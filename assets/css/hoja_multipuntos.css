@@ -1,0 +1,479 @@
+body {
+	font-family: Calibri;
+}
+
+.subcuerpo{
+	width: 1349px !important;
+	height: 1820px !important;
+	margin: 10px auto;
+}
+
+.container{
+		width: 1190px !important;
+		height: 1820px !important;
+		background: white !important;
+		margin: 0px auto;
+}
+
+.encabezado {
+	margin-bottom: 3px;
+}
+
+.encabezado h4 {
+	margin: 0px;
+	font-weight: bold;
+	color: #133A7C;
+	font-size: 30px;
+}
+
+.encabezado .logoFord {
+	width: 60%;
+    position: relative;
+    float: right;
+}
+
+.encabezado .col-xs-3 {
+	background: #c0def3;
+	border-radius: 3px;
+}
+
+.encabezado h6 {
+	font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    color: #133A7C;
+}
+
+.titulo_apartado {
+	background: #133A7C;
+    color: white;
+}
+
+.titulo_apartado_gris {
+	background: #868282;
+    color: white;
+}
+
+.titulo_apartado h6, .titulo_blanco_apartado h6, .titulo_apartado_gris h6 {
+	margin: 2px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+}
+
+.renglon {
+	border: none;
+    border-bottom: 1px solid;
+    width: 80%;
+}
+
+label {
+	font-weight: bold;
+}
+
+.caja {
+	border: 6px solid;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.caja_simple {
+	border: 6px solid;
+    margin-top: 10px;
+}
+
+.titulo_blanco_apartado {
+	background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 0px;
+}
+
+.titulo_blanco_apartado h6{
+	font-size: 12px;
+}
+
+label.perdida_fluido_si {
+	display: inline-block; 
+	position: relative; 
+	bottom: 3px;
+}
+
+i.perdida_fluido_si {
+	display: inline-block; 
+	text-align: center; 
+	width: 15%; 
+	margin-top: 4px;
+}
+
+label.perdida_fluido_no {
+	display: inline-block;
+	position: relative; 
+	bottom: 3px;
+}
+
+i.perdida_fluido_no {
+	display: inline-block; 
+	text-align: center; 
+	width: 15%; 
+	margin-top: 4px;
+}
+
+i.cambiado_aceite {
+	display: inline-block; 
+	text-align: center; 
+	width: 100%;
+	margin-top: 4px;
+}
+
+.caja_simple .row {
+	margin: 0px;
+}
+
+label.perdida_fluido {
+	display: inline-block; 
+	position: relative; 
+	top: 10px; 
+	left: 30px;
+}
+
+span.cuatro_cuadros {
+	font-weight: bold;
+    font-size: 10px;
+    padding: 0px;
+    position: relative;
+    left: -8px;
+}
+
+.span_cuatro_cuadros {
+	font-size: 10px;
+}
+
+.bien_llenar p{
+	font-weight: bold;
+	font-size: 10px;
+}
+
+.bien_llenar i {
+	display: inline-block;
+    position: relative;
+    top: -10px;
+    color: #c5c5c5;
+}
+
+.niveles_texto {
+	padding: 0px;
+}
+
+.niveles_texto span {
+	font-size: 10px;
+}
+
+.subcolumna1 {
+	position: relative;
+	right: 20px;
+	top: 10px;
+}
+
+.subcolumna2 {
+	position: relative;
+	right: 30px;
+	top: 10px;
+}
+
+.subcolumna3 {
+	position: relative;
+	right: 50px;
+	top: 10px;
+}
+
+.subcolumna4 {
+	position: relative;
+	right: 60px;
+	top: 10px;
+}
+
+.subcolumna5 {
+	position: relative;
+	right: 60px;
+	top: 10px;
+}
+
+.subcolumna6 {
+	position: relative;
+	right: 60px;
+	top: 10px;
+}
+
+.plumas_limp {
+	padding: 0px;
+	border-right: 1px solid;
+    height: 40px;
+}
+
+.plumas_limp span{
+	font-weight: bold;
+	font-size: 10px;
+}
+
+.plumas_limp i{
+	padding: 3px;
+}
+
+.cuadro_verde {
+	color: green;
+	margin-top: 5px;
+}
+
+.cuadro_rojo {
+	color: red;
+	margin-top: 5px;
+}
+
+.cuadro_amarillo {
+	color: #ffd400;
+	margin-top: 5px;
+}
+
+.cuadro_blanco {
+	color: white;
+	margin-top: 5px;
+}
+
+.col-xs-3.luces_parabrisas span {
+	font-weight: bold;
+	font-size: 10px;
+}
+
+.col-xs-7.luces_parabrisas {
+	border-right: 1px solid black;
+}
+
+.col-xs-7.luces_parabrisas span {
+	font-size: 12px;
+}
+
+.bateria span {
+	font-weight: bold;
+}
+
+img.nivel_carga_bateria {
+	width: 100%;
+	height: 60px;
+}
+
+.bateria span.porc_cero {
+	display: block;
+    position: relative;
+    top: 50px;
+}
+
+.bateria span.porc_cien {
+	display: block;
+    position: relative;
+    left: 230px;
+    top: -44px;
+    width: 30px;
+    margin: 0px;
+}
+
+.bateria .cca {
+	display: inline-block;
+    position: relative;
+    left: 10px;
+}
+
+.cuadros_estado_bateria {
+	display: inline-block;
+    position: relative;
+    top: 33px;
+    left: 40px;
+}
+
+.sin_borde {
+	margin-top: 10px;
+    padding: 5px;
+    margin-left: 5px;
+}
+
+.sin_borde span {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.sin_borde p {
+	margin-bottom: 0px;
+}
+
+.col-derecha {
+	margin-left: 5px;
+}
+
+.vista_inferior img{
+	width: 100%;
+}
+
+.vista_inferior p{
+	font-weight: bold;
+	text-align: justify;
+}
+
+.rectangulo_azul {
+	background: #133A7C;
+	font-size: 12px;
+	color: white;
+	border: 1px solid black;
+}
+
+.rectangulo_verde {
+	background: green;
+	font-size: 12px;
+	color: white;
+	border: 1px solid black;
+}
+
+.rectangulo_verde h6, .rectangulo_amarillo h6, .rectangulo_rojo h6, .rectangulo_azul h6 {
+	margin: 3px;
+	text-align: center;
+}
+
+.rectangulo_amarillo {
+	background: #ffd400;
+	font-size: 12px;
+	color: black;
+	border: 1px solid black;
+}
+
+.rectangulo_rojo {
+	background: red;
+	font-size: 12px;
+	color: white;
+	border: 1px solid black;
+}
+
+.fondo_gris {
+	padding: 0px;
+	font-size: 12px;
+	font-weight: bold;
+	padding-top: 5px;
+	background: #d2d2d2;
+	border: 1px solid black;
+}
+
+.fondo_gris i {
+	color: white;
+	display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-top: 0px;
+}
+
+.comentarios {
+	padding: 0px;
+}
+
+.comentarios p {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.comentarios textarea {
+	resize: none;
+	width: 100%;
+	height: 304px;
+	text-decoration: underline;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.renglon {
+	border: none;
+	border-bottom: 1px solid black;
+	width: 95%;
+}
+
+.frente_izquierdo span{
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.renglon_mm {
+	border: none;
+	border-bottom: 1px solid black;
+	width: 10%;
+}
+
+.input_diagnostico {
+	border: none;
+	border-bottom: 1px solid black;
+	font-weight: bold;
+	width: 100%;
+}
+
+.renglon_diagnostico {
+	border: none;
+    border-bottom: 1px solid;
+    width: 100%;
+}
+
+.div_direccion {
+	border: none;
+    height: 159px;
+    position: relative;
+    right: 0.35em;
+    width: 41.25%;
+}
+
+.div_direccion h4{
+	font-size: 18px;
+}
+
+.div_direccion h4,  .div_direccion p{
+	color: #133a7c;
+	font-weight: bold;
+}
+
+.dir_sitio {
+	color: #333 !important;
+	font-weight: bold;
+	font-size: 20px;
+	margin: 0px;
+}
+
+.original_cliente {
+	color: red;
+	font-weight: bold;
+}
+
+.derechos_reservados {
+	font-size: 10px;
+	float: right;
+	text-align: right;
+}
+
+.titulo_vertical1{
+	display: none;
+	margin: 0px;
+    padding: 0px;
+    transform: rotate(-90deg);
+    position: absolute;
+    top: 400px;
+    left: 1194px;
+    font-weight: bold;
+}
+
+.titulo_vertical2{
+	display: none;
+	margin: 0px;
+    padding: 0px;
+    transform: rotate(-90deg);
+    position: absolute;
+    top: 1000px;
+    left: 1194px;
+    font-weight: bold;
+}
+
+.prb_limp {
+		font-size: 10px !important;
+}
