@@ -12,13 +12,13 @@
 */
 class Buscador_Model extends CI_Model{
 
-	private $Version = 'V6000';
+	private $Version = 'V4000';
 	private $vista = 'PaquetesWeb';
 
 	public function __construct()
 	{
 		parent::__construct();
-		if ($this->Version == 'V6000') 
+		if ($this->Version == 'V4000') 
 			$this->vista = "vwCA_PaquetesWeb";
 	}
 	
@@ -2228,12 +2228,15 @@ class Buscador_Model extends CI_Model{
 		$intelisis = $this->load->database("other", TRUE);
 		$usuario = $this->session->userdata["logged_in"]["cve_intelisis"];
 		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		$suc_usr = $this->session->userdata["logged_in"]["id_sucursal"];
+
 
 		$where = " fecha_creacion BETWEEN '".date('d-m-Y', strtotime($fecha_ini))." 00:00:00' AND '".date('d-m-Y', strtotime($fecha_fin))." 23:59:59'";
 
 		if($perfil == 6)																//refacciones
 		{
-			$cond_claveUs = "1 = 1";
+			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = '".$suc_usr."'";
+			//$cond_claveUs = "1 = 1 ";
 		}else 
 		{
 			$cond_claveUs = "clave_asesor = '".$usuario."'";
