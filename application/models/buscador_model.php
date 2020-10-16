@@ -2228,14 +2228,21 @@ class Buscador_Model extends CI_Model{
 		$intelisis = $this->load->database("other", TRUE);
 		$usuario = $this->session->userdata["logged_in"]["cve_intelisis"];
 		$perfil = $this->session->userdata["logged_in"]["perfil"];
-		$suc_usr = $this->session->userdata["logged_in"]["id_sucursal"];
+		//se obtiene el id de sucursal a la que pertenece el usuario de la tabla sucursal en bd recepcion
+		$suc_login = $this->session->userdata["logged_in"]["id_sucursal"];
 
+		//se obtiene el  id_intelisis de la sucursal a la cual pertenece el usuario en la bd de la empresa
+		$suc_or['id'] = $this->db->select("id_intelisis")
+							->from("sucursal")
+							->where('id', $suc_login)
+							->get()->row_array();
 
+		//print_r($suc_or['id']['id_intelisis']); die();
 		$where = " fecha_creacion BETWEEN '".date('d-m-Y', strtotime($fecha_ini))." 00:00:00' AND '".date('d-m-Y', strtotime($fecha_fin))." 23:59:59'";
 
 		if($perfil == 6)																//refacciones
 		{
-			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = '".$suc_usr."'";
+			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_intelisis']."  ";
 			//$cond_claveUs = "1 = 1 ";
 		}else 
 		{
