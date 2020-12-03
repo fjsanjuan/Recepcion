@@ -1572,7 +1572,12 @@ class Buscador_Model extends CI_Model{
 		$this->db2->query("INSERT INTO ListaSt (Estacion, Clave) VALUES (888,?)", array($idpak));
 		// echo $this->db2->last_query();
 		// echo $user_id;.
-		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC spGenerarDetalleST 'VentaD',?,?,?,888,1,@OkRef OUTPUT SELECT @OkRef", array($user_id,$Empresa,$Sucursal));
+		$sp = "spGenerarDetalleST";
+		if ($this->Version == 'V6000'){ 
+			$tabla = "xpCA_spGenerarDetalleST";
+		}
+
+		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$sp." 'VentaD',?,?,?,888,1,@OkRef OUTPUT SELECT @OkRef", array($user_id,$Empresa,$Sucursal));
 		// echo $this->db2->last_query();
 		if ($ok) {
     		return 1;
