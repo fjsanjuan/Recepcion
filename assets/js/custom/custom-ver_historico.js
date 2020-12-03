@@ -276,8 +276,8 @@
 	});
 
 	var b_profeco = false;
-	$(".tabla_hist tbody").on("click", "tr td button.profeco", function(e){
-		
+	$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
+		// para crear formato ford
 		if(b_profeco == false)
 		{
 			b_profeco = true;
@@ -298,12 +298,13 @@
 		}
 	});
 
-	$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
-		var id_orden = $(this).prop("id");
-		id_orden = id_orden.split("-");
-		id_orden = id_orden[1];
-		window.open(base_url+"index.php/servicio/profeco_print/"+ id_orden, "_blank");
-	});
+	// $(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
+	// 	// para crear formato fame
+	// 	var id_orden = $(this).prop("id");
+	// 	id_orden = id_orden.split("-");
+	// 	id_orden = id_orden[1];
+	// 	window.open(base_url+"index.php/servicio/profeco_print/"+ id_orden, "_blank");
+	// });
 
 	$(".tabla_hist tbody").on("click", "tr td button.multipuntos", function(e){
 		var id_orden = $(this).prop("id");
