@@ -262,6 +262,7 @@ class Buscador_Model extends CI_Model{
 
 		 $query = $this->db2->query("WITH tabla1 AS (
 				SELECT
+					DISTINCT
 					art.Articulo,
 					art.Descripcion1,
 					art.Unidad,
@@ -270,10 +271,12 @@ class Buscador_Model extends CI_Model{
 				FROM
 					Art art
 				LEFT JOIN ListaPreciosD li ON Art.Articulo = li.Articulo
-
+				--habilitar unicamente para las ford
+				Inner JOIN OperacionesEreactValidas oert ON oert.Articulo = art.Articulo
 				WHERE
 					art.Tipo = 'Servicio'
 					AND art.categoria <> 'TOT'
+					AND art.Estatus = 'ALTA'
 			) SELECT
 				Articulo,
 				Descripcion1,
