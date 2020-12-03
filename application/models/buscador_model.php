@@ -1159,7 +1159,12 @@ class Buscador_Model extends CI_Model{
 
 		// $query['Moneda'] = $this->db2->query("SELECT Moneda FROM Mon")->result_array();
 
-		$query['UEN']  = $this->db2->query("SELECT  UEN, Nombre from  uen join CA_MovTipoValidarUEN muv on muv.UENValida = UEN.UEN 
+		$tabla = "MovTipoValidarUEN";
+		if ($this->Version == 'V6000'){ 
+			$tabla = "CA_MovTipoValidarUEN";
+		}
+
+		$query['UEN']  = $this->db2->query("SELECT  UEN, Nombre from  uen join ".$tabla." muv on muv.UENValida = UEN.UEN 
 			WHERE  muv.Modulo='VTAS' AND MOV IN('Servicio','Cita Servicio') ")->result_array();
 
 		$query['torrecolor'] = $this->db2->query("SELECT Identificador from ServicioIdentificador")->result_array();
