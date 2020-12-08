@@ -451,7 +451,8 @@ class User_model extends CI_Model {
 								 ->count_all_results();
 
 		$firma["firma"] = $datos["valor_firma"];
-		$firma["firma_formatoInventario"] = $datos["valor_firma2"];					 
+		$firma["firma_formatoInventario"] = $datos["valor_firma2"];
+		$firma["firma_renunciaGarantia"] = $datos["valor_firma3"];					 
 		$firma["fecha_actualizacion"] = date("d-m-Y H:i:s");
 
 		if($existe_firma == 0)

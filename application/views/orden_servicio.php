@@ -569,8 +569,8 @@
                           </tr>
                           <tr>
                             <td>
-                               <!--<label for="">Extensión de garantía</label>-->
-							   <label for="">Garantía</label>
+                               <label for="">Extensión de garantía</label>
+                              <!--  <label for="">Garantía</label>  --> <!-- para fame -->
                                 <!-- Material inline 1 -->
                                 <div class="form-check form-check-inline">
                                   <input type="radio" class="form-check-input" id="extGSI" name="ext_garantia" value="si">
@@ -578,7 +578,7 @@
                                 </div>
                                 <!-- Material inline 2 -->
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="extGNo" name="ext_garantia" value="no">
+                                  <input type="radio" class="form-check-input" id="extGNo" name="ext_garantia" value="no" checked>
                                   <label class="form-check-label" for="extGNo">No</label>
                                 </div>
                             </td>
