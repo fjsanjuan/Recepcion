@@ -35,19 +35,19 @@
 
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-fProfeco-tab" data-toggle="pill" href="#pills-fProfeco" role="tab" aria-controls="pills-fProfeco" aria-selected="true">Formato profeco</a>
+                    <a class="nav-link active" id="pills-fProfeco-tab" data-toggle="pill" href="#pills-fProfeco" role="tab" aria-controls="pills-fProfeco" aria-selected="true" style="font-weight: bold;">Formato profeco</a>
                 </li>
                 <li class="nav-item">
                    <!--  el nav de la carta será visible unicamente  para FORD -->
-                    <a class="nav-link" id="pills-fExtGarantia-tab" data-toggle="pill" href="#pills-fExtGarantia" role="tab" aria-controls="pills-fExtGarantia" aria-selected="false">Carta de renuncia a la extensión de garantía</a>
+                    <a class="nav-link" id="pills-fExtGarantia-tab" data-toggle="pill" href="#pills-fExtGarantia" role="tab" aria-controls="pills-fExtGarantia" aria-selected="false" style="font-weight: bold;">Carta de renuncia a la extensión de garantía</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-fInventario-tab" data-toggle="pill" href="#pills-fInventario" role="tab" aria-controls="pills-fInventario" aria-selected="false">Formato inventario</a>
+                    <a class="nav-link" id="pills-fInventario-tab" data-toggle="pill" href="#pills-fInventario" role="tab" aria-controls="pills-fInventario" aria-selected="false" style="font-weight: bold;">Formato inventario</a>
                 </li>
             </ul>
 
             <div class="col-12">
-                <h6><b>Por favor, escriba su firma en los siguientes espacios:</b></h6>
+                <br/><h6><b>Por favor, escriba su firma en los siguientes espacios:</b></h6>
             </div>
 
 
@@ -87,7 +87,8 @@
                                 <div class="col-sm-3">
                                     <button class="btn btn-danger" id="btn_borrarFirma3"><i class="fa fa-eraser"></i></button>
                                 </div>
-                            </div>     
+                            </div><br/>
+                            <h6 style="color: #ff3547; font-weight: bold;">&nbsp; * <b>Firmar solo si el cliente ha rechazado la extensión de garantía.</b></h6>     
                     </div>
                     <div class="tab-pane fade" id="pills-fInventario" role="tabpanel" aria-labelledby="pills-fInventario-tab">
                         <!-- <h6>Formato de Inventario</h6> -->
