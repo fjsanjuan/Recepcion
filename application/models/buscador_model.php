@@ -65,6 +65,19 @@ class Buscador_Model extends CI_Model{
 		return $ret;
 	}
 
+	public function obtener_configEmail()
+	{
+		
+		$query = $this->db->query(" SELECT mail_host, mail_smtpAuth, mail_userName, mail_password, mail_smtpSecure, mail_port 
+				FROM sucursal 
+				WHERE id = ".  $this->session->userdata["logged_in"]["id_agencia"] . "");
+
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else
+			return null;
+	}
+
 	public function traer_datos($datos = null){
 		$int = $this->load->database("other", TRUE);
 		$select = "CONVERT(date, vtn.FechaRequerida, 105 ) as fecha_requerida, vtn.HoraRequerida, vtn.HoraRecepcion, VIN.VIN, ag.Nombre as asesor, vtn.Comentarios, vtn.MovID";

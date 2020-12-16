@@ -9,6 +9,17 @@ class Servicio extends CI_Controller {
 		$this->form_validation->set_error_delimiters('', '<br/>');
 		$this->ASSETS = "./assets/";
 		$this->UPLOADS = "uploads/";
+
+		//datos de configuracion por default para envio de correos
+		$this->mail_host = "smtp.gmail.com";
+		$this->mail_smtpAuth = true;
+		$this->mail_username = "sistemas.intelisis@gmail.com";
+		$this->mail_password = "1234*Sistema";
+		$this->mail_smtpSecure = "ssl";
+		$this->mail_port = 465;
+
+		$this->obtener_configEmail();
+		
 	}
 
 	function tablero(){
@@ -23,6 +34,28 @@ class Servicio extends CI_Controller {
 		$sucursal= $logged_in["id_sucursal"];
 		$result= $this->buscador_model->obtener_asesores($b, $sucursal);
 		echo json_encode($result);
+	}
+
+	function obtener_configEmail()
+	{
+		$result= $this->buscador_model->obtener_configEmail();
+		$config = array('success' =>0, 'msj' => ('Se ha agregado configuracion para envio de correos por defecto, revisar con soporte.'));
+
+		//si la consulta de obtener_configEmail() es exitosa agregará la config por bd al envio de correos de lo contrario dejará la config que se define por default en el constructor
+		if($result != null){
+			foreach ($result as $row) {
+				$this->mail_host = $row['mail_host'];
+				$this->mail_smtpAuth = $row['mail_smtpAuth'];
+				$this->mail_username = $row['mail_userName'];
+				$this->mail_password = $row['mail_password'];
+				$this->mail_smtpSecure = $row['mail_smtpSecure'];
+				$this->mail_port = $row['mail_port'];
+			}
+		$config = array('success' =>1, 'msj' => ('Configuracion por bd para envio de correos exitosa'));
+		}		
+		//print_r($this->mail_host);print_r($this->mail_smtpAuth);print_r($this->mail_username);print_r($this->mail_password);print_r($this->mail_smtpSecure);print_r($this->mail_port);
+		
+		//echo json_encode($config);
 	}
 
 	function obtener_horario(){
@@ -244,16 +277,29 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    // $mail->ErrorInfo;
-			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = true;// Enable SMTP authentication
-			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    $mail->Password = '9F8a*37x';  // SMTP password
-			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = 465;// TCP port to connect to
+			    // $mail->isSMTP();// Set mailer to use SMTP
+			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    // $mail->SMTPAuth = true;// Enable SMTP authentication
+			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    // $mail->Password = '9F8a*37x';  // SMTP password
+			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    // $mail->Port = 465;// TCP port to connect to
+
+			    //Server settings
+			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->ErrorInfo;
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
 			    
 			    //Recipients
-			     $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
+			     $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
 			    //$mail->addAddress($data['usuario']['email_cliente']);// Name is optional
 			    // $mail->AddReplyTo($correo_asesor,'Service Excellence');  //A quien debe ir dirigida la respuesta
 			    $mail->addCC($correo_asesor);											//Con copia a
@@ -1166,17 +1212,20 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    //$mail->SMTPDebug = 2;// Enable verbose debug output
 			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = true;// Enable SMTP authentication
-			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    $mail->Password = '9F8a*37x';  // SMTP password
-			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = 465;// TCP port to connect to
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
 			    
 			    //Recipients
-			    $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom( $mail_username_env, 'Service Excellence');  	//Quien envía el correo
 			    $mail->addAddress($email_envio, $cliente_envio);// Name is optional
-			    $mail->AddReplyTo("fameserviceexcellence@gmail.com",'Service Excellence');  //A quien debe ir dirigida la respuesta
+			    $mail->AddReplyTo($mail_username_env,'Service Excellence');  //A quien debe ir dirigida la respuesta
 			    $mail->addCC($correo_asesor);						  			  			//Con copia a
 			    //$mail->addBCC('fsanjuan@intelisis.com');						  			//Con copia oculta a
 			    
@@ -1606,16 +1655,29 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
-			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = true;// Enable SMTP authentication
-			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    $mail->Password = '9F8a*37x';  // SMTP password
-			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = 465;// TCP port to connect to
-			    
+			    // $mail->isSMTP();// Set mailer to use SMTP
+			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    // $mail->SMTPAuth = true;// Enable SMTP authentication
+			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    // $mail->Password = '9F8a*37x';  // SMTP password
+			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    // $mail->Port = 465;// TCP port to connect to
+
+				//Server settings
+			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->ErrorInfo;
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
+
 			    //Recipients
-			    $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
 			    //$mail->addAddress("fsanjuan@intelisis.com");// Name is optional
 			    $mail->addAddress($correo_asesor);// Name is optional
 			    $mail->addCC($correo_refacciones);
@@ -1672,16 +1734,29 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
-			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = true;// Enable SMTP authentication
-			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    $mail->Password = '9F8a*37x';  // SMTP password
-			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = 465;// TCP port to connect to
+			    // $mail->isSMTP();// Set mailer to use SMTP
+			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    // $mail->SMTPAuth = true;// Enable SMTP authentication
+			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    // $mail->Password = '9F8a*37x';  // SMTP password
+			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    // $mail->Port = 465;// TCP port to connect to
+
+			    //Server settings
+			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->ErrorInfo;
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
 			    
 			    //Recipients
-			    $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom($, 'Service Excellence');  	//Quien envía el correo
 			    $mail->addAddress($correo_asesor);// Name is optional
 			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
 			                              // Set email format to HTML
