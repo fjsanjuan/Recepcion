@@ -2325,20 +2325,36 @@ $(document).on("change", "#cameraInput", function(event){
 
 function optimizar_imagen(e, indice)
 {
-    const width = 880;
-    const fileName = e.target.files[indice].name;
-    const reader = new FileReader(); 								//Se crea instancia de FileReader Js API
+    //const width = 880;
+    var maxWidth = 960;
+    var maxHeight = 720;
+
+    var fileName = e.target.files[indice].name;
+    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
     reader.readAsDataURL(e.target.files[indice]);					//Lee la imagen que está en el input usando el FileReader
     reader.onload = event => {
-        const img = new Image();									//Se crea una nueva instancia de la clase Image
+        var img = new Image();									//Se crea una nueva instancia de la clase Image
         img.src = event.target.result;								//Asignar al source de la imagen el resultado del FileReader
         img.onload = () => {
-                const elem = document.createElement('canvas');		//Crear un elemento Canvas HTML5
-                const scaleFactor = width / img.width;				//Para mantener la relación de aspecto se pone el ancho como constante
-                elem.width = width;
-                elem.height = img.height * scaleFactor;
-                const ctx = elem.getContext('2d');					//Crea objeto para dibujar en el Canvas
-                ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);	//Dibuja el elemento en el Canvas
+                var elem = document.createElement('canvas');		//Crear un elemento Canvas HTML5
+                // const scaleFactor = width / img.width;				//Para mantener la relación de aspecto se pone el ancho como constante
+                // elem.width = width;
+                // elem.height = img.height * scaleFactor;
+                var rectRatio = img.width / img.height;
+                var boundsRatio = maxWidth / maxHeight;
+                var w, h;
+                if (rectRatio > boundsRatio) {
+                    w = maxWidth;
+                    h = img.height * (maxWidth / img.width);
+                } else {
+                    w = img.width * (maxHeight / img.height);
+                    h = maxHeight;
+                }
+                elem.width = w;
+                elem.height = h;
+
+                var ctx = elem.getContext('2d');					//Crea objeto para dibujar en el Canvas
+                ctx.drawImage(img, 0, 0, w, h);	//Dibuja el elemento en el Canvas
                 ctx.canvas.toBlob((blob) => {					    //Retorna la imagen como un blob 							
                 	convertir_blobFileToBase64(blob);
                 }, 'image/jpeg', 1);               

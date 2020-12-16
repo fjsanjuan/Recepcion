@@ -1756,7 +1756,7 @@ class Servicio extends CI_Controller {
 				$mail_username_env = $this->mail_username;
 			    
 			    //Recipients
-			    $mail->SetFrom($, 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
 			    $mail->addAddress($correo_asesor);// Name is optional
 			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
 			                              // Set email format to HTML
