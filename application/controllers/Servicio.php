@@ -7,8 +7,11 @@ class Servicio extends CI_Controller {
 		parent::__construct();
 		$this->load->model('buscador_model');
 		$this->form_validation->set_error_delimiters('', '<br/>');
-		$this->ASSETS = "./assets/";
-		$this->UPLOADS = "uploads/";
+		
+		//variable que controlan el tipo de formato de orden de serivicio(profeco) que se enviara por correo 
+		$this->formt_servicio = "fame";
+		//variable para crear directorio donde se guardaran los formatos creador
+		$this->ruta_formts = "../Recepcion/";
 
 		//datos de configuracion por default para envio de correos
 		$this->mail_host = "smtp.gmail.com";
@@ -1195,18 +1198,24 @@ class Servicio extends CI_Controller {
         $correo_asesor = $this->session->userdata["logged_in"]["correo"];
 		
 		//$multipunto = $this->crear_pdf_multipunto($multipunto, $id_orden);
-		//$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);
+		
 		
 		//guardar en intelisis los archvios generados pendiente de validar
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($formato["ruta"], $id_orden,'orden' );
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($multipunto["ruta"], $id_orden, 'multipuntos' );
 
-        //$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
-		$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
-        // enviar correo       
+		if($this->formt_servicio == 'ford'){
+			$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
+			$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);	
+		}
+		else{
+			$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
+			$finventario["estatus"] = false;
+			$finventario["ruta"] = "";
+		}
 
-		//if($formato['estatus']) //se utliza cuando se manda a llamar el formato de Ford
-        if($formato)
+        // enviar correo       
+        if($formato['estatus'])
         {
 			try {
 			    //Server settings
@@ -1239,9 +1248,8 @@ class Servicio extends CI_Controller {
 				//Attachments 
 				// Se cambiaron al final para permitir cargar imagen dentro del cuerpo
 			    //$mail->addAttachment($formato["ruta"]);
-			    //$mail->addAttachment($formato["ruta"]); //formato de Ford
-			    $mail->addAttachment($formato);                  // Agregar archivo adjunto
-			    //$mail->addAttachment($finventario["ruta"]);                 // Agregar archivo adjunto
+			    $mail->addAttachment($formato["ruta"]); //Agregar archivo adjunto formato orden de servicio
+			    $mail->addAttachment($finventario["ruta"]); // Agregar archivo adjunto
 
 				$enviar = $mail->send();
 				
@@ -1308,7 +1316,7 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		$ruta_temp                = $this->createFolder("Ordenes"); //Se crea el folder si no existe
+		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
 		
 		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		$dompdf = new DOMPDF();
@@ -1317,23 +1325,36 @@ class Servicio extends CI_Controller {
 		$dompdf->render();
 		$output = $dompdf->output();
 		file_put_contents($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf", $output);
-		return $ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf";
+
+
+		if(file_exists($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf"))
+		{
+			$creado["estatus"] = true;
+			$creado["ruta"] = $ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf";
+		}else
+		{
+			$creado["estatus"] = false;
+			$creado["ruta"] = "";
+		}
+
+
+		return $creado;
 	}
 
 	public function createFolder($folder){
-		$base = $this->ASSETS.$this->UPLOADS;
-		$ruta = $this->ASSETS.$this->UPLOADS.$folder."/";
+		$base = $this->ruta_formts;
+		$ruta = $this->ruta_formts.$folder."/";
 		if(!is_dir($ruta) && !file_exists($ruta)){
-			mkdir($this->ASSETS, 0777);
-			mkdir($base, 0777);
+			//mkdir($this->ASSETS, 0777);
+			//mkdir($base, 0777);
 			mkdir($ruta, 0777);
 		}
 		return $ruta;
 	}
 
 	public function showFile($folder, $name){
-		$base = $this->ASSETS.$this->UPLOADS;
-		$directorio = $this->ASSETS.$this->UPLOADS.$folder;
+		$base = $this->ruta_formts;
+		$directorio = $this->ruta_formts.$folder;
 		if(is_dir($directorio)){
 			$filename = $name.".pdf";
 			$ruta = base_url($directorio."/".$filename);
