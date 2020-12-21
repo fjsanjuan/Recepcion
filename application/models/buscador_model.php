@@ -2282,6 +2282,7 @@ class Buscador_Model extends CI_Model{
 							->where($where)
 							->order_by("fecha_creacion", "ASC")
 							->get()->result_array();
+
 		//sql donde se evalua si la orden de servicio esta firmada o no devolviendo 1 o 0 el resultado lo recibe custom-ver_historico.js 
 		foreach ($ordenes as $keyF => $valueF) 
 		{
@@ -2290,6 +2291,15 @@ class Buscador_Model extends CI_Model{
 												->where('id_orden_servicio', $valueF["id"])
 												->get()->row_array();
 		}
+		// valor  de firma para la carta de extension a garantia que usara historico
+		foreach ($ordenes as $keyF => $valueF) 
+		{
+			$ordenes[$keyF]["signGrtia"] =  $this->db->select(" firma_renunciaGarantia ")
+												->from("firma_electronica")
+												->where('id_orden_servicio', $valueF["id"])
+												->get()->row_array();
+		}
+
 		foreach ($ordenes as $key => $value) 
 		{
 			$ordenes[$key]["movID"] = $intelisis->select("MovID")

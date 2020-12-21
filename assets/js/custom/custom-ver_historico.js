@@ -152,11 +152,19 @@
 			data: {fecha_ini: fecha_ini, fecha_fin: fecha_fin}
 		})
 		.done(function(data) {
+			
+			console.log('Datos tabla historico');
+			console.log(data);
+
 			var tabla = "", nombre = "", folio = "";
 			var btn1 = "", btn2 = "";
 			var btn_comentario = "";
-			//variables que contienen valor del correoE del cliente y si la orden esta firmada o no 
-			var correo_cte="", trae_firma='';
+			//variables que contienen valor del correoE del cliente, si la orden esta firmada o no
+			// trae_signGrtia valor de la firma para el formato de rechazo extension de garantia 
+			var correo_cte="", trae_firma='', trae_signGrtia='';
+			//
+			const firma_vacia = "data:image/png;base64,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";
+
 
 			tabla_historico.fnClearTable();
 
@@ -174,6 +182,8 @@
 				val["am_cliente"] = (val["am_cliente"] == "null") ? "" : val["am_cliente"];
 				correo_cte=val['email_cliente'];
 				trae_firma=val['contFirma']['contadorFirma'];
+				trae_signGrtia = val['signGrtia']['firma_renunciaGarantia'];
+				//console.log(trae_signGrtia);
 
 				nombre  = val["nombre_cliente"]+" "+val["ap_cliente"]+" "+val["am_cliente"];
 				folio   = (val["movID"] == null || val["movID"]["MovID"] == null) ? "-" : val["movID"]["MovID"];
@@ -182,7 +192,14 @@
 				// btn     +=  "<button class='btn btn-sm profecoTalisman' style='background: #152f6d;' id='profecoTalisman-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco Toyota</button>";
 				btn     += "<button class='btn btn-sm multipuntos' style='background: #152f6d;' id='multi-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Hoja Multipuntos</button>";
 				btn     += "<button class='btn btn-sm formatoInventario' style='background: #152f6d;' id='inv-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato de Inventario</button>";
-				
+				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
+				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden 
+				if(trae_signGrtia != firma_vacia && trae_signGrtia != null){
+					btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
+					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
+					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+					btn     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
@@ -322,6 +339,64 @@
 		id_orden = id_orden[1];
 
 		window.open(base_url+"index.php/servicio/generar_formatoInventario/0/"+ id_orden, "_blank");
+	});
+
+	//formato carta de renuncia a beneficios(rechazo a extension de garantia)
+	$(".tabla_hist tbody").on("click", "tr td button.renunciaGrtia", function(e){
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		var vin = $("#api_vin-"+id_orden).val();
+		var signGrtia = $("#api_signGrtia-"+id_orden).val();
+		//var vin = $("#api_vin-26590").val();
+		//console.log(signGrtia);
+		var tok=""
+		$.ajax({
+			url: "http://localhost:8000/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'Angelin20',
+				password:'3210995'
+			},
+			beforeSend: function(){
+				//$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+			},
+			success: function (data){
+				tok=data.token;
+			}
+		});
+		$.ajax({
+			url: "http://localhost:8000/reports/getPDF",
+			type: "POST",
+			headers: {
+				Authorization: `Token ${tok}`,
+			},
+			xhrFields: {responseType: "blob"},
+			data: {
+				name:'WRACRN001',
+				dwn:'0',
+				opt:'1',
+				path:'None'
+			},
+			beforeSend: function(){
+				//$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir getPDF de ApiReporter');
+			},
+			success: function (blob){
+				console.log(blob);
+				var filename = "WRACRN001.pdf";
+				var link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = "WRACRN001.pdf";
+				link.click();
+			}
+		});
 	});
 
 	//formato Profeco Talismán
