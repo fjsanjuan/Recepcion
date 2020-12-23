@@ -4,6 +4,8 @@
 	//en este caso para poder vizualizarlas desde el historico
 	var alias_exists = 'uploads';
 	var dir_fotos= 'F:/recepcion_activa/fotografias/';
+	//variable que controlan el tipo de formato de orden de servicio(profeco) que se genera en pdf 
+	var formt_serv_pdf = "ford";
 
     // Data Picker Initialization
     id_presupuesto = 0;
@@ -293,35 +295,39 @@
 	});
 
 	var b_profeco = false;
-	$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
-		// para crear formato ford
-		if(b_profeco == false)
-		{
-			b_profeco = true;
-			localStorage.setItem("formato_base64", "");
-			localStorage.setItem("formatoReverso_base64", "");
+	//condicion que  genera en pdf la orden de servicio por marca
+	if(formt_serv_pdf == "ford"){
+		$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
+			// para crear formato ford
+			if(b_profeco == false)
+			{
+				b_profeco = true;
+				localStorage.setItem("formato_base64", "");
+				localStorage.setItem("formatoReverso_base64", "");
 
+				var id_orden = $(this).prop("id");
+				id_orden = id_orden.split("-");
+				id_orden = id_orden[1];
+
+				$("#loading_spin").show();
+				
+				generar_formato(id_orden);
+				console.log("click")
+			}else 
+			{
+				toastr.info("Por favor, espere un momento, mientras termina la generación del formato");
+			}
+		});
+	}
+	else{
+		$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
+			// para crear formato fame
 			var id_orden = $(this).prop("id");
 			id_orden = id_orden.split("-");
 			id_orden = id_orden[1];
-
-			$("#loading_spin").show();
-			
-			generar_formato(id_orden);
-			console.log("click")
-		}else 
-		{
-			toastr.info("Por favor, espere un momento, mientras termina la generación del formato");
-		}
-	});
-
-	// $(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
-	// 	// para crear formato fame
-	// 	var id_orden = $(this).prop("id");
-	// 	id_orden = id_orden.split("-");
-	// 	id_orden = id_orden[1];
-	// 	window.open(base_url+"index.php/servicio/profeco_print/"+ id_orden, "_blank");
-	// });
+			window.open(base_url+"index.php/servicio/profeco_print/"+ id_orden, "_blank");
+		});
+	}
 
 	$(".tabla_hist tbody").on("click", "tr td button.multipuntos", function(e){
 		var id_orden = $(this).prop("id");

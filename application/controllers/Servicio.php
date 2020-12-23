@@ -8,8 +8,8 @@ class Servicio extends CI_Controller {
 		$this->load->model('buscador_model');
 		$this->form_validation->set_error_delimiters('', '<br/>');
 		
-		//variable que controlan el tipo de formato de orden de serivicio(profeco) que se enviara por correo 
-		$this->formt_servicio = "fame";
+		//variable que controlan el tipo de formato de orden de servicio(profeco) que se enviara por correo 
+		$this->formt_servicio = "ford";
 		//variable para crear directorio donde se guardaran los formatos creador
 		$this->ruta_formts = "../Recepcion/";
 
