@@ -1295,7 +1295,7 @@ class Servicio extends CI_Controller {
 		// var_dump($datos);die;
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		$ruta_temp                = $this->createFolder("Ordenes"); //Se crea el folder si no existe
+		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
 		
 		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		if (false) {
@@ -1307,7 +1307,7 @@ class Servicio extends CI_Controller {
 			$dompdf->render();
 			$output = $dompdf->output();
 			file_put_contents($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf", $output);
-			$this->showFile("Ordenes", "FormatoDeOrdenServicio".$id_orden);
+			$this->showFile("archivos_recepcion", "FormatoDeOrdenServicio".$id_orden);
 		}
 		
 	}
