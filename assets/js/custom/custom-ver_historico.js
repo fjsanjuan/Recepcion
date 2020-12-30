@@ -395,6 +395,7 @@
 			},
 			error: function(){
 				console.log('error al consumir getPDF de ApiReporter');
+				toastr.error("Error al generar el formato");
 			},
 			success: function (blob){
 				console.log(blob);
