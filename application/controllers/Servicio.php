@@ -289,8 +289,9 @@ class Servicio extends CI_Controller {
 			    // $mail->Port = 465;// TCP port to connect to
 
 			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
+			    $mail->isSMTP();// Set mailer to use SMTP
 			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
 			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
 			    $mail->Username = $this->mail_username; // SMTP username
@@ -1687,6 +1688,7 @@ class Servicio extends CI_Controller {
 				//Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
+				$mail->isSMTP();// Set mailer to use SMTP
 			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
 			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
 			    $mail->Username = $this->mail_username; // SMTP username
@@ -1766,6 +1768,7 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
+			    $mail->isSMTP();// Set mailer to use SMTP
 			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
 			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
 			    $mail->Username = $this->mail_username; // SMTP username
