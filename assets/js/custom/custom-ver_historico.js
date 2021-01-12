@@ -6,6 +6,8 @@
 	var dir_fotos= 'F:/recepcion_activa/fotografias/';
 	//variable que controlan el tipo de formato de orden de servicio(profeco) que se genera en pdf 
 	var formt_serv_pdf = "ford";
+	// true solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
+	bnt_renunciaGrtia =true;
 
     // Data Picker Initialization
     id_presupuesto = 0;
@@ -197,8 +199,9 @@
 				btn     += "<button class='btn btn-sm multipuntos' style='background: #152f6d;' id='multi-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Hoja Multipuntos</button>";
 				btn     += "<button class='btn btn-sm formatoInventario' style='background: #152f6d;' id='inv-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato de Inventario</button>";
 				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
-				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden 
-				if(trae_signGrtia != firma_vacia && trae_signGrtia != null){
+				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
+				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
+				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
