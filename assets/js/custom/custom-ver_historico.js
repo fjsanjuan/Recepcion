@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variableque controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -210,6 +210,8 @@ $(document).ready(function() {
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
 					btn     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				// se usara para ver a que cliente se envia en presupuesto
@@ -361,13 +363,16 @@ $(document).ready(function() {
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
-		var vin = $("#api_vin-"+id_orden).val();
-		var signGrtia = $("#api_signGrtia-"+id_orden).val();
+		var t_vin = $("#api_vin-"+id_orden).val();
 		//var vin = $("#api_vin-26590").val();
-		//console.log(signGrtia);
+		var signGrtia = $("#api_signGrtia-"+id_orden).val();
+		//  t_nomCte  -> t_ = this
+		var t_nomCte = $("#api_nomCte-"+id_orden).val();
+		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+		//console.log(t_signAsesor);
 		var tok=""
 		$.ajax({
-			url: "http://localhost:8000/auth/",
+			url: "https://apiintelisis.intelisis-solutions.com:8443/auth/",
 			type: "POST",
 			dataType: 'json',
 			data: {
@@ -375,7 +380,7 @@ $(document).ready(function() {
 				password:'3210995'
 			},
 			beforeSend: function(){
-				//$("#loading_spin").show();
+				$("#loading_spin").show();
 			},
 			error: function(){
 				console.log('error al consumir token de ApiReporter');
@@ -385,32 +390,48 @@ $(document).ready(function() {
 			}
 		});
 		$.ajax({
-			url: "http://localhost:8000/reports/getPDF",
+			url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
 			type: "POST",
 			headers: {
 				Authorization: `Token ${tok}`,
 			},
-			xhrFields: {responseType: "blob"},
+			//habilitar xhrFields cuando se requiera descargar
+			//xhrFields: {responseType: "blob"},
 			data: {
 				name:'WRACRN001',
-				dwn:'0',
+				dwn:'1',
 				opt:'1',
-				path:'None'
+				path:'None',
+				vin:t_vin,
+				garantia:signGrtia,
+				nomCte:t_nomCte,
+				signAsesor:t_signAsesor
 			},
 			beforeSend: function(){
-				//$("#loading_spin").show();
+				$("#loading_spin").show();
 			},
 			error: function(){
 				console.log('error al consumir getPDF de ApiReporter');
 				toastr.error("Error al generar el formato");
+				$("#loading_spin").hide();
 			},
 			success: function (blob){
-				console.log(blob);
-				var filename = "WRACRN001.pdf";
-				var link = document.createElement('a');
-				link.href = window.URL.createObjectURL(blob);
-				link.download = "WRACRN001.pdf";
-				link.click();
+				$("#loading_spin").hide();
+				//console.log(blob);
+				// habilitar en caso de descarga xhrFields
+				// var link = document.createElement('a');
+				// link.href = window.URL.createObjectURL(blob);
+				// para vizualiar formato en pc y descargar en tablet
+				// window.open(link);
+				// para de descargar el formato 
+				//link.download = "WRACRN001.pdf";
+				//link.click();
+				// URL.revokeObjectURL(link.href);
+
+				var win = window.open("", "_blank");
+				//win.document.body.innerHTML = blob;
+				win.document.write(blob);
+		
 			}
 		});
 	});

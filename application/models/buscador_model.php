@@ -2312,6 +2312,14 @@ class Buscador_Model extends CI_Model{
 												->get()->row_array(); 
 		}
 
+		foreach ($ordenes as $key => $value) 
+		{
+			$ordenes[$key] += $this->db->select("firma_electronica as signAsesor")
+							->from("usuarios")
+							->where("cve_intelisis",$value["clave_asesor"])
+							->get()->row_array();
+		}
+
 		return $ordenes;					
 	}
 
