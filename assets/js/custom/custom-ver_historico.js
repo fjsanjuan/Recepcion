@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variableque controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -186,12 +186,8 @@ $(document).ready(function() {
 				val["am_cliente"] = (val["am_cliente"] == "null") ? "" : val["am_cliente"];
 				correo_cte=val['email_cliente'];
 				trae_firma=val['contFirma']['contadorFirma'];
-				
 				if(trae_firma ==1){
 				trae_signGrtia = val['signGrtia']['firma_renunciaGarantia'];
-				}
-				else{
-					trae_signGrtia = null;
 				}
 				//console.log(trae_signGrtia);
 
