@@ -189,6 +189,9 @@
 				if(trae_firma ==1){
 				trae_signGrtia = val['signGrtia']['firma_renunciaGarantia'];
 				}
+				else{
+					trae_signGrtia = null;
+				}
 				//console.log(trae_signGrtia);
 
 				nombre  = val["nombre_cliente"]+" "+val["ap_cliente"]+" "+val["am_cliente"];
