@@ -2171,6 +2171,12 @@ $(document).on("click", '#btn_guardarFirma', function (e){
     }
 });
 
+//Funcion de leyenda Ver en modal firma_config para mostrar termins y condcions (contrato adehesion)
+$(document).on('click','#ver_termCond' ,function(e){
+    e.preventDefault();
+    window.open(base_url+"index.php/servicio/correo_reverso/"+ localStorage.getItem("id_orden_servicio"), "_blank");
+});
+
 /*$(document).on("click", '#btn_guardarFirma2', function (e){
     e.preventDefault();
 

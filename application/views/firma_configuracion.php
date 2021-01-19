@@ -24,6 +24,10 @@
     .btn-success {
         padding: 13px;
     }
+    #ver_termCond{
+        color: #ff3547; 
+        font-weight: bold
+    }
 </style>
 <div>
     <div class="col-sm-12" id="crear_firma">
@@ -39,7 +43,7 @@
                 </li>
                 <li class="nav-item">
                    <!--  el nav de la carta será visible unicamente  para FORD -->
-                    <a class="nav-link" id="pills-fExtGarantia-tab" data-toggle="pill" href="#pills-fExtGarantia" role="tab" aria-controls="pills-fExtGarantia" aria-selected="false" style="font-weight: bold;">Carta de renuncia a la extensión de garantía</a>
+                    <a class="nav-link" id="pills-fExtGarantia-tab" data-toggle="pill" href="#pills-fExtGarantia" role="tab" aria-controls="pills-fExtGarantia" aria-selected="false" style="font-weight: bold;">Carta de renuncia a beneficios <!-- (extensión de garantía) --></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="pills-fInventario-tab" data-toggle="pill" href="#pills-fInventario" role="tab" aria-controls="pills-fInventario" aria-selected="false" style="font-weight: bold;">Formato inventario</a>
@@ -47,7 +51,7 @@
             </ul>
 
             <div class="col-12">
-                <br/><h6><b>Por favor, escriba su firma en los siguientes espacios:</b></h6>
+                <h6><b>Por favor, escriba su firma en los siguientes espacios:</b></h6>
             </div>
 
 
@@ -55,8 +59,7 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-fProfeco" role="tabpanel" aria-labelledby="pills-fProfeco-tab">
                         <!--  <h6>Formato Profeco</h6> -->
-                        <div class="row">
-                            
+                        <div class="row"> 
                             <div class="col-sm-1" >
                                 <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
                             </div>
@@ -70,8 +73,22 @@
                             <div class="col-sm-3">
                                 <button class="btn btn-danger" id="btn_borrarFirma"><i class="fa fa-eraser"></i></button>
                             </div>
-
                         </div>
+                        <br/>
+                        <div class="form-check-inline">
+                            <input type="checkbox" class="form-check-input check-tablaDanios" name="dan_costDerecho" id="cb_termCond">
+                            <label class="form-check-label" for="cb_termCond">
+                                <h6>
+                                    <b> 
+                                        Acepto Términos y Condiciones del Contrato de Adhesión. 
+                                        <i  id="ver_termCond" >
+                                            <i class="far fa-file-pdf"></i> <u>Ver</u>  
+                                        </i>
+                                    </b>
+                                </h6>
+                            </label>
+                        </div>
+
                     </div>
                     <div class="tab-pane fade" id="pills-fExtGarantia" role="tabpanel" aria-labelledby="pills-fExtGarantia-tab">
                             <div class="row">
@@ -87,7 +104,8 @@
                                 <div class="col-sm-3">
                                     <button class="btn btn-danger" id="btn_borrarFirma3"><i class="fa fa-eraser"></i></button>
                                 </div>
-                            </div><br/>
+                            </div>
+                            <br/>
                             <h6 style="color: #ff3547; font-weight: bold;">&nbsp; * <b>Firmar solo si el cliente ha rechazado la extensión de garantía.</b></h6>     
                     </div>
                     <div class="tab-pane fade" id="pills-fInventario" role="tabpanel" aria-labelledby="pills-fInventario-tab">

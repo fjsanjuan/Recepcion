@@ -536,6 +536,12 @@
 		
 	});
 
+	//Funcion de leyenda Ver en modal para agregar firmas muestra termins y condcions (contrato adehesion)
+	$(document).on('click','#ver_termCond' ,function(e){
+		e.preventDefault();
+		window.open(base_url+"index.php/servicio/correo_reverso/"+ localStorage.getItem("hist_id_orden_firm"), "_blank");
+	});
+
 	/* BEGIN ALGUNAS CONFIGURACIONES PARA AGREGAR LA FIRMA DESDE EL HISTORICO */
 
 
@@ -654,7 +660,6 @@
             alert("Hubo un error al guardar las firma");
         }); 
     }
-
 
 	});
 
