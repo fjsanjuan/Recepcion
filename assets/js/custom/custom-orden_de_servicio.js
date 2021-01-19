@@ -1622,6 +1622,10 @@ $(document).on('click','#levanta_orden' ,function(e){
                 // $("#mostrar_modalemail").click();
                 $("#send_mail").click();
                 $("#loading_spin, #levanta_orden").hide();
+                setTimeout(function(){ 
+                    window.open(base_url+"index.php/servicio/correo_reverso/"+ localStorage.getItem("id_orden_servicio"), "_blank");
+                }, 6000);
+                
             }else 
             {
                 toastr.error('Hubo un error al crear la orden.');
