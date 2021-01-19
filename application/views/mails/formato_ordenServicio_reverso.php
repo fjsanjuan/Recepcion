@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <head>
 <link rel="stylesheet" href="<?=base_url()?>assets/librerias/fontawesome-free-5.2.0-web/css/all.css"/>
+<link rel="icon" href="<?=base_url();?>assets/img/favicon.ico" type="image/x-icon">
 <link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" media="all">
 <link href="<?=base_url()?>assets/css/style.css" rel="stylesheet">
 
