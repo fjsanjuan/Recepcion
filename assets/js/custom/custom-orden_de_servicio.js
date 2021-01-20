@@ -2138,6 +2138,9 @@ $(document).on("click", '#btn_guardarFirma', function (e){
 
     // variable que hablita la validacion de la firma de carta de garantia para ford
     validar_ext_garantia = true;
+
+    // valor de check terminos y condiciones
+    form += "&cb_termCond="+ val_checked("cb_termCond");
     
     // Si el elemento esta oculto deshabiltara la validacion para la carta de extension de garantía ford
     if ($('#pills-fExtGarantia-tab').is(':hidden')) {

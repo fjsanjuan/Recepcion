@@ -476,6 +476,11 @@ class User_model extends CI_Model {
 		if($this->db->trans_status() == true)
 		{
 			$firma_creada = true;
+			// registro de aprobacion del cte termins y condicions
+			$orden['acepta_termCond'] = $datos["cb_termCond"];	
+			$orden['fecha_termCond'] = date("d-m-Y H:i:s");	
+			$this->db->where("id", $datos["id_orden_servicio"]);
+			$this->db->update("orden_servicio", $orden);
 		}else
 		{
 			$firma_creada = false;
