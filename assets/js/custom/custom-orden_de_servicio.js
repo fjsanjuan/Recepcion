@@ -2000,6 +2000,25 @@ function actualizar_listasOrden(form, elemento)
     });
 }
 
+//Habilitar y deshabilitar boton de guardado de firmas a traves de check "terminos y condiciones"
+$(document).on('click','#cb_termCond' ,function(e){
+    if( val_checked("cb_termCond")  == true ){
+        $('#btn_guardarFirma').attr('disabled', false);
+    }
+    else{
+        $('#btn_guardarFirma').attr("disabled", true);
+    }
+});
+
+//funcion para obtener valor de un check box sin value asignado
+function val_checked(id_cbx) {
+    var v = false;
+    if( ( v = $("#"+ id_cbx +":checked").val() ) != null ){
+        v = true;
+    }
+    return v;
+}
+
 /*Configuración de firma*/
 $(document).on("click", '#mostrar_modalfirma', function (e){
     e.preventDefault();

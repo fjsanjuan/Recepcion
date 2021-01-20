@@ -76,7 +76,7 @@
                         </div>
                         <br/>
                         <div class="form-check-inline">
-                            <input type="checkbox" class="form-check-input check-tablaDanios" name="dan_costDerecho" id="cb_termCond">
+                            <input type="checkbox" class="form-check-input check-tablaDanios" name="cb_termCond" id="cb_termCond">
                             <label class="form-check-label" for="cb_termCond">
                                 <h6>
                                     <b> 
@@ -122,7 +122,7 @@
 
                             <div class="col-sm-3">
                                 <button class="btn btn-danger" id="btn_borrarFirma2"><i class="fa fa-eraser"></i></button>
-                                <button class="btn btn-success" id="btn_guardarFirma">Guardar Firmas</button>
+                                <button class="btn btn-success" id="btn_guardarFirma" disabled>Guardar Firmas</button>
                             </div>
 
                         </div>
