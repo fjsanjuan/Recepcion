@@ -148,10 +148,11 @@
 </html>
 <script>
 $(document).ready(function() {
-	//variableque controlan la ruta donde se guardan las fotos de la inspeccion 
-	//en este caso para poder vizualizarlas desde el historico
-	var alias_exists = 'uploads';
-	var dir_fotos= 'F:/recepcion_activa/fotografias/';
+	//variables que controlan la ruta donde se guardan las fotos de la inspeccion y seguimiento en el presupuesto
+	//mostrar guardadas en el mismo proyecto dejarlas vacias alias_exists = '' var dir_fotos= '';
+	//mostrar guardadas en otra ruta  alias_exists = 'nom_alias' var dir_fotos= 'F:/recepcion_activa/fotografias/';
+	var alias_exists = ''; 
+	var dir_fotos= '';
 
 	var base_url = "<?=base_url();?>";
 	$("#btn_update_mail").on("click", function(){

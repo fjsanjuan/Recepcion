@@ -1,9 +1,10 @@
 ﻿$(document).ready(function() {
 
-	//variableque controlan la ruta donde se guardan las fotos de la inspeccion 
+	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
-	var alias_exists = 'uploads';
-	var dir_fotos= 'F:/recepcion_activa/fotografias/';
+	var alias_exists = '';
+	// ./assets/uploads/fotografias/   o  F:/recepcion_activa/fotografias/
+	var dir_fotos= './assets/uploads/fotografias/'; 
 	//variable que controlan el tipo de formato de orden de servicio(profeco) que se genera en pdf 
 	var formt_serv_pdf = "ford";
 	// true solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
