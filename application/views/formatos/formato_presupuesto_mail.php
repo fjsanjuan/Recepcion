@@ -83,8 +83,8 @@
 								<?php
 									$total = 0;
 									foreach ($detalle as $key => $value) {
-										$iva= round(($value["precio_unitario"]/1.16),2);
-										$iva = $value["precio_unitario"] - $iva;
+										$iva= round(($value["precio_unitario"] * 0.16),2);
+										//$iva = $value["precio_unitario"] - $iva;
 										$totalIva = $iva*$value["cantidad"];
 										echo "<tr><td>".$value["cve_articulo"]."</td>";
 										echo "<td>".$value["descripcion"]."</td>";
