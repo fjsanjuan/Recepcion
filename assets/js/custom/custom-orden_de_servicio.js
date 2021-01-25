@@ -2156,7 +2156,7 @@ $(document).on("click", '#btn_guardarFirma', function (e){
         toastr.warning("La firma para el Formato profeco está vacía, favor de proporcionarla.");
     }
     else if( validar_ext_garantia && ($("#valor_firma3").val() == firma_vacia  && input_ext_garantia == 'no' ) ){
-            toastr.warning("La firma para la Carta de renuncia a la extensión de garantía está vacía, favor de proporcionarla.",{timeOut: 7000});
+            toastr.warning("La firma para la Carta de renuncia a beneficios está vacía, favor de proporcionarla.",{timeOut: 7000});
     }
     else if($("#valor_firma2").val() == firma_vacia ){
             toastr.warning("La firma para el Formato de inventario está vacía, favor de proporcionarla.");
