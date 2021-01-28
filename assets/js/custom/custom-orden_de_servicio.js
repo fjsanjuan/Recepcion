@@ -1837,7 +1837,8 @@ $(document).on('click', '#add_mo', function (){
             $('#spinner').hide();                       
         },
         success: function(data) {
-            
+            //limpiar tabla para no duplicar registros
+            $('#table_manos > tbody').empty();
             var obj = data;
             //console.log(obj);
             var items =[];
