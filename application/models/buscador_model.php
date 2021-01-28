@@ -18,7 +18,7 @@ class Buscador_Model extends CI_Model{
 	public function __construct()
 	{
 		parent::__construct();
-		if ($this->Version == 'V4000') 
+		if ($this->Version == 'V6000') 
 			$this->vista = "vwCA_PaquetesWeb";
 	}
 	
