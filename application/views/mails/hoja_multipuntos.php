@@ -390,7 +390,9 @@ $(document).ready(function() {
 		input = input.split("|");
 		<?php 
 			$cla = $orden_inspeccion['rev_tecnico']['multipuntos_text'];
-			$stripped =preg_replace( "/\r|\n/", "",$cla);
+			// cambiar doble comilla por simple para que no se detenga la generacion dinamica de la hoja multipuntos
+			$stripped_str = str_replace("\"", "'", $cla);
+			$stripped =preg_replace( "/\r|\n/", "",$stripped_str);
 		?>
 		var textarea = "<?php echo $stripped?>";
 		
