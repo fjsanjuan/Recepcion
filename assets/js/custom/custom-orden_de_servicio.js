@@ -360,7 +360,8 @@ $(window).on('load', function() {
             if(datos[0]['FechaRequerida'])
                 $("#fecha_promesa_cliente").val(datos[0]['FechaRequerida'].substring(0,10));
             if(datos[0]['HoraRequerida'])
-                $("#horapromesa_cliente").val(datos[0]['HoraRequerida']);
+                // se comenta para que tome la hora del sistema y no la hora de la orden
+                //$("#horapromesa_cliente").val(datos[0]['HoraRequerida']);
 
             $("#hora_promesa_cliente2").empty();
             for (var i = 0; i < data.Horarios.length; i++) {
