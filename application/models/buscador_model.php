@@ -68,9 +68,9 @@ class Buscador_Model extends CI_Model{
 	public function obtener_configEmail()
 	{
 		//se agreg en caso de que no detecte variable de session mandar datos smtp de sucursal 1
-		$suc_sess_mail= isset($this->session->userdata["logged_in"]["id_agencia"]);
-		if($suc_sess_mail == null || $suc_sess_mail == '' ){
-			$suc_sess_mail =1;
+		$suc_sess_mail = 1;
+		if (isset($this->session->userdata["logged_in"]["id_sucursal"])) {
+			$suc_sess_mail= $this->session->userdata["logged_in"]["id_sucursal"];
 		}
 		$query = $this->db->query(" SELECT mail_host, mail_smtpAuth, mail_userName, mail_password, mail_smtpSecure, mail_port 
 				FROM sucursal 
