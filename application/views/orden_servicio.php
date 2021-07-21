@@ -573,12 +573,12 @@
                               <!--  <label for="">Garantía</label>  --> <!-- para fame -->
                                 <!-- Material inline 1 -->
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="extGSI" name="ext_garantia" value="si">
+                                  <input type="radio" class="form-check-input" id="extGSI" name="ext_garantia" value="si" checked>
                                   <label class="form-check-label" for="extGSI">Sí</label>
                                 </div>
                                 <!-- Material inline 2 -->
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="extGNo" name="ext_garantia" value="no" checked>
+                                  <input type="radio" class="form-check-input" id="extGNo" name="ext_garantia" value="no">
                                   <label class="form-check-label" for="extGNo">No</label>
                                 </div>
                             </td>
