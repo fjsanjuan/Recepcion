@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.41.168,1430',
+	'hostname' => '192.168.41.168',
 	'username' => 'sa',
 	'password' => '123',
 	'database' => 'recepcion',
@@ -97,10 +97,10 @@ $db['default'] = array(
 
 $db['other'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.41.168,1430',
+	'hostname' => '192.168.41.168',
 	'username' => 'sa',
 	'password' => '123',
-	'database' => 'FameToyota',	//<--- intelisis
+	'database' => 'ACF_Zacatecas',	//<--- intelisis
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
