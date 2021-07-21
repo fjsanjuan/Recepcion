@@ -2262,7 +2262,7 @@ class Buscador_Model extends CI_Model{
 		$suc_login = $this->session->userdata["logged_in"]["id_sucursal"];
 
 		//se obtiene el  id_intelisis de la sucursal a la cual pertenece el usuario en la bd de la empresa
-		$suc_or['id'] = $this->db->select("id_intelisis")
+		$suc_or['id'] = $this->db->select("id_servicio")
 							->from("sucursal")
 							->where('id', $suc_login)
 							->get()->row_array();
@@ -2272,7 +2272,7 @@ class Buscador_Model extends CI_Model{
 
 		if($perfil == 6)																//refacciones
 		{
-			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_intelisis']."  ";
+			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
 		}else 
 		{
