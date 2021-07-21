@@ -2337,7 +2337,7 @@ $(document).on("change", "#cameraInput", function(event){
 	    }
     }else 
     {
-    	toastr.error("No es posible agregar más imágenes, se ha alcanzado el límite máximo permitido.");
+    	toastr.error("No es posible agregar más imágenes, se ha alcanzado el límite máximo permitido: " + cant_max);
     	return;
     }
 });

@@ -2,11 +2,16 @@
 	<div class="col-sm-12">
 		<div class="">
 			<div class="btn btn-info btn-md float-left" id="camaracontainer">
-					<!-- cambio para adjuntar m�s fotos -->
+				
+				<!-- captura fotos sin accesar a galeria -->
 				<input type="file" accept="image/*" capture="camera" id="cameraInput" name="imagen[]" 
 				style="width: 150px;height:50px;opacity: 0;overflow: hidden;position: absolute;z-index: 100000;left:20px;top:5px; cursor: pointer;" 
 				multiple>
-
+				
+				<!-- captura fotos y accesa a galeria -->
+				<!-- <input type="file" accept="image/*;capture=camera" id="cameraInput" name="imagen[]" 
+				style="width: 150px;height:50px;opacity: 0;overflow: hidden;position: absolute;z-index: 100000;left:20px;top:5px; cursor: pointer;" 
+				multiple> -->
 
 	            <span>Capturar Foto  <i class="fa fa-camera"></i></span>
 	        </div>
