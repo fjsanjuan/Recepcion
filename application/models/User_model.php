@@ -12,7 +12,7 @@
 */
 class User_model extends CI_Model {
 
-	private $Version = 'V6000';
+	private $Version = 'V4000';
 	/*  ./assets/uploads/fotografias/   o  F:/recepcion_activa/fotografias/  */
 	private $dir_fotos = './assets/uploads/fotografias/';
 
