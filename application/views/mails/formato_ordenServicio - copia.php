@@ -243,7 +243,9 @@ $( document ).ready(function() {
 	$("#boton").click(function(){
 		genIMG();	
 	});
-	
+
+	$("#boton").click();
+
 	var tipo_orden = "<?=$cliente['tipo_orden']?>";
 
 	switch (tipo_orden) 

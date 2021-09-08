@@ -1560,11 +1560,11 @@ class Buscador_Model extends CI_Model{
 	public function guardar_paq($idpak,$user_id,$Empresa,$Sucursal){
 		$this->db2 = $this->load->database("other", true);
 
-		$this->db2->query("exec LimpiaListaSt 888");
+		$this->db2->query("exec xpCA_LimpiaListaSt 888");
 		$this->db2->query("INSERT INTO ListaSt (Estacion, Clave) VALUES (888,?)", array($idpak));
 		// echo $this->db2->last_query();
 		// echo $user_id;.
-		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC spGenerarDetalleST 'VentaD',?,?,?,888,1,@OkRef OUTPUT SELECT @OkRef", array($user_id,$Empresa,$Sucursal));
+		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC xpCA_spGenerarDetalleST 'VentaD',?,?,?,888,1,@OkRef OUTPUT SELECT @OkRef", array($user_id,$Empresa,$Sucursal));
 		// echo $this->db2->last_query();
 		if ($ok) {
     		return 1;
@@ -2034,54 +2034,55 @@ class Buscador_Model extends CI_Model{
 		$intelisis = $this->load->database("other", TRUE);
 
 		$datos["sucursal"] = $this->db->select("ds.*, s.nombre, s.sucursal_marca, a.razon_social, a.dom_calle_fiscal, a.dom_col_fiscal, a.dom_numExt_fiscal, a.dom_numInt_fiscal, a.dom_ciudad_fiscal, a.dom_estado_fiscal, a.dom_cp_fiscal")
-									  ->from("datos_sucursal ds")
-									  ->join("sucursal s", "ds.id_sucursal = s.id")
-									  ->join("agencia a", "s.id_agencia = a.id")
-									  ->where("ds.id_sucursal", $this->session->userdata["logged_in"]["id_sucursal"])
-									  ->get()->row_array();
+			->from("datos_sucursal ds")
+			->join("sucursal s", "ds.id_sucursal = s.id")
+			->join("agencia a", "s.id_agencia = a.id")
+			->where("ds.id_sucursal", $this->session->userdata["logged_in"]["id_sucursal"])
+			->get()->row_array();
 
 		// echo $this->db->last_query();die;
 		$datos["reverso"] = $this->db->query("
 			SELECT dom_calle, dom_numExt, dom_colonia, dom_ciudad, dom_estado, dom_cp, rfc
 			FROM datos_sucursal WHERE id_sucursal = ?", array($this->session->userdata["logged_in"]["id_sucursal"])) 
 		->row_array();
-		
-		// echo $this->db->last_query();die;						 
+							 
 									  
 		$datos["cliente"] = $this->db->select("*")
-									 ->from("orden_servicio")
-									 ->where("id", $id_orden)
-									 ->where("eliminado", 0)
-									 ->get()->row_array();
+			->from("orden_servicio")
+			->where("id", $id_orden)
+			->where("eliminado", 0)
+			->get()->row_array();
 
 		
 		$datos["cliente"] += $intelisis->select("MovID,Pasajeros,ar.Descripcion1")
-												->from("Venta vta")
-												->join("VIN vn", "vta.servicioSerie = vn.vin")
-												->join("art ar", "ar.Articulo = vta.ServicioArticulo")
-												->where("ID", $datos["cliente"]["id_orden_intelisis"])
-												->get()->row_array(); 
+			->from("Venta vta")
+			->join("VIN vn", "vta.servicioSerie = vn.vin")
+			->join("art ar", "ar.Articulo = vta.ServicioArticulo")
+			->where("ID", $datos["cliente"]["id_orden_intelisis"])
+			->get()->row_array(); 
+									
 
 		$datos["inspeccion"] = $this->db->select("*")
-										->from("orden_servicio_inspeccion")
-										->where("id_servicio", $id_orden)
-										->get()->row_array();
+			->from("orden_servicio_inspeccion")
+			->where("id_servicio", $id_orden)
+			->get()->row_array();
 
-		$datos["desglose"] = $this->db->select("*")
-									  ->from("orden_servicio_desglose")
-									  ->where("id_orden", $id_orden)
-									  ->where("eliminado", 0)
-									  ->get()->result_array();
+		$datos["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total")
+			->from("VentaD")
+			->where("ID", $datos["cliente"]["id_orden_intelisis"])
+			->where('ventad.cantidad > isnull(ventad.cantidadcancelada,0)')
+			->group_by('precio, cantidad, impuesto1, articulo,DescripcionExtra')
+			->get()->result_array();
 
 		$datos["firma_cliente"] = $this->db->select("firma, firma_formatoInventario")
-										   ->from("firma_electronica")
-										   ->where("id_orden_servicio", $id_orden)
-										   ->get()->row_array();
+			->from("firma_electronica")
+			->where("id_orden_servicio", $id_orden)
+			->get()->row_array();
 
 		$datos["asesor"] = $this->db->select("firma_electronica, nombre, apellidos")
-									->from("usuarios")
-									->where("id", $this->session->userdata["logged_in"]["id"])
-									->get()->row_array();
+			->from("usuarios")
+			->where("id", $this->session->userdata["logged_in"]["id"])
+			->get()->row_array();
 
 							   
 		return $datos;
@@ -2268,6 +2269,7 @@ class Buscador_Model extends CI_Model{
 	public function ver_datosHojaMult($id_orden = null)
 	{
 		$int = $this->load->database("other", TRUE);
+		$suc_usu = $this->session->userdata["logged_in"]["id_sucursal"];
 
 		$datos["orden_servicio"] = $this->db->select("*")
 						 				    ->from("orden_servicio")
@@ -2296,7 +2298,7 @@ class Buscador_Model extends CI_Model{
 									 ->from("sucursal s")
 									 ->join("datos_sucursal ds", "s.id = ds.id_sucursal")
 									 ->join("agencia a", "s.id_agencia = a.id")
-									 ->where("s.sucursal_int", $datos["orden_servicio"]["id_sucursal_intelisis"])
+									 ->where("s.id", $suc_usu)
 									 ->get()->row_array();								
 
 		$datos["firma_cliente"] = $this->db->select("firma, firma_multipuntos")

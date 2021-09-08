@@ -83,4 +83,10 @@
   'font awesome 5 free' => array(
     'normal' => $fontDir . '\11f286936ca6448691d213d243db179e',
   ),
+  'roboto' => array(
+    'normal' => $fontDir . '\3fc506ef6c9fec019f75f89cafab3925',
+  ),
+  'fontawesome' => array(
+    'normal' => $fontDir . '\acc98d53d517eb200b20aaadea214430',
+  ),
 ) ?>

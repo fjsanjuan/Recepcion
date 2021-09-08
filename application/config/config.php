@@ -24,7 +24,7 @@ date_default_timezone_set('America/Mexico_City');
 | a PHP script and you can easily do that on your own.
 |
 */
-//$config['base_url'] = "http://fordzacatecas.com.mx:8080/Recepcion/";
+//$config['base_url'] = "https://webdemos.intelisis-solutions.com/Farrera/recepcion/";
 //$config['base_url'] = "http://localhost:8080/Recepcion/";
 $root = "http://".$_SERVER['HTTP_HOST'];
 $root .= dirname($_SERVER['SCRIPT_NAME']);

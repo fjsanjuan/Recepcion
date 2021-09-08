@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.41.168,1430',
-	'username' => 'sa',
-	'password' => '123',
+	'hostname' => '172.29.121.6',
+	'username' => 'intelisis',
+	'password' => 'Iechohn0chie',
 	'database' => 'recepcion',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
@@ -97,10 +97,10 @@ $db['default'] = array(
 
 $db['other'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.41.168,1430',
-	'username' => 'sa',
-	'password' => '123',
-	'database' => 'FameToyota',	//<--- intelisis
+	'hostname' => '172.29.121.6',
+	'username' => 'intelisis',
+	'password' => 'Iechohn0chie',
+	'database' => 'FG_Automotriz',	//<--- intelisis
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

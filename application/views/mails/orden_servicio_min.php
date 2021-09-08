@@ -4,207 +4,218 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="<?=base_url()?>assets/librerias/fontawesome-free-5.2.0-web/css/all.css"/>
 		<link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" media="all">
-		<link href="<?=base_url()?>assets/css/style_pdf.css" rel="stylesheet">
+		<link href="<?=base_url()?>assets/css/style_profeco.css" rel="stylesheet">
 		<title>Orden de Servicio</title>
 	</head>
 	<body>
-		<div class="header">
-			<div class="imagen">
-				<img src="./assets/img/logo/logo_toyota.png" height="90px" /> 
+		<div class="header bordes">
+			<div class="elements rightline" >
+				<div class="imagen">
+					<img src="./assets/img/logo/Find-New-Roads.png" height="90px" /> 
+				</div>
 			</div>
-			<div class="elements ">
+			<div class="elements-identity rightline">
 				<div class="no-margins">
-					<div class="col1-1 "> Denominación o razón social: </div>
-					<div class="col1-2 " > <?=$sucursal["razon_social"]?> </div>
+					<div class="col1-1 "> Denominación o razón social:  <?=strtoupper($sucursal["razon_social"])?> </div>
 				</div>
 				<div class="no-margins">
-					<div class="col1-1 "> R.F.C: </div>
-					<div class="col1-2 "> <?=$sucursal["rfc"]?> </div>
+					<div class="col1-1 "> R.F.C: <?=$sucursal["rfc"]?> </div>
 				</div>
 				<div class="no-margins" >
-					<div class="col1-1 "> Domicilio: </div>
-					<div class="col1-2-domic ">
-						<?php
-							$dom_suc = $sucursal["dom_calle"]." No.".$sucursal["dom_numExt"].", COL. ".$sucursal["dom_colonia"]." C.P. ".$sucursal["dom_cp"]." ".$sucursal["dom_ciudad"].",  ".$sucursal["dom_estado"].", MÉXICO";
-						?>
-						<label><?=strtoupper($dom_suc)?></label> 
+					<div class="col1-1 "> Domicilio: <label class="backcoloured"> <?= $sucursal["dom_calle"] ?> </label>, no. <label class="backcoloured"> <?= $sucursal["dom_numExt"] ?>, int  <?= $sucursal["dom_numInt"] ?></label>, Col. <label class="backcoloured"> <?= $sucursal["dom_colonia"] ?> </label><br>
+					 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <label class="backcoloured"> <?= $sucursal["dom_ciudad"] ?>, <?= $sucursal["dom_estado"] ?> </label>, C.P. <label class="backcoloured"> <?= $sucursal["dom_cp"] ?> </label>
 					</div>
 				</div>
 				<div class="no-margins" >
-					<div class="col1-1"> Teléfono(s) y horario de atención: </div>
-					<div class="col1-2" style="line-height : 12px;"> <?=$sucursal["telefono"].", ".$sucursal["horario_recep"]?> </div>
+					<div class="col1-1"> Teléfono(s) y horario de atención: 
+						<div>
+							<label class="backcoloured"> <?=$sucursal["telefono"].", ".$sucursal["horario_recep"]?> </label>
+						</div>
+					</div>
+
 				</div>
 				<div class="no-margins" >
-					<div class="col1-1"> Fax: </div>
-					<div class="col1-2"> N/A </div>
+					<div class="col1-1"> Fax: N/A</div>
 				</div>
 				<div class="no-margins" >
-					<div class="col1-1"> E.Mail: </div>
-					<div class="col1-2"> <?php echo ($sucursal["email_contacto"])?$sucursal["email_contacto"]:'.';?> </div>
+					<div class="col1-1"> E.Mail: <?php echo ($sucursal["email_contacto"])?$sucursal["email_contacto"]:'.';?></div>
 				</div>
 				<div class="no-margins" >
-					<div class="col1-1"> SIEM (opcional): </div>
-					<div class="col1-2"> . </div>
+					<div class="col1-1"> SIEM (opcional): . </div>
 				</div>
+
 			</div>
-			<div class="elements-identity">
-				<div class="no-margins" >
-					<div class="col2-1"> Orden de<br/>Reparación:  </div>
-					<div class="col2-2"> <?=$cliente["MovID"]?> </div>
+			<div class="elements-right">
+				
+				<div class="underline">
+					<div class="col1-1 secondary-right-header">Orden de reparación: <br>
+						<div class="centered backcoloured">
+							<labe class="remarked"> <?=$cliente["MovID"]?> </label>
+						</div>	
+					</div>
 				</div>
-				<div class="no-margins" style="margin-top:0px;">
-					<div class="col2-3"> Fecha:  </div>
-					<div class="col2-4"> <?=date("d-m-Y")?> </div>
+
+				<div class="underline">
+					<div class="col1-1 secondary-right-header">Fecha: <br>
+						<div class="centered backcoloured">
+							<labe class="remarked"> <?=date('Y/m/d')?> </label>
+						</div>	
+					</div>
 				</div>
-				<div class="no-margins" style="margin-top:0px;">
-					<div class="col2-5"> Localidad:  </div>
-					<div class="col2-6"> <?=$sucursal["dom_ciudad"]?> ,  <?=$sucursal["dom_estado"]?> </div>
+
+				<div class="col1-1 primary-right-header">Localidad: <br>
+					<div class="centered">
+						<label class="remarked backcoloured"> <?=$sucursal["dom_ciudad"]?>,  <?=$sucursal["dom_estado"]?> </label> <br>
+						<label class="unmarked centered no-margins">(lugar de reparación y/o <br> mantenimiento) </label>
+					</div>	
 				</div>
 			</div>
 		</div>
-		<div class="datos-cliente-title">DATOS DEL CLIENTE (CONSUMIDOR)</div>
 		<div class="datos-cliente">
+			<div class="elements-cliente" style="height: 8px;"> 
+				<div class="datos-cliente-title">DATOS DEL CLIENTE (CONSUMIDOR)</div>
+			</div>
 			<div class="elements-cliente" style="height: 12px;">
 				<div class="no-margins">
 					<div class="col3-1">
-						Nombre:
-					</div>
-					<div class="col3-2 etiqueta-renglon">
-						<?php 
-							$nom_cli = $cliente["nombre_cliente"]." ".$cliente["ap_cliente"]." ".$cliente["am_cliente"];
-						?>
-						<?=$nom_cli?>
-					</div>
-					<div class="col3-3">
-						R.F.C.:
-					</div>
-					<div class="col3-4 etiqueta-renglon">
-						<?=$cliente["rfc_cliente"]?>
-					</div>
-					<div class="col3-5">
-						E.Mail:
-					</div>
-					<div class="col3-6 etiqueta-renglon">
-						<?=$cliente["email_cliente"]?>
-					</div>
-				</div>
-			</div>
-			<div class="elements-cliente" style="margin-top:2px;height: 10px;">
-				<div class="no-margins">
-					<div class="col4-1">
-						Domicilio:
-					</div>
-					<div class="col4-2 etiqueta-renglon">
-						<?=$cliente["dir_calle"]?>
-					</div>
-					<div class="col4-3 etiqueta-renglon">
-						<?=$cliente["dir_num_ext"].", ".$cliente["dir_num_int"]?>
-					</div>
-					<div class="col4-4 etiqueta-renglon">
-						<?=$cliente["dir_colonia"]?>
+						<label class="cliente-nombre-label">
+							Nombre: 
+						</label>
+						<label class="backcoloured cliente-nombre">
+							<?= $cliente['nombre_cliente']." ".$cliente["ap_cliente"]." ".$cliente["am_cliente"] ?>
+						</label>
+						<label class="cliente-rfc-label">
+							RFC:
+						</label>
+						<label class="backcoloured cliente-rfc">
+							<?=$cliente["rfc_cliente"]?>
+						</label>
+						<label class="cliente-mail-label">
+							E.Mail: 
+						</label>
+						<label class="backcoloured cliente-mail">
+							<?=$cliente['email_cliente']?>
+						</label>
 					</div>
 				</div>
 			</div>
 			<div class="elements-cliente" style="margin-top:2px;height: 10px;">
 				<div class="no-margins">
-					<div class="col5-1">
+					<div class="elements-cliente-row underline">
+						<label class="domicilio-col-1">
+							Domicilio:
+						</label>
+						<label class="backcoloured domicilio-col-2 ">
+							<?=$cliente["dir_calle"]?>
+						</label>
+						<label class="backcoloured domicilio-col-3">
+							<?=$cliente["dir_num_ext"].", ".$cliente["dir_num_int"]?>
+						</label>
+						<label class="backcoloured domicilio-col-4">
+							<?=$cliente["dir_colonia"]?>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="elements-cliente" style="margin-top:2px;height: 10px;">
+				<div class="no-margins underline">
+					<label class="domicilio-col-1"> </label>
+					<label class="domicilio-col-2 unmarked ">
 						(Calle)
-					</div>
-					<div class="col5-2">
+					</label>
+					<label class="domicilio-col-3 unmarked">
 						(Número exterior e interior)
-					</div>
-					<div class="col5-3">
+					</label>
+					<label class="domicilio-col-4 unmarked">
 						(Colonia)
-					</div>
+					</label>
 				</div>
 			</div>
 			<div class="elements-cliente" style="margin-top:2px;height: 10px;">
-				<div class="no-margins">
-					<div class="col6-1 etiqueta-renglon">
+				<div class="no-margins underline">
+					<label class="backcoloured domicilio-col-1">
 						<?=$cliente["dir_cp"]?>
-					</div>
-					<div class="col6-2 etiqueta-renglon">
+					</label>
+					<label class="backcoloured domicilio-col-2">
 						<?=$cliente["dir_municipio"]?>
-					</div>
-					<div class="col6-3 etiqueta-renglon">
+					</label>
+					<label class="backcoloured domicilio-col-3">
 						<?=$cliente["dir_estado"]?>
-					</div>
-					<div class="col6-4 etiqueta-renglon">
-						<?=$cliente["tel_movil"]." ".$cliente["otro_tel"]?>
-					</div>
+					</label>
+					<label class="backcoloured domicilio-col-4">
+						<?=$cliente["tel_movil"]." - - ".$cliente["otro_tel"]?>
+					</label>
 				</div>
 			</div>
 			<div class="elements-cliente" style="margin-top:2px;height: 10px;">
-				<div class="no-margins">
-					<div class="col7-1">
+				<div class="no-margins underline">
+					
+					<label class="unmarked domicilio-col-1">
 						(Código Postal)
-					</div>
-					<div class="col7-2">
+					</label>
+					<label class="unmarked domicilio-col-2">
 						(Delegación o Municipio)
-					</div>
-					<div class="col7-3">
+					</label>
+					<label class="unmarked domicilio-col-3">
 						(Estado)
-					</div>
-					<div class="col7-4">
+					</label>
+					<label class="unmarked domicilio-col-4">
 						(Teléfonos)
-					</div>
+					<label>
 				</div>
 			</div>
 		</div>
 		<div class="datos-caracteristicas">
 			<div class="elements-cliente" style="margin-top:12px;margin-left:-7px">
 				<div class="middle">
-					<div style="font-weight: bold;font-size: 14px;">
-					CARACTERÍSTICAS GENERALES DEL VEHÍCULO:
+					<div>
+						Marca: <label class="backcoloured"> <?=$cliente["marca_v"]?></label>
 					</div>
 					<div>
-					Marca: <?=$cliente["marca_v"]?>
+						Submarca: <label class="backcoloured">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
 					</div>
 					<div>
-					Submarca:
+						Tipo o versión: <label class="backcoloured"> <?=$cliente["Descripcion1"]?></label>
 					</div>
 					<div>
-					Tipo o versión: <?=$cliente['Descripcion1']?>
+						Color: <label class="backcoloured"> <?=$cliente["color_v"]?></label>
 					</div>
 					<div>
-					Color: <?=$cliente['color_v']?>
+						Año-modelo: <label class="backcoloured"> <?=$cliente['anio_modelo_v']?></label>
 					</div>
 					<div>
-					Año-modelo: <?=$cliente['anio_modelo_v']?>
+						Número Identificación Vehicular: <label class="backcoloured"> <?=$cliente['vin_v']?></label>
 					</div>
 					<div>
-					Número Identificación Vehicular: <?=$cliente['vin_v']?>
+						Capacidad: <label class="backcoloured"> <?=$cliente['Pasajeros']?></label>
 					</div>
 					<div>
-					Capacidad: <?=$cliente['Pasajeros']?>
+						Número de kilómetros recorridos: <label class="backcoloured"> <?=$cliente['kilometraje_v']?></label>
 					</div>
 					<div>
-					Número de kilómetros recorridos: <?=$cliente['kilometraje_v']?>
-					</div>
-					<div>
-					Número de placas: <?=$cliente['placas_v']?>
+						Número de placas: <label class="backcoloured"> <?=$cliente['placas_v']?></label>
 					</div>
 				</div>
 				<div class="middle2">
 					<div>
-						Asesor: <?=$cliente['asesor']?>
+						Asesor: <label class="backcoloured"> <?=$cliente['asesor']?></label>
 					</div>
 					<div>
-						Pirámide: <?=$cliente['torrecolor']?>
+						Pirámide: <label class="backcoloured"> <?=$cliente['torrecolor']?></label>
 					</div>
 					<div>
 						<?php 
 						$cliente["fecha_recepcion"] = explode(" ", $cliente["fecha_recepcion"]);
 						$fecha_recepcion = date("d-m-Y", strtotime($cliente['fecha_recepcion'][0]));
 						?>
-						Fecha y hora de recepción del vehículo: <?=$fecha_recepcion?> <?=$cliente['hora_recepcion']?>
+						Fecha y hora de recepción del vehículo: <label class="backcoloured"> <?=$fecha_recepcion?> <?=$cliente['hora_recepcion']?></label>
 					</div>
 					<div>
 						<?php 
 						$cliente["fecha_entrega"] = explode(" ", $cliente["fecha_entrega"]);
 						$fecha_entrega = date("d-m-Y", strtotime($cliente['fecha_entrega'][0]));
 						?>
-						Fecha y hora de entrega del vehículo:   <b style="font-size:11px;">fecha sujeta a tiempo de revisión</b> 
+						Fecha y hora de entrega del vehículo:  <label class="backcoloured"> <b style="font-size:11px;">fecha sujeta a tiempo de revisión</b> </label>
 					</div>
 					<div>
 						Se entregan las partes o refacciones reemplazadas al consumidor:
@@ -234,56 +245,58 @@
 			$print_precios="";
 			$print_subtotales="";
 			$print_total=0;
+			$subtotal=0;
 			foreach ($desglose as $key => $value){
-				if($key <= 5){
 					$print_operaciones.="<div> ".$value["descripcion"]."</div>";
 					$print_precios.="<div>$".number_format($value["precio_unitario"], 2, '.', ',')."</div>";
-					$print_subtotales.="<div>$".number_format(($value["precio_unitario"]*$value["cantidad"]), 2, '.', ',')."</div>";
-					$print_total+=$value["precio_unitario"]*$value["cantidad"];
-				}
+					$print_subtotales.="<div>$".number_format($value["iva_total"], 2, '.', ',')."</div>";
+					$print_total+=$value["iva_total"];
+					$subtotal+=$value["precio_unitario"]*$value["cantidad"];
+
 			}
+			$iva = $print_total-$subtotal;
 			?>
-			<div class="elements-cliente" style="margin-top:12px;margin-left:-7px">
+			<div class="elements-operation" style="margin-top:12px;">
 				<div class="seg4-1">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					OPERACIONES A EFECTUAR:
 					</div>
-					<?php echo $print_operaciones;?>
+					<label class="backcoloured unmarked"> <?= $print_operaciones ?> </label>
 					<div>
 					</div>
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					POSIBLES CONSECUENCIAS:
 					</div>
 				</div>
 				<div class="seg4-2">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					PARTES Y/O REFACCIONES:
 					</div>
 				</div>
 				<div class="seg4-3">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					PRECIOS UNITARIOS:
 					</div>
-					<?php echo $print_precios;?>
+					<label class="backcoloured unmarked"> <?= $print_precios ?> </label>
 					<div>
 					Monto total de la operación:
 					</div>
 				</div>
 				<div class="seg4-4">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					&nbsp;
 					</div>
-					<?php echo $print_subtotales;?>
+					<label class="backcoloured unmarked"> <?= $print_subtotales ?> </label>
 					<div>
-					<?php echo "$".number_format($print_total, 2, '.', ',');?>
+					<label class="backcoloured unmarked"> <?= "$".number_format($print_total, 2, '.', ',') ?> </label>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="datos-pago">
-			<div class="elements-cliente" style="margin-top:12px;margin-left:-7px">
+			<div class="elements-cliente" style="margin-left:-7px">
 				<div class="seg4-1">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					FORMA DE PAGO: <br>Monto de la operación:
 					</div>
 					<div>
@@ -306,11 +319,11 @@
 					</div>
 				</div>
 				<div class="seg4-2">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					&nbsp;
 					</div>
 					<div class="etiqueta-renglon">
-						$ <?=number_format($cliente['subtotal_orden'], 2, '.', ',')?>
+						<label class="backcoloured"> <?= "$".number_format($subtotal, 2, '.', ',') ?> </label>
 					</div>
 					<div class="etiqueta-renglon">
 					$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -322,17 +335,17 @@
 					$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</div>
 					<div class="etiqueta-renglon">
-						$ <?=number_format($cliente['iva_orden'], 2, '.', ',')?>
+						<label class="backcoloured"> <?= "$".number_format($iva, 2, '.', ',') ?> </label>
 					</div>
 					<div class="etiqueta-renglon">
-						$ <?=number_format($cliente['total_orden'], 2, '.', ',')?>
+						<label class="backcoloured"> <?= "$".number_format($print_total, 2, '.', ',') ?> </label>
 					</div>
 				</div>
 				<div class="seg4-3">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					SERVICIOS ADICIONALES:
 					</div>
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					Total refacciones y servicios adicionales:
 					</div>
 					<div style="margin-top:20px">
@@ -340,13 +353,13 @@
 					</div>
 				</div>
 				<div class="seg4-4">
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					&nbsp;
 					</div>
 					<div>
 					$ __________________
 					</div>
-					<div style="font-weight: bold;font-size: 12px;">
+					<div class="operation-column">
 					&nbsp;
 					</div>
 					<div>
@@ -486,7 +499,7 @@
 			<div class="col-over-sign2">
 				<p>EL CLIENTE</p>
 				<img src="<?=$firma_cliente["firma"]?>" class="firma_cliente" alt="firma del cliente" style="margin-top:-10px;">
-				<p style="font-size: 9px; margin: -5px;"><?=$cliente["nombre_cliente"]." ".$cliente["ap_cliente"]." ".$cliente["am_cliente"]?></p>
+				<p style="font-size: 9px; margin: -5px;" class="backcoloured"><?=$cliente["nombre_cliente"]." ".$cliente["ap_cliente"]." ".$cliente["am_cliente"]?></p>
 				<p style="font-size: 9px; margin: 4px;">(Nombre y Firma)</p>
 			</div>
 			<div class="col-over-content" style="font-size:9px;margin-top:-22px;">(*) El presente contrato fue registrado en la Procuraduría Federal del Consumidor bajo el número 2951-2018 de fecha 19 de abril de 2018. <br>

@@ -125,14 +125,13 @@
 <iframe src="" id="iframe_correo" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_correo" value="<?=site_url().'servicio/mensaje'?>">
 <iframe src="" id="iframe_formato" style="width: 100%; height: 0px; border: none;"></iframe>
-<input type="hidden" id="url_formato" value="<?=site_url().'servicio/correo'?>">
+<input type="hidden" id="url_formato" value="<?=site_url().'servicio/profeco_print'?>">
 <iframe src="" id="iframe_reversoformato" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_reversoformato" value="<?=site_url().'servicio/correo_reverso'?>">
 <iframe src="" id="iframe_correo" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_correo" value="<?=site_url().'servicio/mensaje'?>">
 <iframe src="" id="iframe_inventario" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_inventario" value="<?=site_url().'servicio/generar_formatoInventario/1'?>">
-<input type="hidden" id="url_profeco_print" value="<?=site_url().'servicio/profeco_print'?>">
 <!-- Multipuntos -->
 <iframe src="" id="iframe_formato_multipunto" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_formato_multipunto" value="<?=site_url().'servicio/ver_hojaMultipuntos'?>">

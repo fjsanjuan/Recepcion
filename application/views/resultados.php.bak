@@ -50,11 +50,11 @@
                             <?php 
                                 $permitido="aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789";
                                 $especial=false;
+                                $print_vin="";
                                 $real_vin="";
                                 foreach ($vehiculos as $val) 
                                 {
                                     $real_vin=$val['VIN'];
-                                    $print_vin="";
                                     for($count=0;$count<strlen($val['VIN']);$count++){
                                         if(!strpos($permitido,substr($val['VIN'],$count,1))){
                                             $especial=true;

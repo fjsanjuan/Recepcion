@@ -14,7 +14,7 @@ class User_model extends CI_Model {
 
 	private $Version = 'V6000';
 	//private $dir_fotos = './assets/uploads/fotografias/';
-	private $dir_fotos = 'F:/recepcion_activa/fotografias/';
+	private $dir_fotos = 'F:/AppsGMAUT/Aplicaciones/RA/fotografias/';
 
 	public function __construct(){
 		parent::__construct();

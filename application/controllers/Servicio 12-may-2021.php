@@ -249,7 +249,7 @@ class Servicio extends CI_Controller {
 			    $mail->SMTPAuth = true;// Enable SMTP authentication
 			    $mail->Username = 'notificacionesautotec@gfarrera.mx'; // SMTP username
 			    $mail->Password = 'Farrera_85';  // SMTP password
-			    $mail->SMTPSecure = 'SSL';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
 			    $mail->Port = 25;// TCP port to connect to
 			    
 			    //Recipients
@@ -1155,12 +1155,12 @@ class Servicio extends CI_Controller {
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($formato["ruta"], $id_orden,'orden' );
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($multipunto["ruta"], $id_orden, 'multipuntos' );
 
-        // $formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
-		$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
+        $formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
+		//$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
         // enviar correo       
 
-		// if($formato['estatus']) //se utliza cuando se manda a llamar el formato de Ford
-        if($formato)
+		if($formato['estatus']) //se utliza cuando se manda a llamar el formato de Ford
+        //if($formato)
         {
 			try {
 			    //Server settings
@@ -1170,7 +1170,7 @@ class Servicio extends CI_Controller {
 			    $mail->SMTPAuth = true;// Enable SMTP authentication
 			    $mail->Username = 'notificacionesautotec@gfarrera.mx'; // SMTP username
 			    $mail->Password = 'Farrera_85';  // SMTP password
-			    $mail->SMTPSecure = 'SSL';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
 			    $mail->Port = 25;// TCP port to connect to
 			    
 			    //Recipients
@@ -1190,8 +1190,8 @@ class Servicio extends CI_Controller {
 				//Attachments 
 				// Se cambiaron al final para permitir cargar imagen dentro del cuerpo
 			    //$mail->addAttachment($formato["ruta"]);
-			    // $mail->addAttachment($formato["ruta"]); //formato de Ford
-			    $mail->addAttachment($formato);                  // Agregar archivo adjunto
+			    $mail->addAttachment($formato["ruta"]); //formato de Ford
+			    //$mail->addAttachment($formato);                  // Agregar archivo adjunto
 			    //$mail->addAttachment($finventario["ruta"]);                 // Agregar archivo adjunto
 
 				$enviar = $mail->send();
@@ -1220,12 +1220,11 @@ class Servicio extends CI_Controller {
 	}
 
 	public function correo($id_orden = null)
-	{		
-		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
-		$this->get_firma_gerencia($datos['sucursal']);
-		$datos['imgtype'] = 'html';
-		// var_dump($datos);die;
-		$this->load->view("mails/formato_profecoFarrera", $datos);
+	{
+		// $datos = $this->buscador_model->obtener_datosOrden($id_orden);
+		// $this->load->view('mails/formato_profeco.php', $datos, true);
+		// $this->load->view("mails/formato_ordenServicio", $datos);
+		$this->profeco_print($id_orden);
 	}
 
 	public function correo2($id_orden = 1)
@@ -1234,59 +1233,30 @@ class Servicio extends CI_Controller {
 		// var_dump($datos);die;
 		$this->load->view("mails/formatos_demo/formato_ordenServicio", $datos);
 	}
-	private function get_firma_gerencia(&$sucursal)
-	{
-		$path = base_url('assets/img/firmas/'.$sucursal['nombre'].'/firma.png');
-		$type = pathinfo($path, PATHINFO_EXTENSION);
-		$data = file_get_contents($path);
-		$base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-		$sucursal['firma'] = $base64;
-	}
 
-	public function profeco_print($id_orden){
-		$this->pdf_print($id_orden, 'mails/formato_profecoFarrera.php', 'Ordenes', 'FormatoDeOrdenServicio');
-	}
-
-	public function orden_servicio($id_orden)
-	{
-		$this->pdf_print($id_orden, 'mails/orden_servicio_min.php', 'Ordenes', 'FormatoDeOrdenServicioFarrera');
-	}
-
-	/**
-	 * 
-	 * @param
-	 * $id_orden | intelisis id_orden
-	 * $doc | .php file path since views ejem 'mails/orden_servicio_min.php'
-	 * $folder | folder name to save the file 
-	 * $nombre | name of the file
-	 * 
-	 * pdf_print show and save an pdf file using DOMPDF Library
-	 */
-	private function pdf_print($id_orden, $doc, $folder, $nombre)
-	{
+	public function profeco_print($id_orden = null){
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
-		$this->get_firma_gerencia($datos['sucursal']);
-		$datos['imgtype'] = 'pdf';
-		$ruta_temp = $this->createFolder($folder);
-		$html = $this->load->view($doc, $datos, true);
+		//La función recibe el nombre del folder temporal para almacenar el PDF
+		$ruta_temp = $this->createFolder("Ordenes"); //Se crea el folder si no existe
+		
+		$html = $this->load->view('mails/formato_profecoFarrera.php', $datos, true);
 		$dompdf = new DOMPDF();
 		$dompdf->loadHtml($html);
 		$dompdf->setPaper('letter', 'portrait');
 		$dompdf->render();
 		$output = $dompdf->output();
-		file_put_contents($ruta_temp.$nombre.$id_orden.".pdf", $output);
-		$this->showFile($folder, $nombre.$id_orden);
+		file_put_contents($ruta_temp."FormatoDeOrdenServicioFarrera".$id_orden.".pdf", $output);
+		$this->showFile("Ordenes", "FormatoDeOrdenServicioFarrera".$id_orden);
+		
 	}
 
 	public function profeco_make($id_orden = null){
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
-		$this->get_firma_gerencia($datos['sucursal']);
-		$datos['imgtype'] = 'pdf';
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		$ruta_temp = $this->createFolder("Ordenes"); //Se crea el folder si no existe
+		$ruta_temp                = $this->createFolder("Ordenes"); //Se crea el folder si no existe
 		
-		$html = $this->load->view('mails/formato_profecoFarrera', $datos, true);
+		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		$dompdf = new DOMPDF();
 		$dompdf->loadHtml($html);
 		$dompdf->setPaper('letter', 'portrait');
@@ -1636,8 +1606,8 @@ class Servicio extends CI_Controller {
 			    $mail->SMTPAuth = true;// Enable SMTP authentication
 			    $mail->Username = 'notificacionesautotec@gfarrera.mx'; // SMTP username
 			    $mail->Password = 'Farrera_85';  // SMTP password
-			    $mail->SMTPSecure = '';   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = 587;// TCP port to connect to
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = 25;// TCP port to connect to
 			    
 			    //Recipients
 			    $mail->SetFrom('notificacionesautotec@gfarrera.mx', 'Service Excellence');  	//Quien envía el correo
@@ -1702,7 +1672,7 @@ class Servicio extends CI_Controller {
 			    $mail->SMTPAuth = true;// Enable SMTP authentication
 			    $mail->Username = 'notificacionesautotec@gfarrera.mx'; // SMTP username
 			    $mail->Password = 'Farrera_85';  // SMTP password
-			    $mail->SMTPSecure = 'SSL';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
 			    $mail->Port = 25;// TCP port to connect to
 			    
 			    //Recipients
