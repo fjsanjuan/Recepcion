@@ -2283,6 +2283,7 @@ class Buscador_Model extends CI_Model{
 							->from("orden_servicio")
 							->where($cond_claveUs)
 							->where("id_orden_intelisis IS NOT NULL")
+							->where("eliminado = 0")
 							->where($where)
 							->order_by("fecha_creacion", "ASC")
 							->get()->result_array();
