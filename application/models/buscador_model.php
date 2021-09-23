@@ -2102,11 +2102,13 @@ class Buscador_Model extends CI_Model{
 										->where("id_servicio", $id_orden)
 										->get()->row_array();
 
-		$datos["desglose"] = $this->db->select("*")
-									  ->from("orden_servicio_desglose")
-									  ->where("id_orden", $id_orden)
-									  ->where("eliminado", 0)
-									  ->get()->result_array();
+		//modificacion para obtener detalle de orden de servicio desde ventaD intelisis
+		$datos["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total")
+			->from("VentaD")
+			->where("ID", $datos["cliente"]["id_orden_intelisis"])
+			->where('ventad.cantidad > isnull(ventad.cantidadcancelada,0)')
+			->group_by('precio, cantidad, impuesto1, articulo,DescripcionExtra')
+			->get()->result_array();
 
 		$datos["firma_cliente"] = $this->db->select("firma, firma_formatoInventario")
 										   ->from("firma_electronica")
