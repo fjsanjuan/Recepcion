@@ -673,7 +673,7 @@
                                          url: base_url+ "index.php/user/crear_ordenServicio/",
                                          type: 'POST',
                                          dataType: 'json',
-                                         data: {cliente: $("body #id_usuario").val(), vin: bid, id_cita: 0, no_cita: 0}
+                                         data: {cliente: $("body #id_usuario").val(), vin: real, id_cita: 0, no_cita: 0}
                                          })
                                          .done(function(data) {
                                             if(data["estatus"])
@@ -691,8 +691,17 @@
 
                             $.when(insert_update_orden()).done(function( x ) 
                             {
-                                
-                                location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+bid.replace('.', '')+"/";
+                                //location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+bid.replace('.', '')+"/";
+                                if(real.includes('.')){
+                                    var encoded64Vin = btoa(real);
+                                    location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+ encoded64Vin +"/";
+                                    //console.log(real);
+                                    //console.log(encodedString);
+                                    //console.log(atob(encodedString));
+                                }
+                                else{
+                                    location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+bid.replace('.', '')+"/";
+                                }
                             });                     
                         }
                     },
@@ -709,7 +718,7 @@
                                          url: base_url+ "index.php/user/nueva_ordenServicio/",
                                          type: 'POST',
                                          dataType: 'json',
-                                         data: {cliente: $("body #id_usuario").val(), vin: bid, id_cita: 0, no_cita: 0}
+                                         data: {cliente: $("body #id_usuario").val(), vin: real, id_cita: 0, no_cita: 0}
                                          })
                                          .done(function(data) {
                                             if(data["estatus"])
@@ -727,8 +736,18 @@
 
                             $.when(insert_orden()).done(function( x ) 
                             {
-                                
-                                location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+bid.replace('.', '')+"/";
+                                //location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+bid.replace('.', '')+"/";
+                                // si existe un vin con punto lo codificamos a base64 para envitar error al generar la url
+                                if(real.includes('.')){
+                                    var encoded64Vin = btoa(real);
+                                    location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+ encoded64Vin +"/";
+                                    //console.log(real);
+                                    //console.log(encodedString);
+                                    //console.log(atob(encodedString));
+                                }
+                                else{
+                                    location.href = base_url+ "index.php/servicio/orden_de_servicio/"+ 0 + "/"+$("body #us_seleccionado").val()+"/"+bid.replace('.', '')+"/";
+                                }
                             });                     
                         }
                     },

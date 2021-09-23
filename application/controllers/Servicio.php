@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once APPPATH."libraries\dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 class Servicio extends CI_Controller {
@@ -399,11 +399,18 @@ class Servicio extends CI_Controller {
 
 	function orden_de_servicio($vta, $cliente = 0, $vin = 0){
 		// echo $cliente;die;
+		// si se recibe el vin en base64 es por que viene con punto 
+		if (base64_decode($vin, true)) {
+			$decoded64Vin = base64_decode($vin);
+		} else {
+			$decoded64Vin = $vin;
+		}
+		
 		$logged_in = $this->session->userdata("logged_in");
 		if(!empty($logged_in))	{
 			// var_dump($vta);die();
 			
-			$idVenta = array('vta' => $vta ,'cliente' =>$cliente, 'vin' => $vin);
+			$idVenta = array('vta' => $vta ,'cliente' =>$cliente, 'vin' => $decoded64Vin);
 			// var_dump($idVenta);die;
 			$data['contenido'] = $this->load->view("orden_servicio",$idVenta,true);
 			$data['navbar'] = $this->load->view('navbar','', true);
