@@ -1585,13 +1585,18 @@ class Buscador_Model extends CI_Model{
 	public function guardar_paq($idpak,$user_id,$Empresa,$Sucursal){
 		$this->db2 = $this->load->database("other", true);
 
-		$this->db2->query("exec LimpiaListaSt 888");
+		$xp = "LimpiaListaSt";
+		if ($this->Version == 'V6000'){ 
+			$xp = "xpCA_LimpiaListaSt";
+		}
+		
+		$this->db2->query("exec ".$xp." 888");
 		$this->db2->query("INSERT INTO ListaSt (Estacion, Clave) VALUES (888,?)", array($idpak));
 		// echo $this->db2->last_query();
 		// echo $user_id;.
 		$sp = "spGenerarDetalleST";
 		if ($this->Version == 'V6000'){ 
-			$tabla = "xpCA_spGenerarDetalleST";
+			$sp = "xpCA_spGenerarDetalleST";
 		}
 
 		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$sp." 'VentaD',?,?,?,888,1,@OkRef OUTPUT SELECT @OkRef", array($user_id,$Empresa,$Sucursal));
