@@ -1,4 +1,4 @@
-﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once APPPATH."libraries\dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 class Servicio extends CI_Controller {
@@ -12,6 +12,9 @@ class Servicio extends CI_Controller {
 		$this->formt_servicio = "ford";
 		//variable para crear directorio donde se guardaran los formatos creador
 		$this->ruta_formts = "../Recepcion/";
+		//variable para hablitar o deshabilitar el adjunto de fotos de recepcion al envio de correo
+		// se solicito en cever hyundai aeropuero
+		$this->adjuntar_fotos = true;
 
 		//datos de configuracion por default para envio de correos
 		$this->mail_host = "smtp.gmail.com";
@@ -1243,8 +1246,25 @@ class Servicio extends CI_Controller {
 			    $mail->isHTML(true);                                  // Set email format to HTML
 			    $mail->CharSet = 'UTF-8';
 			    $mail->Subject = 'Copia Orden de Servicio ';
-			    $mail->addStringEmbeddedImage($correo_b64, 'mensaje', '', 'base64','image/png'); //Se agrega el parametro de type : image/png ya que sino lo adjunta como un archivo temporal sin extención
-			    $mail->Body    = '<img width="800" height="400" src="cid:mensaje" alt="texto">';
+			    
+				// esta imagen adjunta siempre va a ir por eso se agrega primero
+				$mail->addStringEmbeddedImage($correo_b64, 'mensaje', '', 'base64','image/png'); //Se agrega el parametro de type : image/png ya que sino lo adjunta como un archivo temporal sin extención
+			    $imgs='<img width="800" height="400" src="cid:mensaje" alt="texto">';
+
+				if($this->adjuntar_fotos){
+					$fotos = $this->buscador_model->traer_fotos($id_orden);
+
+					// si existen fotos se van concatenando a la variable $imgs y la funcion addEmbeddedImage para el envio en el correo
+					// hace la concatenacion si adjuntar_fotos = True
+					if($fotos){
+						foreach ($fotos as $row) {
+							$mail->addEmbeddedImage($row['ruta_archivo'], $row['ruta_archivo'], '', 'base64','image/jpg'); //Se agrega el parametro de type : image/png ya que sino lo adjunta como un archivo temporal sin extención
+							$imgs.='<img width="400" height="200" src="cid:'.$row['ruta_archivo'].'" alt="fotos">';
+						}
+					}
+				}
+				
+				$mail->Body = $imgs;
 
 				//Attachments 
 				// Se cambiaron al final para permitir cargar imagen dentro del cuerpo
