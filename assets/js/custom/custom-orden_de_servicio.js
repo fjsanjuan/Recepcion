@@ -12,7 +12,7 @@ $(window).on('load', function() {
     var id_cliente = $("#cliente").val();
     var vin = $("#vin").val();
 
-    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #enviar_whatsapp").hide();
+    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #levanta_orden, #btn_inicio, #enviar_whatsapp").hide();
 
     // funcion que asigna el total de fotos que tiene cada orden 
     set_totalFots();
@@ -1621,8 +1621,9 @@ $(document).on('click','#levanta_orden' ,function(e){
                 toastr.success('Orden creada correctamente.');
                 $("#mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio").show();
                 // $("#mostrar_modalemail").click();
-                $("#send_mail").click();
+                //$("#send_mail").click();
                 $("#loading_spin, #levanta_orden").hide();
+                generar_formatos();
                 setTimeout(function(){ 
                     window.open(base_url+"index.php/servicio/correo_reverso/"+ localStorage.getItem("id_orden_servicio"), "_blank");
                 }, 6000);
@@ -2184,6 +2185,7 @@ $(document).on("click", '#btn_guardarFirma', function (e){
                 $("#loading_spin").hide();
 
                 $("#modalfirma").modal("hide");
+                $("#levanta_orden").show();
             }else
             {
                 toastr.error("Hubo un error al guardar las firmas del Cliente.");
@@ -2808,7 +2810,7 @@ function generar_formato(id_orden)
     var img = "";
     var img_reverso = "";
     var bandera = true;
-
+    toastr.info("Generando Orden de Servicio.", {timeOut: 5000});
     $("#iframe_formato").prop("src", url_formato);                                                  //1ero se ejecuta esto
     $("#iframe_reversoformato").prop("src", url_reverso);
 
@@ -2865,8 +2867,8 @@ function generar_pdf(img_formato, img_reverso, id_orden)
     doc.addImage(img_reverso, 'PNG', 0, 0, width, height, undefined, 'FAST');
     doc.save('OrdenServicio'+id_orden+'.pdf');
     $("#enviar_whatsapp").show();
-    
     $("#loading_spin").hide();
+    guardar_orden_servicio(img_formato,img_reverso);
     b_profeco = false;
 }
 
@@ -2896,7 +2898,7 @@ $(document).off("click", "#generar_pdf").on("click", "#generar_pdf", function(e)
                         localStorage.setItem("formatoReverso_base64", "");
                                                          
                         $("#loading_spin").show();
-                        generar_formatoProfeco(id_orden);
+                        generar_formato(id_orden);
                     }                   
                 }else 
                 {
@@ -3139,3 +3141,149 @@ $(document).on("click", '#boton_agregarMano', function (e){
     $("#input_cantidad").val(1);
     $("#table_paq tbody, #tabla_detalle tbody").empty();
 });
+
+function generar_formatos() {
+    reset_formatos();
+
+    //Formato orden servicio
+    var url_formato = $("#url_formato").val();
+    url_formato += "/"+localStorage.getItem("id_orden_servicio");
+    var url_correo = $("#url_correo").val();
+    url_correo += "/"+localStorage.getItem("id_orden_servicio");
+    var url_reverso = $("#url_reversoformato").val();
+    url_reverso += "/"+localStorage.getItem("id_orden_servicio");
+    var url_formato_multipunto = $("#url_formato_multipunto").val();
+    url_formato_multipunto += "/"+localStorage.getItem("id_orden_servicio");
+    var url_inventario = $("#url_inventario").val();
+    url_inventario += "/"+localStorage.getItem("id_orden_servicio");
+
+    var bandera = true;
+    toastr.info("Generando formatos.", {timeOut: 5000});
+    $("#iframe_formato, #iframe_correo, #iframe_reversoformato, #iframe_formato_multipunto, #iframe_inventario").off("load").on("load", function (){
+        setTimeout(function(){
+            
+            if(bandera)
+            {
+                revisar_creacionFormatos();
+            }
+            bandera = false;
+        }, 800);
+    });
+
+    var firma_vacia = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAADICAYAAAAQj4UaAAANEklEQVR4Xu3ZwVEkUQwFwcYo1p2xbdwBp9YEbhWCl5wnQr9TulTw8fgjQIAAAQIECBAgQIBAJPARzTGGAAECBAgQIECAAAECjwBxBAQIECBAgAABAgQIZAICJKM2iAABAgQIECBAgAABAeIGCBAgQIAAAQIECBDIBARIRm0QAQIECBAgQIAAAQICxA0QIECAAAECBAgQIJAJCJCM2iACBAgQIECAAAECBASIGyBAgAABAgQIECBAIBMQIBm1QQQIECBAgAABAgQICBA3QIAAAQIECBAgQIBAJiBAMmqDCBAgQIAAAQIECBAQIG6AAAECBAgQIECAAIFMQIBk1AYRIECAAAECBAgQICBA3AABAgQIECBAgAABApmAAMmoDSJAgAABAgQIECBAQIC4AQIECBAgQIAAAQIEMgEBklEbRIAAAQIECBAgQICAAHEDBAgQIECAAAECBAhkAgIkozaIAAECBAgQIECAAAEB4gYIECBAgAABAgQIEMgEBEhGbRABAgQIECBAgAABAgLEDRAgQIAAAQIECBAgkAkIkIzaIAIECBAgQIAAAQIEBIgbIECAAAECBAgQIEAgExAgGbVBBAgQIECAAAECBAgIEDdAgAABAgQIECBAgEAmIEAyaoMIECBAgAABAgQIEBAgboAAAQIECBAgQIAAgUxAgGTUBhEgQIAAAQIECBAgIEDcAAECBAgQIECAAAECmYAAyagNIkCAAAECBAgQIEBAgLgBAgQIECBAgAABAgQyAQGSURtEgAABAgQIECBAgIAAcQMECBAgQIAAAQIECGQCAiSjNogAAQIECBAgQIAAAQHiBggQIECAAAECBAgQyAQESEZtEAECBAgQIECAAAECAsQNECBAgAABAgQIECCQCQiQjNogAgQIECBAgAABAgQEiBsgQIAAAQIECBAgQCATECAZtUEECBAgQIAAAQIECAgQN0CAAAECBAgQIECAQCYgQDJqgwgQIECAAAECBAgQECBugAABAgQIECBAgACBTECAZNQGESBAgAABAgQIECAgQNwAAQIECBAgQIAAAQKZgADJqA0iQIAAAQIECBAgQECAuAECBAgQIECAAAECBDIBAZJRG0SAAAECBAgQIECAgABxAwQIECBAgAABAgQIZAICJKM2iAABAgQIECBAgAABAeIGCBAgQIAAAQIECBDIBARIRm0QAQIECBAgQIAAAQICxA0QIECAAAECBAgQIJAJCJCM2iACBAgQIECAAAECBASIGyBAgAABAgQIECBAIBMQIBm1QQQIECBAgAABAgQICBA3QIAAAQIECBAgQIBAJiBAMmqDCBAgQIAAAQIECBAQIG6AAAECBAgQIECAAIFMQIBk1AYRIECAAAECBAgQICBA3AABAgQIECBAgAABApmAAMmoDSJAgAABAgQIECBAQIC4AQIECBAgQIAAAQIEMgEBklEbRIAAAQIECBAgQICAAHEDBAgQIECAAAECBAhkAgIkozaIAAECBAgQIECAAAEB4gYIECBAgAABAgQIEMgEBEhGbRABAgQIECBAgAABAgLEDRAgQIAAAQIECBAgkAkIkIzaIAIECBAgQIAAAQIEBIgbIECAAAECBAgQIEAgExAgGbVBBAgQIECAAAECBAgIEDdAgAABAgQIECBAgEAmIEAyaoMIECBAgAABAgQIEBAgboAAAQIECBAgQIAAgUxAgGTUBhEgQIAAAQIECBAgIEDcAAECBAgQIECAAAECmYAAyagNIkCAAAECBAgQIEBAgLgBAgQIECBAgAABAgQyAQGSURtEgAABAgQIECBAgIAAcQMECBAgQIAAAQIECGQCAiSjNogAAQIECBAgQIAAAQHiBggQIECAAAECBAgQyAQESEZtEAECBAgQIECAAAECAsQNECBAgAABAgQIECCQCQiQjNogAgQIECBAgAABAgQEiBsgQIAAAQIECBAgQCATECAZtUEECBAgQIAAAQIECAgQN0CAAAECBAgQIECAQCYgQDJqgwgQIECAAAECBAgQECBugAABAgQIECBAgACBTECAZNQGESBAgAABAgQIECAgQNwAAQIECBAgQIAAAQKZgADJqA0iQIAAAQIECBAgQECAuAECBAgQIECAAAECBDIBAZJRG0SAAAECBAgQIECAgABxAwQIECBAgAABAgQIZAICJKM2iAABAgQIECBAgAABAeIGCBAgQIAAAQIECBDIBARIRm0QAQIECBAgQIAAAQICxA0QIECAAAECBAgQIJAJCJCM2iACBAgQIECAAAECBASIGyBAgAABAgQIECBAIBMQIBm1QQQIECBAgAABAgQICBA3QIAAAQIECBAgQIBAJiBAMmqDCBAgQIAAAQIECBAQIG6AAAECBAgQIECAAIFMQIBk1AYRIECAAAECBAgQICBA3AABAgQIECBAgAABApmAAMmoDSJAgAABAgQIECBAQIC4AQIECBAgQIAAAQIEMgEBklEbRIAAAQIECBAgQICAAHEDBAgQIECAAAECBAhkAgIkozaIAAECBAgQIECAAAEB4gYIECBAgAABAgQIEMgEBEhGbRABAgQIECBAgAABAgLEDRAgQIAAAQIECBAgkAkIkIzaIAIECBAgQIAAAQIEBIgbIECAAAECBAgQIEAgExAgGbVBBAgQIECAAAECBAgIEDdAgAABAgQIECBAgEAmIEAyaoMIECBAgAABAgQIEBAgboAAAQIECBAgQIAAgUxAgGTUBhEgQIAAAQIECBAgIEDcAAECBAgQIECAAAECmYAAyagNIkCAAAECBAgQIEBAgLgBAgQIECBAgAABAgQyAQGSURtEgAABAgQIECBAgIAAcQMECBAgQIAAAQIECGQCAiSjNogAAQIECBAgQIAAAQHiBggQIECAAAECBAgQyAQESEZtEAECBAgQIECAAAECAsQNECBAgAABAgQIECCQCQiQjNogAgQIECBAgAABAgQEiBsgQIAAAQIECBAgQCATECAZtUEECBAgQIAAAQIECAgQN0CAAAECBAgQIECAQCYgQDJqgwgQIECAAAECBAgQECBugAABAgQIECBAgACBTECAZNQGESBAgAABAgQIECAgQNwAAQIECBAgQIAAAQKZgADJqA0iQIAAAQIECBAgQECAuAECBAgQIECAAAECBDIBAZJRG0SAAAECBAgQIECAgABxAwQIECBAgAABAgQIZAICJKM2iAABAgQIECBAgAABAeIGCBAgQIAAAQIECBDIBARIRm0QAQIECBAgQIAAAQICxA0QIECAAAECBAgQIJAJCJCM2iACBAgQIECAAAECBASIGyBAgAABAgQIECBAIBMQIBm1QQQIECBAgAABAgQICBA3QIAAAQIECBAgQIBAJiBAMmqDCBAgQIAAAQIECBAQIG6AAAECBAgQIECAAIFMQIBk1AYRIECAAAECBAgQICBA3AABAgQIECBAgAABApnAVIC8Xq+v53k+M12DCBAgQIAAAQIECPws8P1+v//9/LO/8QsB8jf26CsIECBAgAABAgR+r4AA+b2783ICBAgQIECAAAECBC4LTP0H5PIivI0AAQIECBAgQIDAgoAAWdiybyRAgAABAgQIECBwRECAHFmEZxAgQIAAAQIECBBYEBAgC1v2jQQIECBAgAABAgSOCAiQI4vwDAIECBAgQIAAAQILAgJkYcu+kQABAgQIECBAgMARAQFyZBGeQYAAAQIECBAgQGBBQIAsbNk3EiBAgAABAgQIEDgiIECOLMIzCBAgQIAAAQIECCwICJCFLftGAgQIECBAgAABAkcEBMiRRXgGAQIECBAgQIAAgQUBAbKwZd9IgAABAgQIECBA4IiAADmyCM8gQIAAAQIECBAgsCAgQBa27BsJECBAgAABAgQIHBEQIEcW4RkECBAgQIAAAQIEFgQEyMKWfSMBAgQIECBAgACBIwIC5MgiPIMAAQIECBAgQIDAgoAAWdiybyRAgAABAgQIECBwRECAHFmEZxAgQIAAAQIECBBYEBAgC1v2jQQIECBAgAABAgSOCAiQI4vwDAIECBAgQIAAAQILAgJkYcu+kQABAgQIECBAgMARAQFyZBGeQYAAAQIECBAgQGBBQIAsbNk3EiBAgAABAgQIEDgiIECOLMIzCBAgQIAAAQIECCwICJCFLftGAgQIECBAgAABAkcEBMiRRXgGAQIECBAgQIAAgQUBAbKwZd9IgAABAgQIECBA4IiAADmyCM8gQIAAAQIECBAgsCAgQBa27BsJECBAgAABAgQIHBEQIEcW4RkECBAgQIAAAQIEFgQEyMKWfSMBAgQIECBAgACBIwIC5MgiPIMAAQIECBAgQIDAgoAAWdiybyRAgAABAgQIECBwRECAHFmEZxAgQIAAAQIECBBYEBAgC1v2jQQIECBAgAABAgSOCAiQI4vwDAIECBAgQIAAAQILAgJkYcu+kQABAgQIECBAgMARgf8OegrJcwoE6QAAAABJRU5ErkJggg==";
+    var firma_vacia2 = "data:image/png;base64,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"
+
+    setTimeout(function(){
+        if($("#valor_firma").val() == firma_vacia || $("#valor_firma").val() == firma_vacia2 || $("#valor_firma").val() == "" || $("#valor_firma2").val() == firma_vacia || $("#valor_firma2").val() == firma_vacia2 || $("#valor_firma2").val() == "")
+        {
+            toastr.error("Es necesario tener las firmas del Cliente para enviar el correo.");
+        }else 
+        {
+            toastr.info("Cargando archivos a intelisis, esto podría tardar un momento, por favor, espere la notificación de carga finalizada.", {timeOut: 120000});
+            
+            $("#iframe_correo").prop("src", url_correo);
+            $("#iframe_formato").prop("src", url_formato);
+            $("#iframe_reversoformato").prop("src", url_reverso);
+            $("#iframe_inventario").prop("src", url_inventario);
+            $("#iframe_formato_multipunto").prop("src", url_formato_multipunto);
+        } 
+    }, 1000);
+}
+function revisar_creacionFormatos()
+{
+    if(localStorage.getItem("formato_base64") != "" && localStorage.getItem("formatoReverso_base64") != "" && 
+        sessionStorage.getItem("formato_inventario") != "" && localStorage.getItem("correo_base64") != "")
+    {
+        var img = localStorage.getItem("formato_base64");
+        var img2 = localStorage.getItem("hoja_multipuntos");
+        var img3 = sessionStorage.getItem("formato_inventario");
+        var img_correo = localStorage.getItem("correo_base64");
+        var img_reverso = localStorage.getItem("formatoReverso_base64");
+
+        guardar_formatos(img,img2, img_correo, img_reverso, img3);
+    }else 
+    {
+        setTimeout(function(){
+            revisar_creacionFormatos();
+        }, 1000);
+    }
+}
+function guardar_formatos( img, img2, img_correo, img_reverso, img3)
+{
+    var cliente = $("#nombre_cliente").val();
+    var id_orden = localStorage.getItem("id_orden_servicio");
+
+    $.ajax({
+        cache: false,
+        url: base_url+"index.php/servicio/guardar_formatos/",
+        type: 'POST',
+        dataType: "json",
+        data:  { cliente_envio: cliente, id_orden: id_orden, base64: img, correo_base64: img_correo, img_reverso: img_reverso, multi: img2, inv: img3},
+        beforeSend: function(){
+            $('#loading_spin').show();
+            toastr.info('Cargando formatos a intelisis.', {timeOut: 5000});
+        },
+        success: function(data) {
+            if(data)
+            {
+                $('#loading_spin').hide();
+                if (data.orden_servicio.estatus == true) {
+                    toastr.success('Orden de Servicio cargada exitosamente.', {timeOut: 5000});
+                }else{
+                    toastr.error('No fue posible cargar la orden de servicio.', {timeOut: 5000});
+                }
+                if (data.inventario.estatus == true) {
+                    toastr.success('Formato de Inventario cargado exitosamente.', {timeOut: 5000});
+                }else{
+                    toastr.error('No fue posible cargar el formato de Inventario.', {timeOut: 5000});
+                }
+            }else 
+            {
+                toastr.error('Hubo un error al cargar los documentos.', {timeOut: 5000});
+            }               
+        },
+        error : function(xhr, status) {
+            alert("Hubo un error al cargar los formatos");
+        },
+        always: function () {
+            $('#loading_spin').hide();
+        }
+    });
+}
+function guardar_orden_servicio( img, img_reverso)
+{
+    var cliente = $("#nombre_cliente").val();
+    var id_orden = localStorage.getItem("id_orden_servicio");
+
+    $.ajax({
+        cache: false,
+        url: base_url+"index.php/servicio/guardar_orden_servicio/",
+        type: 'POST',
+        dataType: "json",
+        data:  { id_orden: id_orden, base64: img,  img_reverso: img_reverso},
+        beforeSend: function(){
+            $('#loading_spin').show();
+            toastr.info('Cargando Orden de Servicio.', {timeOut: 5000});
+        },
+        success: function(data) {
+            if(data)
+            {
+                $('#loading_spin').hide();
+                if (data.estatus == true) {
+                    toastr.success('Orden de Servicio cargada exitosamente.', {timeOut: 5000});
+                }else{
+                    toastr.error('No fue posible cargar la Orden de Servicio.', {timeOut: 5000});
+                }
+            }else 
+            {
+                toastr.error('Hubo un error al cargar la Orden de Servicio.', {timeOut: 5000});
+            }               
+        },
+        error : function(xhr, status) {
+            alert("Hubo un error al cargar la Orden de Servicio");
+        },
+        always: function () {
+            $('#loading_spin').hide();
+        }
+    });
+}

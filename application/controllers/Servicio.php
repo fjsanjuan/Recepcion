@@ -1,4 +1,4 @@
-﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once APPPATH."libraries\dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 class Servicio extends CI_Controller {
@@ -1870,5 +1870,48 @@ class Servicio extends CI_Controller {
 		// var_dump($datos);
 		// die();
 		$this->load->view("formatos/formato_ProfecoTalisman", $datos);
+	}
+
+	public function guardar_formatos()
+	{
+		ini_set('memory_limit', '1024M');
+		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+		$multipunto = $this->input->post('multi');
+		$imagenb64 = $this->input->post("base64");
+		$img_reverso = $this->input->post("img_reverso");
+		$cliente_envio = $this->input->post("cliente_envio");
+		$id_orden = $this->input->post("id_orden");
+		$formato_inventario = $this->input->post("inv");
+
+		if($this->formt_servicio == 'ford'){
+			$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
+			$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);	
+		}
+		else{
+			$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
+			$finventario["estatus"] = false;
+			$finventario["ruta"] = "";
+		}
+		$respuesta = [
+			'orden_servicio' => $formato,
+			'inventario'     => $finventario
+		];
+		echo json_encode($respuesta);
+	}
+	public function guardar_orden_servicio()
+	{
+		ini_set('memory_limit', '1024M');
+		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+		$imagenb64 = $this->input->post("base64");
+		$img_reverso = $this->input->post("img_reverso");
+		$id_orden = $this->input->post("id_orden");
+
+		if($this->formt_servicio == 'ford'){
+			$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
+		}
+		else{
+			$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
+		}
+		echo json_encode($formato);
 	}
 }
