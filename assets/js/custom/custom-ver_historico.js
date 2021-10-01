@@ -216,10 +216,11 @@
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
-
+				btn     += "<button class='btn btn-sm oasis' style='background: #152f6d;' ><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Oasis</button>";
 				action  = "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
+				action  +="<button class='btn btn-sm cargaroasis' style='background:#C70039;' id='addOasis-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Oasis</button>";
 				//console.log( val['contFirma']['contadorFirma']);
 				//Se obtiene de buscador_model.php el valor de la consulta donde se evalua si existe firma o no del cliente en la orden de servico 
 				if(val['contFirma']['contadorFirma'] == 0){
@@ -537,6 +538,7 @@
 		
 	});
 
+
 	//Funcion de leyenda Ver en modal para agregar firmas muestra termins y condcions (contrato adehesion)
 	$(document).on('click','#ver_termCond' ,function(e){
 		e.preventDefault();
@@ -565,6 +567,15 @@
 		localStorage.setItem('hist_id_orden_firm',id_orden);
 		limpiar_firmas();
 		$('#modalfirma').modal("show");
+	});
+	//modal para agregar oasis en caso de que la orden no las tenga
+	$(".tabla_hist tbody").on("click", "tr td button.cargaroasis", function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		localStorage.setItem("hist_id_orden", id_orden);
+		$('#modaloasis').modal("show");
 	});
 
 
@@ -1586,4 +1597,64 @@ function val_checked(id_cbx) {
 		v = true;
 	}
 	return v;
+}
+//Cambio para adjuntar pdf
+$(document).on("change", "#oasisInput", function(event){
+    optimizar_PDF(event);
+});
+//Cambio para adjuntar pdf
+$(document).on("click", "#btn_guardarOasis", function(event){
+     event.preventDefault();
+    var data = new FormData();
+    var id_orden = localStorage.getItem("hist_id_orden");
+    var oasis = $("#input_vista_previa_pdf").val();
+    data.append("id_orden", id_orden);
+    data.append("oasis",oasis);
+    guardar_oasis(data);
+});
+function optimizar_PDF(e)
+{
+	$("#loading_spin").show();
+    var fileName = e.target.files[0].name;
+    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
+    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
+    reader.onload = event => {
+        var binaryData = event.target.result;
+      //Converting Binary Data to base 64
+      var base64String = window.btoa(binaryData);
+      base64data = reader.result;
+      //showing file converted to base64
+      $('#input_vista_previa_pdf').val(base64data);
+    };
+}
+function guardar_oasis(form)
+{
+    $.ajax({
+        cache: false,
+        url: base_url+ "index.php/servicio/guardar_formatoOasis/",
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        dataType: 'json',
+        data: form,
+        beforeSend: function(){
+            toastr.info("Guardando formato Oasis, por favor, espere un momento.");
+            $("#loading_spin").show();
+        }
+    })
+    .done(function(data) {
+    	$("#loading_spin").hide();
+        if(data.estatus)
+        {
+            toastr.success("Se han guardado el formato Oasis.");
+
+        }else
+        {
+            toastr.error("Hubo un error al guardar el formato Oasis.");
+        }
+    })
+    .fail(function() {
+        alert("Hubo un error al guardar el formato Osis.");
+        $("#loading_spin").hide();
+    });
 }

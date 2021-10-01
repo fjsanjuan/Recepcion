@@ -2833,4 +2833,31 @@ class Buscador_Model extends CI_Model{
 
 		return $datos;
 	}
+	public function cargar_oasis($ruta, $oasis, $id_orden = null)
+	{
+		$response = [
+			"estatus" => false,
+			"ruta" => ""
+		];
+		 $data = explode( ',', $oasis );
+		/*$f = fopen($ruta."FormatoDeOrdenServicio".$id_orden.".pdf", "wb");
+		// guardamos en el archivo el contenido que hay despues de la coma
+		fwrite($f, base64_decode($data[1]));
+ 		fclose($f);*/
+
+		$bin = base64_decode($data[1], true);
+		if ($id_orden !== null) {
+			file_put_contents($ruta."FormatoOasis".$id_orden.".pdf", $bin);
+			if(file_exists($ruta."FormatoDeOrdenServicio".$id_orden.".pdf"))
+			{
+				$response["estatus"] = true;
+				$response["ruta"] = $ruta."FormatoDeOrdenServicio".$id_orden.".pdf";
+			}else
+			{
+				$response["estatus"] = false;
+				$response["ruta"] = "";
+			}
+		}
+		return $response;
+	}
 }

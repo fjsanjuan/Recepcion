@@ -12,7 +12,7 @@ $(window).on('load', function() {
     var id_cliente = $("#cliente").val();
     var vin = $("#vin").val();
 
-    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #enviar_whatsapp").hide();
+    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #enviar_whatsapp #mostrar_modalOasis").hide();
 
     // funcion que asigna el total de fotos que tiene cada orden 
     set_totalFots();
@@ -1228,18 +1228,22 @@ $(window).on('load', function() {
         $("#btn_guardarInspeccion").hide();
 
         $(this).removeClass("btn-circle-2").addClass("current-step");
-        $('a[href="#step-2"], a[href="#step-3"]').removeClass("current-step").addClass("btn-circle-2");
+        $('a[href="#step-2"], a[href="#step-3"], a[href="#step-4"]').removeClass("current-step").addClass("btn-circle-2");
     });
 
     $('a[href="#step-2"]').click(function(){
         $(this).removeClass("btn-circle-2").addClass("current-step");
-        $('a[href="#step-1"], a[href="#step-3"]').removeClass("current-step").addClass("btn-circle-2");
+        $('a[href="#step-1"], a[href="#step-3"], a[href="#step-4"]').removeClass("current-step").addClass("btn-circle-2");
     });
 
     $('a[href="#step-3"]').click(function(){
+        $(this).removeClass("btn-circle-2").addClass("current-step");
+        $('a[href="#step-1"], a[href="#step-2"], a[href="#step-4"]').removeClass("current-step").addClass("btn-circle-2");
+    }); 
+    $('a[href="#step-4"]').click(function(){
         $("#btn_guardarInspeccion").show();
         $(this).removeClass("btn-circle-2").addClass("current-step");
-        $('a[href="#step-1"], a[href="#step-2"]').removeClass("current-step").addClass("btn-circle-2");
+        $('a[href="#step-1"], a[href="#step-2"], a[href="#step-3"]').removeClass("current-step").addClass("btn-circle-2");
     }); 
 
 
@@ -1619,7 +1623,7 @@ $(document).on('click','#levanta_orden' ,function(e){
             if(data.success == 1)
             {
                 toastr.success('Orden creada correctamente.');
-                $("#mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio").show();
+                $("#mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #mostrar_modalOasis").show();
                 // $("#mostrar_modalemail").click();
                 $("#send_mail").click();
                 $("#loading_spin, #levanta_orden").hide();
@@ -2026,6 +2030,13 @@ $(document).on("click", '#mostrar_modalfirma', function (e){
     e.preventDefault();
 
     $("#modalfirma").modal("show");
+});
+
+/*Configuración de firma*/
+$(document).on("click", '#mostrar_modalOasis', function (e){
+    e.preventDefault();
+
+    $("#modaloasis").modal("show");
 });
 
 // var firma = "";
@@ -3138,4 +3149,72 @@ $(document).on("click", '#boton_agregarMano', function (e){
     $("#ajax_arts, #input_precio, #input_claveArt").val("");
     $("#input_cantidad").val(1);
     $("#table_paq tbody, #tabla_detalle tbody").empty();
+});
+//Cambio para adjuntar pdf
+$(document).on("change", "#oasisInput", function(event){
+    optimizar_PDF(event);
+});
+//Cambio para adjuntar pdf
+$(document).on("click", "#btn_guardarOasis", function(event){
+     event.preventDefault();
+    var data = new FormData();
+    var id_orden = localStorage.getItem("hist_id_orden");
+    var oasis = $("#input_vista_previa_pdf").val();
+    console.log("id", id_orden);
+    console.log("oasis", oasis);
+    data.append("id_orden", id_orden);
+    data.append("oasis",oasis);
+    guardar_oasis(data);
+});
+function optimizar_PDF(e)
+{
+    $("#loading_spin").show();
+    var fileName = e.target.files[0].name;
+    var reader = new FileReader();                              //Se crea instancia de FileReader Js API
+    reader.readAsDataURL(e.target.files[0]);                    //Lee la imagen que está en el input usando el FileReader
+    reader.onload = event => {
+        var binaryData = event.target.result;
+      //Converting Binary Data to base 64
+      var base64String = window.btoa(binaryData);
+      base64data = reader.result;
+      //showing file converted to base64
+      $('#input_vista_previa_pdf').val(base64data);
+      $("#loading_spin").hide();
+    };
+}
+function guardar_oasis(form)
+{
+    $.ajax({
+        cache: false,
+        url: base_url+ "index.php/servicio/guardar_formatoOasis/",
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        dataType: 'json',
+        data: form,
+        beforeSend: function(){
+            toastr.info("Guardando formato Oasis, por favor, espere un momento.");
+            $("#loading_spin").show();
+        }
+    })
+    .done(function(data) {
+        $("#loading_spin").hide();
+        if(data.estatus)
+        {
+            toastr.success("Se han guardado el formato Oasis.");
+
+        }else
+        {
+            toastr.error("Hubo un error al guardar el formato Oasis.");
+        }
+    })
+    .fail(function() {
+        alert("Hubo un error al guardar el formato Osis.");
+        $("#loading_spin").hide();
+    });
+}
+//Añadir causa raíz componente
+$(document).on("click", "#add_causa_raiz", function(event){
+     event.preventDefault();
+    $( "#step-4:first" ).clone().appendTo('#step-4');
 });

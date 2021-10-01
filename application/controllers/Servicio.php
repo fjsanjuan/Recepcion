@@ -11,7 +11,7 @@ class Servicio extends CI_Controller {
 		//variable que controlan el tipo de formato de orden de servicio(profeco) que se enviara por correo 
 		$this->formt_servicio = "ford";
 		//variable para crear directorio donde se guardaran los formatos creador
-		$this->ruta_formts = "../Recepcion/";
+		$this->ruta_formts = "../recepcion/";
 		//variable para hablitar o deshabilitar el adjunto de fotos de recepcion al envio de correo
 		// se solicito en cever hyundai aeropuero
 		$this->adjuntar_fotos = true;
@@ -1870,5 +1870,20 @@ class Servicio extends CI_Controller {
 		// var_dump($datos);
 		// die();
 		$this->load->view("formatos/formato_ProfecoTalisman", $datos);
+	}
+
+	public function guardar_formatoOasis($id_orden = null)
+	{
+		ini_set('memory_limit', '1024M');
+		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+		$formato_oasis = $this->input->post("oasis");
+		$id_orden = $this->input->post("id_orden");
+		//$multipunto = $this->crear_pdf_multipunto($multipunto, $id_orden);
+		//guardar en intelisis los archvios generados pendiente de validar
+			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($formato["ruta"], $id_orden,'orden' );
+			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($multipunto["ruta"], $id_orden, 'multipuntos' );
+		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$oasis = $this->buscador_model->cargar_oasis($ruta_temp, $formato_oasis, $id_orden);
+		echo json_encode($oasis);
 	}
 }

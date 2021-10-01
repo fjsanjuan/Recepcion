@@ -392,6 +392,9 @@
                                         <a class="btn-floating red waves-effect waves-light" id="generar_pdf"><i class="far fa-file-pdf" aria-hidden="true"></i></a>
                                     </li>
                                     <li>
+                                        <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
+                                    </li>
+                                    <li>
                                         <a class="btn-floating blue waves-effect waves-light" id="mostrar_modalfirma"><i class="fa fa-file-signature"></i></a>
                                     </li>
                                     <li>
@@ -426,6 +429,9 @@
               </div>
               <div class="steps-step-2">
                   <a href="#step-3" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect" data-toggle="tooltip" data-placement="top" title="Fotos"><i class="fa fa-image" aria-hidden="true"></i>3</a>
+              </div>
+              <div class="steps-step-2">
+                  <a href="#step-4" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect" data-toggle="tooltip" data-placement="top" title="Audios"><i class="fa fa-file-audio" aria-hidden="true"></i>4</a>
               </div>
           </div>
       </div>
@@ -1858,7 +1864,7 @@
     <div class="row setup-content-2" id="step-3">
               <div class="col-md-12">
                   <br>
-                  <h5 style="color: #4285f4;"><center><b>Paso 3: Fotos y Audio</b></center></h5>
+                  <h5 style="color: #4285f4;"><center><b>Paso 3: Fotos</b></center></h5>
                   <br>
                   <h3 class="font-weight-bold pl-0 my-4"><strong>Registro de Daños</strong></h3>
                   <div class="col-12">
@@ -1975,6 +1981,509 @@
                     <ul class="list-unstyled">
                         <li>
                             <a class="btn-floating red waves-effect waves-light" id="mostrar_modalfotos"><i class="fa fa-camera"></i></a>
+                        </li>
+                       <!--  <li>
+                            <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
+                        </li> -->
+                    </ul>
+                </div>
+            </section>
+        </div>
+      <!-- Third Step -->
+    <div class="row setup-content-2" id="step-4">
+            <div class="col-md-12">
+                  <br>
+                  <h5 style="color: #4285f4;"><center><b>Paso 4: Audios</b></center></h5>
+                  <br>
+                  <h3 class="font-weight-bold pl-0 my-4"><strong>Voz del cliente</strong></h3>
+                  <div class="col-12">
+                    <div class="col-6 voz">
+                        <label for="autorizacion_voz">Autorización para grabar voz?</label>
+                          <div class="switch div_switchvoz">
+                            <label>
+                                  No
+                                  <input type="checkbox" name="autorizacion_voz" id="autorizacion_voz">
+                                  <span class="lever success"></span>
+                                  Sí
+                            </label>
+                        </div>
+                    </div>
+                  </div>
+                <div class="row">                      
+                    <div class="col-6">
+                        <blockquote class="blockquote bq-primary htext">Identificación de necesidades de servicio</blockquote>
+                        <div class="form-check">
+                            <label for="">Definición de falla</label>
+                            <input class="form-control" type="text" row="20" name="articulos_personales">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <blockquote class="blockquote bq-primary htext">Condiciones Ambientales</blockquote>
+                        <div class="form-check">
+                            <label class="form-check-label" for="temperatura">Temperatura ambiente</label>
+                            <input type="range" list="temperatura" class="form-check-input">
+                            <datalist id="temperatura">
+                                <option value="-10" label="-10°C">
+                                <option value="0" label="0°C">
+                                <option value="10" label="10°C">
+                                <option value="20" label="20°C">
+                                <option value="30" label="30°C">
+                                <option value="40" label="40°C">
+                                <option value="50" label="50°C">
+                                <option value="60" label="60°C">
+                            </datalist>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="">Húmedad</label><br>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="humedadSeco" name="humedad" value="seco" checked>
+                                  <label class="form-check-label" for="humedadSeco">Seco</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="humedadHumedo" name="humedad" value="húmedo" checked>
+                                  <label class="form-check-label" for="humedadHumedo">Húmedo</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="humedadMojado" name="humedad" value="mojado" checked>
+                                  <label class="form-check-label" for="humedadMojado">Mojado</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="humedadLluvia" name="humedad" value="lluvia" checked>
+                                  <label class="form-check-label" for="humedadLluvia">Lluvia</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="humedadHielo" name="humedad" value="hielo" checked>
+                                  <label class="form-check-label" for="humedadHielo">Hielo</label>
+                                </div>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="">Viento</label><br>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="vientoLigero" name="viento" value="ligero" checked>
+                                  <label class="form-check-label" for="vientoLigero">Ligero</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="vientoMedio" name="viento" value="medio" checked>
+                                  <label class="form-check-label" for="vientoMedio">Medio</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="vientoFuerte" name="viento" value="fuerte" checked>
+                                  <label class="form-check-label" for="vientoFuerte">Fuerte</label>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">                      
+                    <div class="col-6">
+                        <div class="table-responsive">                                          <!-- tabla fallas cuando -->
+                            <table class="table table-bordered table-striped table-hover animated fadeIn" id="tabla_falla_presenta">
+                                <thead class="mdb-color primary-color" style="font-weight: bold; color:#fff;">
+                                    <tr>
+                                        <th colspan="2">
+                                            <center>
+                                                <h6>La falla se presenta cuando:</h6>
+                                            </center>
+                                        </th>
+                                    </tr>                                   
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Arranca el vehículo</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_arranca" id="falla_arranca">
+                                                <label class="form-check-label" for="falla_arranca"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inicia movimiento</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_inicia" id="falla_inicia">
+                                                <label class="form-check-label" for="falla_inicia"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Disminuye la velocidad</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_disminuye_vel" id="falla_disminuye_vel">
+                                                <label class="form-check-label" for="falla_disminuye_vel"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Da vuelta a la izquiera</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_vuelta_izq" id="falla_vuelta_izq">
+                                                <label class="form-check-label" for="falla_vuelta_izq"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Da vuelta a la derecha</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_vuelta_der" id="falla_vuelta_der">
+                                                <label class="form-check-label" for="falla_vuelta_der"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pasa un tope</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_pasa_tope" id="falla_pasa_tope">
+                                                <label class="form-check-label" for="falla_pasa_tope"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pasa un bache</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_pasa_bache" id="falla_pasa_bache">
+                                                <label class="form-check-label" for="falla_pasa_bache"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cambia la velocidad</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_cambia_vel" id="falla_cambia_vel">
+                                                <label class="form-check-label" for="falla_cambia_vel"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Está sin movimiento</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_sin_movimiento" id="falla_sin_movimiento">
+                                                <label class="form-check-label" for="falla_sin_movimiento"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Constantemente</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_constantemente" id="falla_constantemente">
+                                                <label class="form-check-label" for="falla_constantemente"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Esporádicamente</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_esporadicamente" id="falla_esporadicamente">
+                                                <label class="form-check-label" for="falla_esporadicamente"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive">                                          <!-- tabla fallas cuando -->
+                            <table class="table table-bordered table-striped table-hover animated fadeIn" id="tabla_falla_presenta">
+                                <thead class="mdb-color primary-color" style="font-weight: bold; color:#fff;">
+                                    <tr>
+                                        <th colspan="4">
+                                            <center>
+                                                <h6>La falla se percibe en:</h6>
+                                            </center>
+                                        </th>
+                                    </tr>                                   
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Volante</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_volante" id="falla_volante">
+                                                <label class="form-check-label" for="falla_volante"></label>
+                                            </div>
+                                        </td>
+                                        <td>Cofre</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_cofre" id="falla_cofre">
+                                                <label class="form-check-label" for="falla_cofre"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Asiento</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_asiento" id="falla_asiento">
+                                                <label class="form-check-label" for="falla_asiento"></label>
+                                            </div>
+                                        </td>
+                                        <td>Cajuela</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_cajuela" id="falla_cajuela">
+                                                <label class="form-check-label" for="falla_cajuela"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cristales</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_cristales" id="falla_cristales">
+                                                <label class="form-check-label" for="falla_cristales"></label>
+                                            </div>
+                                        </td>
+                                        <td>Toldo</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_toldo" id="falla_toldo">
+                                                <label class="form-check-label" for="falla_toldo"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carrocería</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_carroceria" id="falla_carroceria">
+                                                <label class="form-check-label" for="falla_carroceria"></label>
+                                            </div>
+                                        </td>
+                                        <td>Debajo del vehículo</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_debajo_vehiculo" id="falla_debajo_vehiculo">
+                                                <label class="form-check-label" for="falla_debajo_vehiculo"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                        <td>Estando</td>
+                                        <td colspan="4">
+                                            <div class="form-check form-check-inline">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_dentro" id="falla_dentro">
+                                                <label class="form-check-label" for="falla_dentro">Dentro</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_fuera" id="falla_fuera">
+                                                <label class="form-check-label" for="falla_fuera">Fuera</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_frente" id="falla_frente">
+                                                <label class="form-check-label" for="falla_frente">Frente</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_detras" id="falla_detras">
+                                                <label class="form-check-label" for="falla_detras">Detrás</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <blockquote class="blockquote bq-primary htext">Condiciones Operativas</blockquote>
+                        <div class="form-check">
+                            <label class="form-check-label" for="velocidad">Velocidad Km/hr</label>
+                            <input type="range" min="0" max="260" list="velocidad" class="form-check-input">
+                            <datalist id="velocidad">
+                                <option value="0" label="0">
+                                <option value="20" label="20">
+                                <option value="40" label="40">
+                                <option value="60" label="60">
+                                <option value="80" label="80">
+                                <option value="100" label="100">
+                                <option value="120" label="120">
+                                <option value="140" label="140">
+                                <option value="160" label="160">
+                                <option value="180" label="180">
+                                <option value="200" label="200">
+                                <option value="220" label="220">
+                                <option value="240" label="240">
+                                <option value="260" label="260">
+                            </datalist>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="">Cambio transmisión</label>
+                            <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionR" name="cambioTransmision" value="r" checked>
+                                  <label class="form-check-label" for="cambioTransmisionR">R</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmision1" name="cambioTransmision" value="1" checked>
+                                  <label class="form-check-label" for="cambioTransmision1">1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmision2" name="cambioTransmision" value="2" checked>
+                                  <label class="form-check-label" for="cambioTransmision2">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmision3" name="cambioTransmision" value="3" checked>
+                                  <label class="form-check-label" for="cambioTransmision3">3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmision4" name="cambioTransmision" value="4" checked>
+                                  <label class="form-check-label" for="cambioTransmision4">4</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmision5" name="cambioTransmision" value="5" checked>
+                                  <label class="form-check-label" for="cambioTransmision5">5</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="cambioTransmision6" name="cambioTransmision" value="6" checked>
+                                  <label class="form-check-label" for="cambioTransmision6">6</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input check-4x2" name="cambioTransmision4x2" id="cambioTransmision4x2">
+                                   <label class="form-check-label" for="cambioTransmision4x2">4x2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input check-4x4" name="cambioTransmision4x4" id="cambioTransmision4x4">
+                                   <label class="form-check-label" for="cambioTransmision4x4">4x4</label>
+                                </div>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="rpm">Rpm x1000</label>
+                            <input type="range" min="1" max="8" list="rpm" class="form-check-input">
+                            <datalist id="rpm">
+                                <option value="1" label="1">
+                                <option value="2" label="2">
+                                <option value="3" label="3">
+                                <option value="4" label="4">
+                                <option value="5" label="5">
+                                <option value="6" label="6">
+                                <option value="7" label="7">
+                                <option value="8" label="8">
+                            </datalist>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="carga">Carga</label>
+                            <input type="range" min="0" max="100" list="carga" class="form-check-input">
+                            <datalist id="carga">
+                                <option value="0" label="0%">
+                                <option value="25" label="25%">
+                                <option value="50%" label="50%">
+                                <option value="75%" label="75%">
+                                <option value="100" label="100%">
+                                <option value="101" label="+Remolque">
+                            </datalist>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="pasajeros">Pasajeros</label>
+                            <input type="range" min="1" max="9" list="pasajeros" class="form-check-input">
+                            <datalist id="pasajeros">
+                                <option value="1" label="1">
+                                <option value="2" label="2">
+                                <option value="3" label="3">
+                                <option value="4" label="4">
+                                <option value="5" label="5">
+                                <option value="6" label="6">
+                                <option value="7" label="7">
+                                <option value="8" label="8">
+                                <option value="9" label="9">
+                            </datalist>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="cajuela">Cajuela</label>
+                            <input type="range" min="0" max="100" list="cajuela" class="form-check-input">
+                            <datalist id="cajuela">
+                                <option value="0" label="0%">
+                                <option value="25" label="25%">
+                                <option value="50%" label="50%">
+                                <option value="75%" label="75%">
+                                <option value="100" label="100%">
+                            </datalist>
+                        </div><br>
+                        <blockquote class="blockquote bq-primary htext">Condiciones del Camino</blockquote>
+                        <div class="form-check">
+                            <label class="form-check-label" for="">Estructura</label><br>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="estructuraPlano" name="estructura" value="plano" checked>
+                                  <label class="form-check-label" for="estructuraPlano">Plano</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="estructuraVado" name="estructura" value="vado" checked>
+                                  <label class="form-check-label" for="estructuraVado">Vado</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="estructuraTope" name="estructura" value="tope" checked>
+                                  <label class="form-check-label" for="estructuraTope">Tope</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="estructuraTope" name="estructura" value="tope" checked>
+                                  <label class="form-check-label" for="estructuraTope">Tope</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="estructuraBaches" name="estructura" value="Baches" checked>
+                                  <label class="form-check-label" for="estructuraBaches">Baches</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="estructuraVibradores" name="estructura" value="Vibradores" checked>
+                                  <label class="form-check-label" for="estructuraVibradores">Vibradores</label>
+                                </div>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="">Camino</label><br>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="caminoRecto" name="camino" value="recto" checked>
+                                  <label class="form-check-label" for="caminoRecto">Recto</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="caminoCurvaLigera" name="camino" value="curva ligera" checked>
+                                  <label class="form-check-label" for="caminoCurvaLigera">Curva ligera</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="caminoCurvaCerrada" name="camino" value="curva cerrada" checked>
+                                  <label class="form-check-label" for="caminoCurvaCerrada">Curva cerrada</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="caminoCurvaSinuoso" name="camino" value="curva sinuoso" checked>
+                                  <label class="form-check-label" for="caminoCurvaSinuoso">Sinuoso</label>
+                                </div>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="">Pendiente</label><br>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="caminoRecto" name="pendiente" value="recto" checked>
+                                  <label class="form-check-label" for="pendienteRecto">Recto</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="pendienteLigera" name="pendiente" value="pendeinte ligera" checked>
+                                  <label class="form-check-label" for="pendienteLigera">Pendiente ligera 10°</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="pendienteMediana" name="pendiente" value="pendiente mediana" checked>
+                                  <label class="form-check-label" for="pendienteMediana">Pendiente mediana</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input type="radio" class="form-check-input" id="pendienteMontania" name="pendiente" value="Pendiente Montaña" checked>
+                                  <label class="form-check-label" for="pendienteMontania">Pendiente Motaña</label>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="file" name="pic" id="pic"  style="display:none;" />
+            </div>
+            <section>
+                <!-- fotos y video -->
+                <div class="fixed-action-btn" style="bottom: 60px; right: 24px;">
+                    <a class="btn-floating btn-lg red waves-effect waves-light">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a class="btn-floating red waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-file-audio"></i></a>
+                        </li>
+                        <li>
+                            <a class="btn-floating green waves-effect waves-light" id="add_causa_raiz"><i class="fa fa-copy"></i></a>
                         </li>
                        <!--  <li>
                             <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
@@ -2313,7 +2822,25 @@
         </div>
     </div>
 </div>
-
+<!-- modal oasis -->
+<div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog modal-sm"  role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php $this->load->view("cargar_oasis");?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
 <!--Modal Oasis-->
 <!-- <div id="ModalGoasis" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
