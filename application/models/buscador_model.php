@@ -2833,4 +2833,19 @@ class Buscador_Model extends CI_Model{
 
 		return $datos;
 	}
+	public function get_datos_seguimiento($id_orden = null)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$query['orden'] = $this->db->select('id_orden_intelisis AS folio_intelisis, id AS folio, cliente')->from('orden_servicio')->where('id', $id_orden)->get()->row();
+		$query['cliente'] = $this->db2->select("c.PersonalNombres,ISNULL(c.PersonalNombres2,' ') AS 'PersonalNombres2',ISNULL(c.PersonalApellidoPaterno,'') AS 'PersonalApellidoPaterno',ISNULL(c.PersonalApellidoMaterno,'') AS 'PersonalApellidoMaterno' ")->from("Cte c")->where("c.Cliente",$query['orden']->cliente)->get()->row();
+		if ($query['orden'] && $query['orden']->folio_intelisis !== null) {
+			$query['orden']->folio_intelisis = $this->db2->select("movID")->from("Venta")->where("id",$query['orden']->folio_intelisis)->get()->row()->movID;
+		}
+		return $query;
+	}
+	public function orden_existente($id_orden)
+	{
+		$existe = $this->db->select('id_orden_intelisis AS folio_intelisis, id AS folio, cliente')->from('orden_servicio')->where('id', $id_orden)->get()->row();
+		return sizeof($existe) > 0 ? true : false;
+	}
 }

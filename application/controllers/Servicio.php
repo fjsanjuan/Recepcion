@@ -25,7 +25,6 @@ class Servicio extends CI_Controller {
 		$this->mail_port = 465;
 
 		$this->obtener_configEmail();
-		
 	}
 
 	function tablero(){
@@ -232,16 +231,18 @@ class Servicio extends CI_Controller {
 			$datar["torrenum"]   = $this->input->post('torrenumero');
 			$datar['ZonaImpuesto'] = $this->input->post('ZonaImpuesto_select');
 			$datar['color_cliente'] = $this->input->post('color_cliente');
-
+			$nombre_cliente = $this->input->post('nombre_cliente');
+			$correo_cliente = $this->input->post('correo_cliente');
 			//mano de obras y datos
 			$create=$this->buscador_model->guardar_orden_na($datar, $elementos);
 			if($create){
-				$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
+				$envio = $this->enviar_seguimiento_mail($correo_cliente, $nombre_cliente, $datar['id_orden']);
+				$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'), 'enviado' => $envio);
 			}else{
-				$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
+				$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'), 'enviado' => false);
 			}		
 		}else{
-			$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
+			$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'), 'enviado' => false);
 		}
 
 		$data = json_encode($data);
@@ -1913,5 +1914,58 @@ class Servicio extends CI_Controller {
 			$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
 		}
 		echo json_encode($formato);
+	}
+	public function enviar_seguimiento_mail($email_envio, $cliente_envio, $id_orden)
+	{
+		// cargando las librerias para envío de correo.
+		$this->load->library("PhpMailerLib");
+        $mail = $this->phpmailerlib->load();
+        $correo_asesor = $this->session->userdata["logged_in"]["correo"];
+        //$url = base_url('index.php/seguimiento_cliente/'.$this->encryption->encrypt($id_orden));
+        $url = base_url('index.php/seguimiento_cliente/'.$this->base64_encode_url($id_orden));
+        try {
+			    //Server settings
+			    //$mail->SMTPDebug = 2;// Enable verbose debug output
+			    $mail->isSMTP();// Set mailer to use SMTP
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
+			    
+			    //Recipients
+			    $mail->SetFrom( $mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			    $mail->addAddress($email_envio, $cliente_envio);// Name is optional
+			    $mail->AddReplyTo($mail_username_env,'Service Excellence');  //A quien debe ir dirigida la respuesta
+			    $mail->addCC($correo_asesor);						  			  			//Con copia a
+			    
+			    //Content
+			    $mail->isHTML(true);                                  // Set email format to HTML
+			    $mail->CharSet = 'UTF-8';
+			    $mail->Subject = 'Seguimiento cliente ';
+				$contenido_correo = "<p style='padding: 5px 0 0 0; font-family: Arial, sans-serif; color: #000; font-size: 14px;'>Para dar seguimimiento haga click en el siguiente enlace {$url}</p>";
+			    $mail->Body      = "<html><body style='font-family: Arial, sans-serif; color: #000; font-size: 14px;'>".$contenido_correo."</body></html>";
+				$enviar = $mail->send();
+			    if($enviar)
+			    {
+			    	$envio = true;
+			    }else 
+			    {
+			    	$envio = false;
+			    }
+			} catch (Exception $e) {
+			    echo 'Message could not be sent.';
+			    echo 'Mailer Error: ' . $mail->ErrorInfo;
+
+			    $envio = false;
+			}
+			return $envio;
+	}
+	function base64_encode_url($string) {
+		return str_replace(['+','/','='], ['-','_',''], base64_encode($string));
 	}
 }
