@@ -2848,7 +2848,7 @@ class Buscador_Model extends CI_Model{
 		$bin = base64_decode($data[1], true);
 		if ($id_orden !== null) {
 			file_put_contents($ruta."FormatoOasis".$id_orden.".pdf", $bin);
-			if(file_exists($ruta."FormatoDeOrdenServicio".$id_orden.".pdf"))
+			if(file_exists($ruta."FormatoOasis".$id_orden.".pdf"))
 			{
 				$response["estatus"] = true;
 				$response["ruta"] = $ruta."FormatoDeOrdenServicio".$id_orden.".pdf";
