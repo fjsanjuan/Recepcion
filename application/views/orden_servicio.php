@@ -391,9 +391,7 @@
                                     <li>
                                         <a class="btn-floating red waves-effect waves-light" id="generar_pdf"><i class="far fa-file-pdf" aria-hidden="true"></i></a>
                                     </li>
-                                    <li>
-                                        <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
-                                    </li>
+                            
                                     <li>
                                         <a class="btn-floating blue waves-effect waves-light" id="mostrar_modalfirma"><i class="fa fa-file-signature"></i></a>
                                     </li>
@@ -1989,11 +1987,11 @@
                 </div>
             </section>
         </div>
-      <!-- Third Step -->
+      <!-- Fourth Step -->
     <div class="row setup-content-2" id="step-4">
             <div class="col-md-12">
                   <br>
-                  <h5 style="color: #4285f4;"><center><b>Paso 4: Audios</b></center></h5>
+                  <h5 style="color: #4285f4;"><center><b>Paso 4: Causa Raíz Componente</b></center></h5>
                   <br>
                   <h3 class="font-weight-bold pl-0 my-4"><strong>Voz del cliente</strong></h3>
                   <div class="col-12">
@@ -2036,39 +2034,39 @@
                         <div class="form-check">
                             <label class="form-check-label" for="">Húmedad</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadSeco" name="humedad" value="seco" checked>
-                                  <label class="form-check-label" for="humedadSeco">Seco</label>
+                                  <input type="radio" class="form-check-input" id="humedadSeco0" name="humedad[0][]" value="seco" checked>
+                                  <label class="form-check-label" id="labelSeco0" for="humedadSeco0">Seco</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadHumedo" name="humedad" value="húmedo" checked>
-                                  <label class="form-check-label" for="humedadHumedo">Húmedo</label>
+                                  <input type="radio" class="form-check-input" id="humedadHumedo0" name="humedad[0][]" value="humedo" checked>
+                                  <label class="form-check-label" id="labelHumedo0" for="humedadHumedo0">Húmedo</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadMojado" name="humedad" value="mojado" checked>
-                                  <label class="form-check-label" for="humedadMojado">Mojado</label>
+                                  <input type="radio" class="form-check-input" id="humedadMojado0" name="humedad[0][]" value="mojado" checked>
+                                  <label class="form-check-label" id="labelMojado0" for="humedadMojado0">Mojado</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadLluvia" name="humedad" value="lluvia" checked>
-                                  <label class="form-check-label" for="humedadLluvia">Lluvia</label>
+                                  <input type="radio" class="form-check-input" id="humedadLluvia0" name="humedad[0][]" value="lluvia" checked>
+                                  <label class="form-check-label" id="labelLluvia0" for="humedadLluvia0">Lluvia</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadHielo" name="humedad" value="hielo" checked>
-                                  <label class="form-check-label" for="humedadHielo">Hielo</label>
+                                  <input class="form-check-input" type="radio" id="humedadHielo0" name="humedad[0][]" value="hielo" checked>
+                                  <label class="form-check-label" id="labelHielo0" for="humedadHielo0">Hielo</label>
                                 </div>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Viento</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoLigero" name="viento" value="ligero" checked>
-                                  <label class="form-check-label" for="vientoLigero">Ligero</label>
+                                  <input type="radio" class="form-check-input" id="vientoLigero0" name="viento[0][]" value="ligero" checked>
+                                  <label class="form-check-label" id="labelLigero0" for="vientoLigero0">Ligero</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoMedio" name="viento" value="medio" checked>
-                                  <label class="form-check-label" for="vientoMedio">Medio</label>
+                                  <input type="radio" class="form-check-input" id="vientoMedio0" name="viento[0][]" value="medio" checked>
+                                  <label class="form-check-label" id="labelMedio0" for="vientoMedio0">Medio</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoFuerte" name="viento" value="fuerte" checked>
-                                  <label class="form-check-label" for="vientoFuerte">Fuerte</label>
+                                  <input type="radio" class="form-check-input" id="vientoFuerte0" name="viento[0][]" value="fuerte" checked>
+                                  <label class="form-check-label" id="labelFuerte0" for="vientoFuerte0">Fuerte</label>
                                 </div>
                         </div>
                     </div>
@@ -2091,8 +2089,8 @@
                                         <td>Arranca el vehículo</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_arranca" id="falla_arranca">
-                                                <label class="form-check-label" for="falla_arranca"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_arranca0">
+                                                <label class="form-check-label" id="label_arranca0" for="falla_arranca0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2100,8 +2098,8 @@
                                         <td>Inicia movimiento</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_inicia" id="falla_inicia">
-                                                <label class="form-check-label" for="falla_inicia"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_inicia0">
+                                                <label class="form-check-label" id="label_inicia0" for="falla_inicia0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2109,8 +2107,8 @@
                                         <td>Disminuye la velocidad</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_disminuye_vel" id="falla_disminuye_vel">
-                                                <label class="form-check-label" for="falla_disminuye_vel"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_disminuye_vel0">
+                                                <label class="form-check-label" id="label_disminuye_vel0" for="falla_disminuye_vel0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2118,8 +2116,8 @@
                                         <td>Da vuelta a la izquiera</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_vuelta_izq" id="falla_vuelta_izq">
-                                                <label class="form-check-label" for="falla_vuelta_izq"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_vuelta_izq0">
+                                                <label class="form-check-label" id="label_vuelta_izq0" for="falla_vuelta_izq0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2127,8 +2125,8 @@
                                         <td>Da vuelta a la derecha</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_vuelta_der" id="falla_vuelta_der">
-                                                <label class="form-check-label" for="falla_vuelta_der"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_vuelta_der0">
+                                                <label class="form-check-label" id="vuelta_der0" for="falla_vuelta_der0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2136,8 +2134,8 @@
                                         <td>Pasa un tope</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_pasa_tope" id="falla_pasa_tope">
-                                                <label class="form-check-label" for="falla_pasa_tope"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_pasa_tope0">
+                                                <label class="form-check-label" id="label_pasa_tope0" for="falla_pasa_tope0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2145,8 +2143,8 @@
                                         <td>Pasa un bache</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_pasa_bache" id="falla_pasa_bache">
-                                                <label class="form-check-label" for="falla_pasa_bache"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_pasa_bache0">
+                                                <label class="form-check-label" id="label_pasa_bache0" for="falla_pasa_bache0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2154,8 +2152,8 @@
                                         <td>Cambia la velocidad</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_cambia_vel" id="falla_cambia_vel">
-                                                <label class="form-check-label" for="falla_cambia_vel"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_cambia_vel0">
+                                                <label class="form-check-label" id="label_cambia_vel0" for="falla_cambia_vel0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2163,8 +2161,8 @@
                                         <td>Está sin movimiento</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_sin_movimiento" id="falla_sin_movimiento">
-                                                <label class="form-check-label" for="falla_sin_movimiento"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_sin_movimiento0">
+                                                <label class="form-check-label" id="label_sin_movimiento0" for="falla_sin_movimiento0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2172,8 +2170,8 @@
                                         <td>Constantemente</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_constantemente" id="falla_constantemente">
-                                                <label class="form-check-label" for="falla_constantemente"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_constantemente0">
+                                                <label class="form-check-label" id="label_constantemente0" for="falla_constantemente0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2181,8 +2179,8 @@
                                         <td>Esporádicamente</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla_esporadicamente" id="falla_esporadicamente">
-                                                <label class="form-check-label" for="falla_esporadicamente"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="falla[0][]" id="falla_esporadicamente0">
+                                                <label class="form-check-label" id="label_esporadicamente0" for="falla_esporadicamente0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2205,15 +2203,15 @@
                                         <td>Volante</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_volante" id="falla_volante">
-                                                <label class="form-check-label" for="falla_volante"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_volante0">
+                                                <label class="form-check-label" id="label_volante0" for="falla_volante0"></label>
                                             </div>
                                         </td>
                                         <td>Cofre</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_cofre" id="falla_cofre">
-                                                <label class="form-check-label" for="falla_cofre"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_cofre0">
+                                                <label class="form-check-label" id="label_cofre0" for="falla_cofre0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2221,15 +2219,15 @@
                                         <td>Asiento</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_asiento" id="falla_asiento">
-                                                <label class="form-check-label" for="falla_asiento"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_asiento0">
+                                                <label class="form-check-label" id="label_asiento0" for="falla_asiento0"></label>
                                             </div>
                                         </td>
                                         <td>Cajuela</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_cajuela" id="falla_cajuela">
-                                                <label class="form-check-label" for="falla_cajuela"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_cajuela0">
+                                                <label class="form-check-label" id="label_cajuela0" for="falla_cajuela0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2237,15 +2235,15 @@
                                         <td>Cristales</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_cristales" id="falla_cristales">
-                                                <label class="form-check-label" for="falla_cristales"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_cristales0">
+                                                <label class="form-check-label" id="label_cristales0" for="falla_cristales0"></label>
                                             </div>
                                         </td>
                                         <td>Toldo</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_toldo" id="falla_toldo">
-                                                <label class="form-check-label" for="falla_toldo"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_toldo0">
+                                                <label class="form-check-label" id="label_toldo0" for="falla_toldo0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2253,35 +2251,35 @@
                                         <td>Carrocería</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_carroceria" id="falla_carroceria">
-                                                <label class="form-check-label" for="falla_carroceria"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_carroceria0">
+                                                <label class="form-check-label" id="label_carroceria0" for="falla_carroceria0"></label>
                                             </div>
                                         </td>
                                         <td>Debajo del vehículo</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_debajo_vehiculo" id="falla_debajo_vehiculo">
-                                                <label class="form-check-label" for="falla_debajo_vehiculo"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_debajo_vehiculo0">
+                                                <label class="form-check-label" id="label_debajo_vehiculo0" for="falla_debajo_vehiculo0"></label>
                                             </div>
                                         </td>
                                     </tr>
                                         <td>Estando</td>
                                         <td colspan="4">
                                             <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_dentro" id="falla_dentro">
-                                                <label class="form-check-label" for="falla_dentro">Dentro</label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_dentro0">
+                                                <label class="form-check-label" id="label_dentro0" for="falla_dentro0">Dentro</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_fuera" id="falla_fuera">
-                                                <label class="form-check-label" for="falla_fuera">Fuera</label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_fuera0">
+                                                <label class="form-check-label" id="label_fuera0" for="falla_fuera0">Fuera</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_frente" id="falla_frente">
-                                                <label class="form-check-label" for="falla_frente">Frente</label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_frente0">
+                                                <label class="form-check-label" id="label_frente0" for="falla_frente0">Frente</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla_detras" id="falla_detras">
-                                                <label class="form-check-label" for="falla_detras">Detrás</label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="falla[0][]" id="falla_detras0">
+                                                <label class="form-check-label" id="label_detras0" for="falla_detras0">Detrás</label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2314,40 +2312,40 @@
                         <div class="form-check">
                             <label class="form-check-label" for="">Cambio transmisión</label>
                             <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionR" name="cambioTransmision" value="r" checked>
-                                  <label class="form-check-label" for="cambioTransmisionR">R</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionR0" name="cambioTransmision[0][]" value="r" checked>
+                                  <label class="form-check-label" id="labelTransmisionR0" for="cambioTransmisionR0">R</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmision1" name="cambioTransmision" value="1" checked>
-                                  <label class="form-check-label" for="cambioTransmision1">1</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionUno0" name="cambioTransmision[0][]" value="1" checked>
+                                  <label class="form-check-label" id="labelTransmisionUno0" for="cambioTransmisionUno0">1</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmision2" name="cambioTransmision" value="2" checked>
-                                  <label class="form-check-label" for="cambioTransmision2">2</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionDos0" name="cambioTransmision[0][]" value="2" checked>
+                                  <label class="form-check-label" id="labelTransmisionDos0" for="cambioTransmisionDos0">2</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmision3" name="cambioTransmision" value="3" checked>
-                                  <label class="form-check-label" for="cambioTransmision3">3</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionTres0" name="cambioTransmision[0][]" value="3" checked>
+                                  <label class="form-check-label" id="labelTransmisionTres0" for="cambioTransmisionTres0">3</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmision4" name="cambioTransmision" value="4" checked>
-                                  <label class="form-check-label" for="cambioTransmision4">4</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionCuatro0" name="cambioTransmision[0][]" value="4" checked>
+                                  <label class="form-check-label" id="labelTransmisionCuatro0" for="cambioTransmisionCuatro0">4</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmision5" name="cambioTransmision" value="5" checked>
-                                  <label class="form-check-label" for="cambioTransmision5">5</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionCinco0" name="cambioTransmision[0][]" value="5" checked>
+                                  <label class="form-check-label" id="labelTransmisionCinco0" for="cambioTransmisionCinco0">5</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmision6" name="cambioTransmision" value="6" checked>
-                                  <label class="form-check-label" for="cambioTransmision6">6</label>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionSeis0" name="cambioTransmision[0][]" value="6" checked>
+                                  <label class="form-check-label" id="labelTransmisionSeis0" for="cambioTransmisionSeis0">6</label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input check-4x2" name="cambioTransmision4x2" id="cambioTransmision4x2">
-                                   <label class="form-check-label" for="cambioTransmision4x2">4x2</label>
+                                    <input type="checkbox" class="form-check-input check-4x2" name="cambioTransmision[0][]" id="cambioTransmisionSiete0">
+                                   <label class="form-check-label" id="labelTransmisionSiete0" for="cambioTransmisionSiete0">4x2</label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input check-4x4" name="cambioTransmision4x4" id="cambioTransmision4x4">
-                                   <label class="form-check-label" for="cambioTransmision4x4">4x4</label>
+                                    <input type="checkbox" class="form-check-input check-4x4" name="cambioTransmision[0][]" id="cambioTransmisionOcho0">
+                                   <label class="form-check-label" id="labelTransmisionOcho0" for="cambioTransmisionOcho0">4x4</label>
                                 </div>
                         </div>
                         <div class="form-check">
@@ -2406,69 +2404,80 @@
                         <div class="form-check">
                             <label class="form-check-label" for="">Estructura</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraPlano" name="estructura" value="plano" checked>
-                                  <label class="form-check-label" for="estructuraPlano">Plano</label>
+                                  <input type="radio" class="form-check-input" id="estructuraPlano0" name="estructura[0][]" value="plano" checked>
+                                  <label class="form-check-label" id="labelPlano0" for="estructuraPlano0">Plano</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraVado" name="estructura" value="vado" checked>
-                                  <label class="form-check-label" for="estructuraVado">Vado</label>
+                                  <input type="radio" class="form-check-input" id="estructuraVado0" name="estructura[0][]" value="vado" checked>
+                                  <label class="form-check-label" id="labelVado0" for="estructuraVado0">Vado</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraTope" name="estructura" value="tope" checked>
-                                  <label class="form-check-label" for="estructuraTope">Tope</label>
+                                  <input type="radio" class="form-check-input" id="estructuraTope0" name="estructura[0][]" value="tope" checked>
+                                  <label class="form-check-label" id="labelTope0" for="estructuraTope0">Tope</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraTope" name="estructura" value="tope" checked>
-                                  <label class="form-check-label" for="estructuraTope">Tope</label>
+                                  <input type="radio" class="form-check-input" id="estructuraBaches0" name="estructura[0][]" value="Baches" checked>
+                                  <label class="form-check-label" id="labelBaches0" for="estructuraBaches0">Baches</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraBaches" name="estructura" value="Baches" checked>
-                                  <label class="form-check-label" for="estructuraBaches">Baches</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraVibradores" name="estructura" value="Vibradores" checked>
-                                  <label class="form-check-label" for="estructuraVibradores">Vibradores</label>
+                                  <input type="radio" class="form-check-input" id="estructuraVibradores0" name="estructura[0][]" value="Vibradores" checked>
+                                  <label class="form-check-label" id="labelVibradores0" for="estructuraVibradores0">Vibradores</label>
                                 </div>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Camino</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoRecto" name="camino" value="recto" checked>
-                                  <label class="form-check-label" for="caminoRecto">Recto</label>
+                                  <input type="radio" class="form-check-input" id="caminoRecto0" name="camino[0][]" value="recto" checked>
+                                  <label class="form-check-label" id="labelRecto0" for="caminoRecto0">Recto</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaLigera" name="camino" value="curva ligera" checked>
-                                  <label class="form-check-label" for="caminoCurvaLigera">Curva ligera</label>
+                                  <input type="radio" class="form-check-input" id="caminoCurvaLigera0" name="camino[0][]" value="curva ligera" checked>
+                                  <label class="form-check-label" id="labelCurvaLigera0" for="caminoCurvaLigera0">Curva ligera</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaCerrada" name="camino" value="curva cerrada" checked>
-                                  <label class="form-check-label" for="caminoCurvaCerrada">Curva cerrada</label>
+                                  <input type="radio" class="form-check-input" id="caminoCurvaCerrada0" name="camino[0][]" value="curva cerrada" checked>
+                                  <label class="form-check-label" id="labelCurvaCerrada0" for="caminoCurvaCerrada0">Curva cerrada</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaSinuoso" name="camino" value="curva sinuoso" checked>
-                                  <label class="form-check-label" for="caminoCurvaSinuoso">Sinuoso</label>
+                                  <input type="radio" class="form-check-input" id="caminoCurvaSinuoso0" name="camino[0][]" value="curva sinuoso" checked>
+                                  <label class="form-check-label" id="labelCurvaSinuoso0" for="caminoCurvaSinuoso0">Sinuoso</label>
                                 </div>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Pendiente</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoRecto" name="pendiente" value="recto" checked>
-                                  <label class="form-check-label" for="pendienteRecto">Recto</label>
+                                  <input type="radio" class="form-check-input" id="pendienteRecto0" name="pendiente[0][]" value="recto" checked>
+                                  <label class="form-check-label" id="labelRecto0" for="pendienteRecto0">Recto</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteLigera" name="pendiente" value="pendeinte ligera" checked>
-                                  <label class="form-check-label" for="pendienteLigera">Pendiente ligera 10°</label>
+                                  <input type="radio" class="form-check-input" id="pendienteLigera0" name="pendiente[0][]" value="pendeinte ligera" checked>
+                                  <label class="form-check-label" id="labelLigera0" for="pendienteLigera0">Pendiente ligera 10°</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteMediana" name="pendiente" value="pendiente mediana" checked>
-                                  <label class="form-check-label" for="pendienteMediana">Pendiente mediana</label>
+                                  <input type="radio" class="form-check-input" id="pendienteMediana0" name="pendiente[0][]" value="pendiente mediana" checked>
+                                  <label class="form-check-label" id="labelMediana0" for="pendienteMediana0">Pendiente mediana</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteMontania" name="pendiente" value="Pendiente Montaña" checked>
-                                  <label class="form-check-label" for="pendienteMontania">Pendiente Motaña</label>
+                                  <input type="radio" class="form-check-input" id="pendienteMontania0" name="pendiente[0][]" value="Pendiente Montaña" checked>
+                                  <label class="form-check-label" id="labelMontania0" for="pendienteMontania0">Pendiente Motaña</label>
                                 </div>
+                        </div><br><br>
+                        <div class="row"> 
+                            <div class="col-sm-1" >
+                                <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="hidden" name="valor_firma[0][]" id="valor_firma0">
+                                <div id="firma"></div>
+                                <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
+                            </div>                   
+                            <div class="col-sm-3">
+                                <button class="btn btn-danger" id="btn_borrarFirma"><i class="fa fa-eraser"></i></button>
+                            </div>
                         </div>
-                    </div>
+                        <center><h5>Firma del Cliente</h5></center>
+                    </div> 
+                    <a class="btn btn-info" id="add_causa_raiz"><i class="fa fa-copy"></i>Nueva Página</a>                 
                 </div>
                 <input type="file" name="pic" id="pic"  style="display:none;" />
             </div>
@@ -2483,12 +2492,52 @@
                             <a class="btn-floating red waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone"></i></a>
                         </li>
                         <li>
-                            <a class="btn-floating green waves-effect waves-light" id="add_causa_raiz"><i class="fa fa-copy"></i></a>
+                            <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
                         </li>
-                       <!--  <li>
+                        <!-- <li>
+                            <a class="btn-floating green waves-effect waves-light" id="add_causa_raiz"><i class="fa fa-copy"></i></a>
+                        </li> -->
+                         <!-- <li>
                             <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
                         </li> -->
                     </ul>
+                    <!-- modal oasis -->
+                    <div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
+                        <div class="modal-dialog modal-sm"  role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php $this->load->view("cargar_oasis");?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <!--Modal Oasis-->
+                    <!-- <div id="ModalGoasis" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">GOASIS</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="modalBodyO">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
             </section>
         </div>
@@ -2822,43 +2871,7 @@
         </div>
     </div>
 </div>
-<!-- modal oasis -->
-<div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
-    <div class="modal-dialog modal-sm"  role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <?php $this->load->view("cargar_oasis");?>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-    </div>
-</div>
-<!--Modal Oasis-->
-<!-- <div id="ModalGoasis" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">GOASIS</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalBodyO">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div> -->
+
 <!-- Genera el formato de orden servicio -->
 <iframe src="" id="iframe_correo" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_correo" value="<?=site_url().'servicio/mensaje'?>">
