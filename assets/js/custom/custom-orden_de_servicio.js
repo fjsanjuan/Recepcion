@@ -3447,17 +3447,17 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.appendTo('#step-4');
 });
 $(document).on("click", "#audioInput", function(event){
-     event.preventDefault();
-      if (media_recorder) {
+    event.preventDefault();
+    if (media_recorder) {
         $('#btn_audio').removeClass('btn-green').addClass('btn-info');
         detener_grabacion();
-      }else{
+    }else{
         $('#btn_audio').removeClass('btn-info').addClass('btn-green');
         navigator.mediaDevices.getUserMedia({
           audio: true
         })
         .then( stream => {
-                media_recorder = new media_recorder(stream);
+                media_recorder = new MediaRecorder(stream);
                 media_recorder.start();
                 iniciar_conteo();
                 const grabacion = [];
@@ -3473,6 +3473,8 @@ $(document).on("click", "#audioInput", function(event){
         })
         .catch(error => {
             console.log('error stream', error);
+            $('#btn_audio').removeClass('btn-green').addClass('btn-info');
+            detener_grabacion();
       });
   }
 });
