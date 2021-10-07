@@ -1980,10 +1980,50 @@
                         <li>
                             <a class="btn-floating red waves-effect waves-light" id="mostrar_modalfotos"><i class="fa fa-camera"></i></a>
                         </li>
+                        <li>
+                            <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
+                        </li>
                        <!--  <li>
                             <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
                         </li> -->
                     </ul>
+                    <!-- modal oasis -->
+                    <div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
+                        <div class="modal-dialog modal-sm"  role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php $this->load->view("cargar_oasis");?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <!--Modal Oasis-->
+                    <!-- <div id="ModalGoasis" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">GOASIS</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="modalBodyO">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
             </section>
         </div>
@@ -2491,9 +2531,9 @@
                         <li>
                             <a class="btn-floating red waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone"></i></a>
                         </li>
-                        <li>
+                        <!--<li>
                             <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
-                        </li>
+                        </li>-->
                         <!-- <li>
                             <a class="btn-floating green waves-effect waves-light" id="add_causa_raiz"><i class="fa fa-copy"></i></a>
                         </li> -->
@@ -2501,43 +2541,6 @@
                             <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
                         </li> -->
                     </ul>
-                    <!-- modal oasis -->
-                    <div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
-                        <div class="modal-dialog modal-sm"  role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php $this->load->view("cargar_oasis");?>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                    <!--Modal Oasis-->
-                    <!-- <div id="ModalGoasis" class="modal fade" role="dialog">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">GOASIS</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body" id="modalBodyO">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </section>
         </div>
