@@ -3269,8 +3269,9 @@ let cloneID = 0;
 //Añadir causa raíz componente
 $(document).on("click", "#add_causa_raiz", function(event){
      event.preventDefault();
+     ++cloneID;
      let clone = $( "#step-4 .col-md-12:nth-child(2)" ).clone();
-     clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${++cloneID}][]`);
+     clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${cloneID}][]`);
      clone.find('#humedadSeco0').prop('id', `humedadSeco${cloneID}`);
      clone.find('#humedadHumedo0').prop('id', `humedadHumedo${cloneID}`);
      clone.find('#humedadMojado0').prop('id', `humedadMojado${cloneID}`);
@@ -3287,7 +3288,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#labelLluvia0').prop('id', `labelLluvia${cloneID}`);
      clone.find('#labelHielo0').prop('id', `labelHielo${cloneID}`);
     
-     clone.find('input[name="viento[0][]"]').prop('name', `viento[${++cloneID}][]`);
+     clone.find('input[name="viento[0][]"]').prop('name', `viento[${cloneID}][]`);
      clone.find('#vientoLigero0').prop('id', `vientoLigero${cloneID}`);
      clone.find('#vientoMedio0').prop('id', `vientoMedio${cloneID}`);
      clone.find('#vientoFuerte0').prop('id', `vientoFuerte${cloneID}`);
@@ -3298,7 +3299,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#labelMedio0').prop('id', `labelMedio${cloneID}`);
      clone.find('#labelFuerte0').prop('id', `labelFuerte${cloneID}`);
 
-     clone.find('input[name="falla[0][]"]').prop('name', `falla[${++cloneID}][]`);
+     clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
      clone.find('#falla_arranca0').prop('id', `falla_arranca${cloneID}`);
      clone.find('#falla_inicia0').prop('id', `falla_inicia${cloneID}`);
      clone.find('#falla_disminuye_vel0').prop('id', `falla_disminuye_vel${cloneID}`);
@@ -3333,7 +3334,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#label_constantemente0').prop('id', `label_constantemente${cloneID}`);
      clone.find('#label_esporadicamente0').prop('id', `label_esporadicamente${cloneID}`);
   
-     clone.find('input[name="falla[0][]"]').prop('name', `falla[${++cloneID}][]`);
+     clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
      clone.find('#falla_volante0').prop('id', `falla_volante${cloneID}`);
      clone.find('#falla_cofre0').prop('id', `falla_cofre${cloneID}`);
      clone.find('#falla_asiento0').prop('id', `falla_asiento${cloneID}`);
@@ -3371,7 +3372,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#label_frente0').prop('id', `label_frente${cloneID}`);
      clone.find('#label_detras0').prop('id', `label_detras${cloneID}`);
 
-     clone.find('input[name="cambioTransmision[0][]"]').prop('name', `cambioTransmision[${++cloneID}][]`);
+     clone.find('input[name="cambioTransmision[0][]"]').prop('name', `cambioTransmision[${cloneID}][]`);
      clone.find('#cambioTransmisionR0').prop('id', `cambioTransmisionR${cloneID}`);
      clone.find('#cambioTransmisionUno0').prop('id', `cambioTransmisionUno${cloneID}`);
      clone.find('#cambioTransmisionDos0').prop('id', `cambioTransmisionDos${cloneID}`);
@@ -3400,7 +3401,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#labelTransmisionSiete0').prop('id', `labelTransmisionSiete${cloneID}`);
      clone.find('#labelTransmisionOcho0').prop('id', `labelTransmisionOcho${cloneID}`);
 
-     clone.find('input[name="estructura[0][]"]').prop('name', `estructura[${++cloneID}][]`);
+     clone.find('input[name="estructura[0][]"]').prop('name', `estructura[${cloneID}][]`);
      clone.find('#estructuraPlano0').prop('id', `estructuraPlano${cloneID}`);
      clone.find('#estructuraVado0').prop('id', `estructuraVado${cloneID}`);
      clone.find('#estructuraTope0').prop('id', `estructuraTope${cloneID}`);
@@ -3417,7 +3418,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#labelBaches0').prop('id', `labelBaches${cloneID}`);
      clone.find('#labelVibradores0').prop('id', `labelVibradores${cloneID}`);
 
-     clone.find('input[name="camino[0][]"]').prop('name', `camino[${++cloneID}][]`);
+     clone.find('input[name="camino[0][]"]').prop('name', `camino[${cloneID}][]`);
      clone.find('#caminoRecto0').prop('id', `caminoRecto${cloneID}`);
      clone.find('#caminoCurvaLigera0').prop('id', `caminoCurvaLigera${cloneID}`);
      clone.find('#caminoCurvaCerrada0').prop('id', `caminoCurvaCerrada${cloneID}`);
@@ -3431,7 +3432,7 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#labelCurvaCerrada0').prop('id', `labelCurvaCerrada${cloneID}`);
      clone.find('#labelCurvaSinuoso0').prop('id', `labelCurvaSinuoso${cloneID}`);
 
-     clone.find('input[name="pendiente[0][]"]').prop('name', `pendiente[${++cloneID}][]`);
+     clone.find('input[name="pendiente[0][]"]').prop('name', `pendiente[${cloneID}][]`);
      clone.find('#pendienteRecto0').prop('id', `pendienteRecto${cloneID}`);
      clone.find('#pendienteLigera0').prop('id', `pendienteLigera${cloneID}`);
      clone.find('#pendienteMediana0').prop('id', `pendienteMediana${cloneID}`);
@@ -3444,7 +3445,19 @@ $(document).on("click", "#add_causa_raiz", function(event){
      clone.find('#labelLigera0').prop('id', `labelLigera${cloneID}`);
      clone.find('#labelMediana0').prop('id', `labelMediana${cloneID}`);
      clone.find('#labelMontania0').prop('id', `labelMontania${cloneID}`);
-     clone.appendTo('#step-4');
+     clone.find('#firma').prop('id', `firma${cloneID}`);
+     var config = {
+        autoFit : true,       // Update any forms field with signature when loading the page
+        // format : "image/png",  // Default signature image format
+        background : "#EEE",   // Default signature background
+        lineColor : "#000",          // Default signature pen color
+        lineWidth : 1,          // Default signature pen width
+        border : "#AAA",       // Default signature pen border color
+        height : 210           // Default signature height in px
+    };
+    clone.find(`#firma${cloneID}`).empty();
+    clone.appendTo('#step-4');
+    clone.find(`#firma${cloneID}`).jqSignature(config);
 });
 $(document).on("click", "#audioInput", function(event){
     event.preventDefault();
@@ -3550,4 +3563,12 @@ $(document).on("change", '#autorizacion_voz', function (e){
     }else{
         $('#mostrar_modalsonido').hide();
     }
+});
+$(document).on("click", '.btn_borrarFirma', function (e){
+    console.log('event', e);
+    e.preventDefault();
+    $("#loading_spin").show();
+    $(this).closest('.row').find('.col-sm-8').find("div[name='firma[]']").jqSignature('clearCanvas');
+    $(this).closest('.row').find('.col-sm-8').find("input[name='valor_firma[]']").val('p');
+    $("#loading_spin").hide();
 });

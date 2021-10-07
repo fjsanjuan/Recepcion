@@ -2505,17 +2505,14 @@
                                 </div>
                         </div><br><br>
                         <div class="row"> 
-                            <div class="col-sm-1" >
-                                <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
+                            <div class="col-sm-2">
+                                <button class="btn btn-danger btn_borrarFirma"><i class="fa fa-eraser"></i></button>
                             </div>
                             <div class="col-sm-8">
-                                <input type="hidden" name="valor_firma[0][]" id="valor_firma0">
-                                <div id="firma"></div>
+                                <input type="hidden" name="valor_firma[]" id="valor_firma0">
+                                <div id="firma" name="firma[]"></div>
                                 <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
                             </div>                   
-                            <div class="col-sm-3">
-                                <button class="btn btn-danger" id="btn_borrarFirma"><i class="fa fa-eraser"></i></button>
-                            </div>
                         </div>
                         <center><h5>Firma del Cliente</h5></center>
                     </div> 
