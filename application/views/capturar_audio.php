@@ -2,7 +2,8 @@
 	<div class="col-sm-12">
 		<div class="file-field">
 			<div id="btn_audio" class="btn btn-info btn-md float-left">
-	            <span>Capturar Audio  <i class="fa fa-microphone" ></i></span>
+	            <span id="btn_audioTitulo">Iniciar grabación  </span>
+	            <i id="btn_audioIcono" class="fa fa-microphone" ></i>
 	            <input type="file" accept="audio/*" id="audioInput" name="audios" 
 				style="width: 150px;height:50px;opacity: 0;overflow: hidden;position: absolute;z-index: 100000;left:20px;top:5px; cursor: pointer;" 
 				multiple>

@@ -1879,12 +1879,16 @@ class Servicio extends CI_Controller {
 		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
 		$formato_oasis = $this->input->post("oasis");
 		$id_orden = $this->input->post("id_orden");
-		//$multipunto = $this->crear_pdf_multipunto($multipunto, $id_orden);
-		//guardar en intelisis los archvios generados pendiente de validar
-			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($formato["ruta"], $id_orden,'orden' );
-			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($multipunto["ruta"], $id_orden, 'multipuntos' );
 		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
 		$oasis = $this->buscador_model->cargar_oasis($ruta_temp, $formato_oasis, $id_orden);
 		echo json_encode($oasis);
+	}
+	public function guardar_voc()
+	{
+		ini_set('memory_limit', '1024M');
+		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+		$datos = $this->input->post();
+		$response = $this->buscador_model->guardar_voc($datos);
+		echo json_encode($response);
 	}
 }

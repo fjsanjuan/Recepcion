@@ -2029,30 +2029,32 @@
         </div>
       <!-- Fourth Step -->
     <div class="row setup-content-2" id="step-4">
-            <div class="col-md-12">
-                  <br>
-                  <h5 style="color: #4285f4;"><center><b>Paso 4: Causa Raíz Componente</b></center></h5>
-                  <br>
-                  <h3 class="font-weight-bold pl-0 my-4"><strong>Voz del cliente</strong></h3>
-                  <div class="col-12">
-                    <div class="col-6 voz">
-                        <label for="autorizacion_voz">Autorización para grabar voz?</label>
-                          <div class="switch div_switchvoz">
-                            <label>
-                                  No
-                                  <input type="checkbox" name="autorizacion_voz" id="autorizacion_voz">
-                                  <span class="lever success"></span>
-                                  Sí
-                            </label>
-                        </div>
+        <div class="col-md-12">
+            <br>
+            <h5 style="color: #4285f4; text-align: center;"><center><b>Paso 4: Causa Raíz Componente</b></center></h5>
+            <br>
+            <div class="col-12">
+                <div class="col-6 voz">
+                    <label for="autorizacion_voz">¿Autorización para grabar voz?</label>
+                    <div class="switch div_switchvoz">
+                        <label>
+                            No
+                            <input type="checkbox" name="autorizacion_voz" id="autorizacion_voz">
+                            <span class="lever success"></span>
+                            Sí
+                        </label>
                     </div>
-                  </div>
-                <div class="row">                      
+                </div>
+            </div>
+        </div>
+            <div class="col-md-12">
+                <br>
+                <div class="row">
                     <div class="col-6">
                         <blockquote class="blockquote bq-primary htext">Identificación de necesidades de servicio</blockquote>
                         <div class="form-check">
                             <label for="">Definición de falla</label>
-                            <input class="form-control" type="text" row="20" name="articulos_personales">
+                            <textarea class="form-control" type="text" rows="5" name="articulos_personales"></textarea>
                         </div>
                     </div>
                     <div class="col-6">
@@ -2522,7 +2524,7 @@
                 <input type="file" name="pic" id="pic"  style="display:none;" />
             </div>
             <section>
-                <!-- fotos y video -->
+                <!-- audios -->
                 <div class="fixed-action-btn" style="bottom: 60px; right: 24px;">
                     <a class="btn-floating btn-lg red waves-effect waves-light">
                         <i class="fa fa-plus"></i>

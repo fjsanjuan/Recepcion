@@ -12,7 +12,7 @@ $(window).on('load', function() {
     var id_cliente = $("#cliente").val();
     var vin = $("#vin").val();
 
-    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #enviar_whatsapp #mostrar_modalOasis").hide();
+    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #enviar_whatsapp #mostrar_modalOasis, #mostrar_modalsonido").hide();
 
     // funcion que asigna el total de fotos que tiene cada orden 
     set_totalFots();
@@ -3269,7 +3269,7 @@ let cloneID = 0;
 //Añadir causa raíz componente
 $(document).on("click", "#add_causa_raiz", function(event){
      event.preventDefault();
-     let clone = $( "#step-4:first" ).clone();
+     let clone = $( "#step-4 .col-md-12:nth-child(2)" ).clone();
      clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${++cloneID}][]`);
      clone.find('#humedadSeco0').prop('id', `humedadSeco${cloneID}`);
      clone.find('#humedadHumedo0').prop('id', `humedadHumedo${cloneID}`);
@@ -3449,10 +3449,14 @@ $(document).on("click", "#add_causa_raiz", function(event){
 $(document).on("click", "#audioInput", function(event){
     event.preventDefault();
     if (media_recorder) {
+        $('#btn_audioTitulo').text('Iniciar grabación');
         $('#btn_audio').removeClass('btn-green').addClass('btn-info');
+        $('#btn_audioIcono').removeClass('fa fa-stop').addClass('fa fa-microphone');
         detener_grabacion();
     }else{
+        $('#btn_audioTitulo').text('Detener grabación');
         $('#btn_audio').removeClass('btn-info').addClass('btn-green');
+        $('#btn_audioIcono').removeClass('fa fa-microphone').addClass('fa fa-stop');
         navigator.mediaDevices.getUserMedia({
           audio: true
         })
@@ -3477,4 +3481,73 @@ $(document).on("click", "#audioInput", function(event){
             detener_grabacion();
       });
   }
+});
+$(document).on("click", '#btn_guardarAudio', function (e){
+    e.preventDefault();
+    var data = new FormData();
+    var cve_cliente = $("#id_cliente").val();
+    var vin = $("#vin_cliente").val();
+    var id_orden_servicio = localStorage.getItem("id_orden_servicio");
+    var audios = $("input[name='input_vista_previa_audo[]']");
+     //reemplaza vins que tengan puntos o espacios pero no afecta el campo en la BD
+     vin = vin.replace(".", "");
+     vin = vin.replace(" ", "");
+
+    $.each(audios, function(index, val)
+    {
+        var file = base64toFile($(val).val(), "voc-"+(index+1));
+        data.append("voc-"+(index+1), file);
+    });
+    data.append("cve_cliente", cve_cliente);
+    data.append("vin", vin);
+    data.append("id_orden_servicio", id_orden_servicio);
+    data.append("form_foto_f",$("#foto_comentario").val());
+
+    if(audios.length <= 0)
+    {
+        toastr.error("No se ha capturado ningun audio.");
+    }else 
+    {
+        guardar_audios(data);
+    }
+});
+function guardar_audios(form)
+{
+    $.ajax({
+        cache: false,
+        url: base_url+ "index.php/Servicio/guardar_voc/",
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        dataType: 'json',
+        data: form,
+        beforeSend: function(){
+            toastr.info("Guardando lo(s) audio(s), por favor, espere un momento.");
+            $("#loading_spin").show();
+        }
+    })
+    .done(function(dat) {
+        $("#loading_spin").hide();
+        if(dat)
+        {
+            toastr.success("Se han guardado lo(s) audio(s).");
+            $('#audios_grabados').empty();
+            $(".coloca").empty();
+        }else
+        {
+            toastr.error("Hubo un error al guardar lo(s) audio(s).");
+        }
+    })
+    .fail(function() {
+        alert("Hubo un error al guardar lo(s) audio(s)");
+        $("#loading_spin").hide();
+    });
+}
+$(document).on("change", '#autorizacion_voz', function (e){
+    e.preventDefault();
+    if ($('#autorizacion_voz').prop('checked')) {
+        $('#mostrar_modalsonido').show();
+    }else{
+        $('#mostrar_modalsonido').hide();
+    }
 });

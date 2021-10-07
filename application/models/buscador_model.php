@@ -14,6 +14,7 @@ class Buscador_Model extends CI_Model{
 
 	private $Version = 'V4000';
 	private $vista = 'PaquetesWeb';
+	private $ruta_formts = "../recepcion/";
 
 	public function __construct()
 	{
@@ -2859,5 +2860,43 @@ class Buscador_Model extends CI_Model{
 			}
 		}
 		return $response;
+	}
+	public function guardar_voc($datos = null)
+	{
+		$datos["vin"] = trim($datos["vin"]);
+		$archivo["id_orden_servicio"] = $datos["id_orden_servicio"];	//DE PRUEBA
+		$archivo["tipo_archivo"] = 1;
+		$archivo["fecha_creacion"] = date("d-m-Y H:i:s");
+		$archivo["fecha_actualizacion"] = date("d-m-Y H:i:s");
+		$vocs = $_FILES;
+		$files = [];
+		foreach($vocs as $key => $value) 
+		{
+				$datos["imagen"] = $value;
+				$datos['id'] = $key;
+				$archivo_creado = $this->crear_archivo($datos);
+				$files[] = ($archivo_creado) ? true : false;
+		}
+
+		return $files;
+	}
+	public function crear_archivo($datos = null)
+	{
+		$archivo = $datos["imagen"];
+		$datos["vin"] = trim($datos["vin"]);
+		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"].'/'.$datos["id"].'.mp3'; 
+		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
+			mkdir($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"], 0777, true);
+		}
+		$nombrearchivo = $archivo["name"];
+		move_uploaded_file($archivo["tmp_name"], $ruta);
+		if(file_exists($ruta)) {
+			$ruta_a["ruta_archivo"] = $ruta;
+			$ruta_a["fecha_actualizacion"] = date("d-m-Y H:i:s");
+			$creado = true;
+		}else {
+			$creado = false;
+		}
+		return $creado;
 	}
 }
