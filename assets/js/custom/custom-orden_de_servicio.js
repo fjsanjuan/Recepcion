@@ -291,7 +291,7 @@ $(window).on('load', function() {
             else
                 
 				localStorage.setItem("nom_cliente", datos[0]['PersonalNombres'] + ' ' + datos[0]['PersonalNombres2']) ;
-// console.log("agrega PersonalNombres");
+            // console.log("agrega PersonalNombres");
             localStorage.setItem("ap_cliente", datos[0]['PersonalApellidoPaterno']);
             localStorage.setItem("am_cliente", datos[0]['PersonalApellidoMaterno']);
 
@@ -3156,7 +3156,7 @@ $(document).on("change", "#oasisInput", function(event){
 });
 //Cambio para adjuntar pdf
 $(document).on("click", "#btn_guardarOasis", function(event){
-     event.preventDefault();
+    event.preventDefault();
     var data = new FormData();
     var id_orden = localStorage.getItem("hist_id_orden");
     var oasis = $("#input_vista_previa_pdf").val();
@@ -3213,8 +3213,91 @@ function guardar_oasis(form)
         $("#loading_spin").hide();
     });
 }
+function convertir_tiempo(segundos) {
+    let horas = Math.floor(segundos / 3600);
+    segundos -= horas * 3600;
+    let minutos = Math.floor(segundos / 60);
+    segundos -= minutos * 60;
+    segundos = parseInt(segundos);
+    if (horas < 10) horas = "0" + horas;
+    if (minutos < 10) minutos = "0" + minutos;
+    if (segundos < 10) segundos = "0" + segundos;
+
+    return `${horas}:${minutos}:${segundos}`;
+}
+let tiempo_inicio, media_recorder, id_intervalo;
+ // Mostrar tiempo de grabación
+function iniciar_conteo() {
+    tiempo_inicio = Date.now();
+    id_intervalo = setInterval(refrescar, 1000);
+}
+function refrescar() {
+    $('#tiempo_grabado').text(convertir_tiempo((Date.now() - tiempo_inicio) / 1000));
+}
+function detener_grabacion() {
+    if (!media_recorder) return alert("No se está grabando");
+    media_recorder.stop();
+    media_recorder = null;
+}
+function detener_conteo() {
+    clearInterval(id_intervalo);
+    tiempo_inicio = null;
+    $('#tiempo_grabado').text('');
+}
+function agregar_audio(blob) {
+    var reader = new FileReader();
+    var base64data = "";
+    reader.readAsDataURL(blob); 
+    reader.onloadend = function() {
+        base64data = reader.result;
+        $('#audios_grabados').append(`<input type="hidden" name="input_vista_previa_audo[]" class="new_audio" value="${base64data}">`);
+        $('#audios_grabados').append(`<div class="row"><audio class="col-sm-10" controls controlsList="nofullscreen nodownload" name="vista_previa_audio[]" src="${base64data}"></audio><span class="remove-audio col-sm-2" data-id="0" style="max-width:50px;cursor:pointer; background-color:rgba(255,0,0,0.8);padding:15px;"><i class="fa fa-trash" style="color:#fff"></i></span></div>`);
+        $('#audios_grabados').append(`<br>`);
+    }
+}
+$(document).on("click", '#btn_borrarAudio', function (e){
+    e.preventDefault();
+    //TODO llamada al borrado de archivos de momento no se almacenan
+    $('#audios_grabados').empty();
+});
+$(document).on("click", '.remove-audio', function (e){
+    e.preventDefault();
+    //TODO llamada al borrado de archivos de momento no se almacenan
+    $(this).closest(".row").remove();
+});
+let cloneID = 0;
 //Añadir causa raíz componente
 $(document).on("click", "#add_causa_raiz", function(event){
-     event.preventDefault();
+    event.preventDefault();
     $( "#step-4:first" ).clone().appendTo('#step-4');
+});
+$(document).on("click", "#audioInput", function(event){
+     event.preventDefault();
+      if (media_recorder) {
+        $('#btn_audio').removeClass('btn-green').addClass('btn-info');
+        detener_grabacion();
+      }else{
+        $('#btn_audio').removeClass('btn-info').addClass('btn-green');
+        navigator.mediaDevices.getUserMedia({
+          audio: true
+        })
+        .then( stream => {
+                media_recorder = new media_recorder(stream);
+                media_recorder.start();
+                iniciar_conteo();
+                const grabacion = [];
+                media_recorder.addEventListener("dataavailable", event => {
+                    grabacion.push(event.data);
+                });
+                media_recorder.addEventListener("stop", () => {
+                stream.getTracks().forEach(track => track.stop());
+                detener_conteo();
+                const blobAudio = new Blob(grabacion, {type: "audio/mp3"});
+                agregar_audio(blobAudio);
+                });
+        })
+        .catch(error => {
+            console.log('error stream', error);
+      });
+  }
 });

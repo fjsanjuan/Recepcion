@@ -2480,7 +2480,7 @@
                     </a>
                     <ul class="list-unstyled">
                         <li>
-                            <a class="btn-floating red waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-file-audio"></i></a>
+                            <a class="btn-floating red waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone"></i></a>
                         </li>
                         <li>
                             <a class="btn-floating green waves-effect waves-light" id="add_causa_raiz"><i class="fa fa-copy"></i></a>
@@ -2768,7 +2768,7 @@
 </div>
 <!-- modal capturar sonido-->
 <div class="modal fade" id="modalsonido" tabindex="-1" role="dialog" data-backdrop="false">
-    <div class="modal-dialog modal-sm"  role="document">
+    <div class="modal-dialog modal-md"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Capturar Audio</h5>
