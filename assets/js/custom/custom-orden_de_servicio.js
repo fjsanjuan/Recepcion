@@ -3179,6 +3179,7 @@ function optimizar_PDF(e)
       base64data = reader.result;
       //showing file converted to base64
       $('#input_vista_previa_pdf').val(base64data);
+      $('#vista_previa_pdf').prop('src', base64data);
       $("#loading_spin").hide();
     };
 }

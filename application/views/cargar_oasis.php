@@ -14,12 +14,14 @@
         ?>
         <input type="hidden" name="input_vista_previa_pdf" id="input_vista_previa_pdf">
 	</div>
-	<br><br><br><!-- 
+	<br><br><br>
 	<div class="col-sm-12">
 		<h5 style="text-align: center;"><b>Vista Previa</b></h5>
-		
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe class="embed-responsive-item" src="" frameborder="0" id="vista_previa_pdf" allowfullscreen></iframe>
+		</div>
 	</div>
-	<br><br> -->
+	<br><br>
 		<?php
         	echo form_close();
     	?>
