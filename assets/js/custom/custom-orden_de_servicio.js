@@ -3575,7 +3575,10 @@ $(document).on("click", '.btn_borrarFirma', function (e){
 });
 $(document).on("click", '#btn_borrarOasis', function (e){
     e.preventDefault();
-    $('#vista_previa_pdf').prop('src',"").empty();
-        $('.vista_previa_pdf').val("");
-        $('.input_vista_previa_pdf').val("");
+    $('#input_vista_previa_pdf').val("");
+      $('#vista_previa_pdf').prop("src", "");
+});
+$(document).on("click", '#btn_borrarFoto', function (e){
+    e.preventDefault();
+    $('#pictures_orden_recepcion').html("");
 });
