@@ -2029,13 +2029,13 @@
         </div>
       <!-- Fourth Step -->
     <div class="row setup-content-2" id="step-4">
-        <div class="col-md-12">
+        <div class="col-sm-12 col-md-12 col-lg-12">
             <br>
             <h5 style="color: #4285f4; text-align: center;"><center><b>Paso 4: Causa Raíz Componente</b></center></h5>
             <br>
             <div class="col-12">
                 <div class="col-6 voz">
-                    <label for="autorizacion_voz">¿Autorización para grabar voz?</label>
+                    <label for="autorizacion_voz"><strong>¿Autorización para grabar voz?</strong></label>
                     <div class="switch div_switchvoz">
                         <label>
                             No
@@ -2047,7 +2047,7 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-12">
+            <div class="col-sm-12 col-md-12 col-lg-12">
                 <br>
                 <div class="row">
                     <div class="col-6">
@@ -2505,10 +2505,10 @@
                                 </div>
                         </div><br><br>
                         <div class="row"> 
-                            <div class="col-sm-2">
+                            <div class="col-sm-2 col-md-2 col-lg-2">
                                 <button class="btn btn-danger btn_borrarFirma"><i class="fa fa-eraser"></i></button>
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-8 col-md-8 col-lg-8">
                                 <input type="hidden" name="valor_firma[]" id="valor_firma0">
                                 <div id="firma" name="firma[]"></div>
                                 <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->

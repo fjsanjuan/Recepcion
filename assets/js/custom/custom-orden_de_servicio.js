@@ -3461,13 +3461,13 @@ $(document).on("click", "#add_causa_raiz", function(event){
     clone.find(`#firma${cloneID}`).jqSignature(config);
 });
 $(document).on("click", "#audioInput", function(event){
-    event.preventDefault();
-    if (media_recorder) {
+     event.preventDefault();
+      if (media_recorder) {
         $('#btn_audioTitulo').text('Iniciar grabación');
         $('#btn_audio').removeClass('btn-green').addClass('btn-info');
         $('#btn_audioIcono').removeClass('fa fa-stop').addClass('fa fa-microphone');
         detener_grabacion();
-    }else{
+      }else{
         $('#btn_audioTitulo').text('Detener grabación');
         $('#btn_audio').removeClass('btn-info').addClass('btn-green');
         $('#btn_audioIcono').removeClass('fa fa-microphone').addClass('fa fa-stop');
@@ -3506,8 +3506,8 @@ $(document).on("click", '#btn_guardarAudio', function (e){
      //reemplaza vins que tengan puntos o espacios pero no afecta el campo en la BD
      vin = vin.replace(".", "");
      vin = vin.replace(" ", "");
-
-    $.each(audios, function(index, val)
+     
+     $.each(audios, function(index, val)
     {
         var file = base64toFile($(val).val(), "voc-"+(index+1));
         data.append("voc-"+(index+1), file);
@@ -3572,4 +3572,10 @@ $(document).on("click", '.btn_borrarFirma', function (e){
     $(this).closest('.row').find('.col-sm-8').find("div[name='firma[]']").jqSignature('clearCanvas');
     $(this).closest('.row').find('.col-sm-8').find("input[name='valor_firma[]']").val('p');
     $("#loading_spin").hide();
+});
+$(document).on("click", '#btn_borrarOasis', function (e){
+    e.preventDefault();
+    $('#vista_previa_pdf').prop('src',"").empty();
+        $('.vista_previa_pdf').val("");
+        $('.input_vista_previa_pdf').val("");
 });
