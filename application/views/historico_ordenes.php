@@ -379,7 +379,7 @@
 </div>
 <!-- modal oasis -->
 <div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
-    <div class="modal-dialog modal-sm"  role="document">
+    <div class="modal-dialog modal-lg"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>

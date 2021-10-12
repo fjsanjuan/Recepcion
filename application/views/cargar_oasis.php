@@ -5,7 +5,7 @@
 	            <span>Cargar Oasis  <i class="fa fa-file-pdf" ></i></span>
 	            <input type="file" accept="application/pdf" id="oasisInput" name="oasis_pdf" 
 				style="width: 150px;height:50px;opacity: 0;overflow: hidden;position: absolute;z-index: 100000;left:20px;top:5px; cursor: pointer;" 
-				multiple>
+				>
 	        </div>
         </div>
 		<?php

@@ -1625,6 +1625,8 @@ function optimizar_PDF(e)
       base64data = reader.result;
       //showing file converted to base64
       $('#input_vista_previa_pdf').val(base64data);
+	  $('#vista_previa_pdf').prop('src', base64data);
+	  $("#loading_spin").hide();
     };
 }
 function guardar_oasis(form)
@@ -1658,3 +1660,9 @@ function guardar_oasis(form)
         $("#loading_spin").hide();
     });
 }
+$(document).on('click', '#btn_borrarOasis', function (e) {
+	e.preventDefault();
+	$('#vista_previa_pdf').prop('src', '');
+	$('#input_vista_previa_pdf').val('');
+	$('#oasisInput').val('');
+});
