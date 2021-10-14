@@ -2851,8 +2851,31 @@ class Buscador_Model extends CI_Model{
 			file_put_contents($ruta."FormatoOasis".$id_orden.".pdf", $bin);
 			if(file_exists($ruta."FormatoOasis".$id_orden.".pdf"))
 			{
-				$response["estatus"] = true;
-				$response["ruta"] = $ruta."FormatoDeOrdenServicio".$id_orden.".pdf";
+				$archivo = [
+					'id_orden_servicio' => $id_orden,
+					'tipo_archivo' => 7,
+					'fecha_creacion' => date("d-m-Y H:i:s"),
+					'fecha_actualizacion' => date("d-m-Y H:i:s"),
+					'eliminado' => 0,
+					'comentario' => '',
+					'ruta_archivo' => $ruta."FormatoOasis".$id_orden.".pdf"
+				];
+				$this->db->trans_start();
+				$this->db->insert("archivo", $archivo);
+				$id_registro = $this->db->select("IDENT_CURRENT('archivo') as id")->get()->row_array();
+
+				$this->db->trans_complete();
+
+				if($this->db->trans_status() == true)
+				{
+					$response["estatus"] = true;
+					$response["ruta"] = $ruta."FormatoOasis".$id_orden.".pdf";
+					$response['id_registro'] = $id_registro;
+				}else
+				{
+					$response["estatus"] = false;
+					$response["ruta"] = "";
+				}
 			}else
 			{
 				$response["estatus"] = false;
