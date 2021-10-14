@@ -3566,19 +3566,25 @@ $(document).on("change", '#autorizacion_voz', function (e){
     }
 });
 $(document).on("click", '.btn_borrarFirma', function (e){
-    console.log('event', e);
     e.preventDefault();
     $("#loading_spin").show();
     $(this).closest('.row').find('.col-sm-8').find("div[name='firma[]']").jqSignature('clearCanvas');
-    $(this).closest('.row').find('.col-sm-8').find("input[name='valor_firma[]']").val('p');
+    $(this).closest('.row').find('.col-sm-8').find("input[name='valor_firma[]']").val('');
     $("#loading_spin").hide();
 });
 $(document).on("click", '#btn_borrarOasis', function (e){
     e.preventDefault();
-    $('#input_vista_previa_pdf').val("");
-      $('#vista_previa_pdf').prop("src", "");
+    $('#vista_previa_pdf').prop("src", "");
+    $('#input_vista_previa_pdf').html('');
+    $('#oasisInput').val('');
 });
 $(document).on("click", '#btn_borrarFoto', function (e){
     e.preventDefault();
-    $('#pictures_orden_recepcion').html("");
+    $('#vista_previa').val('');
+    $('#pictures_orden_recepcion').html('');
+    $('#cameraInput').val('');
+});
+$(document).on("click", '#btn_delete', function(e){
+    e.preventDefault();
+    
 });

@@ -2516,7 +2516,8 @@
                         </div>
                         <center><h5>Firma del Cliente</h5></center>
                     </div> 
-                    <a class="btn btn-info" id="add_causa_raiz"><i class="fa fa-copy"></i>Nueva Página</a>                 
+                    <a class="btn btn-info" id="add_causa_raiz"><i class="fa fa-copy"></i>Nueva Página</a>
+                    <button class="btn btn-danger" id="btn_delete">Borrar Página</button>          
                 </div>
                 <input type="file" name="pic" id="pic"  style="display:none;" />
             </div>

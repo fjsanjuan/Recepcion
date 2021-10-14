@@ -1,5 +1,5 @@
 <style>
-    #firma, #firma2 , #firma3 {
+    #firma, #firma1, #firma2 , #firma3, #firma4 {
         border: 2px dotted black;
         background-color: #fff;
         width: 425px;
