@@ -2886,26 +2886,21 @@ class Buscador_Model extends CI_Model{
 	}
 	public function guardar_voc($datos = null)
 	{
-		$datos["vin"] = trim($datos["vin"]);
-		$archivo["id_orden_servicio"] = $datos["id_orden_servicio"];	//DE PRUEBA
-		$archivo["tipo_archivo"] = 1;
-		$archivo["fecha_creacion"] = date("d-m-Y H:i:s");
-		$archivo["fecha_actualizacion"] = date("d-m-Y H:i:s");
 		$vocs = $_FILES;
 		$files = [];
 		foreach($vocs as $key => $value) 
 		{
-				$datos["imagen"] = $value;
-				$datos['id'] = $key;
-				$archivo_creado = $this->crear_archivo($datos);
-				$files[] = ($archivo_creado) ? true : false;
+			$datos["voc"] = $value;
+			$datos['id'] = $key;
+			$archivo_creado = $this->crear_archivo($datos);
+			$files[] = ($archivo_creado) ? true : false;
 		}
 
 		return $files;
 	}
 	public function crear_archivo($datos = null)
 	{
-		$archivo = $datos["imagen"];
+		$archivo = $datos["voc"];
 		$datos["vin"] = trim($datos["vin"]);
 		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"].'/'.$datos["id"].'.mp3'; 
 		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
@@ -2914,8 +2909,25 @@ class Buscador_Model extends CI_Model{
 		$nombrearchivo = $archivo["name"];
 		move_uploaded_file($archivo["tmp_name"], $ruta);
 		if(file_exists($ruta)) {
-			$ruta_a["ruta_archivo"] = $ruta;
-			$ruta_a["fecha_actualizacion"] = date("d-m-Y H:i:s");
+			$archivo = [
+					'id_orden_servicio' => $datos['id_orden_servicio'],
+					'tipo_archivo' => 8,
+					'fecha_creacion' => date("d-m-Y H:i:s"),
+					'fecha_actualizacion' => date("d-m-Y H:i:s"),
+					'eliminado' => 0,
+					'comentario' => '',
+					'ruta_archivo' => $ruta
+				];
+				$this->db->trans_start();
+				$this->db->insert("archivo", $archivo);
+				$this->db->trans_complete();
+				if($this->db->trans_status() == true)
+				{
+					$creado = true;
+				}else
+				{
+					$creado = false;
+				}
 			$creado = true;
 		}else {
 			$creado = false;
