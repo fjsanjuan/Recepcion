@@ -3268,10 +3268,19 @@ $(document).on("click", '.remove-audio', function (e){
 });
 let cloneID = 0;
 //Añadir causa raíz componente
-$(document).on("click", "#add_causa_raiz", function(event){
+$(document).on("click", ".add_causa_raiz", function(event){
      event.preventDefault();
      ++cloneID;
-     let clone = $( "#step-4 .col-md-12:nth-child(2)" ).clone();
+     let clone = $( "#step-4 .div_causa_raiz_componente:first" ).clone();
+
+     clone.find('input[name="humedad[]"]').prop('name', `humedad[${cloneID}]`);
+     clone.find('input[name="viento[]"]').prop('name', `viento[${cloneID}]`);
+     clone.find('input[name="cambioTransmision[]"]').prop('name', `cambioTransmision[${cloneID}]`);
+     clone.find('input[name="cambioTipo[]"]').prop('name', `cambioTipo[${cloneID}]`);
+     clone.find('input[name="estructura[]"]').prop('name', `estructura[${cloneID}]`);
+     clone.find('input[name="camino[]"]').prop('name', `camino[${cloneID}]`);
+     clone.find('input[name="pendiente[]"]').prop('name', `pendiente[${cloneID}]`);
+
      clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${cloneID}][]`);
      clone.find('#humedadSeco0').prop('id', `humedadSeco${cloneID}`);
      clone.find('#humedadHumedo0').prop('id', `humedadHumedo${cloneID}`);
@@ -3584,7 +3593,15 @@ $(document).on("click", '#btn_borrarFoto', function (e){
     $('#pictures_orden_recepcion').html('');
     $('#cameraInput').val('');
 });
-$(document).on("click", '#btn_delete', function(e){
+$(document).on('click', '.btn_delete_page', function (e) {
     e.preventDefault();
-    
+    if ($(this).closest('.div_causa_raiz_componente').find('#firma').length > 0) {
+        toastr.warning('No puedes eliminar la primer página');
+        return;
+    }
+    if ($('.div_causa_raiz_componente').length > 1) {
+        $(this).closest('.div_causa_raiz_componente').remove();
+    }else {
+        toastr.warning('Debes matener un formato causa raíz componente');
+    }
 });
