@@ -2612,6 +2612,9 @@ $(document).on("click", "#btn_guardarInspeccion", function(e){
         // var existen_danios = ($("#existen_danios").val() == "on") ? "No"  : "Si";
         //form = $("#form_inspeccion_servicio").serialize();
         //form += "&id_orden="+localStorage.getItem("id_orden_servicio");
+        $.each($('div[name="firma[]"]'), function(index, val){
+            $(val).closest('.col-sm-8.col-md-8.col-lg-8').find('input[name="valor_firma[]"]').val($(val).jqSignature('getDataURL'));
+        });
 		id_orden = localStorage.getItem("id_orden_servicio");
         $.ajax({
             cache: false,
@@ -3363,7 +3366,7 @@ $(document).on("click", ".add_causa_raiz", function(event){
      clone.find('#label_cajuela0').prop('for', `falla_cajuela${cloneID}`);
      clone.find('#label_cristales0').prop('for', `falla_cristales${cloneID}`);
      clone.find('#label_toldo0').prop('for', `falla_toldo${cloneID}`);
-     clone.find('#label_carroceria0').prop('for', `falla_corroceria${cloneID}`);
+     clone.find('#label_carroceria0').prop('for', `falla_carroceria${cloneID}`);
      clone.find('#label_debajo_vehiculo0').prop('for', `falla_debajo_vehiculo${cloneID}`);
      clone.find('#label_dentro0').prop('for', `falla_dentro${cloneID}`);
      clone.find('#label_fuera0').prop('for', `falla_fuera${cloneID}`);

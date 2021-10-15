@@ -1155,6 +1155,46 @@ class Servicio extends CI_Controller {
 			$dato['reqRev_sistFrenos'] = 0;
 		}
 
+		/*Datos del formato causa raíz componente para la voz del cliente*/
+		$dato['autorizacion_voz']     = $this->input->post('autorizacion_voz') == "on" ? 1 : 0;
+		$dato['articulos_personales'] = $this->input->post('articulos_personales[]') !== "" ?  $this->input->post('articulos_personales[]') : [];
+		$dato['temperatura']          = $this->input->post('temperatura[]') !== "" ?  $this->input->post('temperatura[]') : [];
+		$dato['humedad']              = $this->input->post('humedad[]') !== "" ?  $this->input->post('humedad[]') : [];
+		$dato['viento']               = $this->input->post('viento[]') !== "" ?  $this->input->post('viento[]') : [];
+		$dato['arranca']              = $this->input->post('arranca[]') !== "" ?  $this->input->post('arranca[]') : [];
+		$dato['inicia']               = $this->input->post('inicia[]') !== "" ?  $this->input->post('inicia[]') : [];
+		$dato['disminuye']            = $this->input->post('disminuye[]') !== "" ?  $this->input->post('disminuye[]') : [];
+		$dato['vuelta_izq']           = $this->input->post('vuelta_izq[]') !== "" ?  $this->input->post('vuelta_izq[]') : [];
+		$dato['vuelta_der']           = $this->input->post('vuelta_der[]') !== "" ?  $this->input->post('vuelta_der[]') : [];
+		$dato['tope']                 = $this->input->post('tope[]') !== "" ?  $this->input->post('tope[]') : [];
+		$dato['bache']                = $this->input->post('bache[]') !== "" ?  $this->input->post('bache[]') : [];
+		$dato['cambia']               = $this->input->post('cambia[]') !== "" ?  $this->input->post('cambia[]') : [];
+		$dato['movimiento']           = $this->input->post('movimiento[]') !== "" ?  $this->input->post('movimiento[]') : [];
+		$dato['constantemente']       = $this->input->post('constantemente[]') !== "" ?  $this->input->post('constantemente[]') : [];
+		$dato['esporadicamente']      = $this->input->post('esporadicamente[]') !== "" ?  $this->input->post('esporadicamente[]') : [];
+		$dato['volante']              = $this->input->post('volante[]') !== "" ?  $this->input->post('volante[]') : [];
+		$dato['cofre']                = $this->input->post('cofre[]') !== "" ?  $this->input->post('cofre[]') : [];
+		$dato['asiento']              = $this->input->post('asiento[]') !== "" ?  $this->input->post('asiento[]') : [];
+		$dato['cajuela_f']            = $this->input->post('cajuela_f[]') !== "" ?  $this->input->post('cajuela_f[]') : [];
+		$dato['cristales']            = $this->input->post('cristales[]') !== "" ?  $this->input->post('cristales[]') : [];
+		$dato['toldo']                = $this->input->post('toldo[]') !== "" ?  $this->input->post('toldo[]') : [];
+		$dato['carroceria']           = $this->input->post('carroceria[]') !== "" ?  $this->input->post('carroceria[]') : [];
+		$dato['dentro']               = $this->input->post('dentro[]') !== "" ?  $this->input->post('dentro[]') : [];
+		$dato['fuera']                = $this->input->post('fuera[]') !== "" ?  $this->input->post('fuera[]') : [];
+		$dato['frente']               = $this->input->post('frente[]') !== "" ?  $this->input->post('frente[]') : [];
+		$dato['detras']               = $this->input->post('detras[]') !== "" ?  $this->input->post('detras[]') : [];
+		$dato['velocidad']            = $this->input->post('velocidad[]') !== "" ?  $this->input->post('velocidad[]') : [];
+		$dato['cambioTransmision']    = $this->input->post('cambioTransmision[]') !== "" ?  $this->input->post('cambioTransmision[]') : [];
+		$dato['cambioTipo']           = $this->input->post('cambioTipo[]') !== "" ?  $this->input->post('cambioTipo[]') : [];
+		$dato['rpm']                  = $this->input->post('rpm[]') !== "" ?  $this->input->post('rpm[]') : [];
+		$dato['carga']                = $this->input->post('carga[]') !== "" ?  $this->input->post('carga[]') : [];
+		$dato['pasajeros']            = $this->input->post('pasajeros[]') !== "" ?  $this->input->post('pasajeros[]') : [];
+		$dato['cajuela']              = $this->input->post('cajuela[]') !== "" ?  $this->input->post('cajuela[]') : [];
+		$dato['estructura']           = $this->input->post('estructura[]') !== "" ?  $this->input->post('estructura[]') : [];
+		$dato['camino']               = $this->input->post('camino[]') !== "" ?  $this->input->post('camino[]') : [];
+		$dato['pendiente']            = $this->input->post('pendiente[]') !== "" ?  $this->input->post('pendiente[]') : [];
+		$dato['valor_firma']          = $this->input->post('valor_firma[]') !== "" ?  $this->input->post('valor_firma[]') : [];
+
 		// var_dump($dato);die;
 		$create = $this->buscador_model->guardar_inspeccion($dato);
 		

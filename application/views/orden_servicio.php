@@ -2168,7 +2168,7 @@
                                         <td>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input check-falla_presenta" name="vuelta_der[]" id="falla_vuelta_der0" value="Da vuelta a la derecha">
-                                                <label class="form-check-label" id="vuelta_der0" for="falla_vuelta_der0"></label>
+                                                <label class="form-check-label" id="label_vuelta_der0" for="falla_vuelta_der0"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -2268,7 +2268,7 @@
                                         <td>Cajuela</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="cajuela[]" id="falla_cajuela0" value="Cajuela">
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="cajuela_f[]" id="falla_cajuela0" value="Cajuela">
                                                 <label class="form-check-label" id="label_cajuela0" for="falla_cajuela0"></label>
                                             </div>
                                         </td>
@@ -2333,7 +2333,7 @@
                         <blockquote class="blockquote bq-primary htext">Condiciones Operativas</blockquote>
                         <div class="form-check">
                             <label class="form-check-label" for="velocidad">Velocidad Km/hr</label>
-                            <input type="range" min="0" max="260" list="velocidad_list" name="velocidad" class="form-check-input">
+                            <input type="range" min="0" max="260" list="velocidad_list" name="velocidad[]" class="form-check-input">
                             <datalist id="velocidad_list">
                                 <option value="0" label="0">
                                 <option value="20" label="20">
