@@ -2978,4 +2978,13 @@ class Buscador_Model extends CI_Model{
 		}
 		return $creado;
 	}
+	public function get_archivos_orden_servicio($id_orden = null, $tipo = 7)
+	{
+		$this->load->database();
+		$query = $this->db->query("select id_orden_servicio, tipo_archivo, ruta_archivo from archivo where id_orden_servicio = {$id_orden} and tipo_archivo = {$tipo} order by id desc;");
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else
+			return [];
+	}
 }

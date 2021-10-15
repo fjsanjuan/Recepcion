@@ -1931,4 +1931,28 @@ class Servicio extends CI_Controller {
 		$response = $this->buscador_model->guardar_voc($datos);
 		echo json_encode($response);
 	}
+	public function get_archivos_orden_servicio($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['voc'] = [];
+			$response['oasis'] = [];
+		}else{
+			$oasis  = $this->buscador_model->get_archivos_orden_servicio($id_orden, 7);
+			$audios = $this->buscador_model->get_archivos_orden_servicio($id_orden, 8);
+			$array  = [];
+			foreach ($oasis as $key => $value) {
+				$path = base_url().$value['ruta_archivo'];
+				$array[$key] = $path;
+			}
+			$response['oasis'] = $array;
+			foreach ($audios as $key => $value) {
+				$path = base_url().$value['ruta_archivo'];
+				$array[$key] = $path;
+			}
+			$response['voc'] = $array;
+			$response['estatus'] = true;
+		}
+		echo json_encode($response);
+	}
 }
