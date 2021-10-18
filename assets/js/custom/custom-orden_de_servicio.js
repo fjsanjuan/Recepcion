@@ -3206,6 +3206,7 @@ function guardar_oasis(form)
         if(data.estatus)
         {
             toastr.success("Se han guardado el formato Oasis.");
+            $('#vista_previa_pdf').prop("src", "");
 
         }else
         {
