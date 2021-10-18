@@ -216,11 +216,12 @@
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
-				btn     += "<button class='btn btn-sm oasis' style='background: #152f6d;' ><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Oasis</button>";
+				btn     += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action  = "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action  +="<button class='btn btn-sm cargaroasis' style='background:#C70039;' id='addOasis-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Oasis</button>";
+				//btn  +="<button class='btn btn-sm audiomp3' style='background:#fff200;' id='audiomp3-"+val["id"]+"'><i class='fa fa-file-audio-o'></i>&nbsp&nbsp audios mp3</button>";
 				//console.log( val['contFirma']['contadorFirma']);
 				//Se obtiene de buscador_model.php el valor de la consulta donde se evalua si existe firma o no del cliente en la orden de servico 
 				if(val['contFirma']['contadorFirma'] == 0){
@@ -305,6 +306,57 @@
             "positionClass": "toast-bottom-left",
         });
 	});
+	// para archivos adjuntos
+	$(".tabla_hist tbody").on("click", "tr td button.archivosadjuntos", function (e){
+		e.preventDefault();
+		$('#archivo_oasis').empty();
+		$('#archivos_voc').empty();
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		$.ajax({
+			url: base_url+"index.php/servicio/get_archivos_orden_servicio/"+id_orden,
+			type: "POST",
+			dataType: 'json',
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				$("#loading_spin").hide();
+				toastr.warning('No hay archivos adjuntos para mostrar');
+			},
+			success: function(data){
+				$("#loading_spin").hide();
+				if (data.estatus){
+					$('#modalarchivosadjuntos').modal('toggle');
+					if (data.oasis && data.oasis.length >0) {
+						//$('#archivo_oasis').html(`<a class='btn btn-info' href='${data.oasis[0]}' target='_blank'>Formato Oasis<a>`);
+						$('#archivo_oasis').html(`<div class="embed-responsive embed-responsive-16by9">
+  							<iframe class="embed-responsive-item" src="${data.oasis[0]}" allowfullscreen></iframe>
+						</div>`);
+						console.log('oasis', data.oasis);
+					}else{
+						$('#archivo_oasis').html('<p class="text-center text-danger">No hay datos de Oasis</p>');
+						console.error('No hay datos de oasis');
+					}
+					if (data.voc && data.voc.length >0){
+						var voc = "";
+						$.each(data.voc, function(index, value){
+							voc +=`<a class='btn btn-info' href='${value}' target='_blank'>Voc-${index}<a>`;
+							//voc += `<audio class="cols-sm-10" controls controlsList="nofullscreen nodownload" src="${value}"></audio>`;
+						});
+						$('#archivos_voc').html(voc);
+						console.log('voc', data.voc);
+					}else{
+						$('#archivos_voc').html('<p class="text-center text-danger">No hay datos de Voz del cliente</p>');
+						console.error('No hay datos de voc');
+					}
+				}else{
+					toastr.warning('No hay archivos adjuntos para mostrar');
+				}
+			}
+		});
+	});
 
 	var b_profeco = false;
 	//condicion que  genera en pdf la orden de servicio por marca
@@ -349,7 +401,7 @@
 
 		window.open(base_url+"index.php/servicio/ver_hojaMultipuntos/"+ id_orden, "_blank");
 	});
-
+	
 	//formato de Inventario
 	$(".tabla_hist tbody").on("click", "tr td button.formatoInventario", function(e){
 		var id_orden = $(this).prop("id");
