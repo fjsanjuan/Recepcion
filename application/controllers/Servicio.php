@@ -1940,15 +1940,22 @@ class Servicio extends CI_Controller {
 		}else{
 			$oasis  = $this->buscador_model->get_archivos_orden_servicio($id_orden, 7);
 			$audios = $this->buscador_model->get_archivos_orden_servicio($id_orden, 8);
+			$this->db->last_query();
+			$response['archivos'] = $this->db->last_query();
 			$array  = [];
 			foreach ($oasis as $key => $value) {
 				$path = base_url().$value['ruta_archivo'];
-				$array[$key] = $path;
+				if (file_exists($value['ruta_archivo'])) {
+					$array[$key] = $path;
+				}
 			}
 			$response['oasis'] = $array;
+			$array = [];
 			foreach ($audios as $key => $value) {
 				$path = base_url().$value['ruta_archivo'];
-				$array[$key] = $path;
+				if (file_exists($value['ruta_archivo'])) {
+					$array[$key] = $path;
+				}
 			}
 			$response['voc'] = $array;
 			$response['estatus'] = true;
