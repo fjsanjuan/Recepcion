@@ -2050,14 +2050,14 @@
             <div class="col-sm-12 col-md-12 col-lg-12 div_causa_raiz_componente">
                 <br>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <blockquote class="blockquote bq-primary htext">Identificación de necesidades de servicio</blockquote>
                         <div class="form-check">
                             <label for="">Definición de falla</label>
                             <textarea class="form-control" type="text" rows="5" name="articulos_personales[]"></textarea>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <blockquote class="blockquote bq-primary htext">Condiciones Ambientales</blockquote>
                         <div class="form-check">
                             <label class="form-check-label" for="temperatura">Temperatura ambiente</label>
@@ -2114,7 +2114,7 @@
                     </div>
                 </div>
                 <div class="row">                      
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="table-responsive">                                          <!-- tabla fallas cuando -->
                             <table class="table table-bordered table-striped table-hover animated fadeIn" id="tabla_falla_presenta">
                                 <thead class="mdb-color primary-color" style="font-weight: bold; color:#fff;">
@@ -2329,7 +2329,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <blockquote class="blockquote bq-primary htext">Condiciones Operativas</blockquote>
                         <div class="form-check">
                             <label class="form-check-label" for="velocidad">Velocidad Km/hr</label>
