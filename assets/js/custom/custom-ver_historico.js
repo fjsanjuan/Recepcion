@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -205,6 +205,10 @@
 				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
+				btn_jefe = ``;
+				action_jefe = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i></button>`;
+				btn_tecnico = ``;
+				action_tecnico = `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#classModal"><i class="fa fa-tasks"></i></button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -244,6 +248,32 @@
 						btn,
 						action2,
 						btn_presupuesto,
+						btn_comentario
+					]);
+				} else if(id_perfil == 4){
+					tabla_historico.fnAddData([
+						val["id"],
+						folio,	
+						nombre,	
+						val["tel_movil"],
+						val["vin"],
+						val["anio_modelo_v"],
+						btn_jefe,
+						action_jefe,
+						"",
+						btn_comentario
+					]);
+				} else if(id_perfil == 5){
+					tabla_historico.fnAddData([
+						val["id"],
+						folio,	
+						nombre,	
+						val["tel_movil"],
+						val["vin"],
+						val["anio_modelo_v"],
+						btn_tecnico,
+						action_tecnico,
+						"",
 						btn_comentario
 					]);
 				}else 
@@ -1718,3 +1748,26 @@ $(document).on('click', '#btn_borrarOasis', function (e) {
 	$('#input_vista_previa_pdf').val('');
 	$('#oasisInput').val('');
 });
+
+//modal para agregar oasis en caso de que la orden no las tenga
+	$(document).on("click", ".tabla_hist tbody tr td button.diagnostico", function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		localStorage.setItem("hist_id_orden", id_orden);
+		swal({
+			title: '¿Autorizar el diagnóstico de la orden?',
+			showCancelButton: true,
+			confirmButtonText: 'Autorizar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				/* Read more about isConfirmed, isDenied below */
+				if (result.value ) {
+					swal('Diagnóstico autorizado', '', 'success');
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+		});
+	});

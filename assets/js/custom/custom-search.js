@@ -4,6 +4,8 @@ if(id_perfil != 0)                                                              
     switch(id_perfil)                                                               
     {
         case "6":
+        case "5":
+        case "4":
             window.location.href = site_url+"buscador/ver_historico";
         break;
         default:

@@ -416,7 +416,7 @@
     </div>
 </div>
 <!-- modal diagnostico del problema -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#classModal"></button>
+
 <div id="classModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="diagnosticoproblema" aria-hidden="true">
 <div class=".modal-lg">
     <div class="modal-content">
