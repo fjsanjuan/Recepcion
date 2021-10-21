@@ -225,6 +225,7 @@ $(document).ready(function() {
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action  +="<button class='btn btn-sm cargaroasis' style='background:#C70039;' id='addOasis-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Oasis</button>";
+				action  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				//btn  +="<button class='btn btn-sm audiomp3' style='background:#fff200;' id='audiomp3-"+val["id"]+"'><i class='fa fa-file-audio-o'></i>&nbsp&nbsp audios mp3</button>";
 				//console.log( val['contFirma']['contadorFirma']);
 				//Se obtiene de buscador_model.php el valor de la consulta donde se evalua si existe firma o no del cliente en la orden de servico 
@@ -235,6 +236,8 @@ $(document).ready(function() {
 				btn_presupuesto += "<button class='btn btn-sm search_budgets' style='background: #607d8b;' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Presupuestos</button>";
 				btn_comentario = "<div style='display: none;' id='comentario-"+val["id"]+"'>"+val["comentario_tecnico_multip"]+"</div><button class='btn btn-sm btn-info comentario-tec' data-id='"+val["id"]+"'><i class='fa fa-edit'></i>&nbsp&nbsp Ver</button>";
 				action2  ="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
+				action2  +="<button class='btn btn-sm cargaroasis' style='background:#C70039;' id='addOasis-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Oasis</button>";
+				action2  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				if(id_perfil == 6)
 				{
 					tabla_historico.fnAddData([
@@ -1749,7 +1752,7 @@ $(document).on('click', '#btn_borrarOasis', function (e) {
 	$('#oasisInput').val('');
 });
 
-//modal para agregar oasis en caso de que la orden no las tenga
+//autorizar diagnóstico por parte del jefe de taller
 	$(document).on("click", ".tabla_hist tbody tr td button.diagnostico", function(e){
 		e.preventDefault();
 		var id_orden = $(this).prop("id");
@@ -1763,9 +1766,30 @@ $(document).on('click', '#btn_borrarOasis', function (e) {
 			cancelButtonText: 'Cancelar',
 			type: 'info'
 			}).then((result) => {
-				/* Read more about isConfirmed, isDenied below */
-				if (result.value ) {
-					swal('Diagnóstico autorizado', '', 'success');
+				if (result.value) {
+					swal('Diagnóstico autorizado.', '', 'success');
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+		});
+	});
+
+//autorizar pregarantía por parte del asesor
+	$(document).on("click", ".tabla_hist tbody tr td button.pregarantia", function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		localStorage.setItem("hist_id_orden", id_orden);
+		swal({
+			title: 'Abrir Pregarantía',
+			showCancelButton: true,
+			confirmButtonText: 'Autorizar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				if (result.value) {
+					swal('Pregarantía abierta.', '', 'success');
 				} else if (result.dismiss) {
 					swal('Cancelado', '', 'error');
 				}

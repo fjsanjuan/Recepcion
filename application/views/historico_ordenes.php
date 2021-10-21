@@ -417,8 +417,8 @@
 </div>
 <!-- modal diagnostico del problema -->
 
-<div id="classModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="diagnosticoproblema" aria-hidden="true">
-<div class=".modal-lg">
+<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="diagnosticoproblema" aria-hidden="true">
+<div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="col-lg-12 text-center"><div class="modal-header">
       <h4 style="color: #4285f4; text-align: center;"class="modal-title" id="classModalLabel"><b>Diagnóstico del Problema</b></h4>
@@ -426,111 +426,113 @@
             <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <table id="classTable" class="table table-bordered">
-          <thead>
-          <tr>
-              <th>Rep. No.</th>
-              <th>Tipo de Garantía</th>
-              <th>Daños en Relación</th>
-              <th>Autoriz NO.1</th>
-              <th>Autoriz NO.2</th>
-              <th>Partes Totales $</th>
-              <th>M. de Obra Total $</th>
-              <th>Misc. Total $</th>
-              <th>IVA $</th>
-              <th>Participación Cliente $</th>
-              <th>Participación Distribuidor $</th>
-              <th>Reparación Distribuidor $</th>
-              <th>Autorización Jefe de Taller</th>
-              <th>Autorización Gerente de Servicio</th>
-            </tr>
-          </thead>
-          <tbody>
-          <tr>
-        <th>1</th>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-      </tr>
-      <tr>
-        <th>2</th>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-      </tr>
-      <tr>
-        <th>3</th>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-      </tr>
-      <tr>
-        <th>4</th>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-      </tr>
-      <tr>
-        <th>5</th>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-        <td><input type="text" class="form-control"/></td>
-      </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="classTable" class="table table-bordered">
+              <thead>
+              <tr>
+                  <th>Rep. No.</th>
+                  <th>Tipo de Garantía</th>
+                  <th>Daños en Relación</th>
+                  <th>Autoriz NO.1</th>
+                  <th>Autoriz NO.2</th>
+                  <th>Partes Totales $</th>
+                  <th>M. de Obra Total $</th>
+                  <th>Misc. Total $</th>
+                  <th>IVA $</th>
+                  <th>Participación Cliente $</th>
+                  <th>Participación Distribuidor $</th>
+                  <th>Reparación Distribuidor $</th>
+                  <th>Autorización Jefe de Taller</th>
+                  <th>Autorización Gerente de Servicio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                    <td><input type="text" class="form-control"/></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
