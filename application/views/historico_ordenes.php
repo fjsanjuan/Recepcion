@@ -378,17 +378,17 @@
     </div>
 </div>
 <!-- modal oasis -->
-<div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
+<div class="modal fade" id="modaldocumentacion" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog modal-lg"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Cargar Documentación</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <?php $this->load->view("cargar_oasis");?>
+                    <?php $this->load->view("modals/cargar_documentacion");?>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -401,7 +401,7 @@
     <div class="modal-dialog modal-lg"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Archivos Adjuntos</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Documentación Adjunta</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -577,7 +577,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

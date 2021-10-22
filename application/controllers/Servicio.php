@@ -1,4 +1,4 @@
-﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once APPPATH."libraries\dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 class Servicio extends CI_Controller {
@@ -1935,31 +1935,44 @@ class Servicio extends CI_Controller {
 	{
 		if ($id_orden == null) {
 			$response['estatus'] = false;
-			$response['voc'] = [];
-			$response['oasis'] = [];
+			$response['archivos'] = [];
 		}else{
 			$oasis  = $this->buscador_model->get_archivos_orden_servicio($id_orden, 7);
 			$audios = $this->buscador_model->get_archivos_orden_servicio($id_orden, 8);
-			$this->db->last_query();
-			$response['archivos'] = $this->db->last_query();
 			$array  = [];
 			foreach ($oasis as $key => $value) {
 				$path = base_url().$value['ruta_archivo'];
 				if (file_exists($value['ruta_archivo'])) {
-					$array[$key] = $path;
+					$array[] = [
+						'ruta' => $path,
+						'tipo' => $value['tipo'],
+						'nombre' => pathinfo($path)['filename']
+					];
 				}
 			}
-			$response['oasis'] = $array;
-			$array = [];
 			foreach ($audios as $key => $value) {
 				$path = base_url().$value['ruta_archivo'];
 				if (file_exists($value['ruta_archivo'])) {
-					$array[$key] = $path;
+					$array[] = [
+						'ruta' => $path,
+						'tipo' => $value['tipo'],
+						'nombre' => pathinfo($path)['filename']
+					];
 				}
 			}
-			$response['voc'] = $array;
+			$response['archivos'] = $array;
 			$response['estatus'] = true;
 		}
+		echo json_encode($response);
+	}
+	public function guardar_documentacion()
+	{
+		ini_set('memory_limit', '1024M');
+		ini_set('max_execution_time', 900); //300 seconds = 5 minutes;
+		$tipo = $this->input->post("tipo");
+		$id_orden = $this->input->post("id_orden_servicio");
+		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$response = $this->buscador_model->cargar_documentacion($ruta_temp, $tipo, $id_orden);
 		echo json_encode($response);
 	}
 }

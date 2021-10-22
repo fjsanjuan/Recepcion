@@ -53,6 +53,7 @@ $(document).ready(function() {
 	        });
 	    }
 	});
+	$('[data-toggle="tooltip"]').tooltip();
 
 	var tabla_historico = $(".tabla_hist").dataTable(
     {
@@ -205,10 +206,11 @@ $(document).ready(function() {
 				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
-				btn_jefe = ``;
-				action_jefe = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i></button>`;
-				btn_tecnico = ``;
-				action_tecnico = `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#classModal"><i class="fa fa-tasks"></i></button>`;
+				btn_jefe       = ``;
+				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Abrir Pregarantía</button>`;
+				btn_tecnico    = ``;
+				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#classModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Diagnóstico</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -224,7 +226,7 @@ $(document).ready(function() {
 				action  = "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
-				action  +="<button class='btn btn-sm cargaroasis' style='background:#C70039;' id='addOasis-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Oasis</button>";
+				action  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				action  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				//btn  +="<button class='btn btn-sm audiomp3' style='background:#fff200;' id='audiomp3-"+val["id"]+"'><i class='fa fa-file-audio-o'></i>&nbsp&nbsp audios mp3</button>";
 				//console.log( val['contFirma']['contadorFirma']);
@@ -236,7 +238,7 @@ $(document).ready(function() {
 				btn_presupuesto += "<button class='btn btn-sm search_budgets' style='background: #607d8b;' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Presupuestos</button>";
 				btn_comentario = "<div style='display: none;' id='comentario-"+val["id"]+"'>"+val["comentario_tecnico_multip"]+"</div><button class='btn btn-sm btn-info comentario-tec' data-id='"+val["id"]+"'><i class='fa fa-edit'></i>&nbsp&nbsp Ver</button>";
 				action2  ="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
-				action2  +="<button class='btn btn-sm cargaroasis' style='background:#C70039;' id='addOasis-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Oasis</button>";
+				action2  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				action2  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				if(id_perfil == 6)
 				{
@@ -342,8 +344,7 @@ $(document).ready(function() {
 	// para archivos adjuntos
 	$(".tabla_hist tbody").on("click", "tr td button.archivosadjuntos", function (e){
 		e.preventDefault();
-		$('#archivo_oasis').empty();
-		$('#archivos_voc').empty();
+		$('#archvis_documentacion').empty();
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
@@ -362,30 +363,21 @@ $(document).ready(function() {
 				$("#loading_spin").hide();
 				if (data.estatus){
 					$('#modalarchivosadjuntos').modal('toggle');
-					if (data.oasis && data.oasis.length >0) {
-						//$('#archivo_oasis').html(`<a class='btn btn-info' href='${data.oasis[0]}' target='_blank'>Formato Oasis<a>`);
-						$('#archivo_oasis').html(`<div class="embed-responsive embed-responsive-16by9">
-  							<iframe class="embed-responsive-item" src="${data.oasis[0]}" allowfullscreen></iframe>
-						</div>`);
-						console.log('oasis', data.oasis);
-					}else{
-						$('#archivo_oasis').html('<p class="text-center text-danger">No hay datos de Oasis</p>');
-						console.error('No hay datos de oasis');
-					}
-					if (data.voc && data.voc.length >0){
-						var voc = "";
-						$.each(data.voc, function(index, value){
-							voc +=`<a class='btn btn-info' href='${value}' target='_blank'>Voc-${index}<a>`;
-							//voc += `<audio class="cols-sm-10" controls controlsList="nofullscreen nodownload" src="${value}"></audio>`;
+					if (data.archivos && data.archivos.length >0) {
+						let archivos = "";
+						$.each(data.archivos, function(index, archivo){
+							archivos += `<tr>`;
+							archivos += `<td>${archivo['nombre']}</td>`;
+							archivos += `<td>${archivo['tipo']}</td>`;
+							archivos += `<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver archivo ${archivo['nombre']}"><a href="${archivo['ruta']}" target="_blank"><i class="fa fa-eye"></i></a></td>`;
+							archivos += `</tr>`;
 						});
-						$('#archivos_voc').html(voc);
-						console.log('voc', data.voc);
+						$('#archivos_documentacion').html(archivos);
 					}else{
-						$('#archivos_voc').html('<p class="text-center text-danger">No hay datos de Voz del cliente</p>');
-						console.error('No hay datos de voc');
+						$('#archivos_documentacion').html('<tr><td colspan="3" class="text-center text-danger">No hay documentación adjunta.</td></tr>');
 					}
 				}else{
-					toastr.warning('No hay archivos adjuntos para mostrar');
+					toastr.warning('No hay documentación adjunta.');
 				}
 			}
 		});
@@ -653,14 +645,14 @@ $(document).ready(function() {
 		limpiar_firmas();
 		$('#modalfirma').modal("show");
 	});
-	//modal para agregar oasis en caso de que la orden no las tenga
-	$(".tabla_hist tbody").on("click", "tr td button.cargaroasis", function(e){
+	//modal para agregar documentación en caso de que la orden no las tenga
+	$(".tabla_hist tbody").on("click", "tr td button.cargardocumentacion", function(e){
 		e.preventDefault();
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
 		localStorage.setItem("hist_id_orden", id_orden);
-		$('#modaloasis').modal("show");
+		$('#modaldocumentacion').modal("show");
 	});
 
 
@@ -1684,6 +1676,139 @@ function val_checked(id_cbx) {
 	return v;
 }
 //Cambio para adjuntar pdf
+$(document).on("change", "#cargar_doc", function(event){
+    optimizar_archivo(event);
+});
+//Cambio para adjuntar pdf
+$(document).on("click", "#btn_guardar_doc", function(event){
+     event.preventDefault();
+    var data = new FormData();
+    var id_orden = localStorage.getItem("hist_id_orden");
+    const archivos = $("input[name='doc_adjunto[]']");
+    const tipos = $("input[name='tipo[]']");
+    $('#id_orden_servicio_doc').val(id_orden);
+    data.append('id_orden_servicio', id_orden);
+     $.each(archivos, function(index, val)
+    {
+        var file = base64toFile($(val).val(), "archivo-"+(index+1));
+        data.append("archivo-"+(index+1), file);
+    });
+     $.each(tipos, function(index, val)
+    {
+        data.append("tipo[]", $(val).val());
+    });
+    guardar_documentacion(data);
+});
+function optimizar_archivo(e)
+{
+	$("#loading_spin").show();
+    var fileName = e.target.files[0].name;
+    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
+    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
+    reader.onload = event => {
+        var binaryData = event.target.result;
+      //Converting Binary Data to base 64
+      var base64String = window.btoa(binaryData);
+      base64data = reader.result;
+      //showing file converted to base64
+      const archivo = `
+      	<tr>
+      		<input type='hidden' value='${base64data}' name="doc_adjunto[]" />
+      		<input type='hidden' value='${$('input[name="tipo_archivo"]:checked').val()}' name="tipo[]" />
+      		<td>${fileName}</td>
+      		<td>${$('input[name="tipo_archivo"]:checked').val()}<td>
+      	</tr>
+      `;
+
+      $('#archivos_adjuntos_doc').append(archivo);
+	  
+	  $("#loading_spin").hide();
+	  $('#cargar_doc').val('');
+    };
+}
+function guardar_documentacion(form)
+{
+    $.ajax({
+        cache: false,
+        url: base_url+ "index.php/servicio/guardar_documentacion/",
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        dataType: 'json',
+        data: form,
+        beforeSend: function(){
+            toastr.info("Guardando documentación, por favor, espere un momento.");
+            $("#loading_spin").show();
+        }
+    })
+    .done(function(data) {
+    	$("#loading_spin").hide();
+        if(data.length > 0)
+        {
+        	$('#archivos_adjuntos_doc').empty();
+            toastr.success("Se guardo la documentación.");
+
+        }else
+        {
+            toastr.error("Hubo un error al guardar la documentación.");
+        }
+    })
+    .fail(function() {
+        alert("Hubo un error al guardar la documentación.");
+        $("#loading_spin").hide();
+    });
+}
+$(document).on('click', '#btn_borrar_doc', function (e) {
+	e.preventDefault();
+	$('#archivos_adjuntos_doc').empty();
+	$('#cargar_doc').val('');
+});
+
+//autorizar diagnóstico por parte del jefe de taller
+	$(document).on("click", ".tabla_hist tbody tr td button.diagnostico", function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		localStorage.setItem("hist_id_orden", id_orden);
+		swal({
+			title: '¿Autorizar el diagnóstico de la orden?',
+			showCancelButton: true,
+			confirmButtonText: 'Autorizar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				if (result.value) {
+					swal('Diagnóstico autorizado.', '', 'success');
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+		});
+	});
+
+//autorizar pregarantía por parte del asesor
+	$(document).on("click", ".tabla_hist tbody tr td button.pregarantia", function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		localStorage.setItem("hist_id_orden", id_orden);
+		swal({
+			title: 'Abrir Pregarantía',
+			showCancelButton: true,
+			confirmButtonText: 'Autorizar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				if (result.value) {
+					swal('Pregarantía abierta.', '', 'success');
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+		});
+	});
+
+//Cambio para adjuntar pdf
 $(document).on("change", "#oasisInput", function(event){
     optimizar_PDF(event);
 });
@@ -1752,46 +1877,17 @@ $(document).on('click', '#btn_borrarOasis', function (e) {
 	$('#oasisInput').val('');
 });
 
-//autorizar diagnóstico por parte del jefe de taller
-	$(document).on("click", ".tabla_hist tbody tr td button.diagnostico", function(e){
-		e.preventDefault();
-		var id_orden = $(this).prop("id");
-		id_orden = id_orden.split("-");
-		id_orden = id_orden[1];
-		localStorage.setItem("hist_id_orden", id_orden);
-		swal({
-			title: '¿Autorizar el diagnóstico de la orden?',
-			showCancelButton: true,
-			confirmButtonText: 'Autorizar',
-			cancelButtonText: 'Cancelar',
-			type: 'info'
-			}).then((result) => {
-				if (result.value) {
-					swal('Diagnóstico autorizado.', '', 'success');
-				} else if (result.dismiss) {
-					swal('Cancelado', '', 'error');
-				}
-		});
-	});
-
-//autorizar pregarantía por parte del asesor
-	$(document).on("click", ".tabla_hist tbody tr td button.pregarantia", function(e){
-		e.preventDefault();
-		var id_orden = $(this).prop("id");
-		id_orden = id_orden.split("-");
-		id_orden = id_orden[1];
-		localStorage.setItem("hist_id_orden", id_orden);
-		swal({
-			title: 'Abrir Pregarantía',
-			showCancelButton: true,
-			confirmButtonText: 'Autorizar',
-			cancelButtonText: 'Cancelar',
-			type: 'info'
-			}).then((result) => {
-				if (result.value) {
-					swal('Pregarantía abierta.', '', 'success');
-				} else if (result.dismiss) {
-					swal('Cancelado', '', 'error');
-				}
-		});
-	});
+function base64toFile(dataurl, filename) 
+{
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+            
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+        
+    return new File([u8arr], filename, {type:mime});
+}

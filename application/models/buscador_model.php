@@ -2981,10 +2981,64 @@ class Buscador_Model extends CI_Model{
 	public function get_archivos_orden_servicio($id_orden = null, $tipo = 7)
 	{
 		$this->load->database();
-		$query = $this->db->query("select id_orden_servicio, tipo_archivo, ruta_archivo from archivo where id_orden_servicio = {$id_orden} and tipo_archivo = {$tipo} order by id desc;");
+		$query = $this->db->query("select archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} order by archivo.id desc;");
 		if($query->num_rows() > 0){
 			return $query->result_array();
 		}else
 			return [];
+	}
+	public function cargar_documentacion($ruta_temp, $tipos, $id_orden)
+	{
+		$archivos = $_FILES;
+		$files = [];
+		$columna = 0;
+		foreach($archivos as $key => $value) 
+		{
+			$datos["archivo"] = $value;
+			$datos['id'] = $columna;
+			$datos['id_orden_servicio'] = $id_orden;
+			$datos['tipo'] = $tipos[$columna] == 'PDF' ? 7 : 8;
+			$datos['tipo_nombre'] = $tipos[$columna];
+			$archivo_creado = $this->crear_archivo_v2($datos);
+			$files[] = ($archivo_creado) ? true : false;
+			$columna++;
+		}
+
+		return $files;
+	}
+	public function crear_archivo_v2($datos = null)
+	{
+		$archivo = $datos["archivo"];
+		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["id_orden_servicio"].'/'.$datos['tipo_nombre']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
+		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.$datos["id_orden_servicio"])) {
+			mkdir($this->ruta_formts.'archivos_recepcion/'.$datos["id_orden_servicio"], 0777, true);
+		}
+		$nombrearchivo = $archivo["name"];
+		move_uploaded_file($archivo["tmp_name"], $ruta);
+		if(file_exists($ruta)) {
+			$archivo = [
+					'id_orden_servicio' => $datos['id_orden_servicio'],
+					'tipo_archivo' => $datos['tipo'],
+					'fecha_creacion' => date("d-m-Y H:i:s"),
+					'fecha_actualizacion' => date("d-m-Y H:i:s"),
+					'eliminado' => 0,
+					'comentario' => '',
+					'ruta_archivo' => $ruta
+				];
+				$this->db->trans_start();
+				$this->db->insert("archivo", $archivo);
+				$this->db->trans_complete();
+				if($this->db->trans_status() == true)
+				{
+					$creado = true;
+				}else
+				{
+					$creado = false;
+				}
+			$creado = true;
+		}else {
+			$creado = false;
+		}
+		return $creado;
 	}
 }
