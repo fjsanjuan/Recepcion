@@ -1975,4 +1975,10 @@ class Servicio extends CI_Controller {
 		$response = $this->buscador_model->cargar_documentacion($ruta_temp, $tipo, $id_orden);
 		echo json_encode($response);
 	}
+	public function abrir_pregarantia()
+	{
+		$id_orden_servicio = $this->input->post('id_orden_servicio');
+		$response = $this->buscador_model->abrir_pregarantia($id_orden_servicio);
+		echo json_encode($response);
+	}
 }

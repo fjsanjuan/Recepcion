@@ -2326,6 +2326,9 @@ class Buscador_Model extends CI_Model{
 		{
 			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
+		}else if($perfil == 4 || $perfil == 5){
+			//$usuario = "AM2";
+			$cond_claveUs = " movimiento IS NOT NULL";
 		}else 
 		{
 			$cond_claveUs = "clave_asesor = '".$usuario."'";
@@ -3040,5 +3043,23 @@ class Buscador_Model extends CI_Model{
 			$creado = false;
 		}
 		return $creado;
+	}
+	public function abrir_pregarantia($id_orden_servicio)
+	{
+		$this->db->trans_start();
+		$this->db->where('id', $id_orden_servicio);
+		$this->db->update('orden_servicio', ['movimiento' => $id_orden_servicio]);
+		$this->db->trans_complete();
+
+		if( $this->db->trans_status() == true)
+		{
+			$response["estatus"] = true;
+			$response["update"] = $this->db->affected_rows() > 0;
+		}else
+		{
+			$response["estatus"] = false;
+			$response["update"] = $this->db->affected_rows() > 0;
+		}
+		return $response;
 	}
 }

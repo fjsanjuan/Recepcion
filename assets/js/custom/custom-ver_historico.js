@@ -207,7 +207,7 @@ $(document).ready(function() {
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
 				btn_jefe       = ``;
-				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Abrir Pregarantía</button>`;
+				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#classModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Diagnóstico</button>`;
@@ -1716,10 +1716,10 @@ function optimizar_archivo(e)
       		<input type='hidden' value='${base64data}' name="doc_adjunto[]" />
       		<input type='hidden' value='${$('input[name="tipo_archivo"]:checked').val()}' name="tipo[]" />
       		<td>${fileName}</td>
-      		<td>${$('input[name="tipo_archivo"]:checked').val()}<td>
+      		<td>${$('input[name="tipo_archivo"]:checked').val()}</td>
+      		<td><i class="fa fa-times text-danger td_borrar_doc" style="cursor: pointer;"></i></td>
       	</tr>
       `;
-
       $('#archivos_adjuntos_doc').append(archivo);
 	  
 	  $("#loading_spin").hide();
@@ -1801,7 +1801,31 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 			type: 'info'
 			}).then((result) => {
 				if (result.value) {
-					swal('Pregarantía abierta.', '', 'success');
+					$.ajax({
+						url: `${base_url}index.php/servicio/abrir_pregarantia`,
+						type: 'POST',
+						dataType: 'json',
+						data: {id_orden_servicio: id_orden},
+						beforeSend: function(){
+							toastr.info("Abriendo Pregarantía.");
+							$("#loading_spin").show();
+						}
+					})
+					.done(function(data) {
+						if (data.estatus) {
+							swal('Pregarantía abierta.', '', 'success');
+						}else{
+							toastr.warning('Hubo un error al abrir la pregarantía');
+						}
+					})
+					.fail(function() {
+						toastr.warning('Hubo un error al abrir la pregarantía');
+					})
+					.always(function() {
+						$("#loading_spin").hide();
+					});
+					
+					//swal('Pregarantía abierta.', '', 'success');
 				} else if (result.dismiss) {
 					swal('Cancelado', '', 'error');
 				}
@@ -1891,3 +1915,7 @@ function base64toFile(dataurl, filename)
         
     return new File([u8arr], filename, {type:mime});
 }
+$(document).on('click', '.td_borrar_doc', function (e) {
+	e.preventDefault();
+	$(this).closest('tr').remove();
+})

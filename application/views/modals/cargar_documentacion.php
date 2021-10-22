@@ -29,6 +29,7 @@
     				<tr>
     					<th>Nombre</th>
     					<th>Tipo</th>
+    					<th><i class="fa fa-times text-danger"><i></th>
     				</tr>
     			</thead>
     			<tbody id="archivos_adjuntos_doc">
