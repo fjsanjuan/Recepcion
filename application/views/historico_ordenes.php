@@ -443,12 +443,12 @@
                         <td><input type="text" name="" id=""></td>
                         <td>
                         <div>
-                            <input id="checkbox1" type="checkbox" name="checkbox" value="1" check=""><label for="checkbox1"></label>
+                            <input id="checkbox1" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                         <td>
                         <div>
-                            <input id="checkbox2" type="checkbox" name="checkbox" value="2" check=""><label for="checkbox2"></label>
+                            <input id="checkbox2" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                     </tr>
@@ -458,12 +458,12 @@
                         <td><input type="text" name="" id=""></td>
                         <td>
                         <div>
-                            <input id="checkbox3" type="checkbox" name="checkbox" value="3" check=""><label for="checkbox3"></label>
+                            <input id="checkbox3" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                         <td>
                         <div>
-                            <input id="checkbox4" type="checkbox" name="checkbox" value="4" check=""><label for="checkbox4"></label>
+                            <input id="checkbox4" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                     </tr>
@@ -473,12 +473,12 @@
                         <td><input type="text" name="" id=""></td>
                         <td>
                         <div>
-                            <input id="checkbox5" type="checkbox" name="checkbox" value="5" check=""><label for="checkbox5"></label>
+                            <input id="checkbox5" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                         <td>
                         <div>
-                            <input id="checkbox6" type="checkbox" name="checkbox" value="6" check=""><label for="checkbox6"></label>
+                            <input id="checkbox6" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                     </tr>
@@ -488,12 +488,12 @@
                         <td><input type="text" name="" id=""></td>
                         <td>
                         <div>
-                            <input id="checkbox7" type="checkbox" name="checkbox" value="7" check=""><label for="checkbox7"></label>
+                            <input id="checkbox7" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                         <td>
                         <div>
-                            <input id="checkbox8" type="checkbox" name="checkbox" value="8" check=""><label for="checkbox8"></label>
+                            <input id="checkbox8" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                     </tr>
@@ -503,18 +503,26 @@
                         <td><input type="text" name="" id=""></td>
                         <td>
                         <div>
-                            <input id="checkbox9" type="checkbox" name="checkbox" value="9" check=""><label for="checkbox9"></label>
+                            <input id="checkbox9" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                         <td>
                         <div>
-                            <input id="checkbox10" type="checkbox" name="checkbox" value="10" check=""><label for="checkbox10"></label>
+                            <input id="checkbox10" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <table class="table table-border">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </head>
                 <tbody>
                     <tr>
                         <td>KOEO</td>
