@@ -415,119 +415,164 @@
             </div>
     </div>
 </div>
-<!-- modal diagnostico del problema -->
-
-<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="diagnosticoproblema" aria-hidden="true">
+<!-- modal lineas de reparacion -->
+<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="lineareparacion" aria-hidden="true">
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="col-lg-12 text-center"><div class="modal-header">
-      <h4 style="color: #4285f4; text-align: center;"class="modal-title" id="classModalLabel"><b>Diagnóstico del Problema</b></h4>
+      <h4 style="color: #4285f4;" class="modal-title" id="classModalLabel"><b>Línea de Reparación</b></h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
         <div class="table-responsive">
-            <table id="classTable" class="table table-bordered">
-              <thead>
-              <tr>
-                  <th>Rep. No.</th>
-                  <th>Tipo de Garantía</th>
-                  <th>Daños en Relación</th>
-                  <th>Autoriz NO.1</th>
-                  <th>Autoriz NO.2</th>
-                  <th>Partes Totales $</th>
-                  <th>M. de Obra Total $</th>
-                  <th>Misc. Total $</th>
-                  <th>IVA $</th>
-                  <th>Participación Cliente $</th>
-                  <th>Participación Distribuidor $</th>
-                  <th>Reparación Distribuidor $</th>
-                  <th>Autorización Jefe de Taller</th>
-                  <th>Autorización Gerente de Servicio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                    <td><input type="text" class="form-control"/></td>
-                </tr>
-              </tbody>
+            <table class="table table-border">
+                <thead>
+                    <tr>
+                        <th>Rep.</th>
+                        <th>Luz indicadora</th>
+                        <th>Daños en Relación</th>
+                        <th>Autorización Jefe Taller</th>
+                        <th>Autorización Gerente Servicio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Linea 1</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td>
+                        <div>
+                            <input id="checkbox1" type="checkbox" name="checkbox" value="1" check=""><label for="checkbox1"></label>
+                        </div>
+                        </td>
+                        <td>
+                        <div>
+                            <input id="checkbox2" type="checkbox" name="checkbox" value="2" check=""><label for="checkbox2"></label>
+                        </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Linea 2</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td>
+                        <div>
+                            <input id="checkbox3" type="checkbox" name="checkbox" value="3" check=""><label for="checkbox3"></label>
+                        </div>
+                        </td>
+                        <td>
+                        <div>
+                            <input id="checkbox4" type="checkbox" name="checkbox" value="4" check=""><label for="checkbox4"></label>
+                        </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Linea 3</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td>
+                        <div>
+                            <input id="checkbox5" type="checkbox" name="checkbox" value="5" check=""><label for="checkbox5"></label>
+                        </div>
+                        </td>
+                        <td>
+                        <div>
+                            <input id="checkbox6" type="checkbox" name="checkbox" value="6" check=""><label for="checkbox6"></label>
+                        </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Linea 4</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td>
+                        <div>
+                            <input id="checkbox7" type="checkbox" name="checkbox" value="7" check=""><label for="checkbox7"></label>
+                        </div>
+                        </td>
+                        <td>
+                        <div>
+                            <input id="checkbox8" type="checkbox" name="checkbox" value="8" check=""><label for="checkbox8"></label>
+                        </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Linea 5</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td>
+                        <div>
+                            <input id="checkbox9" type="checkbox" name="checkbox" value="9" check=""><label for="checkbox9"></label>
+                        </div>
+                        </td>
+                        <td>
+                        <div>
+                            <input id="checkbox10" type="checkbox" name="checkbox" value="10" check=""><label for="checkbox10"></label>
+                        </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-border">
+                <tbody>
+                    <tr>
+                        <td>KOEO</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>KOEC</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>KOER</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>CARROCERIA</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>CHASIS</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>INDEFINIDO</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>OTRO</td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" name="" id=""></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
       </div>
