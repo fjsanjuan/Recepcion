@@ -1981,4 +1981,19 @@ class Servicio extends CI_Controller {
 		$response = $this->buscador_model->abrir_pregarantia($id_orden_servicio);
 		echo json_encode($response);
 	}
+	public function obtener_datos_quejas($id_orden = null)
+	{
+		$response = [];
+		if ($id_orden == null) {
+			$response = [
+				'estatus' => false,
+				'mensaje' => 'Orden de servicio no válida.'
+			];
+		}else {
+			$response['data']    = $this->buscador_model->obtener_datos_quejas($id_orden);
+			$response['estatus'] = sizeof($response['data']) > 0 ? true : false;
+			$response['mensaje'] = sizeof($response['data']) > 0 ? 'Quejas encontradas para la orden de servicio.' : 'La orden de servicio no tiene ninguna queja vinculada.';
+		}
+		echo json_encode($response);
+	}
 }

@@ -3062,4 +3062,17 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function obtener_datos_quejas($id_orden_servicio)
+	{
+		//$query = $this->db->query("SELECT id, id_orden_servicio, autorizacion_grabar_voz, definicion_falla, arranca_vehiculo, inicia_movimiento, disminuye_vel, da_vuelta_izq, da_vuelta_der, pasa_bache, pasa_tope, cambia_vel, esta_sin_movimiento, constantemente, volante, esperodicamente, asiento, cristales, carroceria, cofre, cajuela, toldo, estando_dentro, estando_fuera, estando_frente, estando_detras, temp_ambiente, humedad, viento, vel_km_hr, cambio_transmision, rpmx1000, cambio_tipo, carga, pasajeros, cajuela_cond_operativa, estructura, camino, pendiente FROM causa_raiz_componente WHERE id_orden_servicio = {$id_orden_servicio}");
+		$query = $this->db->select('id, id_orden_servicio, autorizacion_grabar_voz, definicion_falla, arranca_vehiculo, inicia_movimiento, disminuye_vel, da_vuelta_izq, da_vuelta_der, pasa_bache, pasa_tope, cambia_vel, esta_sin_movimiento, constantemente, volante, esperodicamente, asiento, cristales, carroceria, cofre, cajuela, toldo, estando_dentro, estando_fuera, estando_frente, estando_detras, temp_ambiente, humedad, viento, vel_km_hr, cambio_transmision, rpmx1000, cambio_tipo, carga, pasajeros, cajuela_cond_operativa, estructura, camino, pendiente')
+			->from('causa_raiz_componente')
+			->where('id_orden_servicio', $id_orden_servicio)
+			->get();
+			if($query->num_rows() > 0){
+				return  $query->result_array();
+			}else{
+				return [];
+			}
+	}
 }
