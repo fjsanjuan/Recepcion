@@ -1872,6 +1872,10 @@ class Buscador_Model extends CI_Model{
 						   ->from("orden_servicio_inspeccion")
 						   ->where("id_servicio", $orden_servicio)
 						   ->count_all_results();
+		$existe_orden = $this->db->select("id")
+						   ->from("orden_servicio")
+						   ->where("id", $orden_servicio)
+						   ->count_all_results();
 				   
 		$this->db->trans_begin();
 
@@ -1971,9 +1975,9 @@ class Buscador_Model extends CI_Model{
 			$id = $orden_servicio;
 		}
 
-		if($id) {
+		if($existe_orden > 0) {
 			foreach ($data['articulos_personales'] as $key => $articulos_personale) {
-				$causa_raiz['id_orden_servicio']       = $id;
+				$causa_raiz['id_orden_servicio']       = $orden_servicio;
 				$causa_raiz['autorizacion_grabar_voz'] = $data['autorizacion_voz'];
 				$causa_raiz['definicion_falla']        = isset($data['articulos_personales'][$key]) ?  $data['articulos_personales'][$key] : null;
 				$causa_raiz['arranca_vehiculo']        = isset($data['arranca'][$key]) ? 1 : 0;
