@@ -1953,7 +1953,6 @@ $(document).on('click', '.td_borrar_doc', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').remove();
 })
-<<<<<<< Updated upstream
 $(document).on('click', 'a.deladjunto', function (e) {
 	e.preventDefault();
 	id_archivo = $(this).prop('id');
@@ -1983,7 +1982,7 @@ $(document).on('click', 'a.deladjunto', function (e) {
 	});
 	
 })
-=======
+
 //para modal jefe taller asigna tecnico
 $("#asigna_tecnico").empty();
             $("#asigna_tecnico").append('<option value="">Seleccione</option>');
@@ -1993,4 +1992,3 @@ $("#asigna_tecnico").empty();
                 else
                     $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '">' + data.Nombre[i]['Nombre'] + '</option>');
             }
->>>>>>> Stashed changes
