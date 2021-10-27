@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -211,7 +211,7 @@ $(document).ready(function() {
 				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
-				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#classModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Diagnóstico</button>`;
+				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Diagnóstico</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -221,6 +221,9 @@ $(document).ready(function() {
 					btn     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
+				action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Planificador</button>`;
+				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
+				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Reverso</button>`;
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
 				btn     += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
@@ -1950,6 +1953,7 @@ $(document).on('click', '.td_borrar_doc', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').remove();
 })
+<<<<<<< Updated upstream
 $(document).on('click', 'a.deladjunto', function (e) {
 	e.preventDefault();
 	id_archivo = $(this).prop('id');
@@ -1979,3 +1983,14 @@ $(document).on('click', 'a.deladjunto', function (e) {
 	});
 	
 })
+=======
+//para modal jefe taller asigna tecnico
+$("#asigna_tecnico").empty();
+            $("#asigna_tecnico").append('<option value="">Seleccione</option>');
+            for (var i = 0; i < data.Nombre.length; i++) {
+                if (data.Nombre[i]['Nombre'] == data.Datos[0].Nombre)
+                    $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '" selected>' + data.Nombre[i]['Nombre'] + '</option>');
+                else
+                    $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '">' + data.Nombre[i]['Nombre'] + '</option>');
+            }
+>>>>>>> Stashed changes

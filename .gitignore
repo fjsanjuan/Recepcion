@@ -31,3 +31,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/tests/
 /tests/results/
 application/config/database.php
+archivos_recepcion/FormatoOasis34758.pdf
+archivos_recepcion/MAJFP1GD6FC137882/34762/voc-2.mp3
+archivos_recepcion/MAJFP1GD6FC137882/34798/voc-1.mp3
+archivos_recepcion/MAJFP1GD6FC137882/34798/voc-2.mp3
