@@ -198,11 +198,12 @@ $(document).ready(function() {
 
 				nombre  = val["nombre_cliente"]+" "+val["ap_cliente"]+" "+val["am_cliente"];
 				folio   = (val["movID"] == null || val["movID"]["MovID"] == null) ? "-" : val["movID"]["MovID"];
+				btn = "";
 				//btn     =  "<button class='btn btn-sm profeco' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
-				btn     =  "<button class='btn btn-sm profec' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
+				//btn     =  "<button class='btn btn-sm profec' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
 				// btn     +=  "<button class='btn btn-sm profecoTalisman' style='background: #152f6d;' id='profecoTalisman-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco Toyota</button>";
-				btn     += "<button class='btn btn-sm multipuntos' style='background: #152f6d;' id='multi-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Hoja Multipuntos</button>";
-				btn     += "<button class='btn btn-sm formatoInventario' style='background: #152f6d;' id='inv-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato de Inventario</button>";
+				//btn     += "<button class='btn btn-sm multipuntos' style='background: #152f6d;' id='multi-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Hoja Multipuntos</button>";
+				//btn     += "<button class='btn btn-sm formatoInventario' style='background: #152f6d;' id='inv-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato de Inventario</button>";
 				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
@@ -212,7 +213,7 @@ $(document).ready(function() {
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#classModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Diagnóstico</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
-					btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
+					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
 					btn     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
@@ -222,7 +223,7 @@ $(document).ready(function() {
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
-				btn     += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				btn     += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action  = "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
@@ -348,6 +349,8 @@ $(document).ready(function() {
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
+		trae_signGrtia = $(this).data('trae_signgrtia');
+		const firma_vacia = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAakAAADSCAYAAADwvj/tAAAAAXNSR0IArs4c6QAAB/JJREFUeF7t1UENAAAMArHh3/Rs3KNTQMoSdo4AAQIECEQFFs0lFgECBAgQOCPlCQgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAgQee7QDT4w9urAAAAABJRU5ErkJggg==";
 		$.ajax({
 			url: base_url+"index.php/servicio/get_archivos_orden_servicio/"+id_orden,
 			type: "POST",
@@ -363,18 +366,46 @@ $(document).ready(function() {
 				$("#loading_spin").hide();
 				if (data.estatus){
 					$('#modalarchivosadjuntos').modal('toggle');
+					let archivos = "";
+					archivos += `<tr>
+						<td>Formato Profeco</td>
+						<td>PDF</td>
+						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Descargar formato profeco"><a class="profec" id="profeco-${id_orden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
+						archivos += id_perfil == 7 ? '<td></td>' : '';
+					archivos +=`<tr>`;
+					archivos += `<tr>
+						<td>Hoja Multipuntos</td>
+						<td>PDF</td>
+						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver hoja multipuntos"><a class="multipuntos" id="multi-${id_orden}" href="#!"><i class="fa fa-eye"></i></a></td>`;
+						archivos += id_perfil == 7 ? '<td></td>' : '';
+					archivos +=`<tr>`;
+					archivos += `<tr>
+						<td>Formato de Inventario</td>
+						<td>PDF</td>
+						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver formato de inventario"><a class="formatoInventario" id="inv-${id_orden}" href="#!"><i class="fa fa-eye"></i></a></td>`;
+						archivos += id_perfil == 7 ? '<td></td>' : '';
+					archivos +=`<tr>`;
+					if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
+						archivos += `<tr>
+							<td>Carta de Renuncia a Beneficios</td>
+							<td>PDF</td>
+							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver carte de renuncia a beneficios"><a class="renunciaGrtia" id="renunGrtia-${id_orden}" href="#!"><i class="fa fa-eye"></i></a></td>`;
+							archivos += id_perfil == 7 ? '<td></td>' : '';
+						archivos +=`<tr>`;
+					}
 					if (data.archivos && data.archivos.length >0) {
-						let archivos = "";
 						$.each(data.archivos, function(index, archivo){
 							archivos += `<tr>`;
 							archivos += `<td>${archivo['nombre']}</td>`;
 							archivos += `<td>${archivo['tipo']}</td>`;
 							archivos += `<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver archivo ${archivo['nombre']}"><a href="${archivo['ruta']}" target="_blank"><i class="fa fa-eye"></i></a></td>`;
+							archivos += id_perfil == 7 ? `<td class="text-danger" data-toggle="tooltip" data-placement="top" title="Eliminar archivo ${archivo['nombre']}"><a href="#!" class="deladjunto" id="deladjunto-${archivo['id']}"><i class="fa fa-times text-danger"></i></a></td>` : '';
 							archivos += `</tr>`;
 						});
 						$('#archivos_documentacion').html(archivos);
 					}else{
-						$('#archivos_documentacion').html('<tr><td colspan="3" class="text-center text-danger">No hay documentación adjunta.</td></tr>');
+						//archivos += '<tr><td colspan="3" class="text-center text-danger">No hay documentación adjunta.</td></tr>';
+						$('#archivos_documentacion').html(archivos);
 					}
 				}else{
 					toastr.warning('No hay documentación adjunta.');
@@ -386,7 +417,7 @@ $(document).ready(function() {
 	var b_profeco = false;
 	//condicion que  genera en pdf la orden de servicio por marca
 	if(formt_serv_pdf == "ford"){
-		$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
+		$("#archivos_documentacion").on("click", "tr td a.profec", function(e){
 			// para crear formato ford
 			if(b_profeco == false)
 			{
@@ -409,7 +440,7 @@ $(document).ready(function() {
 		});
 	}
 	else{
-		$(".tabla_hist tbody").on("click", "tr td button.profec", function(e){
+		$("#archivos_documentacion").on("click", "tr td a.profec", function(e){
 			// para crear formato fame
 			var id_orden = $(this).prop("id");
 			id_orden = id_orden.split("-");
@@ -418,7 +449,7 @@ $(document).ready(function() {
 		});
 	}
 
-	$(".tabla_hist tbody").on("click", "tr td button.multipuntos", function(e){
+	$("#archivos_documentacion").on("click", "tr td a.multipuntos", function(e){
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
@@ -428,7 +459,7 @@ $(document).ready(function() {
 	});
 	
 	//formato de Inventario
-	$(".tabla_hist tbody").on("click", "tr td button.formatoInventario", function(e){
+	$("#archivos_documentacion").on("click", "tr td a.formatoInventario", function(e){
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
@@ -437,7 +468,7 @@ $(document).ready(function() {
 	});
 
 	//formato carta de renuncia a beneficios(rechazo a extension de garantia)
-	$(".tabla_hist tbody").on("click", "tr td button.renunciaGrtia", function(e){
+	$("#archivos_documentacion").on("click", "tr td a.renunciaGrtia", function(e){
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
@@ -1918,4 +1949,33 @@ function base64toFile(dataurl, filename)
 $(document).on('click', '.td_borrar_doc', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').remove();
+})
+$(document).on('click', 'a.deladjunto', function (e) {
+	e.preventDefault();
+	id_archivo = $(this).prop('id');
+	const tr = $(this).closest('tr');
+	id_archivo = id_archivo.split('-')[1];
+	$.ajax({
+		url: base_url+ "index.php/servicio/eliminar_archivo_documentacion/"+ id_archivo,
+		type: 'delete',
+		dataType: 'json',
+		beforeSend: function(){
+            $("#loading_spin").show();
+        }
+	})
+	.done(function(data) {
+		if (data.estatus == true) {
+			toastr.success(data.mensaje);
+			tr.remove();
+		}else{
+			toastr.warning(data.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('No fue posible eliminar el archivo');
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	
 })

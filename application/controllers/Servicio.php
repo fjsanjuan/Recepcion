@@ -1944,9 +1944,10 @@ class Servicio extends CI_Controller {
 				$path = base_url().$value['ruta_archivo'];
 				if (file_exists($value['ruta_archivo'])) {
 					$array[] = [
-						'ruta' => $path,
-						'tipo' => $value['tipo'],
-						'nombre' => pathinfo($path)['filename']
+						'ruta'   => $path,
+						'tipo'   => $value['tipo'],
+						'nombre' => pathinfo($path)['filename'],
+						'id'     => $value['id']
 					];
 				}
 			}
@@ -1954,9 +1955,10 @@ class Servicio extends CI_Controller {
 				$path = base_url().$value['ruta_archivo'];
 				if (file_exists($value['ruta_archivo'])) {
 					$array[] = [
-						'ruta' => $path,
-						'tipo' => $value['tipo'],
-						'nombre' => pathinfo($path)['filename']
+						'ruta'   => $path,
+						'tipo'   => $value['tipo'],
+						'nombre' => pathinfo($path)['filename'],
+						'id'     => $value['id']
 					];
 				}
 			}
@@ -1993,6 +1995,16 @@ class Servicio extends CI_Controller {
 			$response['data']    = $this->buscador_model->obtener_datos_quejas($id_orden);
 			$response['estatus'] = sizeof($response['data']) > 0 ? true : false;
 			$response['mensaje'] = sizeof($response['data']) > 0 ? 'Quejas encontradas para la orden de servicio.' : 'La orden de servicio no tiene ninguna queja vinculada.';
+		}
+		echo json_encode($response);
+	}
+	public function eliminar_archivo_documentacion($id_archivo = null)
+	{
+		if ($id_archivo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Archivo no válido.';
+		}else {
+			$response = $this->buscador_model->eliminar_archivo_documentacion($id_archivo);
 		}
 		echo json_encode($response);
 	}

@@ -2321,12 +2321,11 @@ class Buscador_Model extends CI_Model{
 
 		//print_r($suc_or['id']['id_intelisis']); die();
 		$where = " fecha_creacion BETWEEN '".date('d-m-Y', strtotime($fecha_ini))." 00:00:00' AND '".date('d-m-Y', strtotime($fecha_fin))." 23:59:59'";
-
 		if($perfil == 6)																//refacciones
 		{
 			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
-		}else if($perfil == 4 || $perfil == 5){
+		}else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){
 			//$usuario = "AM2";
 			$cond_claveUs = " movimiento IS NOT NULL";
 		}else 
@@ -2984,7 +2983,7 @@ class Buscador_Model extends CI_Model{
 	public function get_archivos_orden_servicio($id_orden = null, $tipo = 7)
 	{
 		$this->load->database();
-		$query = $this->db->query("select archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} order by archivo.id desc;");
+		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 order by archivo.id desc;");
 		if($query->num_rows() > 0){
 			return $query->result_array();
 		}else
@@ -3064,7 +3063,6 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_datos_quejas($id_orden_servicio)
 	{
-		//$query = $this->db->query("SELECT id, id_orden_servicio, autorizacion_grabar_voz, definicion_falla, arranca_vehiculo, inicia_movimiento, disminuye_vel, da_vuelta_izq, da_vuelta_der, pasa_bache, pasa_tope, cambia_vel, esta_sin_movimiento, constantemente, volante, esperodicamente, asiento, cristales, carroceria, cofre, cajuela, toldo, estando_dentro, estando_fuera, estando_frente, estando_detras, temp_ambiente, humedad, viento, vel_km_hr, cambio_transmision, rpmx1000, cambio_tipo, carga, pasajeros, cajuela_cond_operativa, estructura, camino, pendiente FROM causa_raiz_componente WHERE id_orden_servicio = {$id_orden_servicio}");
 		$query = $this->db->select('id, id_orden_servicio, autorizacion_grabar_voz, definicion_falla, arranca_vehiculo, inicia_movimiento, disminuye_vel, da_vuelta_izq, da_vuelta_der, pasa_bache, pasa_tope, cambia_vel, esta_sin_movimiento, constantemente, volante, esperodicamente, asiento, cristales, carroceria, cofre, cajuela, toldo, estando_dentro, estando_fuera, estando_frente, estando_detras, temp_ambiente, humedad, viento, vel_km_hr, cambio_transmision, rpmx1000, cambio_tipo, carga, pasajeros, cajuela_cond_operativa, estructura, camino, pendiente')
 			->from('causa_raiz_componente')
 			->where('id_orden_servicio', $id_orden_servicio)
@@ -3074,5 +3072,20 @@ class Buscador_Model extends CI_Model{
 			}else{
 				return [];
 			}
+	}
+	public function eliminar_archivo_documentacion($id_archivo)
+	{
+		$this->db->trans_start();
+		$this->db->where('id', $id_archivo);
+		$this->db->update('archivo', ['eliminado' => 1]);
+		$this->db->trans_complete();
+		if ($this->db->trans_status() == true) {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Archivo eliminado correctamente.';
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Archivo inexistente.';
+		}
+		return $response;
 	}
 }
