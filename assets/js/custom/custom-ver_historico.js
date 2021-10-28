@@ -212,7 +212,7 @@ $(document).ready(function() {
 				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
-				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Diagnóstico</button>`;
+				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -1998,7 +1998,15 @@ $("#asigna_tecnico").empty();
                 else
                     $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '">' + data.Nombre[i]['Nombre'] + '</option>');
             }*/
+// nueva linea en requisiciones
 $(document).on('click', '.nueva_linea', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').clone().appendTo($(this).closest('tbody'));
+})
+// seleccionar linea revision quejas
+$("#select_queja").empty();
+            $("#select_queja").append('<option value=""></option>');
+$(document).on('click', '.registrar_linea', function (e) {
+	e.preventDefault();
+	$(this).closest('tr').clone().appendTo($(this).next('thead'));
 })
