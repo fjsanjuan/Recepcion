@@ -649,6 +649,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -702,6 +703,7 @@
                 </thead>
             </table>
         </div>
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary">Asignar</button>
@@ -719,6 +721,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <div class="col-md-12">
       <tbody>
           <tr>
               <td><b>No. REQUISICIÓN</b><input type="text" class="form-control" name="" id=""></td>
@@ -728,8 +731,9 @@
               <td><b>TÉCNICO</b><input type="text" class="form-control" name="" id=""></td>
             </tr>
         </tbody>
+        <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-border">
+            <table class="table table-border text-center">
                 <thead>
                     <tr>
                         <th>CANT.</th>
@@ -741,21 +745,23 @@
                     <tr>
                     <td><input type="text" class="form-control" name="" id="" style="width: 50px;" /></td>
                     <td><input type="text" class="form-control" name="" id="" style="width: 100px;" /></td>
-                    <td><input type="text" class="form-control" name="" id="" style="width: 500px;" /></td>
-                    <td><i class="fa fa-plus fa-2x" style="color:green" aria-hidden="true"></i></td>
+                    <td><input type="text" class="form-control" name="" id="" style="width: 450px;" /></td>
+                    <td><i class="fa fa-plus fa-2x nueva_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
                     </tr>
                 </tbody>
             </table>
             <div class="table-responsive">
-            <table class="table table-border">
+            <table class="table table-border text-center">
             <tbody>
                 <tr>
-                    <td><input type="text"  class="form-control" name="" id="" style="width: 360px;" /><b>Nombre y Firma Resp. Refacciones</b></td>
-                    <td><input type="text"  class="form-control" name="" id="" style="width: 360px;" /><b>Nombre y Firma Técnico</b></td>
+                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacciones</b></td>
+                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b></td>
                 </tr>
             </tbody>
             </table>
             </div>
+            </div>
+        </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
