@@ -1986,9 +1986,13 @@ $(document).on('click', 'a.deladjunto', function (e) {
 //para modal jefe taller asigna tecnico
 $("#asigna_tecnico").empty();
             $("#asigna_tecnico").append('<option value="">Seleccione</option>');
-            for (var i = 0; i < data.Nombre.length; i++) {
+            /*for (var i = 0; i < data.Nombre.length; i++) {
                 if (data.Nombre[i]['Nombre'] == data.Datos[0].Nombre)
                     $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '" selected>' + data.Nombre[i]['Nombre'] + '</option>');
                 else
                     $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '">' + data.Nombre[i]['Nombre'] + '</option>');
-            }
+            }*/
+$(document).on('click', '.nueva_linea', function (e) {
+	e.preventDefault();
+	$(this).closest('tr').clone().appendTo($(this).closest('tbody'));
+})
