@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -198,6 +198,7 @@
 
 				nombre  = val["nombre_cliente"]+" "+val["ap_cliente"]+" "+val["am_cliente"];
 				folio   = (val["movID"] == null || val["movID"]["MovID"] == null) ? "-" : val["movID"]["MovID"];
+				tipo	= (val["movimiento"] == null) ? "Pública": "Pregarantía";
 				btn = "";
 				//btn     =  "<button class='btn btn-sm profeco' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
 				//btn     =  "<button class='btn btn-sm profec' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
@@ -248,7 +249,8 @@
 				{
 					tabla_historico.fnAddData([
 						val["id"],
-						folio,	
+						folio,
+						tipo,	
 						val["asesor"],
 						nombre,	
 						val["tel_movil"],
@@ -262,7 +264,8 @@
 				} else if(id_perfil == 4){
 					tabla_historico.fnAddData([
 						val["id"],
-						folio,	
+						folio,
+						tipo,	
 						nombre,	
 						val["tel_movil"],
 						val["vin"],
@@ -275,7 +278,8 @@
 				} else if(id_perfil == 5){
 					tabla_historico.fnAddData([
 						val["id"],
-						folio,	
+						folio,
+						tipo,
 						nombre,	
 						val["tel_movil"],
 						val["vin"],
@@ -289,7 +293,8 @@
 				{
 					tabla_historico.fnAddData([
 						val["id"],
-						folio,	
+						folio,
+						tipo,	
 						nombre,	
 						val["tel_movil"],
 						val["vin"],
@@ -1848,6 +1853,7 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 					.done(function(data) {
 						if (data.estatus) {
 							swal('Pregarantía abierta.', '', 'success');
+							$("#btn_mostrar").trigger("click");
 						}else{
 							toastr.warning('Hubo un error al abrir la pregarantía');
 						}
