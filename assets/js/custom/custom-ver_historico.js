@@ -2016,29 +2016,44 @@ $(document).on('click', '.registrar_linea', function (e) {
 	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#queja').val(), 'name': 'queja[]'})));
 	let check;
 	if ($('#apl_grta:checked').length > 0){
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_grta[]`}));
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
 	}else {
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_grta[]`}));
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
 	}
 	registro.append($('<td>').append(check));
-	check.append($('<label>', {'for': `apl_grta[]`}));
+	check.append($('<label>', {'for': `apl_grta[${actual}]`}));
 	if ($('#apl_add:checked').length > 0){
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_add[]`}));
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_add[${actual}]`, 'id':`apl_add[${actual}]`}));
 	}else {
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_add[]`}));
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_add[${actual}]`, 'id':`apl_add[${actual}]`}));
 	}
 	registro.append($('<td>').append(check));
-	check.append($('<label>', {'for': `apl_add[]`}));
+	check.append($('<label>', {'for': `apl_add[${actual}]`}));
 	registro.append($('<td>').append($('<button>',{'class': 'btn btn-info edit_reg'}).append($('<i>', {'class': 'fa fa-edit'}))));
 	registro.append($('<td>').append($('<button>',{'class': 'btn btn-danger del_reg'}).append($('<i>', {'class': 'fa fa-times'}))));
 	$('#quejas_diagnostico').append(registro);
+	$('#select_queja').val('');
+	$('#queja').val('');
+	$('#apl_grta').prop('checked', false);
+	$('#apl_add').prop('checked', false);
 });
 $(document).on('click', '#quejas_diagnostico .edit_reg', function (e) {
 	e.preventDefault();
-	$(this).closest('tr').find('input[name="num_queja[]"]').removeAttr('readonly');
-	$(this).closest('tr').find('input[name="queja[]"]').removeAttr('readonly');
-	$(this).closest('tr').find('input[name="apl_grta[]"]').removeAttr('disabled');
-	$(this).closest('tr').find('input[name="apl_add[]"]').removeAttr('disabled');
+	if ($(this).find('i').hasClass('fa-edit')) {
+		$(this).find('i').removeClass('fa-edit').addClass('fa-save');
+		$(this).removeClass('btn-info').addClass('btn-success');
+		$(this).closest('tr').find('input[name="num_queja[]"]').removeAttr('readonly');
+		$(this).closest('tr').find('input[name="queja[]"]').removeAttr('readonly');
+		$(this).closest('tr').find('.checkbox').find('input:checkbox').removeAttr('disabled');
+		$(this).closest('tr').find('.checkbox').find('input[name="apl_add[]"]').removeAttr('disabled');
+	} else {
+		$(this).find('i').removeClass('fa-save').addClass('fa-edit');
+		$(this).removeClass('btn-success').addClass('btn-info');
+		$(this).closest('tr').find('input[name="num_queja[]"]').prop('readonly', 'readonly');
+		$(this).closest('tr').find('input[name="queja[]"]').prop('readonly', 'readonly');
+		$(this).closest('tr').find('input:checkbox').prop('disabled', true);
+		$(this).closest('tr').find('input[name="apl_add[]"]').prop('disabled', true);
+	}
 });
 $(document).on('click', '#quejas_diagnostico .del_reg', function (e) {
 	e.preventDefault();
