@@ -669,7 +669,7 @@
                     <tr>
                         <th>Técnico</th>
                         <td>
-                        <div class="form-group col">
+                        <div class="form-group col-md-8">
                             <label for="asigna_tecnico" class="grey-text">Nombre</label>
                             <select id="asigna_tecnico" name="asigna_tecnico" class="browser-default form-control validate[required]" >
                             <!-- <option>seleccione... </option> -->
@@ -688,15 +688,30 @@
                         </td></tr>
                         <tr><th>Hora Asignación</th>
                         <td>
+                        <div class="row">
+                        <div class="col-md-4">
+                            <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+                            <input type="text" id="light-version-examples" class="form-control" placeholder="Select time">
+                            <label for="light-version-examples">Hora inico</label>
+                            <i class="fas fa-clock input-prefix" style="cursor:pointer;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+                            <input type="text" id="light-version-examples" class="form-control" placeholder="Select time">
+                            <label for="light-version-examples">Hora termina</label>
+                            <i class="fas fa-clock input-prefix1" style="cursor:pointer;"></i>
+                            </div>
+                        </div>
+                        </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="gridCheck1">
-                            <label class="form-check-label" for="gridCheck1">
-                            Todo el día
-                            </label>
+                            <label class="form-check-label" for="gridCheck1">Todo el día</label>
                         </div>
                         </td></tr>
                         <tr><th>Trabajo Inicial</th>
                         <td>
+                        <div class="row">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
                             <label class="form-check-label" for="exampleRadios1">FORD</label>
@@ -704,11 +719,12 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
                             <label class="form-check-label" for="exampleRadios2">PROPIO</label>
-                        </div>
+                        </div>&nbsp&nbsp
                         <div id="contenedor">
                             <div class="added">
                                 <input name="mitexto[]" id="campo_1" placeholder="Paquetes" type="text"><a href="#" class="eliminar">X</a>
                             </div>
+                        </div>
                         </div>
                         </td></tr>
                         <tr><th>Detalles o Comentarios</th>
@@ -793,6 +809,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <div class="row">
       <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-border">
@@ -800,98 +817,57 @@
                     <tr>
                     <td>
                         <div class="form-group">
-                            <label for="usr">QUEJA No.</label>
-                            <input type="text" id="usr" name="username" style="width: 50px;" />
+                            <label for="select_queja"><b>No.&nbspQueja</b></label>
+                            <select id="select_queja" name="select_queja" style="width:50px;" class="browser-default validate[required]">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            </select>
                         </div></td>
                         <td>
                         <div class="form-group">
-                            <label for="usr">DESCRIPCIÓN QUEJA</label>
-                            <textarea name="textarea" rows="2" cols="30"></textarea>
+                            <label for="usr"><b>DESCRIPCIÓN QUEJA</b></label>
+                            <textarea name="textarea" rows="3" cols="40"></textarea>
                         </div></td>
                         <div class="checkbox">
-                        <td><input id="checkbox1" type="checkbox" name="checkbox" value="" check="checkbox1"><label for="checkbox1">Aplica Garantía</label></td>
+                        <td><input id="checkbox1" type="checkbox" name="checkbox" value="" check="checkbox1"><label for="checkbox1"><b>Aplica Garantía</b></label></td>
                         </div>
                         <div class="checkbox">
-                        <td><input id="checkbox3" type="checkbox" name="checkbox" value="" check="checkbox3"><label for="checkbox3">Adicional (ADD)</label></td>
-                        </div>
-                    </tr>
-                    <tr>
-                    <td>
-                        <div class="form-group">
-                            <label for="usr">QUEJA No.</label>
-                            <input type="text" id="usr" name="username" style="width: 50px;" />
-                        </div></td>
-                        <td>
-                        <div class="form-group">
-                            <label for="usr">DESCRIPCIÓN QUEJA</label>
-                            <textarea name="textarea" rows="2" cols="30"></textarea>
-                        </div></td>
-                        <div class="checkbox">
-                        <td><input id="checkbox2" type="checkbox" name="checkbox" value="" check="checkbox2"><label for="checkbox2">Aplica Garantía</label></td>
-                        </div>
-                        <div class="checkbox">
-                        <td><input id="checkbox4" type="checkbox" name="checkbox" value="" check="checkbox4"><label for="checkbox4">Adicional (ADD)</label></td>
-                        </div>
-                    </tr>
-                    <tr>
-                    <td>
-                        <div class="form-group">
-                            <label for="usr">QUEJA No.</label>
-                            <input type="text" id="usr" name="username" style="width: 50px;" />
-                        </div></td>
-                        <td>
-                        <div class="form-group">
-                            <label for="usr">DESCRIPCIÓN QUEJA</label>
-                            <textarea name="textarea" rows="2" cols="30"></textarea>
-                        </div></td>
-                        <div class="checkbox">
-                        <td><input id="checkbox5" type="checkbox" name="checkbox" value="" check="checkbox5"><label for="checkbox5">Aplica Garantía</label></td>
-                        </div>
-                        <div class="checkbox">
-                        <td><input id="checkbox6" type="checkbox" name="checkbox" value="" check="checkbox6"><label for="checkbox6">Adicional (ADD)</label></td>
-                        </div>
-                    </tr>
-                    <tr>
-                    <td>
-                        <div class="form-group">
-                            <label for="usr">QUEJA No.</label>
-                            <input type="text" id="usr" name="username" style="width: 50px;" />
-                        </div></td>
-                        <td>
-                        <div class="form-group">
-                            <label for="usr">DESCRIPCIÓN QUEJA</label>
-                            <textarea name="textarea" rows="2" cols="30"></textarea>
-                        </div></td>
-                        <div class="checkbox">
-                        <td><input id="checkbox7" type="checkbox" name="checkbox" value="" check="checkbox7"><label for="checkbox7">Aplica Garantía</label></td>
-                        </div>
-                        <div class="checkbox">
-                        <td><input id="checkbox8" type="checkbox" name="checkbox" value="" check="checkbox8"><label for="checkbox8">Adicional (ADD)</label></td>
-                        </div>
-                    </tr>
-                    <tr>
-                    <td>
-                        <div class="form-group">
-                            <label for="usr">QUEJA No.</label>
-                            <input type="text" id="usr" name="username" style="width: 50px;" />
-                        </div></td>
-                        <td>
-                        <div class="form-group">
-                            <label for="usr">DESCRIPCIÓN QUEJA</label>
-                            <textarea name="textarea" rows="2" cols="30"></textarea>
-                        </div></td>
-                        <div class="checkbox">
-                        <td><input id="checkbox9" type="checkbox" name="checkbox" value="" check="checkbox9"><label for="checkbox9">Aplica Garantía</label></td>
-                        </div>
-                        <div class="checkbox">
-                        <td><input id="checkbox0" type="checkbox" name="checkbox" value="" check="checkbox0"><label for="checkbox0">Adicional (ADD)</label></td>
+                        <td><input id="checkbox3" type="checkbox" name="checkbox" value="" check="checkbox3"><label for="checkbox3"><b>Adicional (ADD)</b></label></td>
+                        <td><i class="fa fa-plus fa-2x registrar_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
                         </div>
                     </tr>
                 </tbody>
             </table>
         </div>
         </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="table-responsive">
+        <table class="table table-border">
+        <thead>
+            <tr>
+                <th>No. QUEJA</th>
+                <th>DESCRIPCIÓN QUEJA</th>
+                <th>Aplica Garantía</th>
+                <th>Adicional (ADD)</th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </thead>
+        </table>
+        </div>
+        </div>
+        </div>
       <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
