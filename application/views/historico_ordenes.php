@@ -408,11 +408,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
     </div>
+    <div class="col-md-12">
     <div class="table-responsive">
         <table class="table table-border">
             <thead>
                 <tr>
                     <th>
+                    <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table table-border">
                             <thead>
@@ -495,15 +497,20 @@
                             </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div> 
                     </th>
                 </tr>
             </thead>
         </table>
+        </div>
     </div>
+    <div class="col-md-12">
     <div class="modal-header">
         <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLongTitle"><b>COMENTARIOS DEL MECANICO</b></h5>
     </div>
+    </div>
+    <div class="col-md-12">
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -553,9 +560,13 @@
                 </tbody>
             </body>
         </table>
+        </div>
+            <div class="col-md-12">
             <div class="modal-header">
                 <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLongTitle"><b>REGISTRO DE LABOR</b></h5>
             </div>
+            </div>
+            <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
@@ -611,6 +622,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -780,6 +792,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-border">
                 <tbody>
@@ -875,6 +888,7 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">Guardar</button>
