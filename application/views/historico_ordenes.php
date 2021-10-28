@@ -96,6 +96,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Folio</th>
+                        <th>Tipo Garantía</th>
                         <?php 
                         if($this->session->userdata["logged_in"]["perfil"] == 6)
                             {
