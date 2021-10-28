@@ -828,14 +828,14 @@
                         </div></td>
                         <td>
                         <div class="form-group">
-                            <label for="usr"><b>DESCRIPCIÓN QUEJA</b></label>
-                            <textarea name="textarea" rows="3" cols="40"></textarea>
+                            <label for="queja"><b>DESCRIPCIÓN QUEJA</b></label>
+                            <textarea name="textarea" rows="3" cols="40" id="queja"></textarea>
                         </div></td>
                         <div class="checkbox">
-                        <td><input id="checkbox1" type="checkbox" name="checkbox" value="" check="checkbox1"><label for="checkbox1"><b>Aplica Garantía</b></label></td>
+                        <td><input id="apl_grta" type="checkbox" name="apl_grta"  ><label for="apl_grta"><b>Aplica Garantía</b></label></td>
                         </div>
                         <div class="checkbox">
-                        <td><input id="checkbox3" type="checkbox" name="checkbox" value="" check="checkbox3"><label for="checkbox3"><b>Adicional (ADD)</b></label></td>
+                        <td><input id="apl_add" type="checkbox" name="apl_add" ><label for="apl_add"><b>Adicional (ADD)</b></label></td>
                         <td><i class="fa fa-plus fa-2x registrar_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
                         </div>
                     </tr>
@@ -848,20 +848,17 @@
         <div class="col-md-12">
         <div class="table-responsive">
         <table class="table table-border">
-        <thead>
-            <tr>
-                <th>No. QUEJA</th>
-                <th>DESCRIPCIÓN QUEJA</th>
-                <th>Aplica Garantía</th>
-                <th>Adicional (ADD)</th>
-            </tr>
-            <tbody>
+            <thead>
                 <tr>
-                    <td></td>
-                    <td></td>
+                    <th>No. QUEJA</th>
+                    <th>DESCRIPCIÓN QUEJA</th>
+                    <th>Aplica Garantía</th>
+                    <th>Adicional (ADD)</th>
+                    <th><i class="fa fa-edit"></i></th>
+                    <th><i class="fa fa-times"></i></th>
                 </tr>
-            </tbody>
-        </thead>
+            </thead>
+            <tbody id="quejas_diagnostico"></tbody>
         </table>
         </div>
         </div>

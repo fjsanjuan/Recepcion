@@ -2010,5 +2010,37 @@ $("#select_queja").empty();
             $("#select_queja").append('<option value=""></option>');
 $(document).on('click', '.registrar_linea', function (e) {
 	e.preventDefault();
-	$(this).closest('tr').clone().appendTo($(this).next('thead'));
-})
+	const actual = $('#quejas_diagnostico > tr').length;
+	const registro = $('<tr>', {'class': 'text-danger'});
+	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#select_queja').val(), 'name': 'num_queja[]'})));
+	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#queja').val(), 'name': 'queja[]'})));
+	let check;
+	if ($('#apl_grta:checked').length > 0){
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_grta[]`}));
+	}else {
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_grta[]`}));
+	}
+	registro.append($('<td>').append(check));
+	check.append($('<label>', {'for': `apl_grta[]`}));
+	if ($('#apl_add:checked').length > 0){
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_add[]`}));
+	}else {
+		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_add[]`}));
+	}
+	registro.append($('<td>').append(check));
+	check.append($('<label>', {'for': `apl_add[]`}));
+	registro.append($('<td>').append($('<button>',{'class': 'btn btn-info edit_reg'}).append($('<i>', {'class': 'fa fa-edit'}))));
+	registro.append($('<td>').append($('<button>',{'class': 'btn btn-danger del_reg'}).append($('<i>', {'class': 'fa fa-times'}))));
+	$('#quejas_diagnostico').append(registro);
+});
+$(document).on('click', '#quejas_diagnostico .edit_reg', function (e) {
+	e.preventDefault();
+	$(this).closest('tr').find('input[name="num_queja[]"]').removeAttr('readonly');
+	$(this).closest('tr').find('input[name="queja[]"]').removeAttr('readonly');
+	$(this).closest('tr').find('input[name="apl_grta[]"]').removeAttr('disabled');
+	$(this).closest('tr').find('input[name="apl_add[]"]').removeAttr('disabled');
+});
+$(document).on('click', '#quejas_diagnostico .del_reg', function (e) {
+	e.preventDefault();
+	$(this).closest('tr').remove();
+});
