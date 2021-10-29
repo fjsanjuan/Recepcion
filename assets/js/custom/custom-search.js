@@ -3,6 +3,8 @@ if(id_perfil != 0)                                                              
 {
     switch(id_perfil)                                                               
     {
+        case "8":
+        case "7":
         case "6":
         case "5":
         case "4":

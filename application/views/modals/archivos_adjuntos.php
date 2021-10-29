@@ -8,6 +8,9 @@
         					<th>Nombre</th>
         					<th>Tipo</th>
         					<th><i class="fa fa-eye"></i></th>
+                            <?php if($this->session->userdata["logged_in"]["perfil"] == 7): ?>
+                                <th><i class="fa fa-times"></i></th>
+                            <?php endif; ?>
         				</tr>
         			</thead>
         			<tbody id="archivos_documentacion">

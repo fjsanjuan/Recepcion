@@ -96,6 +96,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Folio</th>
+                        <th>Tipo Garantía</th>
                         <?php 
                         if($this->session->userdata["logged_in"]["perfil"] == 6)
                             {
@@ -396,6 +397,242 @@
             </div>
     </div>
 </div>
+<!-- modal para codigo diagnostico del problema -->
+<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">Genera Reverso</button>-->
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLongTitle"><b>CÓDIGO DE DIAGNÓSTICO DEL PROBLEMA</b></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-border">
+            <thead>
+                <tr>
+                    <th>
+                    <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-border">
+                            <thead>
+                                <tr>
+                                    <th><b>NO. REP.</b></th>
+                                    <th><b>LUZ FALLA ENCENDIDA</b></th>
+                                    <th><b>DTC&nbspTREN&nbspMOTRIZ</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>KOEO</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>KOEC</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>KOER</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>CARROCERIA</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>CHASIS</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>INDEFINIDO</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 60px;" /></td>
+                                <td>OTRO</td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                                <td><input type="text" name="" id="" style="width: 30px;" /></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div> 
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        </div>
+    </div>
+    <div class="col-md-12">
+    <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLongTitle"><b>COMENTARIOS DEL MECANICO</b></h5>
+    </div>
+    </div>
+    <div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th><b>INCLUYA LA DESCRIPCION DE LA CAUSA DEL PROBLEMA</b></th>
+                    <th><b>NÚMERO REP.</b></th>
+                    <th><b>CLAVE DE DEFECTO</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="usr">IDENTIFIQUE LA PARTE CAUSANTE</label><br>
+                            <input type="text" class="form-control" id="usr" name="username">
+                        </div></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                            <label for="usr">IDENTIFIQUE LA CAUSA DE LA FALLA</label><br>
+                            <input type="text" class="form-control" id="usr" name="username">
+                            </div></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                            <label for="usr">IDENTIFIQUE EL EQUIPO DE DIAGNOSTICO</label><br>
+                            <input type="text" class="form-control" id="usr" name="username">
+                            </div></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                            <label for="usr">EXPLIQUE LA REPARACIÓN AFECTUADA</label><br>
+                            <textarea name="textarea" rows="10" cols="50"></textarea>
+                            </div></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                    </tr>
+                </tbody>
+            </body>
+        </table>
+        </div>
+            <div class="col-md-12">
+            <div class="modal-header">
+                <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLongTitle"><b>REGISTRO DE LABOR</b></h5>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th><b>RETORNO DE PARTES A VENTANILLA BASICO/FECHA</b></th>
+                            <th><b>MECANICO CLAVE</b></th>
+                            <th><b>COSTO O TIEMPO UTILIZADO</b></th>
+                            <th><b>RELOJ CHEC.(INICIO)</b></th>
+                            <th><b>RELOJ CHEC.(TERMINO)</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Generar Reverso</button>
+            </div>
+    </div>
+    </div>
+    </div>
+</div>
 <!-- modal archivos adjuntos -->
 <div class="modal fade" id="modalarchivosadjuntos" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog modal-lg"  role="document">
@@ -415,32 +652,250 @@
             </div>
     </div>
 </div>
+<!-- modal para jefe de taller asignar tecnico-->
+<div class="modal fade" id="asignModal" tabindex="-1" aria-labelledby="asignModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="asignModalLabel">ASIGNAR TÉCNICO</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Técnico</th>
+                        <td>
+                        <div class="form-group col-md-8">
+                            <label for="asigna_tecnico" class="grey-text">Nombre</label>
+                            <select id="asigna_tecnico" name="asigna_tecnico" class="browser-default form-control validate[required]" >
+                            <!-- <option>seleccione... </option> -->
+                            </select>
+                        </div>
+                        </td>
+                    </tr>
+                        <tr><th>Fecha Asignación</th>
+                        <td>
+                        <div class="col-sm-1 icono_calendario">
+                            <i class="fa fa-calendar-alt"></i>
+                        </div>
+                        <div class="col-sm-4">
+                        <input placeholder="Fecha Inicio" value="<?php echo date("Y-m").'\n';?>" type="text" id="fecha_ini" class="form-control datepicker input_fecha" >
+                        </div>
+                        </td></tr>
+                        <tr><th>Hora Asignación</th>
+                        <td>
+                        <div class="row">
+                        <div class="col-md-4">
+                            <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+                            <input type="text" id="light-version-examples" class="form-control" placeholder="Select time">
+                            <label for="light-version-examples">Hora inico</label>
+                            <i class="fas fa-clock input-prefix" style="cursor:pointer;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
+                            <input type="text" id="light-version-examples" class="form-control" placeholder="Select time">
+                            <label for="light-version-examples">Hora termina</label>
+                            <i class="fas fa-clock input-prefix1" style="cursor:pointer;"></i>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck1">
+                            <label class="form-check-label" for="gridCheck1">Todo el día</label>
+                        </div>
+                        </td></tr>
+                        <tr><th>Trabajo Inicial</th>
+                        <td>
+                        <div class="row">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                            <label class="form-check-label" for="exampleRadios1">FORD</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                            <label class="form-check-label" for="exampleRadios2">PROPIO</label>
+                        </div>&nbsp&nbsp
+                        <div id="contenedor">
+                            <div class="added">
+                                <input name="mitexto[]" id="campo_1" placeholder="Paquetes" type="text"><a href="#" class="eliminar">X</a>
+                            </div>
+                        </div>
+                        </div>
+                        </td></tr>
+                        <tr><th>Detalles o Comentarios</th>
+                        <td><textarea name="textarea" rows="3" cols="60"></textarea></td></tr>
+                </thead>
+            </table>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Asignar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal para requisiciones-->
+<div class="modal fade" id="requisModal" tabindex="-1" aria-labelledby="requisModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="requisModalLabel">REQUISICIÓN DE REFACCIONES POR GARANTÍA</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="col-md-12">
+      <tbody>
+          <tr>
+              <td><b>No. REQUISICIÓN</b><input type="text" class="form-control" name="" id=""></td>
+              <td><b>FECHA REQUISICIÓN</b><input type="text" class="form-control" name="" id=""></td>
+              <td><b>FECHA RECEPCIÓN</b><input type="text" class="form-control" name="" id=""></td>
+              <td><b>No. 1863</b><input type="text" class="form-control" name="" id=""></td>
+              <td><b>TÉCNICO</b><input type="text" class="form-control" name="" id=""></td>
+            </tr>
+        </tbody>
+        <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-border text-center">
+                <thead>
+                    <tr>
+                        <th>CANT.</th>
+                        <th>NO. PARTE</th>
+                        <th>DESCRIPCIÓN DE LA PARTE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td><input type="text" class="form-control" name="" id="" style="width: 50px;" /></td>
+                    <td><input type="text" class="form-control" name="" id="" style="width: 100px;" /></td>
+                    <td><input type="text" class="form-control" name="" id="" style="width: 450px;" /></td>
+                    <td><i class="fa fa-plus fa-2x nueva_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table-responsive">
+            <table class="table table-border text-center">
+            <tbody>
+                <tr>
+                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacciones</b></td>
+                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b></td>
+                </tr>
+            </tbody>
+            </table>
+            </div>
+            </div>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal para revision de quejas del cliente-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLabel">REVISIÓN DE QUEJAS DEL CLIENTE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="row">
+      <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-border">
+                <tbody>
+                    <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="select_queja"><b>No.&nbspQueja</b></label>
+                            <select id="select_queja" name="select_queja" style="width:50px;" class="browser-default validate[required]">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            </select>
+                        </div></td>
+                        <td>
+                        <div class="form-group">
+                            <label for="queja"><b>DESCRIPCIÓN QUEJA</b></label>
+                            <textarea name="textarea" rows="3" cols="40" id="queja"></textarea>
+                        </div></td>
+                        <div class="checkbox">
+                        <td><input id="apl_grta" type="checkbox" name="apl_grta"  ><label for="apl_grta"><b>Aplica Garantía</b></label></td>
+                        </div>
+                        <div class="checkbox">
+                        <td><input id="apl_add" type="checkbox" name="apl_add" ><label for="apl_add"><b>Adicional (ADD)</b></label></td>
+                        <td><i class="fa fa-plus fa-2x registrar_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="table-responsive">
+        <table class="table table-border">
+            <thead>
+                <tr>
+                    <th>No. QUEJA</th>
+                    <th>DESCRIPCIÓN QUEJA</th>
+                    <th>Aplica Garantía</th>
+                    <th>Adicional (ADD)</th>
+                    <th><i class="fa fa-edit"></i></th>
+                    <th><i class="fa fa-times"></i></th>
+                </tr>
+            </thead>
+            <tbody id="quejas_diagnostico"></tbody>
+        </table>
+        </div>
+        </div>
+        </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- modal lineas de reparacion -->
-<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="lineareparacion" aria-hidden="true">
+<!--<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="lineareparacion" aria-hidden="true">
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="col-lg-12 text-center"><div class="modal-header">
+    <div class="modal-header">
       <h4 style="color: #4285f4;" class="modal-title" id="classModalLabel"><b>Línea de Reparación</b></h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <span aria-hidden="true">&times;</span></button>
-      </div>
+    </div>
       <div class="modal-body">
         <div class="table-responsive">
             <table class="table table-border">
                 <thead>
                     <tr>
-                        <th>Rep.</th>
-                        <th>Luz indicadora</th>
-                        <th>Daños en Relación</th>
-                        <th>Autorización Jefe Taller</th>
-                        <th>Autorización Gerente Servicio</th>
+                        <th><b>NUM. REP.</b></th>
+                        <th><b>LUZ INDICADORA</b></th>
+                        <th><b>DAÑOS EN RELACIÓN</b></th>
+                        <th><b>AUTORIZACIÓN JEFE TALLER</b></th>
+                        <th><b>AUTORIZACIÓN GERENTE SERVICIO</b></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Linea 1</td>
-                        <td><input type="text" name="" id=""></td>
-                        <td><input type="text" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
+                        <td><input type="text" class="form-control" name="" id=""></td>
                         <td>
                         <div>
                             <input id="checkbox1" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
@@ -451,6 +906,7 @@
                             <input id="checkbox2" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
+                        <td><button type="button" class="btn btn-info btn-sm">Generar&nbspFormato</button></td>
                     </tr>
                     <tr>
                         <td>Linea 2</td>
@@ -466,6 +922,7 @@
                             <input id="checkbox4" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
+                        <td><button type="button" class="btn btn-info btn-sm">Generar&nbspFormato</button></td>
                     </tr>
                     <tr>
                         <td>Linea 3</td>
@@ -481,6 +938,7 @@
                             <input id="checkbox6" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
+                        <td><button type="button" class="btn btn-info btn-sm">Generar&nbspFormato</button></td>
                     </tr>
                     <tr>
                         <td>Linea 4</td>
@@ -496,6 +954,7 @@
                             <input id="checkbox8" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
+                        <td><button type="button" class="btn btn-info btn-sm">Generar&nbspFormato</button></td>
                     </tr>
                     <tr>
                         <td>Linea 5</td>
@@ -511,18 +970,14 @@
                             <input id="checkbox10" type="checkbox" name="checkbox" value="" check=""><label for=""></label>
                         </div>
                         </td>
-                    </tr>
+                        <td><button type="button" class="btn btn-info btn-sm">Generar&nbspFormato</button></td>
+                    </tr> 
                 </tbody>
             </table>
             <table class="table table-border">
                 <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </head>
+                    <tr></tr>
+                </thead>
                 <tbody>
                     <tr>
                         <td>KOEO</td>
@@ -589,4 +1044,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->

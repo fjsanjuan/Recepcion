@@ -2039,23 +2039,25 @@ $(document).on("click", '#mostrar_modalOasis', function (e){
     $("#modaloasis").modal("show");
 });
 
-// var firma = "";
-// $(document).ready(function() {
-//     var config = {
-//         autoInit : true,       // Update any forms field with signature when loading the page
-//         format : "image/png",  // Default signature image format
-//         background : "#EEE",   // Default signature background
-//         pen : "#000",          // Default signature pen color
-//         penWidth : 1,          // Default signature pen width
-//         border : "#AAA",       // Default signature pen border color
-//         height : 200           // Default signature height in px
-//     };
-
-//     firma = $("#firma").jSignature(config);
-// });
-
 // firma = Formato profeco
 var firma = "";
+$(document).ready(function() {
+    var config = {
+        autoFit : true,       // Update any forms field with signature when loading the page
+        // format : "image/png",  // Default signature image format
+        background : "#EEE",   // Default signature background
+        lineColor : "#000",          // Default signature pen color
+        lineWidth : 1,          // Default signature pen width
+        border : "#AAA",       // Default signature pen border color
+        height : 210,           // Default signature height in px
+        width  : 425
+    };
+
+    firma = $("#firma").jqSignature(config);
+});
+
+
+var firma0 = "";
 //firma2 = Formato de inventario
 var firma2 = "";
 //firma3 = Carta de renuncia a a la extensión de garantía
@@ -2073,7 +2075,7 @@ $(document).ready(function() {
         height : 210           // Default signature height in px
     };
 
-    firma = $("#firma").jqSignature(config);
+    firma0 = $("#firma0").jqSignature(config);
 });
 
 
@@ -2110,7 +2112,7 @@ $(document).ready(function() {
 $(document).on("click", '#btn_borrarFirma', function (e){
     e.preventDefault();
     $("#firma").jqSignature('clearCanvas');
-    // $("#firma").jSignature("clear");
+    //$("#firma").jSignature("clear");
     $("#valor_firma").val("");
     $("#loading_spin").hide();
 });
@@ -3161,7 +3163,7 @@ $(document).on("change", "#oasisInput", function(event){
 $(document).on("click", "#btn_guardarOasis", function(event){
     event.preventDefault();
     var data = new FormData();
-    var id_orden = localStorage.getItem("hist_id_orden");
+    var id_orden = localStorage.getItem("id_orden_servicio");
     var oasis = $("#input_vista_previa_pdf").val();
     console.log("id", id_orden);
     console.log("oasis", oasis);
@@ -3459,7 +3461,7 @@ $(document).on("click", ".add_causa_raiz", function(event){
      clone.find('#labelLigera0').prop('id', `labelLigera${cloneID}`);
      clone.find('#labelMediana0').prop('id', `labelMediana${cloneID}`);
      clone.find('#labelMontania0').prop('id', `labelMontania${cloneID}`);
-     clone.find('#firma').prop('id', `firma${cloneID}`);
+     clone.find('#firma0').prop('id', `firma${cloneID}`);
      var config = {
         autoFit : true,       // Update any forms field with signature when loading the page
         // format : "image/png",  // Default signature image format
@@ -3599,7 +3601,7 @@ $(document).on("click", '#btn_borrarFoto', function (e){
 });
 $(document).on('click', '.btn_delete_page', function (e) {
     e.preventDefault();
-    if ($(this).closest('.div_causa_raiz_componente').find('#firma').length > 0) {
+    if ($(this).closest('.div_causa_raiz_componente').find('#firma0').length > 0) {
         toastr.warning('No puedes eliminar la primer página');
         return;
     }
