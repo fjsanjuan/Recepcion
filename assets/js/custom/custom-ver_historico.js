@@ -212,7 +212,7 @@ $(document).ready(function() {
 				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
-				action_tecnico = `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
+				action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -442,7 +442,6 @@ $(document).ready(function() {
 				$("#loading_spin").show();
 				
 				generar_formato(id_orden);
-				console.log("click")
 			}else 
 			{
 				toastr.info("Por favor, espere un momento, mientras termina la generación del formato");
@@ -2011,21 +2010,30 @@ $("#select_queja").empty();
 $(document).on('click', '.registrar_linea', function (e) {
 	e.preventDefault();
 	const actual = $('#quejas_diagnostico > tr').length;
-	const registro = $('<tr>', {'class': 'text-danger'});
+	if (actual >= 5) {
+		swal({
+			title: 'No puedes agregar más de 5 quejas a tu revisión debido a que la garantía solo puede contener máximo 5 líneas.',
+			type: "warning"
+		});
+		return;
+	}
+	const registro = $('<tr>');
+	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': actual+1, 'name': 'num_linea[]'})));
 	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#select_queja').val(), 'name': 'num_queja[]'})));
-	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#queja').val(), 'name': 'queja[]'})));
+	registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#queja').val(), 'name': 'queja[]'})));
+    registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#anotaciones_tec').text(), 'name': 'anotaciones[]'})));
 	let check;
 	if ($('#apl_grta:checked').length > 0){
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
+		check = $('<div>',{'class': 'checkbox check_grta'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
 	}else {
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
+		check = $('<div>',{'class': 'checkbox check_grta'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
 	}
 	registro.append($('<td>').append(check));
 	check.append($('<label>', {'for': `apl_grta[${actual}]`}));
 	if ($('#apl_add:checked').length > 0){
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_add[${actual}]`, 'id':`apl_add[${actual}]`}));
+		check = $('<div>',{'class': 'checkbox check_add'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_add[${actual}]`, 'id':`apl_add[${actual}]`}));
 	}else {
-		check = $('<div>',{'class': 'checkbox'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_add[${actual}]`, 'id':`apl_add[${actual}]`}));
+		check = $('<div>',{'class': 'checkbox check_add'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'name':`apl_add[${actual}]`, 'id':`apl_add[${actual}]`}));
 	}
 	registro.append($('<td>').append(check));
 	check.append($('<label>', {'for': `apl_add[${actual}]`}));
@@ -2034,6 +2042,7 @@ $(document).on('click', '.registrar_linea', function (e) {
 	$('#quejas_diagnostico').append(registro);
 	$('#select_queja').val('');
 	$('#queja').val('');
+    $('#anotaciones_tec').val('');
 	$('#apl_grta').prop('checked', false);
 	$('#apl_add').prop('checked', false);
 });
@@ -2043,14 +2052,16 @@ $(document).on('click', '#quejas_diagnostico .edit_reg', function (e) {
 		$(this).find('i').removeClass('fa-edit').addClass('fa-save');
 		$(this).removeClass('btn-info').addClass('btn-success');
 		$(this).closest('tr').find('input[name="num_queja[]"]').removeAttr('readonly');
-		$(this).closest('tr').find('input[name="queja[]"]').removeAttr('readonly');
+		$(this).closest('tr').find('textarea[name="queja[]"]').removeAttr('readonly');
+        $(this).closest('tr').find('textarea[name="anotaciones[]"]').removeAttr('readonly');
 		$(this).closest('tr').find('.checkbox').find('input:checkbox').removeAttr('disabled');
 		$(this).closest('tr').find('.checkbox').find('input[name="apl_add[]"]').removeAttr('disabled');
 	} else {
 		$(this).find('i').removeClass('fa-save').addClass('fa-edit');
 		$(this).removeClass('btn-success').addClass('btn-info');
 		$(this).closest('tr').find('input[name="num_queja[]"]').prop('readonly', 'readonly');
-		$(this).closest('tr').find('input[name="queja[]"]').prop('readonly', 'readonly');
+		$(this).closest('tr').find('textarea[name="queja[]"]').prop('readonly', 'readonly');
+        $(this).closest('tr').find('textarea[name="anotaciones[]"]').prop('readonly', 'readonly');
 		$(this).closest('tr').find('input:checkbox').prop('disabled', true);
 		$(this).closest('tr').find('input[name="apl_add[]"]').prop('disabled', true);
 	}
@@ -2058,4 +2069,56 @@ $(document).on('click', '#quejas_diagnostico .edit_reg', function (e) {
 $(document).on('click', '#quejas_diagnostico .del_reg', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').remove();
+	recalcular_lineas();
 });
+
+$(document).on('click', '.tabla_hist tbody tr td button.revisionqueja', function (e) {
+    let id_orden = $(this).prop('id');
+    id_orden = id_orden.split('-')[1];
+    e.preventDefault();
+    $.ajax({
+        url: `${base_url}index.php/servicio/obtener_datos_quejas/${id_orden}`,
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: function () {
+            $("#loading_spin").show();
+            toastr.info('Obteniendo información de las quejas de la orden');
+        }
+    })
+    .done(function(data) {
+        if (data.estatus) {
+            $('#select_queja').empty();
+            $('#select_queja').append($('<option>',{'value': '', 'text': 'Selecciona una queja.'}));
+            $.each(data.data, function(index, val) {
+                $('#select_queja').append($('<option>',{'value': val.id, 'text': val.id, 'data-queja': val.definicion_falla}));
+            });
+            $('#exampleModal').modal('toggle');
+        }else {
+            toastr.warning(data.mensaje);
+        }
+    })
+    .fail(function() {
+        toastr.warning('No fue posible obtener las quejas de la orden');
+    })
+    .always(function() {
+        $('#loading_spin').hide();
+    });
+    
+});
+
+$(document).on('change', '#exampleModal #select_queja', function(e){
+    e.preventDefault();
+    $(this).closest('tr').find('#queja').val($(this).find('option:selected').data('queja'));
+});
+
+function recalcular_lineas() {
+	const tr = $('#quejas_diagnostico > tr');
+	$.each(tr, function(index, val) {
+		$(this).find('input[name="num_linea[]"]').val(index+1);
+		$(this).closest('check_grta').find('input:checkbox').prop({'name': `apl_grta[${index+1}]`, 'id': `apl_grta[${index+1}]`});
+		$(this).closest('check_grta').find('label').prop('for', `apl_grta[${index+1}]`);
+		$(this).closest('check_add').find('input:checkbox').prop({'name': `apl_add[${index+1}]`, 'name': `apl_add[${index+1}]`});
+		$(this).closest('check_add').find('label').prop('for', `apl_add[${index+1}]`);
+	});
+}
+

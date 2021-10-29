@@ -53,6 +53,9 @@
     #modalbusqarts{
         overflow:scroll;
     }
+    #exampleModal td{
+        vertical-align: middle;
+    }
 </style>
 <div class="container">
     <br>
@@ -750,47 +753,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="col-md-12">
-      <tbody>
-          <tr>
-              <td><b>No. REQUISICIÓN</b><input type="text" class="form-control" name="" id=""></td>
-              <td><b>FECHA REQUISICIÓN</b><input type="text" class="form-control" name="" id=""></td>
-              <td><b>FECHA RECEPCIÓN</b><input type="text" class="form-control" name="" id=""></td>
-              <td><b>No. 1863</b><input type="text" class="form-control" name="" id=""></td>
-              <td><b>TÉCNICO</b><input type="text" class="form-control" name="" id=""></td>
-            </tr>
-        </tbody>
-        <div class="col-md-12">
-        <div class="table-responsive">
-            <table class="table table-border text-center">
-                <thead>
-                    <tr>
-                        <th>CANT.</th>
-                        <th>NO. PARTE</th>
-                        <th>DESCRIPCIÓN DE LA PARTE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><input type="text" class="form-control" name="" id="" style="width: 50px;" /></td>
-                    <td><input type="text" class="form-control" name="" id="" style="width: 100px;" /></td>
-                    <td><input type="text" class="form-control" name="" id="" style="width: 450px;" /></td>
-                    <td><i class="fa fa-plus fa-2x nueva_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="table-responsive">
-            <table class="table table-border text-center">
-            <tbody>
-                <tr>
-                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacciones</b></td>
-                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b></td>
-                </tr>
-            </tbody>
-            </table>
-            </div>
-            </div>
-        </div>
+        <div class="modal-body">
+            <?php $this->load->view('modals/requisiciones'); ?>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -809,62 +773,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="row">
-      <div class="col-md-12">
-        <div class="table-responsive">
-            <table class="table table-border">
-                <tbody>
-                    <tr>
-                    <td>
-                        <div class="form-group">
-                            <label for="select_queja"><b>No.&nbspQueja</b></label>
-                            <select id="select_queja" name="select_queja" style="width:50px;" class="browser-default validate[required]">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            </select>
-                        </div></td>
-                        <td>
-                        <div class="form-group">
-                            <label for="queja"><b>DESCRIPCIÓN QUEJA</b></label>
-                            <textarea name="textarea" rows="3" cols="40" id="queja"></textarea>
-                        </div></td>
-                        <div class="checkbox">
-                        <td><input id="apl_grta" type="checkbox" name="apl_grta"  ><label for="apl_grta"><b>Aplica Garantía</b></label></td>
-                        </div>
-                        <div class="checkbox">
-                        <td><input id="apl_add" type="checkbox" name="apl_add" ><label for="apl_add"><b>Adicional (ADD)</b></label></td>
-                        <td><i class="fa fa-plus fa-2x registrar_linea" style="color:green; cursor:pointer;" aria-hidden="true"></i></td>
-                        </div>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-12">
-        <div class="table-responsive">
-        <table class="table table-border">
-            <thead>
-                <tr>
-                    <th>No. QUEJA</th>
-                    <th>DESCRIPCIÓN QUEJA</th>
-                    <th>Aplica Garantía</th>
-                    <th>Adicional (ADD)</th>
-                    <th><i class="fa fa-edit"></i></th>
-                    <th><i class="fa fa-times"></i></th>
-                </tr>
-            </thead>
-            <tbody id="quejas_diagnostico"></tbody>
-        </table>
-        </div>
-        </div>
-        </div>
+      <div class="modal-body">
+        <?php $this->load->view('modals/revision_queja'); ?>
+      </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
