@@ -1,7 +1,7 @@
 <style>
     #firma, #firma1, #firma2 , #firma3, #firma4, #firma0 {
         border: 2px dotted black;
-        background-color: #fff;
+        background-color: #EEE;
         width: 425px;
         height: 210px;
     }

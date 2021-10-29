@@ -2039,23 +2039,25 @@ $(document).on("click", '#mostrar_modalOasis', function (e){
     $("#modaloasis").modal("show");
 });
 
+// firma = Formato profeco
 var firma = "";
 $(document).ready(function() {
     var config = {
-        autoInit : true,       // Update any forms field with signature when loading the page
-        format : "image/png",  // Default signature image format
+        autoFit : true,       // Update any forms field with signature when loading the page
+        // format : "image/png",  // Default signature image format
         background : "#EEE",   // Default signature background
-        pen : "#000",          // Default signature pen color
-        penWidth : 1,          // Default signature pen width
+        lineColor : "#000",          // Default signature pen color
+        lineWidth : 1,          // Default signature pen width
         border : "#AAA",       // Default signature pen border color
-        height : 200           // Default signature height in px
+        height : 210,           // Default signature height in px
+        width  : 425
     };
 
     firma = $("#firma").jSignature(config);
 });
 
-// firma = Formato profeco
-var firma = "";
+
+var firma0 = "";
 //firma2 = Formato de inventario
 var firma2 = "";
 //firma3 = Carta de renuncia a a la extensión de garantía
@@ -2073,7 +2075,7 @@ $(document).ready(function() {
         height : 210           // Default signature height in px
     };
 
-    firma = $("#firma0").jqSignature(config);
+    firma0 = $("#firma0").jqSignature(config);
 });
 
 
@@ -2110,7 +2112,7 @@ $(document).ready(function() {
 $(document).on("click", '#btn_borrarFirma', function (e){
     e.preventDefault();
     $("#firma").jqSignature('clearCanvas');
-    // $("#firma").jSignature("clear");
+    $("#firma").jSignature("clear");
     $("#valor_firma").val("");
     $("#loading_spin").hide();
 });
