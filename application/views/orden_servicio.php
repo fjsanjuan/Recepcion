@@ -2510,7 +2510,7 @@
                             </div>
                             <div class="col-sm-8 col-md-8 col-lg-8">
                                 <input type="hidden" name="valor_firma[]" id="valor_firma0">
-                                <div id="firma" name="firma[]"></div>
+                                <div id="firma0" name="firma[]"></div>
                                 <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
                             </div>                   
                         </div>
