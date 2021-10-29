@@ -14,7 +14,7 @@ class Buscador_Model extends CI_Model{
 
 	private $Version = 'V4000';
 	private $vista = 'PaquetesWeb';
-	//private $ruta_formts = "../recepcion/";
+	//private $ruta_formts = "F:/recepcion/assets";
 	private $ruta_formts = '../recepcion/assets/uploads/';
 
 	public function __construct()
