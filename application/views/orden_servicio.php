@@ -2054,14 +2054,14 @@
                         <blockquote class="blockquote bq-primary htext">Identificación de necesidades de servicio</blockquote>
                         <div class="form-check">
                             <label for="">Definición de falla</label>
-                            <textarea class="form-control" type="text" rows="5" name="articulos_personales[]"></textarea>
+                            <textarea class="form-control" type="text" rows="5" name="articulos_personales[]" value=""></textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <blockquote class="blockquote bq-primary htext">Condiciones Ambientales</blockquote>
                         <div class="form-check">
                             <label class="form-check-label" for="temperatura">Temperatura ambiente</label>
-                            <input type="range" list="temperatura_list" class="form-check-input" name="temperatura[]">
+                            <input type="range" list="temperatura_list" class="form-check-input" name="temperatura[]" value="0"> 
                             <datalist id="temperatura_list">
                                 <option value="-10" label="-10°C">
                                 <option value="0" label="0°C">
@@ -2076,38 +2076,38 @@
                         <div class="form-check">
                             <label class="form-check-label" for="">Húmedad</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadSeco0" name="humedad[]" value="seco" checked>
+                                  <input type="radio" class="form-check-input" id="humedadSeco0" name="humedad[]" value="seco">
                                   <label class="form-check-label" id="labelSeco0" for="humedadSeco0">Seco</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadHumedo0" name="humedad[]" value="humedo" checked>
+                                  <input type="radio" class="form-check-input" id="humedadHumedo0" name="humedad[]" value="humedo">
                                   <label class="form-check-label" id="labelHumedo0" for="humedadHumedo0">Húmedo</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadMojado0" name="humedad[]" value="mojado" checked>
+                                  <input type="radio" class="form-check-input" id="humedadMojado0" name="humedad[]" value="mojado" >
                                   <label class="form-check-label" id="labelMojado0" for="humedadMojado0">Mojado</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadLluvia0" name="humedad[]" value="lluvia" checked>
+                                  <input type="radio" class="form-check-input" id="humedadLluvia0" name="humedad[]" value="lluvia">
                                   <label class="form-check-label" id="labelLluvia0" for="humedadLluvia0">Lluvia</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" id="humedadHielo0" name="humedad[]" value="hielo" checked>
+                                  <input class="form-check-input" type="radio" id="humedadHielo0" name="humedad[]" value="hielo">
                                   <label class="form-check-label" id="labelHielo0" for="humedadHielo0">Hielo</label>
                                 </div>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Viento</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoLigero0" name="viento[]" value="ligero" checked>
+                                  <input type="radio" class="form-check-input" id="vientoLigero0" name="viento[]" value="ligero">
                                   <label class="form-check-label" id="labelLigero0" for="vientoLigero0">Ligero</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoMedio0" name="viento[]" value="medio" checked>
+                                  <input type="radio" class="form-check-input" id="vientoMedio0" name="viento[]" value="medio">
                                   <label class="form-check-label" id="labelMedio0" for="vientoMedio0">Medio</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoFuerte0" name="viento[]" value="fuerte" checked>
+                                  <input type="radio" class="form-check-input" id="vientoFuerte0" name="viento[]" value="fuerte">
                                   <label class="form-check-label" id="labelFuerte0" for="vientoFuerte0">Fuerte</label>
                                 </div>
                         </div>
@@ -2333,7 +2333,7 @@
                         <blockquote class="blockquote bq-primary htext">Condiciones Operativas</blockquote>
                         <div class="form-check">
                             <label class="form-check-label" for="velocidad">Velocidad Km/hr</label>
-                            <input type="range" min="0" max="260" list="velocidad_list" name="velocidad[]" class="form-check-input">
+                            <input type="range" min="0" max="260" list="velocidad_list" name="velocidad[]" class="form-check-input" value="0">
                             <datalist id="velocidad_list">
                                 <option value="0" label="0">
                                 <option value="20" label="20">
@@ -2354,31 +2354,31 @@
                         <div class="form-check">
                             <label class="form-check-label" for="">Cambio transmisión</label>
                             <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionR0" name="cambioTransmision[]" value="r" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionR0" name="cambioTransmision[]" value="r">
                                   <label class="form-check-label" id="labelTransmisionR0" for="cambioTransmisionR0">R</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionUno0" name="cambioTransmision[]" value="1" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionUno0" name="cambioTransmision[]" value="1">
                                   <label class="form-check-label" id="labelTransmisionUno0" for="cambioTransmisionUno0">1</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionDos0" name="cambioTransmision[]" value="2" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionDos0" name="cambioTransmision[]" value="2">
                                   <label class="form-check-label" id="labelTransmisionDos0" for="cambioTransmisionDos0">2</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionTres0" name="cambioTransmision[]" value="3" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionTres0" name="cambioTransmision[]" value="3">
                                   <label class="form-check-label" id="labelTransmisionTres0" for="cambioTransmisionTres0">3</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionCuatro0" name="cambioTransmision[]" value="4" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionCuatro0" name="cambioTransmision[]" value="4">
                                   <label class="form-check-label" id="labelTransmisionCuatro0" for="cambioTransmisionCuatro0">4</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionCinco0" name="cambioTransmision[]" value="5" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionCinco0" name="cambioTransmision[]" value="5">
                                   <label class="form-check-label" id="labelTransmisionCinco0" for="cambioTransmisionCinco0">5</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionSeis0" name="cambioTransmision[]" value="6" checked>
+                                  <input type="radio" class="form-check-input" id="cambioTransmisionSeis0" name="cambioTransmision[]" value="6">
                                   <label class="form-check-label" id="labelTransmisionSeis0" for="cambioTransmisionSeis0">6</label>
                                 </div>
                                 <div class="form-check">
@@ -2392,7 +2392,7 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="rpm">Rpm x1000</label>
-                            <input type="range" min="1" max="8" list="rpm_list" class="form-check-input" name="rpm[]">
+                            <input type="range" min="1" max="8" list="rpm_list" class="form-check-input" name="rpm[]" value="0">
                             <datalist id="rpm_list">
                                 <option value="1" label="1">
                                 <option value="2" label="2">
@@ -2406,7 +2406,7 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="carga">Carga</label>
-                            <input type="range" min="0" max="100" list="carga_carga" name="carga[]" class="form-check-input">
+                            <input type="range" min="0" max="100" list="carga_carga" name="carga[]" class="form-check-input" value="0">
                             <datalist id="carga_carga">
                                 <option value="0" label="0%">
                                 <option value="25" label="25%">
@@ -2418,7 +2418,7 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="pasajeros">Pasajeros</label>
-                            <input type="range" min="1" max="9" list="pasajeros[]" name="pasajeros[]" class="form-check-input">
+                            <input type="range" min="1" max="9" list="pasajeros[]" name="pasajeros[]" class="form-check-input" value="0">
                             <datalist id="pasajeros[]">
                                 <option value="1" label="1">
                                 <option value="2" label="2">
@@ -2433,7 +2433,7 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="cajuela">Cajuela</label>
-                            <input type="range" min="0" max="100" list="cajuela_list" name="cajuela[]" class="form-check-input">
+                            <input type="range" min="0" max="100" list="cajuela_list" name="cajuela[]" class="form-check-input" value="0">
                             <datalist id="cajuela_list">
                                 <option value="0" label="0%">
                                 <option value="25" label="25%">
@@ -2446,61 +2446,61 @@
                         <div class="form-check">
                             <label class="form-check-label" for="">Estructura</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraPlano0" name="estructura[]" value="plano" checked>
+                                  <input type="radio" class="form-check-input" id="estructuraPlano0" name="estructura[]" value="plano">
                                   <label class="form-check-label" id="labelPlano0" for="estructuraPlano0">Plano</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraVado0" name="estructura[]" value="vado" checked>
+                                  <input type="radio" class="form-check-input" id="estructuraVado0" name="estructura[]" value="vado" >
                                   <label class="form-check-label" id="labelVado0" for="estructuraVado0">Vado</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraTope0" name="estructura[]" value="tope" checked>
+                                  <input type="radio" class="form-check-input" id="estructuraTope0" name="estructura[]" value="tope">
                                   <label class="form-check-label" id="labelTope0" for="estructuraTope0">Tope</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraBaches0" name="estructura[]" value="Baches" checked>
+                                  <input type="radio" class="form-check-input" id="estructuraBaches0" name="estructura[]" value="Baches">
                                   <label class="form-check-label" id="labelBaches0" for="estructuraBaches0">Baches</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraVibradores0" name="estructura[]" value="Vibradores" checked>
+                                  <input type="radio" class="form-check-input" id="estructuraVibradores0" name="estructura[]" value="Vibradores">
                                   <label class="form-check-label" id="labelVibradores0" for="estructuraVibradores0">Vibradores</label>
                                 </div>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Camino</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoRecto0" name="camino[]" value="recto" checked>
+                                  <input type="radio" class="form-check-input" id="caminoRecto0" name="camino[]" value="recto">
                                   <label class="form-check-label" id="labelRecto0" for="caminoRecto0">Recto</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaLigera0" name="camino[]" value="curva ligera" checked>
+                                  <input type="radio" class="form-check-input" id="caminoCurvaLigera0" name="camino[]" value="curva ligera">
                                   <label class="form-check-label" id="labelCurvaLigera0" for="caminoCurvaLigera0">Curva ligera</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaCerrada0" name="camino[]" value="curva cerrada" checked>
+                                  <input type="radio" class="form-check-input" id="caminoCurvaCerrada0" name="camino[]" value="curva cerrada">
                                   <label class="form-check-label" id="labelCurvaCerrada0" for="caminoCurvaCerrada0">Curva cerrada</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaSinuoso0" name="camino[]" value="curva sinuoso" checked>
+                                  <input type="radio" class="form-check-input" id="caminoCurvaSinuoso0" name="camino[]" value="curva sinuoso">
                                   <label class="form-check-label" id="labelCurvaSinuoso0" for="caminoCurvaSinuoso0">Sinuoso</label>
                                 </div>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Pendiente</label><br>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteRecto0" name="pendiente[]" value="Recto" checked>
+                                  <input type="radio" class="form-check-input" id="pendienteRecto0" name="pendiente[]" value="Recto">
                                   <label class="form-check-label" id="labelPendRecto0" for="pendienteRecto0">Recto</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteLigera0" name="pendiente[]" value="Pendiente ligera" checked>
+                                  <input type="radio" class="form-check-input" id="pendienteLigera0" name="pendiente[]" value="Pendiente ligera">
                                   <label class="form-check-label" id="labelLigera0" for="pendienteLigera0">Pendiente ligera 10°</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteMediana0" name="pendiente[]" value="Pendiente mediana" checked>
+                                  <input type="radio" class="form-check-input" id="pendienteMediana0" name="pendiente[]" value="Pendiente mediana">
                                   <label class="form-check-label" id="labelMediana0" for="pendienteMediana0">Pendiente mediana</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteMontania0" name="pendiente[]" value="Pendiente Montaña" checked>
+                                  <input type="radio" class="form-check-input" id="pendienteMontania0" name="pendiente[]" value="Pendiente Montaña">
                                   <label class="form-check-label" id="labelMontania0" for="pendienteMontania0">Pendiente Motaña</label>
                                 </div>
                         </div><br><br>
