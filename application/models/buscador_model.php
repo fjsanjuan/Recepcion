@@ -14,7 +14,8 @@ class Buscador_Model extends CI_Model{
 
 	private $Version = 'V4000';
 	private $vista = 'PaquetesWeb';
-	private $ruta_formts = "../recepcion/";
+	//private $ruta_formts = "F:/recepcion/assets";
+	private $ruta_formts = '../recepcion/assets/uploads/';
 
 	public function __construct()
 	{
@@ -3015,9 +3016,9 @@ class Buscador_Model extends CI_Model{
 	public function crear_archivo_v2($datos = null)
 	{
 		$archivo = $datos["archivo"];
-		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["id_orden_servicio"].'/'.$datos['tipo_nombre']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
-		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.$datos["id_orden_servicio"])) {
-			mkdir($this->ruta_formts.'archivos_recepcion/'.$datos["id_orden_servicio"], 0777, true);
+		$ruta = $this->ruta_formts.'archivos_recepcion/'.'OrdenServicio'.$datos["id_orden_servicio"].'/'.$datos['tipo_nombre']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
+		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.'OrdenServicio'.$datos["id_orden_servicio"])) {
+			mkdir($this->ruta_formts.'archivos_recepcion/'.'OrdenServicio'.$datos["id_orden_servicio"], 0777, true);
 		}
 		$nombrearchivo = $archivo["name"];
 		move_uploaded_file($archivo["tmp_name"], $ruta);
