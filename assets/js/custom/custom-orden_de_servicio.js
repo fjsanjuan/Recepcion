@@ -2053,7 +2053,7 @@ $(document).ready(function() {
         width  : 425
     };
 
-    firma = $("#firma").jqSignature(config);
+    firma = $("#firma").jSignature(config);
 });
 
 
@@ -2112,7 +2112,7 @@ $(document).ready(function() {
 $(document).on("click", '#btn_borrarFirma', function (e){
     e.preventDefault();
     $("#firma").jqSignature('clearCanvas');
-    //$("#firma").jSignature("clear");
+    $("#firma").jSignature("clear");
     $("#valor_firma").val("");
     $("#loading_spin").hide();
 });
@@ -3472,6 +3472,10 @@ $(document).on("click", ".add_causa_raiz", function(event){
         height : 210           // Default signature height in px
     };
     clone.find(`#firma${cloneID}`).empty();
+    clone.find('input:checkbox').prop('checked', false);
+    clone.find('input[type="radio"]').prop('checked', false);
+    clone.find('input[type="range"]').prop('value', 0);
+    clone.find('textarea[type="text"]').prop('value', "");
     clone.appendTo('#step-4');
     clone.find(`#firma${cloneID}`).jqSignature(config);
 });
