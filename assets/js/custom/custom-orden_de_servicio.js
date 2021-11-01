@@ -2053,7 +2053,7 @@ $(document).ready(function() {
         width  : 425
     };
 
-    firma = $("#firma").jSignature(config);
+    firma = $("#firma").jqSignature(config);
 });
 
 
@@ -2112,7 +2112,7 @@ $(document).ready(function() {
 $(document).on("click", '#btn_borrarFirma', function (e){
     e.preventDefault();
     $("#firma").jqSignature('clearCanvas');
-    $("#firma").jSignature("clear");
+    $("#firma").jqSignature("clear");
     $("#valor_firma").val("");
     $("#loading_spin").hide();
 });
