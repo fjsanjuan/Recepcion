@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -2021,7 +2021,7 @@ $(document).on('click', '.registrar_linea', function (e) {
 	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': actual+1, 'name': 'num_linea[]'})));
 	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#select_queja').val(), 'name': 'num_queja[]'})));
 	registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#queja').val(), 'name': 'queja[]'})));
-    registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#anotaciones_tec').text(), 'name': 'anotaciones[]'})));
+    registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#anotaciones_tec').val(), 'name': 'anotaciones[]'})));
 	let check;
 	if ($('#apl_grta:checked').length > 0){
 		check = $('<div>',{'class': 'checkbox check_grta'}).append($('<input>',{'type': 'checkbox', 'disabled': 'disabled', 'checked': 'checked', 'name':`apl_grta[${actual}]`, 'id':`apl_grta[${actual}]`}));
