@@ -3478,6 +3478,7 @@ $(document).on("click", ".add_causa_raiz", function(event){
     clone.find('textarea[type="text"]').prop('value', "");
     clone.appendTo('#step-4');
     clone.find(`#firma${cloneID}`).jqSignature(config);
+    clone.find('input[type="range"]').trigger('change');
 });
 $(document).on("click", "#audioInput", function(event){
      event.preventDefault();
