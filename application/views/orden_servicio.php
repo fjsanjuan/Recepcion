@@ -2392,8 +2392,9 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="rpm">Rpm x1000</label>
-                            <input type="range" min="1" max="8" list="rpm_list" class="form-check-input" name="rpm[]" value="0">
+                            <input type="range" min="0" max="8" list="rpm_list" class="form-check-input" name="rpm[]" value="0">
                             <datalist id="rpm_list">
+                                <option value="0" label="0">
                                 <option value="1" label="1">
                                 <option value="2" label="2">
                                 <option value="3" label="3">
@@ -2418,8 +2419,9 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label" for="pasajeros">Pasajeros</label>
-                            <input type="range" min="1" max="9" list="pasajeros[]" name="pasajeros[]" class="form-check-input" value="0">
+                            <input type="range" min="0" max="9" list="pasajeros[]" name="pasajeros[]" class="form-check-input" value="0">
                             <datalist id="pasajeros[]">
+                                <option value="0" label="0">
                                 <option value="1" label="1">
                                 <option value="2" label="2">
                                 <option value="3" label="3">
