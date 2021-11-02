@@ -31,8 +31,12 @@
                         <table class="table table-border text-center">
                             <tbody>
                                 <tr>
-                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacciones</b></td>
-                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b></td>
+                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacciones</b>
+                                    <i class="fa fa-file-signature fa-4X firma_refacc" style="cursor:pointer;"></i>
+                                    </td>
+                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b>
+                                    <i class="fa fa-file-signature fa-4X firma_tecn" style="cursor:pointer;"></i>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
