@@ -208,8 +208,23 @@
 				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
+				btn_garantias	=``;
+				btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				//action_garantias	= "<button class='btn btn-sm f1863' style='background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
+				action_garantias	="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
+				action_garantias	+="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
+				action_garantias	+= "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
+				action_garantias	+="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar&nbspDocs</button>";
+				action_garantias	+="<button class='btn btn-sm autorizarefacc' style='background:#17A2B8;' id='autorizarefacc-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Autorizar Refacciones</button>";
+				action_garantias	 +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Validar Pregarantía</button>";
+				//action_garantias	+=`<button type="button" class="btn btn-primary btn-sm refacciones" id='autorizar_refacciones-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Refacciones</button>`;
+				btn_gerente		=``;
+				btn_gerente		+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				action_gerente	=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
 				btn_jefe       = ``;
-				action_jefe    = `<button type="button" class="btn btn-primary diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
+				btn_jefe	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				action_jefe    = `<button type="button" class="btn btn-primary btn-sm diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
+				action_jefe		+=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
@@ -288,6 +303,34 @@
 						val["anio_modelo_v"],
 						btn_tecnico,
 						action_tecnico,
+						"",
+						btn_comentario
+					]);
+				} else if(id_perfil == 7){
+					tabla_historico.fnAddData([
+						val["id"],
+						folio,
+						tipo,
+						nombre,	
+						val["tel_movil"],
+						val["vin"],
+						val["anio_modelo_v"],
+						btn_garantias,
+						action_garantias,
+						btn_presupuesto,
+						btn_comentario
+					]);
+				} else if(id_perfil == 8){
+					tabla_historico.fnAddData([
+						val["id"],
+						folio,
+						tipo,
+						nombre,	
+						val["tel_movil"],
+						val["vin"],
+						val["anio_modelo_v"],
+						btn_gerente,
+						action_gerente,
 						"",
 						btn_comentario
 					]);
@@ -1872,6 +1915,69 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 				}
 		});
 	});
+// validar pregarantia por admón de garantias
+$(document).on("click", ".tabla_hist tbody tr td button.pregarantia", function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("id");
+	id_orden = id_orden.split("-");
+	id_orden = id_orden[1];
+	localStorage.setItem("hist_id_orden", id_orden);
+	swal({
+		title: '¿Validar Pregarantia?',
+		showCancelButton: true,
+		confirmButtonText: 'Validar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				swal('Pregarantia validada.', '', 'success');
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+	});
+});
+// autoriza refacciones admón de garantias
+$(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("id");
+	id_orden = id_orden.split("-");
+	id_orden = id_orden[1];
+	localStorage.setItem("hist_id_orden", id_orden);
+	swal({
+		title: '¿Desea autorizar Refacciones?',
+		showCancelButton: true,
+		confirmButtonText: 'autorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				swal('Refacciones autorizadas.', '', 'success');
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+	});
+});
+// autorizar Adicional (ADD) por parte de Gerente
+$(document).on("click", ".tabla_hist tbody tr td button.add", function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("id");
+	id_orden = id_orden.split("-");
+	id_orden = id_orden[1];
+	localStorage.setItem("hist_id_orden", id_orden);
+	swal({
+		title: '¿Desea autorizar adicional?',
+		showCancelButton: true,
+		confirmButtonText: 'autorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				swal('Adicional autorizada.', '', 'success');
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+	});
+});
 
 //Cambio para adjuntar pdf
 $(document).on("change", "#oasisInput", function(event){
