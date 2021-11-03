@@ -755,27 +755,7 @@
     </div>
   </div>
 </div>
-<!-- modal para agregar tipo de garantia-->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLabel">Tipo Garantia</button>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLabel">AGREGAR TIPO GARANTIA</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <?php $this->load->view('modals/tipo_garantia'); ?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 <!-- modal lineas de reparacion -->
 <!--<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="lineareparacion" aria-hidden="true">
 <div class="modal-dialog modal-lg">
