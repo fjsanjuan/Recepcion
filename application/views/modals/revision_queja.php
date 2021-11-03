@@ -58,13 +58,12 @@
             <table class="table table-border">
                 <thead>
                     <tr>
-                        <th>Num.</th>
-                        <th>No. QUEJA</th>
+                        <th style="width: 90px;">No. QUEJA</th>
                         <th>DESCRIPCIÓN QUEJA</th>
                         <th>Anotaciones</th>
                         <th>Aplica Garantía</th>
                         <th>Adicional (ADD)</th>
-                        <th><i class="fa fa-edit"></i></th>
+                        <th><i class="fas fa-edit"></i></th>
                         <th><i class="fa fa-times"></i></th>
                     </tr>
                 </thead>

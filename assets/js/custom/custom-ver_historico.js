@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -2105,11 +2105,47 @@ $("#asigna_tecnico").empty();
                 else
                     $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '">' + data.Nombre[i]['Nombre'] + '</option>');
             }*/
+
+// nueva linea de registro de labor en codigo diagnostico del problema
+$(document).on('click', '.nuevo_registro', function (e) {
+	e.preventDefault();
+	$(this).closest('tr').clone().insertBefore($(this).closest('tr'));
+	$(this).closest('tr').find('input[type="text"]').val("");
+})
+
+$(document).on('click', '.borrar_registro', function (e) {
+	e.preventDefault();
+	if ($(this).closest('.registro_labor tr').find('tr').length > 0) {
+        toastr.warning('No puedes eliminar el primer registro');
+        return;
+    }
+    if ($('.registro_labor tr').length > 1) {
+        $(this).closest('.registro_labor tr').remove();
+    }else {
+        toastr.warning('Debes matener una linea de registro');
+    }
+});
+
 // nueva linea en requisiciones
 $(document).on('click', '.nueva_linea', function (e) {
 	e.preventDefault();
-	$(this).closest('tr').clone().appendTo($(this).closest('tbody'));
+	//clone.find('input[type="text"]').prop('value', "");
+	$(this).closest('tr').clone().insertBefore($(this).closest('tr'));
+	$(this).closest('tr').find('input[type="text"]').val("");
 })
+
+$(document).on('click', '.borra_linea', function (e) {
+	e.preventDefault();
+	if ($(this).closest('.lineas_refacciones tr').find('tr').length > 0) {
+        toastr.warning('No puedes eliminar la primer linea');
+        return;
+    }
+    if ($('.lineas_refacciones tr').length > 1) {
+        $(this).closest('.lineas_refacciones tr').remove();
+    }else {
+        toastr.warning('Debes matener una linea');
+    }
+});
 // seleccionar linea revision quejas
 $("#select_queja").empty();
             $("#select_queja").append('<option value=""></option>');
@@ -2124,7 +2160,7 @@ $(document).on('click', '.registrar_linea', function (e) {
 		return;
 	}
 	const registro = $('<tr>');
-	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': actual+1, 'name': 'num_linea[]'})));
+	//registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': actual+1, 'name': 'num_linea[]'})));
 	registro.append($('<td>').append($('<input>',{'class': 'form-control','readonly': 'readonly', 'value': $('#select_queja').val(), 'name': 'num_queja[]'})));
 	registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#queja').val(), 'name': 'queja[]'})));
     registro.append($('<td>').append($('<textarea>',{'class': 'form-control','readonly': 'readonly', 'text': $('#anotaciones_tec').val(), 'name': 'anotaciones[]'})));
@@ -2143,8 +2179,8 @@ $(document).on('click', '.registrar_linea', function (e) {
 	}
 	registro.append($('<td>').append(check));
 	check.append($('<label>', {'for': `apl_add[${actual}]`}));
-	registro.append($('<td>').append($('<button>',{'class': 'btn btn-info edit_reg'}).append($('<i>', {'class': 'fa fa-edit'}))));
-	registro.append($('<td>').append($('<button>',{'class': 'btn btn-danger del_reg'}).append($('<i>', {'class': 'fa fa-times'}))));
+	registro.append($('<td>').append($('<button>',{'class': 'edit_reg'}).append($('<i>', {'class': 'fas fa-edit fa-1x'}))));
+	registro.append($('<td>').append($('<button>',{'class': 'del_reg'}).append($('<i>', {'class': 'fa fa-times fa-1x'}))));
 	$('#quejas_diagnostico').append(registro);
 	$('#select_queja').val('');
 	$('#queja').val('');
@@ -2194,7 +2230,7 @@ $(document).on('click', '.tabla_hist tbody tr td button.revisionqueja', function
     .done(function(data) {
         if (data.estatus) {
             $('#select_queja').empty();
-            $('#select_queja').append($('<option>',{'value': '', 'text': 'Selecciona una queja.'}));
+            $('#select_queja').append($('<option>',{'value': '', 'text': 'Select'}));
             $.each(data.data, function(index, val) {
                 $('#select_queja').append($('<option>',{'value': val.id, 'text': val.id, 'data-queja': val.definicion_falla}));
             });

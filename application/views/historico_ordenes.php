@@ -423,8 +423,8 @@
                         <table class="table table-border">
                             <thead>
                                 <tr>
-                                    <th><b>NO. REP.</b></th>
-                                    <th><b>LUZ FALLA ENCENDIDA</b></th>
+                                    <th style="width: 30px;"><b>NO. REP.</b></th>
+                                    <th style="width: 60px;"><b>LUZ FALLA ENCENDIDA</b></th>
                                     <th><b>DTC&nbspTREN&nbspMOTRIZ</b></th>
                                 </tr>
                             </thead>
@@ -575,54 +575,26 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th><b>RETORNO DE PARTES A VENTANILLA BASICO/FECHA</b></th>
-                            <th><b>MECANICO CLAVE</b></th>
-                            <th><b>COSTO O TIEMPO UTILIZADO</b></th>
-                            <th><b>RELOJ CHEC.(INICIO)</b></th>
-                            <th><b>RELOJ CHEC.(TERMINO)</b></th>
+                            <th style="width: 200px;"><b>RETORNO DE PARTES: BASICO/FECHA</b></th>
+                            <th style="width: 70px;"><b>MECANICO CLAVE</b></th>
+                            <th style="width: 60px;"><b>COSTO O TIEMPO UTILIZADO</b></th>
+                            <th style="width: 70px;"><b>RELOJ CHEC.(INICIO)</b></th>
+                            <th style="width: 70px;"><b>RELOJ CHEC.(TERMINO)</b></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="registro_labor">
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <td><input type="text" class="form-control" id="" name="return_partes{}" style="width: 200px;" /></td>
+                        <td><input type="text" class="form-control" id="" name="mecanico_clave{}" style="width: 70px;" /></td>
+                        <td><input type="text" class="form-control" id="" name="costo_tiempo{}" style="width: 60px;" /></td>
+                        <td><input type="text" class="form-control" id="" name="reloj_inicio{}" style="width: 70px;" /></td>
+                        <td><input type="text" class="form-control" id="" name="reloj_termino{}" style="width: 70px;" /></td>
+                        <td>
+                        <i class="fa fa-plus fa-1x nuevo_registro" style="color:green; cursor:pointer;" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                        <i class="fa fa-times fa-1x borrar_registro" style="color:red; cursor:pointer;"></i>
+                        </td>
                         </tr>
                     </tbody>
                 </table>
@@ -775,6 +747,27 @@
       </div>
       <div class="modal-body">
         <?php $this->load->view('modals/revision_queja'); ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal para agregar tipo de garantia-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLabel">Tipo Garantia</button>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLabel">AGREGAR TIPO GARANTIA</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php $this->load->view('modals/tipo_garantia'); ?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
