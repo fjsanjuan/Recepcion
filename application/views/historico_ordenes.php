@@ -627,6 +627,25 @@
             </div>
     </div>
 </div>
+<!-- modal autorizaciones -->
+<div class="modal fade" id="modalautorizaciones" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog modal-lg"  role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 style="color: #4285f4;" class="modal-title" id="exampleModalLabel">AUTORIZACIONES</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php $this->load->view("modals/autorizaciones");?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
 <!-- modal para jefe de taller asignar tecnico-->
 <div class="modal fade" id="asignModal" tabindex="-1" aria-labelledby="asignModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">

@@ -213,21 +213,23 @@ $(document).ready(function() {
 				//action_garantias	= "<button class='btn btn-sm f1863' style='background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
 				action_garantias	="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action_garantias	+="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
+				action_garantias	+="<button type='button' class='btn btn-sm btn-primary' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones'-"+val["id"]+"><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				action_garantias	+= "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action_garantias	+="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar&nbspDocs</button>";
-				action_garantias	+="<button class='btn btn-sm autorizarefacc' style='background:#17A2B8;' id='autorizarefacc-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Autorizar Refacciones</button>";
-				action_garantias	 +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Validar Pregarantía</button>";
+				//action_garantias	+="<button class='btn btn-sm autorizarefacc' style='background:#17A2B8;' id='autorizarefacc-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Autorizar Refacciones</button>";
+				//action_garantias	 +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Validar Pregarantía</button>";
 				//action_garantias	+=`<button type="button" class="btn btn-primary btn-sm refacciones" id='autorizar_refacciones-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Refacciones</button>`;
 				btn_gerente		=``;
 				btn_gerente		+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
-				action_gerente	=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
+				action_gerente	="<button type='button' class='btn btn-sm btn-primary' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones'-"+val["id"]+"><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				btn_jefe       = ``;
 				btn_jefe	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
-				action_jefe    = `<button type="button" class="btn btn-primary btn-sm diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
-				action_jefe		+=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
+				//action_jefe    = `<button type="button" class="btn btn-primary btn-sm diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
+				//action_jefe		+=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
+				action_jefe		="<button type='button' class='btn btn-sm btn-primary' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones'-"+val["id"]+"><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
-				action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
+				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -237,8 +239,8 @@ $(document).ready(function() {
 					btn     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
-				action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Planificador</button>`;
-				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
+				//action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
+				action_tecnico		= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
 				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Reverso</button>`;
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
@@ -1848,7 +1850,7 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 });
 
 //autorizar diagnóstico por parte del jefe de taller
-	$(document).on("click", ".tabla_hist tbody tr td button.diagnostico", function(e){
+	/*$(document).on("click", ".tabla_hist tbody tr td button.diagnostico", function(e){
 		e.preventDefault();
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
@@ -1867,9 +1869,9 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 					swal('Cancelado', '', 'error');
 				}
 		});
-	});
+	});*/
 
-//autorizar pregarantía por parte del asesor
+//abrir pregarantía por parte del asesor
 	$(document).on("click", ".tabla_hist tbody tr td button.pregarantia", function(e){
 		e.preventDefault();
 		var id_orden = $(this).prop("id");
@@ -1915,22 +1917,23 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 				}
 		});
 	});
-// validar pregarantia por admón de garantias
-$(document).on("click", ".tabla_hist tbody tr td button.pregarantia", function(e){
+// autorizar pregarantia
+$(document).on('click', '#autor_preg', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("id");
 	id_orden = id_orden.split("-");
 	id_orden = id_orden[1];
 	localStorage.setItem("hist_id_orden", id_orden);
 	swal({
-		title: '¿Validar Pregarantia?',
+		title: '¿Autorizar Pregarantia?',
 		showCancelButton: true,
-		confirmButtonText: 'Validar',
+		confirmButtonText: 'Autorizar',
 		cancelButtonText: 'Cancelar',
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-				swal('Pregarantia validada.', '', 'success');
+				swal('Pregarantia Autorizada.', '', 'success');
+				$("#pregCheck1").trigger("click");
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
@@ -1946,7 +1949,7 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 	swal({
 		title: '¿Desea autorizar Refacciones?',
 		showCancelButton: true,
-		confirmButtonText: 'autorizar',
+		confirmButtonText: 'Autorizar',
 		cancelButtonText: 'Cancelar',
 		type: 'info'
 		}).then((result) => {
@@ -1957,8 +1960,8 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 			}
 	});
 });
-// autorizar Adicional (ADD) por parte de Gerente
-$(document).on("click", ".tabla_hist tbody tr td button.add", function(e){
+// autorizar Adicional (ADD) por parte jefe taller y de Gerente
+$(document).on('click', '#autor_add', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("id");
 	id_orden = id_orden.split("-");
@@ -1967,12 +1970,13 @@ $(document).on("click", ".tabla_hist tbody tr td button.add", function(e){
 	swal({
 		title: '¿Desea autorizar adicional?',
 		showCancelButton: true,
-		confirmButtonText: 'autorizar',
+		confirmButtonText: 'Autorizar',
 		cancelButtonText: 'Cancelar',
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
 				swal('Adicional autorizada.', '', 'success');
+				$("#addCheck1").trigger("click");
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
