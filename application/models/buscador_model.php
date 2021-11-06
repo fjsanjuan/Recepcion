@@ -2972,12 +2972,14 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->insert("archivo", $archivo);
 				$this->db->trans_complete();
-				if($this->db->trans_status() == true)
+				if($this->db->trans_status() == FALSE)
 				{
-					$creado = true;
+					$this->db->trans_rollback();
+					$creado = false;
 				}else
 				{
-					$creado = false;
+					$this->db->trans_commit();
+					$creado = true;
 				}
 			$creado = true;
 		}else {
@@ -3035,12 +3037,14 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->insert("archivo", $archivo);
 				$this->db->trans_complete();
-				if($this->db->trans_status() == true)
-				{
-					$creado = true;
-				}else
+				if($this->db->trans_status() === FALSE)
 				{
 					$creado = false;
+					$this->db->trans_rollback();
+				}else
+				{
+					$this->db->trans_commit();
+					$creado = true;
 				}
 			$creado = true;
 		}else {
@@ -3055,13 +3059,15 @@ class Buscador_Model extends CI_Model{
 		$this->db->update('orden_servicio', ['movimiento' => $id_orden_servicio]);
 		$this->db->trans_complete();
 
-		if( $this->db->trans_status() == true)
-		{
-			$response["estatus"] = true;
-			$response["update"] = $this->db->affected_rows() > 0;
-		}else
+		if( $this->db->trans_status() === FALSE)
 		{
 			$response["estatus"] = false;
+			$response["update"] = $this->db->affected_rows() > 0;
+			$this->db->trans_rollback();
+		}else
+		{
+			$this->db->trans_commit();
+			$response["estatus"] = true;
 			$response["update"] = $this->db->affected_rows() > 0;
 		}
 		return $response;
@@ -3084,12 +3090,14 @@ class Buscador_Model extends CI_Model{
 		$this->db->where('id', $id_archivo);
 		$this->db->update('archivo', ['eliminado' => 1]);
 		$this->db->trans_complete();
-		if ($this->db->trans_status() == true) {
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Archivo eliminado correctamente.';
-		}else {
+		if ($this->db->trans_status() === FALSE) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Archivo inexistente.';
+			$this->db->trans_rollback();
+		}else {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Archivo eliminado correctamente.';
+			$this->db->trans_commit();
 		}
 		return $response;
 	}
