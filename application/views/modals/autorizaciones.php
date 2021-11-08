@@ -8,9 +8,7 @@
         					<th>Nombre</th>
         					<th>Autorizado</th>
         					<th>Autorizar y Firmar</th>
-                            <?php if($this->session->userdata["logged_in"]["perfil"] == 7): ?>
-                                <th><i class="fa fa-times"></i></th>
-                            <?php endif; ?>
+                                <th>Cancelar</th>
         				</tr>
         			</thead>
         			<tbody id="hacer_autorizaciones">
@@ -18,24 +16,30 @@
                             <td>Pregarantia</td>
                             <td>
                             <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="pregCheck1">
+                            <input class="form-check-input" type="checkbox" id="pregCheck1" disabled>
                             <label class="form-check-label" for="pregCheck1"></label>
                             </div>
                             </td>
                             <td>
-                            <button type="button" class="btn btn-success" id="autor_preg">Autorizar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" id="autor_preg">☑</button>
+                            </td>
+                            <td>
+                            <button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_preg">X</button>
                             </td>
                         </tr>
         				<tr>
                             <td>Adicional (ADD)</td>
                             <td>
                             <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="addCheck1">
+                            <input class="form-check-input" type="checkbox" id="addCheck1" disabled>
                             <label class="form-check-label" for="addCheck1"></label>
                             </div>
                             </td>
                             <td>
-                            <button type="button" class="btn btn-success" id="autor_add">Autorizar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" id="autor_add">☑</button>
+                            </td>
+                            <td>
+                            <button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_add">X</button>
                             </td>
                         </tr>
         			</tbody>

@@ -3101,4 +3101,39 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function autorizar($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas registradas.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				$this->db->update('firma_electronica', ['firma_pregarantia' => $firma['firma_electronica']]);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo autorizar firma.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	public function obtenerFirmas($id_orden)
+	{
+		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+	}
 }

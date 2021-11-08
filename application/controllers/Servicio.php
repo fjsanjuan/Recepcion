@@ -2008,4 +2008,26 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function autorizar()
+	{
+		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->autorizar($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function obtenerFirmas($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "orden no válida.";
+		}else {
+			$response['estatus'] = true;
+			$response['data'] = $this->buscador_model->obtenerFirmas($id_orden);
+		}
+		echo json_encode($response);
+	}
 }
