@@ -2008,36 +2008,69 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	public function autorizar()
+	public function autorizar_pregarantia()
 	{
 		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
 		if ($id_orden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'orden no valida';
 		}else {
-			$response = $this->buscador_model->autorizar($id_orden);
+			$response = $this->buscador_model->autorizar_pregarantia($id_orden);
 		}
 		echo json_encode($response);
 	}
-	public function obtenerFirmas($id_orden = null)
+	public function obtenerFirmasPregarantia($id_orden = null)
 	{
 		if ($id_orden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = "orden no válida.";
 		}else {
 			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmas($id_orden);
+			$response['data'] = $this->buscador_model->obtenerFirmasPregarantia($id_orden);
 		}
 		echo json_encode($response);
 	}
-	public function cancelar_firma()
+	public function cancelar_firma_pregarantia()
 		{
 			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
 			if ($id_orden == null) {
 				$response['estatus'] = false;
 				$response['mensaje'] = 'no existe autorizacion';
 			}else {
-				$response = $this->buscador_model->cancelar_firma($id_orden);
+				$response = $this->buscador_model->cancelar_firma_pregarantia($id_orden);
+			}
+			echo json_encode($response);
+		}
+	public function autorizar_adicional()
+	{
+		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->autorizar_adicional($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function obtenerFirmaAdd($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "orden no válida.";
+		}else {
+			$response['estatus'] = true;
+			$response['data'] = $this->buscador_model->obtenerFirmaAdd($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function cancelar_firma_adicional()
+		{
+			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
+			if ($id_orden == null) {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'no existe autorizacion';
+			}else {
+				$response = $this->buscador_model->cancelar_firma_adicional($id_orden);
 			}
 			echo json_encode($response);
 		}

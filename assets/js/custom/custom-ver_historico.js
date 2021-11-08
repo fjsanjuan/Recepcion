@@ -1935,7 +1935,7 @@ $(document).on('click', '#autor_preg', function(e){
 			if (result.value) {
 				$.ajax({
 					cache: false,
-					url: base_url+ "index.php/servicio/autorizar/",
+					url: base_url+ "index.php/servicio/autorizar_pregarantia/",
 					contentType: false,
 					processData: false,
 					type: 'POST',
@@ -1985,7 +1985,8 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	$('#addCheck1').prop('checked', false);
 	$.ajax({
 		cache: false,
-		url: base_url+ "index.php/servicio/obtenerFirmas/"+id_orden,
+		url: base_url+ "index.php/servicio/obtenerFirmasPregarantia/"+id_orden,
+		url: base_url+ "index.php/servicio/obtenerFirmaAdd/"+id_orden,
 		contentType: false,
 		processData: false,
 		type: 'GET',
@@ -2000,6 +2001,10 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 					$('#autor_preg').prop('disabled', true);
 					$('#pregCheck1').prop('checked', true);
 					$('#cancelar_preg').css('display', 'inline-block');
+					
+					$('#autor_add').prop('disabled', true);
+					$('#addCheck1').prop('checked', true);
+					$('#cancelar_add').css('display', 'inline-block');
 				}
 			}
 		}else {
@@ -2029,7 +2034,7 @@ $(document).on('click', '#cancelar_preg', function(e){
 			if (result.value) {
 				$.ajax({
 					cache: false,
-					url: base_url+ "index.php/servicio/cancelar_firma/",
+					url: base_url+ "index.php/servicio/cancelar_firma_pregarantia/",
 					contentType: false,
 					processData: false,
 					type: 'POST',
@@ -2083,21 +2088,47 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 // autorizar Adicional (ADD) por parte jefe taller y de Gerente
 $(document).on('click', '#autor_add', function(e){
 	e.preventDefault();
-	var id_orden = $(this).prop("id");
-	id_orden = id_orden.split("-");
-	id_orden = id_orden[1];
+	var id_orden = $(this).prop("data-orden");
+	console.log('id orden', id_orden);
 	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
 	swal({
-		title: '¿Desea autorizar adicional?',
+		title: '¿Autorizar Adicional?',
 		showCancelButton: true,
 		confirmButtonText: 'Autorizar',
 		cancelButtonText: 'Cancelar',
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-				swal('Adicional autorizada.', '', 'success');
-				$("#addCheck1").prop("checked", true);
-				document.getElementById("autor_add").disabled = true;
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/autorizar_adicional/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Adicional autorizada.', '', 'success');
+						$("#addCheck1").prop("checked", true);
+						$("#addCheck1").css('display', 'inline-block');
+						document.getElementById("autor_add").disabled = true;
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al autorizar adicional');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
@@ -2106,10 +2137,10 @@ $(document).on('click', '#autor_add', function(e){
 
 $(document).on('click', '#cancelar_add', function(e){
 	e.preventDefault();
-	var id_orden = $(this).prop("id");
-	id_orden = id_orden.split("-");
-	id_orden = id_orden[1];
+	var id_orden = $(this).prop("data-orden");
 	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
 	swal({
 		title: '¿Desea cancelar adicional?',
 		showCancelButton: true,
@@ -2118,9 +2149,33 @@ $(document).on('click', '#cancelar_add', function(e){
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-				swal('Adicional cancelada.', '', 'success');
-				$("#addCheck1").prop("checked", false);
-				document.getElementById("autor_add").disabled = false;
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/cancelar_firma_adicional/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Adicional cancelada.', '', 'success');
+						$("#addCheck1").prop("checked", false);
+						document.getElementById("autor_add").disabled = false;
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al cancelar adicional');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}

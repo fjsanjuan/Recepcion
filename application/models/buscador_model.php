@@ -3101,7 +3101,7 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function autorizar($id_orden)
+	public function autorizar_pregarantia($id_orden)
 	{
 		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
 		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
@@ -3132,12 +3132,12 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function obtenerFirmas($id_orden)
+	public function obtenerFirmasPregarantia($id_orden)
 	{
 		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
 	}
 
-	public function cancelar_firma($id_orden)
+	public function cancelar_firma_pregarantia($id_orden)
 	{
 		$existe_firma = $this->db->select("*")
 								 ->from("firma_electronica")
@@ -3150,6 +3150,67 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
 				$this->db->update('firma_electronica', ['firma_pregarantia' => null]);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
+			}
+		return $response;
+	}
+	public function autorizar_adicional($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas registradas.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				$this->db->update('firma_electronica', ['firma_adicional' => $firma['firma_electronica']]);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo autorizar firma.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	public function obtenerFirmaAdd($id_orden)
+	{
+		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+	}
+
+	public function cancelar_firma_adicional($id_orden)
+	{
+		$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas para cancelar.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				$this->db->update('firma_electronica', ['firma_adicional' => null]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
