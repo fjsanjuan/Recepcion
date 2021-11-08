@@ -1949,6 +1949,7 @@ $(document).on('click', '#autor_preg', function(e){
 					if (data.estatus) {
 						swal('Pregarantia autorizada.', '', 'success');
 						$("#pregCheck1").prop("checked", true);
+						$("#pregCheck1").css('display', 'inline-block');
 						document.getElementById("autor_preg").disabled = true;
 					}else{
 						toastr.warning(data.mensaje);
@@ -1978,8 +1979,8 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	
 	$('#autor_preg').prop('disabled', false);
 	$('#autor_add').prop('disabled', false);
-	$('#cancelar_preg').prop('disabled', false);
-	$('#cancelar_add').prop('disabled', false);
+	$('#cancelar_preg').css('display', 'none');
+	$('#cancelar_add').css('display', 'none');
 	$('#pregCheck1').prop('checked', false);
 	$('#addCheck1').prop('checked', false);
 	$.ajax({
@@ -1998,6 +1999,7 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 				if(data.data[0].firma_pregarantia != null){
 					$('#autor_preg').prop('disabled', true);
 					$('#pregCheck1').prop('checked', true);
+					$('#cancelar_preg').css('display', 'inline-block');
 				}
 			}
 		}else {
