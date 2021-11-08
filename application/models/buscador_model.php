@@ -3136,4 +3136,30 @@ class Buscador_Model extends CI_Model{
 	{
 		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
 	}
+
+	public function cancelar_firma($id_orden)
+	{
+		$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas para cancelar.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				$this->db->update('firma_electronica', ['firma_pregarantia' => null]);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
+			}
+		return $response;
+	}
 }

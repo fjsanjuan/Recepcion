@@ -2013,10 +2013,10 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 
 $(document).on('click', '#cancelar_preg', function(e){
 	e.preventDefault();
-	var id_orden = $(this).prop("id");
-	id_orden = id_orden.split("-");
-	id_orden = id_orden[1];
+	var id_orden = $(this).prop("data-orden");
 	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
 	swal({
 		title: '¿Desea cancelar pregarantia?',
 		showCancelButton: true,
@@ -2025,9 +2025,33 @@ $(document).on('click', '#cancelar_preg', function(e){
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-				swal('Pregarantia cancelada.', '', 'success');
-				$("#pregCheck1").prop("checked", false);
-				document.getElementById("autor_preg").disabled = false;
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/cancelar_firma/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Pregarantia cancelada.', '', 'success');
+						$("#pregCheck1").prop("checked", false);
+						document.getElementById("autor_preg").disabled = false;
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al cancelar pregarantia');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
