@@ -3115,7 +3115,7 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_pregarantia' => $firma['firma_electronica']]);
+				$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => $firma['firma_electronica']]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
 					$this->db->trans_rollback();
@@ -3149,7 +3149,7 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_pregarantia' => null]);
+				$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => null]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -3176,7 +3176,7 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_adicional' => $firma['firma_electronica']]);
+				$this->db->update('firma_electronica', ['firma_adicionalJefe' => $firma['firma_electronica']]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
 					$this->db->trans_rollback();
@@ -3210,7 +3210,7 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_adicional' => null]);
+				$this->db->update('firma_electronica', ['firma_adicionalJefe' => null]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();

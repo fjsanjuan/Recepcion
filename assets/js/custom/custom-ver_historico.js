@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -1998,11 +1998,11 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	}).done(function (data) {
 		if (data.estatus) {
 			if (data.data.length > 0) {
-				if(data.data[0].firma_pregarantia != null){
+				if(data.data[0].firma_pregarantiaJefe != null){
 					$('#autor_preg').prop('disabled', true);
 					$('#pregCheck1').prop('checked', true);
 					$('#cancelar_preg').css('display', 'inline-block');
-					
+			
 					$('#autor_add').prop('disabled', true);
 					$('#addCheck1').prop('checked', true);
 					$('#cancelar_add').css('display', 'inline-block');
