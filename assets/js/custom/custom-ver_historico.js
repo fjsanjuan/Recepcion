@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -1952,6 +1952,7 @@ $(document).on('click', '#autor_preg', function(e){
 						$("#pregCheck1").prop("checked", true);
 						$("#pregCheck1").css('display', 'inline-block');
 						document.getElementById("autor_preg").disabled = true;
+						$("#cancelar_preg").css('display', 'inline-block');
 					}else{
 						toastr.warning(data.mensaje);
 					}
@@ -2002,7 +2003,32 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 					$('#autor_preg').prop('disabled', true);
 					$('#pregCheck1').prop('checked', true);
 					$('#cancelar_preg').css('display', 'inline-block');
-			
+
+				}
+			}
+		}else {
+			toast.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toast.warning("No se pudo obtener información de las firmas");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaAdd/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_adicionalJefe != null){
 					$('#autor_add').prop('disabled', true);
 					$('#addCheck1').prop('checked', true);
 					$('#cancelar_add').css('display', 'inline-block');
@@ -2049,6 +2075,7 @@ $(document).on('click', '#cancelar_preg', function(e){
 					if (data.estatus) {
 						swal('Pregarantia cancelada.', '', 'success');
 						$("#pregCheck1").prop("checked", false);
+						$("#cancelar_preg").css('display', 'none');
 						document.getElementById("autor_preg").disabled = false;
 					}else{
 						toastr.warning(data.mensaje);
@@ -2120,6 +2147,7 @@ $(document).on('click', '#autor_add', function(e){
 						$("#addCheck1").prop("checked", true);
 						$("#addCheck1").css('display', 'inline-block');
 						document.getElementById("autor_add").disabled = true;
+						$("#cancelar_add").css('display', 'inline-block');
 					}else{
 						toastr.warning(data.mensaje);
 					}
@@ -2166,6 +2194,7 @@ $(document).on('click', '#cancelar_add', function(e){
 					if (data.estatus) {
 						swal('Adicional cancelada.', '', 'success');
 						$("#addCheck1").prop("checked", false);
+						$("#cancelar_add").css('display', 'none');
 						document.getElementById("autor_add").disabled = false;
 					}else{
 						toastr.warning(data.mensaje);
@@ -2466,6 +2495,7 @@ function recalcular_lineas() {
 		$(this).closest('check_add').find('input:checkbox').prop({'name': `apl_add[${index+1}]`, 'name': `apl_add[${index+1}]`});
 		$(this).closest('check_add').find('label').prop('for', `apl_add[${index+1}]`);
 	});
+
 }
 
 $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', function(e) {
@@ -2521,6 +2551,4 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 	.always(function() {
 		$("#loading_spin").hide();
 	});
-	
-	
 });
