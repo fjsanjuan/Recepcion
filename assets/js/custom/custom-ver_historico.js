@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -210,6 +210,7 @@ $(document).ready(function() {
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
 				btn_garantias	=``;
 				btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				//action_garantias	= "<button class='btn btn-sm f1863' style='background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
 				action_garantias	="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action_garantias	+="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
@@ -2467,3 +2468,59 @@ function recalcular_lineas() {
 	});
 }
 
+$(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', function(e) {
+	e.preventDefault();
+	$('#tbl-aut').empty();
+	let id_orden_servicio = $(this).prop('id');
+	id_orden_servicio = id_orden_servicio.split('-')[1];
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_firmas/${id_orden_servicio}`,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function () {
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(data) {
+		if (data.estatus) {
+			let registro = undefined;
+			console.log('daa', data.data);
+			for (index in data.data) {
+				console.log(index);
+				registro = $("<tr>");
+				registro.append($("<td>",{"text": index}));
+				var checkbox = $('<div>', {'class': 'form-check'});
+                if (data.data[index]) {
+                	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox','checked': 'checked', 'disabled': 'disabled', 'id': `aut-${index}`}));
+                	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${index}`}));
+                }else{
+                	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox', 'disabled': 'disabled', 'id': `aut-${index}`}));
+                	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${index}`}));
+                }
+				registro.append($("<td>").append(checkbox));
+				registro.append($("<td>"));
+				registro.appendTo('#tbl-aut');
+			}
+			if (registro === undefined) {
+				registro = $("<tr>");
+				registro.append($("<td>",{"class": "text-danger text-center", "colspan": 3, "text": "No existen firmas para la orden de servicio."}));
+				registro.appendTo('#tbl-aut');
+			}else {
+				$('#autorizacionesModal').modal('toggle');
+			}
+		}else {
+			toastr.info(data.mensaje);
+		}
+	})
+	.fail(function(error) {
+		registro = $("<tr>");
+		registro.append($("<td>",{"class": "text-danger text-center", "colspan": 3, "text": "No existen firmas para la orden de servicio."}));
+		registro.appendTo('#tbl-aut');
+		toastr.warning('Hubo un problema al tratar de obtener la información de las firmas.');
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	
+	
+});

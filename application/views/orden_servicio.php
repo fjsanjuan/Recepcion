@@ -2059,9 +2059,8 @@
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <blockquote class="blockquote bq-primary htext">Condiciones Ambientales</blockquote>
-                        <div class="form-check">
-                            <label class="form-check-label" for="temperatura">Temperatura ambiente</label>
-                            <input type="range" list="temperatura_list" class="form-check-input" name="temperatura[]" value="0"> 
+                            <label class="form-label" for="temperatura">Temperatura ambiente</label>
+                            <input type="range" list="temperatura_list" class="form-range" name="temperatura[]" value="0"> 
                             <datalist id="temperatura_list">
                                 <option value="-10" label="-10°C">
                                 <option value="0" label="0°C">
@@ -2072,7 +2071,6 @@
                                 <option value="50" label="50°C">
                                 <option value="60" label="60°C">
                             </datalist>
-                        </div>
                         <div class="form-check">
                             <label class="form-check-label" for="">Húmedad</label><br>
                                 <div class="form-check form-check-inline">

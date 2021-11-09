@@ -3223,4 +3223,17 @@ class Buscador_Model extends CI_Model{
 			}
 		return $response;
 	}
+	public function obtener_firmas($id_orden)
+	{
+		$result = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL, 1, 0) AS "ADD(Adicional)"')->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get();
+		if ($result->num_rows() > 0) {
+			$response['estatus'] = true;
+			$response['data'] = $result->row_array();
+			$response['mensaje'] = "Firmas obtenidas con éxito.";
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "No hay firmar para esta orden de serivicio.";
+		}
+		return $response;
+	}
 }

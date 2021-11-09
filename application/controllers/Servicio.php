@@ -2074,4 +2074,14 @@ class Servicio extends CI_Controller {
 			}
 			echo json_encode($response);
 		}
+	public function obtener_firmas($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "orden no válida.";
+		}else {
+			$response = $this->buscador_model->obtener_firmas($id_orden);
+		}
+		echo json_encode($response);
+	}
 }

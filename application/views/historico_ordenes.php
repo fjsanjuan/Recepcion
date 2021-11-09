@@ -774,6 +774,26 @@
     </div>
   </div>
 </div>
+<!-- modal para revision las autorizaciones-->
+<div class="modal fade" id="autorizacionesModal" tabindex="-1" aria-labelledby="autorizacionesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="autorizacionesModalLabel">REVISIÓN DE AUTORIZACIONES</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php $this->load->view('modals/validar_autorizaciones'); ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- modal lineas de reparacion -->
 <!--<div id="classModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="lineareparacion" aria-hidden="true">
