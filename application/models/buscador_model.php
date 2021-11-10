@@ -3104,6 +3104,7 @@ class Buscador_Model extends CI_Model{
 	public function autorizar_pregarantia($id_orden)
 	{
 		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
 		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 			$existe_firma = $this->db->select("*")
 								 ->from("firma_electronica")
@@ -3115,7 +3116,15 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => $firma['firma_electronica']]);
+				if ($perfil == 4){
+					$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => $firma['firma_electronica']]);
+				}
+				if ($perfil == 8){
+					$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => $firma['firma_electronica']]);
+				}
+				if ($perfil == 7){
+					$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => $firma['firma_electronica']]);
+				}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
 					$this->db->trans_rollback();
@@ -3139,6 +3148,7 @@ class Buscador_Model extends CI_Model{
 
 	public function cancelar_firma_pregarantia($id_orden)
 	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
 		$existe_firma = $this->db->select("*")
 								 ->from("firma_electronica")
 								 ->where("id_orden_servicio", $id_orden)
@@ -3149,7 +3159,9 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => null]);
+				if($perfil == 4){$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => null]);}
+				if($perfil == 8){$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => null]);}
+				if($perfil == 7){$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -3162,9 +3174,11 @@ class Buscador_Model extends CI_Model{
 			}
 		return $response;
 	}
+
 	public function autorizar_adicional($id_orden)
 	{
 		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
 		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 			$existe_firma = $this->db->select("*")
 								 ->from("firma_electronica")
@@ -3176,7 +3190,15 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 4){
 				$this->db->update('firma_electronica', ['firma_adicionalJefe' => $firma['firma_electronica']]);
+				}
+				if($perfil == 8){
+				$this->db->update('firma_electronica', ['firma_adicionalGerente' => $firma['firma_electronica']]);
+				}
+				if($perfil == 7){
+				$this->db->update('firma_electronica', ['firma_adicionalAdmon' => $firma['firma_electronica']]);
+				}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
 					$this->db->trans_rollback();
@@ -3193,6 +3215,7 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	
 	public function obtenerFirmaAdd($id_orden)
 	{
 		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
@@ -3200,6 +3223,7 @@ class Buscador_Model extends CI_Model{
 
 	public function cancelar_firma_adicional($id_orden)
 	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
 		$existe_firma = $this->db->select("*")
 								 ->from("firma_electronica")
 								 ->where("id_orden_servicio", $id_orden)
@@ -3210,7 +3234,9 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
-				$this->db->update('firma_electronica', ['firma_adicionalJefe' => null]);
+				if($perfil == 4){$this->db->update('firma_electronica', ['firma_adicionalJefe' => null]);}
+				if($perfil == 8){$this->db->update('firma_electronica', ['firma_adicionalGerente' => null]);}
+				if($perfil == 7){$this->db->update('firma_electronica', ['firma_adicionalAdmon' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();

@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -1918,7 +1918,7 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 				}
 		});
 	});
-// autorizar pregarantia
+// autorizar pregarantia por jefe taller
 $(document).on('click', '#autor_preg', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
@@ -1966,7 +1966,7 @@ $(document).on('click', '#autor_preg', function(e){
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
-	});
+		});
 });
 
 $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', function (e) {
@@ -1974,6 +1974,7 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
     id_orden = id_orden.split('-')[1];
 	e.preventDefault();
 	console.log('id', id_orden);
+	if(id_perfil == 4){$('#lineAdicional').hide();}
 	$('#autor_preg').prop('data-orden', id_orden);
 	$('#autor_add').prop('data-orden', id_orden);
 	$('#cancelar_preg').prop('data-orden', id_orden);
@@ -1988,7 +1989,6 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	$.ajax({
 		cache: false,
 		url: base_url+ "index.php/servicio/obtenerFirmasPregarantia/"+id_orden,
-		url: base_url+ "index.php/servicio/obtenerFirmaAdd/"+id_orden,
 		contentType: false,
 		processData: false,
 		type: 'GET',
@@ -1999,7 +1999,27 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	}).done(function (data) {
 		if (data.estatus) {
 			if (data.data.length > 0) {
-				if(data.data[0].firma_pregarantiaJefe != null){
+				if(data.data[0].firma_pregarantiaJefe != null && id_perfil == 4){
+					$('#autor_preg').prop('disabled', true);
+					$('#pregCheck1').prop('checked', true);
+					$('#cancelar_preg').css('display', 'inline-block');
+
+				}
+			}
+		}
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_pregarantiaGerente != null && id_perfil == 8){
+					$('#autor_preg').prop('disabled', true);
+					$('#pregCheck1').prop('checked', true);
+					$('#cancelar_preg').css('display', 'inline-block');
+
+				}
+			}
+		}
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_pregarantiaAdmon != null && id_perfil == 7){
 					$('#autor_preg').prop('disabled', true);
 					$('#pregCheck1').prop('checked', true);
 					$('#cancelar_preg').css('display', 'inline-block');
@@ -2007,10 +2027,10 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 				}
 			}
 		}else {
-			toast.warning(data.mensaje);
+			toastr.warning(data.mensaje);
 		}
 	}).fail(function (error) {
-		toast.warning("No se pudo obtener información de las firmas");
+		toastr.warning("No se pudo obtener información de las firmas");
 	})
 	.always(function() {
 		$("#loading_spin").hide();
@@ -2028,17 +2048,35 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	}).done(function (data) {
 		if (data.estatus) {
 			if (data.data.length > 0) {
-				if(data.data[0].firma_adicionalJefe != null){
+				if(data.data[0].firma_adicionalJefe != null && id_perfil == 4){
+					$('#autor_add').prop('disabled', true);
+					$('#addCheck1').prop('checked', true);
+					$('#cancelar_add').css('display', 'inline-block');
+				}
+			}
+		}
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_adicionalGerente != null && id_perfil == 8){
+					$('#autor_add').prop('disabled', true);
+					$('#addCheck1').prop('checked', true);
+					$('#cancelar_add').css('display', 'inline-block');
+				}
+			}
+		}
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_adicionalAdmon != null && id_perfil == 7){
 					$('#autor_add').prop('disabled', true);
 					$('#addCheck1').prop('checked', true);
 					$('#cancelar_add').css('display', 'inline-block');
 				}
 			}
 		}else {
-			toast.warning(data.mensaje);
+			toastr.warning(data.mensaje);
 		}
 	}).fail(function (error) {
-		toast.warning("No se pudo obtener información de las firmas");
+		toastr.warning("No se pudo obtener información de las firmas");
 	})
 	.always(function() {
 		$("#loading_spin").hide();
@@ -2090,8 +2128,9 @@ $(document).on('click', '#cancelar_preg', function(e){
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
+		});
 	});
-});
+
 // autoriza refacciones admón de garantias
 $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", function(e){
 	e.preventDefault();
@@ -2113,7 +2152,7 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 			}
 	});
 });
-// autorizar Adicional (ADD) por parte jefe taller y de Gerente
+// autorizar Adicional (ADD) por parte jefe taller 
 $(document).on('click', '#autor_add', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
@@ -2161,7 +2200,7 @@ $(document).on('click', '#autor_add', function(e){
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
-	});
+		});
 });
 
 $(document).on('click', '#cancelar_add', function(e){
@@ -2209,9 +2248,8 @@ $(document).on('click', '#cancelar_add', function(e){
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
+		});	
 	});
-});
-
 //Cambio para adjuntar pdf
 $(document).on("change", "#oasisInput", function(event){
     optimizar_PDF(event);
