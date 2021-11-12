@@ -42,6 +42,21 @@
                             <button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_add">X</button>
                             </td>
                         </tr>
+						<tr id="carroParado">
+                            <td>Carro Parado</td>
+                            <td>
+                            <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cpCheck1" disabled>
+                            <label class="form-check-label" for="cpCheck1"></label>
+                            </div>
+                            </td>
+                            <td>
+                            <button type="button" class="btn btn-outline-success btn-sm" id="autor_cp">☑</button>
+                            </td>
+                            <td>
+                            <button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_cp">X</button>
+                            </td>
+                        </tr>
         			</tbody>
         		</table>
         	</div>

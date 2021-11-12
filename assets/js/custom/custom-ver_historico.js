@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -2009,15 +2009,22 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	e.preventDefault();
 	console.log('id', id_orden);
 	if(id_perfil == 4){$('#lineAdicional').hide();}
+	if(id_perfil == 8){$('#carroParado').hide();}
+	if(id_perfil == 7){$('#carroParado').hide();}
+	$('#autor_cp').prop('data-orden', id_orden);
 	$('#autor_preg').prop('data-orden', id_orden);
 	$('#autor_add').prop('data-orden', id_orden);
+	$('#cancelar_cp').prop('data-orden', id_orden);
 	$('#cancelar_preg').prop('data-orden', id_orden);
 	$('#cancelar_add').prop('data-orden', id_orden);
 	
 	$('#autor_preg').prop('disabled', false);
+	$('#autor_cp').prop('disabled', false);
 	$('#autor_add').prop('disabled', false);
+	$('#cancelar_cp').css('display', 'none');
 	$('#cancelar_preg').css('display', 'none');
 	$('#cancelar_add').css('display', 'none');
+	$('#cpCheck1').prop('checked', false);
 	$('#pregCheck1').prop('checked', false);
 	$('#addCheck1').prop('checked', false);
 	$.ajax({
@@ -2279,6 +2286,113 @@ $(document).on('click', '#cancelar_add', function(e){
 				.always(function() {
 					$("#loading_spin").hide();
 				});
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});	
+	});
+	//carro parado
+$(document).on('click', '#autor_cp', function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("data-orden");
+	console.log('id orden', id_orden);
+	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
+	swal({
+		title: '¿Autorizar Carro parado?',
+		showCancelButton: true,
+		confirmButtonText: 'Autorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+			swal('CP autorizado.', '', 'success');
+						$("#cpCheck1").prop("checked", true);
+						$("#cpCheck1").css('display', 'inline-block');
+						document.getElementById("autor_cp").disabled = true;
+						$("#cancelar_cp").css('display', 'inline-block');
+				/*$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/autorizar_adicional/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Adicional autorizada.', '', 'success');
+						$("#addCheck1").prop("checked", true);
+						$("#addCheck1").css('display', 'inline-block');
+						document.getElementById("autor_add").disabled = true;
+						$("#cancelar_add").css('display', 'inline-block');
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al autorizar adicional');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});*/
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+});
+
+$(document).on('click', '#cancelar_cp', function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("data-orden");
+	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
+	swal({
+		title: '¿Desea cancelar carro parado?',
+		showCancelButton: true,
+		confirmButtonText: 'Cancelar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				swal('Carro Parado cancelada.', '', 'success');
+						$("#cpCheck1").prop("checked", false);
+						$("#cancelar_cp").css('display', 'none');
+						document.getElementById("autor_cp").disabled = false;
+				/*$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/cancelar_firma_adicional/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Adicional cancelada.', '', 'success');
+						$("#addCheck1").prop("checked", false);
+						$("#cancelar_add").css('display', 'none');
+						document.getElementById("autor_add").disabled = false;
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al cancelar adicional');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});*/
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
