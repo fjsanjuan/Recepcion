@@ -3258,7 +3258,7 @@ class Buscador_Model extends CI_Model{
 			$response['mensaje'] = "Firmas obtenidas con éxito.";
 		} else {
 			$response['estatus'] = false;
-			$response['mensaje'] = "No hay firmar para esta orden de serivicio.";
+			$response['mensaje'] = "No hay firmas para esta orden de serivicio.";
 		}
 		return $response;
 	}

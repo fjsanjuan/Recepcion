@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -222,14 +222,17 @@ $(document).ready(function() {
 				//action_garantias	+=`<button type="button" class="btn btn-primary btn-sm refacciones" id='autorizar_refacciones-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Refacciones</button>`;
 				btn_gerente		=``;
 				btn_gerente		+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				btn_gerente 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				action_gerente	="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				btn_jefe       = ``;
 				btn_jefe	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				btn_jefe 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				//action_jefe    = `<button type="button" class="btn btn-primary btn-sm diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
 				//action_jefe		+=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
 				action_jefe		="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
@@ -245,6 +248,7 @@ $(document).ready(function() {
 				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Reverso</button>`;
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
+				btn		+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				btn     += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action  = "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
@@ -307,6 +311,7 @@ $(document).ready(function() {
 						val["anio_modelo_v"],
 						btn_tecnico,
 						action_tecnico,
+						btn_presupuesto,
 						"",
 						btn_comentario
 					]);
@@ -1880,45 +1885,72 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
 		localStorage.setItem("hist_id_orden", id_orden);
-		swal({
-			title: 'Abrir Pregarantía',
-			showCancelButton: true,
-			confirmButtonText: 'Abrir',
-			cancelButtonText: 'Cancelar',
-			type: 'info'
-			}).then((result) => {
-				if (result.value) {
-					$.ajax({
-						url: `${base_url}index.php/servicio/abrir_pregarantia`,
-						type: 'POST',
-						dataType: 'json',
-						data: {id_orden_servicio: id_orden},
-						beforeSend: function(){
-							toastr.info("Abriendo Pregarantía.");
-							$("#loading_spin").show();
-						}
-					})
-					.done(function(data) {
-						if (data.estatus) {
-							swal('Pregarantía abierta.', '', 'success');
-							$("#btn_mostrar").trigger("click");
-						}else{
+		$.ajax({
+			cache: false,
+			url: base_url+ "index.php/servicio/obtenerFirmasPregarantia/"+id_orden,
+			contentType: false,
+			processData: false,
+			type: 'GET',
+			dataType: 'json',
+			beforeSend: function(){
+				$("#loading_spin").show();
+			}
+		}).done(function (data) {
+			if (data.estatus) {
+				if (data.data.length > 0) {
+					if(data.data[0].firma_pregarantiaJefe != null){
+						swal({
+							title: 'Abrir Pregarantía',
+							showCancelButton: true,
+							confirmButtonText: 'Abrir',
+							cancelButtonText: 'Cancelar',
+							type: 'info'
+							}).then((result) => {
+								if (result.value) {
+						$.ajax({
+							url: `${base_url}index.php/servicio/abrir_pregarantia`,
+							type: 'POST',
+							dataType: 'json',
+							data: {id_orden_servicio: id_orden},
+							beforeSend: function(){
+								toastr.info();
+								$("#loading_spin").show();
+							}
+						})
+						.done(function(data) {
+							if (data.estatus) {
+								swal('Pregarantía abierta.', '', 'success');
+								$("#btn_mostrar").trigger("click");
+									
+							}else{
+								toastr.warning('Pregarantia no autorizada para abrir');
+							}
+						})
+						.fail(function() {
 							toastr.warning('Hubo un error al abrir la pregarantía');
-						}
-					})
-					.fail(function() {
-						toastr.warning('Hubo un error al abrir la pregarantía');
-					})
-					.always(function() {
-						$("#loading_spin").hide();
-					});
-					
-					//swal('Pregarantía abierta.', '', 'success');
-				} else if (result.dismiss) {
-					swal('Cancelado', '', 'error');
-				}
+						})
+						.always(function() {
+							$("#loading_spin").hide();
+						});
+					}
+				});
+			}else{
+				toastr.info('No existe autorizacion para abrir pregarantia.')
+			}
+		}else{
+			toastr.info('No existe autorización.')
+		}
+	}else {
+				toastr.warning('No existe autorizacion de pregarantia.');
+			}
+		}).fail(function (error) {
+			toastr.warning("No se encontro autorizacion para abrir pregarantia.");
+		})
+		.always(function() {
+			$("#loading_spin").hide();
 		});
 	});
+
 // autorizar pregarantia por jefe taller
 $(document).on('click', '#autor_preg', function(e){
 	e.preventDefault();
@@ -1953,6 +1985,7 @@ $(document).on('click', '#autor_preg', function(e){
 						$("#pregCheck1").prop("checked", true);
 						$("#pregCheck1").css('display', 'inline-block');
 						document.getElementById("autor_preg").disabled = true;
+						document.getElementById("pregarantia").disabled = false;
 						$("#cancelar_preg").css('display', 'inline-block');
 					}else{
 						toastr.warning(data.mensaje);
@@ -2541,7 +2574,7 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 	e.preventDefault();
 	$('#tbl-aut').empty();
 	let id_orden_servicio = $(this).prop('id');
-	id_orden_servicio = id_orden_servicio.split('-')[1];
+	id_orden_servicio = id_orden_servicio.split('-')[1];   
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_firmas/${id_orden_servicio}`,
 		type: 'GET',

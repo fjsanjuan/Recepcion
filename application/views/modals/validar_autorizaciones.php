@@ -5,7 +5,7 @@
 				<thead>
 					<tr>
 						<th>Documento</th>
-						<th>Autorización</th>
+						<th>Firmado</th>
 						<th></th>
 					</tr>
 				</thead>
