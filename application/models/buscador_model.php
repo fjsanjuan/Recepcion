@@ -3262,4 +3262,36 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function verificar_cp($id_orden_servicio)
+	{
+		$result = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL, 1, 0) AS "ADD(Adicional)"')->from('firma_electronica')->where('id_orden_servicio', $id_orden_servicio)->get();
+		if ($result->num_rows() > 0) {
+			$response['estatus'] = true;
+			$response['data'] = $result->row_array();
+			$response['mensaje'] = "Formato de Carro Parado necesario.";
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Formato de Carro Parado no necesario, el vehículo es apto para entregarse al cliente.";
+		}
+		return $response;
+	}
+	public function obtener_datos_cp($id_orden, $vin)
+	{
+		
+		$this->db2 = $this->load->database('other',true);
+		$datos = $this->db2->select('v.Cliente AS cliente, v.ServicioIdentificador, ServicioNumero, MovID')->from('Venta AS v')->where('id', $id_orden)->get()->row_array();
+		$response['cliente'] = $this->db2->select(" '0' as ID, c.cliente,,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.Direccion, c.DireccionNumero, c.TelefonosLada,c.Extencion2,c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, c.Cliente, '".$vin."' as ServicioSerie,c.PersonalNombres,ISNULL(c.PersonalNombres2,' ') AS 'PersonalNombres2',ISNULL(c.PersonalApellidoPaterno,'') AS 'PersonalApellidoPaterno',ISNULL(c.PersonalApellidoMaterno,'') AS 'PersonalApellidoMaterno' ")->from("Cte c")->where("c.Cliente",$datos['cliente'])->get()->row_array();
+		$response['vehiculo'] = $this->db2->select ("Vin.Articulo as ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km,  vin.Vin as ServicioSerie, vin.ColorExteriorDescripcion")->from("Vin vin")
+			->where("vin.Vin", urldecode($vin))->get()->row_array();
+		$response['agente'] = $this->db2->query("Select ag.agente, ag.nombre FROM Venta vta INNER JOIN Agente ag ON ag.Agente = vta.Agente WHERE vta.ID = ?" ,$id_orden)->row_array();
+		$response['datos'] = $datos;
+		if (!empty($response)) {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible recuperar datos de la orden.';
+		}
+		return $response;
+	}
 }

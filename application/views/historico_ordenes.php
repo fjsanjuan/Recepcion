@@ -56,6 +56,9 @@
     #exampleModal td{
         vertical-align: middle;
     }
+    #cpModal td{
+        vertical-align: middle;
+    }
 </style>
 <div class="container">
     <br>
@@ -970,3 +973,5 @@
     </div>
   </div>
 </div>-->
+
+<?php $this->load->view('modals/cp'); ?>

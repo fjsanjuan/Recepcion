@@ -2084,4 +2084,23 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function verificar_cp($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Orden no válida.";
+		} else {
+			$response = $this->buscador_model->verificar_cp($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_datos_cp($id_orden_intelisis = null, $vin = null){
+		if ($id_orden_intelisis == null || $vin == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Orden no válida.";
+		} else {
+			$response = $this->buscador_model->obtener_datos_cp($id_orden_intelisis, $vin);
+		}
+		echo json_encode($response);
+	}
 }

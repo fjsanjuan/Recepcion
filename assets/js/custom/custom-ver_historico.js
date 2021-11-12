@@ -250,6 +250,7 @@ $(document).ready(function() {
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
+				action  +="<button class='btn btn-sm CP' style='background:#C70039;' id='CP-"+val["id"]+"' data-vin='"+val['vin']+"' data-inte='"+val['id_orden_intelisis']+"'><i class='fa fa-car-crash'></i>&nbsp&nbsp Formato Carro Parado</button>";
 				if (val['movimiento'] == null) {
 					action  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				}
@@ -2589,4 +2590,63 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 	.always(function() {
 		$("#loading_spin").hide();
 	});
+});
+
+$(document).on('click', '.tabla_hist tbody tr td button.CP', function(e) {
+	let id_orden_servicio = $(this).prop('id');
+	let vin               = $(this).data('vin');
+	let id_orden_intelsis = $(this).data('inte');
+	id_orden_servicio     = id_orden_servicio.split('-')[1];
+	vin                   = vin.replace(".", "");
+	vin                   = vin.replace(" ", "");
+	localStorage.setItem("hist_id_orden", id_orden_servicio);
+	e.preventDefault();
+	if (id_orden_intelsis == 'null' || id_orden_intelsis == 'undefined' || id_orden_intelsis == null || id_orden_intelsis == undefined) {
+		toastr.info('No existen información para mostrar el formato de Carro Parado.');
+		return;
+	}
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_datos_cp/${id_orden_intelsis}/${vin}`,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function() {
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(data) {
+		if (data.estatus) {
+			if (data.vehiculo) {
+				$('#cpModal #unidadCp').val(data.vehiculo['ServicioArticulo']);
+				$('#cpModal #modeloCp').val(data.vehiculo['Modelo']);
+				$('#cpModal #serieCp').val(data.vehiculo['ServicioSerie']);
+				$('#cpModal #ordenCp').val(data.datos['MovID']);
+				$('#cpModal #torreCp').val(`${data.datos['ServicioNumero']} ${data.datos['ServicioIdentificador']}`);
+				$('#cpModal #asesorCp').val(data.agente['nombre']);
+			}
+			$('#cpModal').modal('toggle');
+		} else {
+			toastr.info(data.mensaje ? data.mensaje : "Formato de Carro Parado no aplicable.");
+		}
+	})
+	.fail(function(error) {
+		toastr.warning("Hubo un error al intentar validar la disponibilidad del Carro Parado.");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	
+});
+$(document).off('click', '#cpModal .addPiezaCp').on('click', '#cpModal .addPiezaCp', function(e) {
+	e.preventDefault();
+	const tr = $('<tr>');
+	//const checkbox = $('<div>', {'class': 'form-check'});
+	const checkbox =$('<input>', {'style': 'position: relative !important; left: 0 !important; visibility: visible;', 'class': '', 'type': 'checkbox', 'name': 'recibidoCp[]'});
+	tr.append($('<td>').append($('<input>',{'type': 'number', 'name':'cantidadCp[]', 'class': 'form-control'})));
+	tr.append($('<td>').append($('<input>',{'type': 'text', 'name':'numPartesCp[]', 'class': 'form-control'})));
+	tr.append($('<td>').append($('<textarea>',{'name':'descripcionCp[]', 'class': 'form-control'})));
+	tr.append($('<td>').append($('<input>',{'type': 'text', 'name':'cexcingarCp[]', 'class': 'form-control'})));
+	tr.append($('<td>').append(checkbox));
+	tr.append($('<td>').append($('<textarea>',{'name':'observacionesCp[]', 'class': 'form-control'})));
+	$('#cpModal #datosCp').append(tr);
+
 });
