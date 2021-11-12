@@ -2794,6 +2794,11 @@ $(document).off('click', '#cpModal .addPiezaCp').on('click', '#cpModal .addPieza
 	tr.append($('<td>').append($('<input>',{'type': 'text', 'name':'cexcingarCp[]', 'class': 'form-control'})));
 	tr.append($('<td>').append(checkbox));
 	tr.append($('<td>').append($('<textarea>',{'name':'observacionesCp[]', 'class': 'form-control'})));
+	tr.append($('<td>',{'style': 'cursor:pointer;'}).append($('<i>',{ 'class': 'text-danger fa fa-trash dltPiezaCp'})));
 	$('#cpModal #datosCp').append(tr);
 
+});
+$(document).off('click', '#cpModal .dltPiezaCp').on('click', '#cpModal .dltPiezaCp', function(e) {
+	e.preventDefault();
+	$(this).closest('tr').remove();
 });
