@@ -3249,9 +3249,78 @@ class Buscador_Model extends CI_Model{
 			}
 		return $response;
 	}
+	public function autorizar_cp($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas registradas.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 4){
+				$this->db->update('firma_electronica', ['firma_carroParado' => $firma['firma_electronica']]);
+				}
+				if($perfil == 8){
+				$this->db->update('firma_electronica', ['firma_carroParado' => $firma['firma_electronica']]);
+				}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo autorizar firma.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	public function obtenerFirmaCP($id_orden)
+	{
+		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+	}
+
+	public function cancelar_firma_cp($id_orden)
+	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas para cancelar.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 4){$this->db->update('firma_electronica', ['firma_carroParado' => null]);}
+				if($perfil == 8){$this->db->update('firma_electronica', ['firma_carroParado' => null]);}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
+			}
+		return $response;
+	}
 	public function obtener_firmas($id_orden)
 	{
-		$result = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL, 1, 0) AS "ADD(Adicional)"')->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get();
+		$result = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL OR firma_pregarantiaGerente IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL AND firma_adicionalGerente IS NOT NULL, 1, 0) AS "ADD(Adicional)", IIF(firma_carroParado IS NOT NULL, 1, 0) AS "Carro Parado"')->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get();
 		if ($result->num_rows() > 0) {
 			$response['estatus'] = true;
 			$response['data'] = $result->row_array();
@@ -3262,23 +3331,11 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function verificar_cp($id_orden_servicio)
+	public function obtener_datos_cp($id_orden, $id_orden_intelisis, $vin)
 	{
-		$result = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL, 1, 0) AS "ADD(Adicional)"')->from('firma_electronica')->where('id_orden_servicio', $id_orden_servicio)->get();
+		$result = $this->db->select('IIF(carro_parado IS NOT NULL, 1, 0) AS "Carro Parado"')->from('orden_servicio')->where('id_orden', $id_orden)->get();
 		if ($result->num_rows() > 0) {
-			$response['estatus'] = true;
-			$response['data'] = $result->row_array();
-			$response['mensaje'] = "Formato de Carro Parado necesario.";
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Formato de Carro Parado no necesario, el vehículo es apto para entregarse al cliente.";
-		}
-		return $response;
-	}
-	public function obtener_datos_cp($id_orden, $vin)
-	{
-		
-		$this->db2 = $this->load->database('other',true);
+			$this->db2 = $this->load->database('other',true);
 		$datos = $this->db2->select('v.Cliente AS cliente, v.ServicioIdentificador, ServicioNumero, MovID')->from('Venta AS v')->where('id', $id_orden)->get()->row_array();
 		$response['cliente'] = $this->db2->select(" '0' as ID, c.cliente,,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.Direccion, c.DireccionNumero, c.TelefonosLada,c.Extencion2,c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, c.Cliente, '".$vin."' as ServicioSerie,c.PersonalNombres,ISNULL(c.PersonalNombres2,' ') AS 'PersonalNombres2',ISNULL(c.PersonalApellidoPaterno,'') AS 'PersonalApellidoPaterno',ISNULL(c.PersonalApellidoMaterno,'') AS 'PersonalApellidoMaterno' ")->from("Cte c")->where("c.Cliente",$datos['cliente'])->get()->row_array();
 		$response['vehiculo'] = $this->db2->select ("Vin.Articulo as ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km,  vin.Vin as ServicioSerie, vin.ColorExteriorDescripcion")->from("Vin vin")
@@ -3291,6 +3348,10 @@ class Buscador_Model extends CI_Model{
 		}else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No fue posible recuperar datos de la orden.';
+		}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Formato de Carro Parado no necesario, el vehículo es apto para entregarse al cliente.";
 		}
 		return $response;
 	}

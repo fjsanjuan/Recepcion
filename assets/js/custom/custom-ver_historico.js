@@ -1985,7 +1985,6 @@ $(document).on('click', '#autor_preg', function(e){
 						$("#pregCheck1").prop("checked", true);
 						$("#pregCheck1").css('display', 'inline-block');
 						document.getElementById("autor_preg").disabled = true;
-						document.getElementById("pregarantia").disabled = false;
 						$("#cancelar_preg").css('display', 'inline-block');
 					}else{
 						toastr.warning(data.mensaje);
@@ -2008,9 +2007,6 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
     id_orden = id_orden.split('-')[1];
 	e.preventDefault();
 	console.log('id', id_orden);
-	if(id_perfil == 4){$('#lineAdicional').hide();}
-	if(id_perfil == 8){$('#carroParado').hide();}
-	if(id_perfil == 7){$('#carroParado').hide();}
 	$('#autor_cp').prop('data-orden', id_orden);
 	$('#autor_preg').prop('data-orden', id_orden);
 	$('#autor_add').prop('data-orden', id_orden);
@@ -2057,16 +2053,6 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 
 				}
 			}
-		}
-		if (data.estatus) {
-			if (data.data.length > 0) {
-				if(data.data[0].firma_pregarantiaAdmon != null && id_perfil == 7){
-					$('#autor_preg').prop('disabled', true);
-					$('#pregCheck1').prop('checked', true);
-					$('#cancelar_preg').css('display', 'inline-block');
-
-				}
-			}
 		}else {
 			toastr.warning(data.mensaje);
 		}
@@ -2104,13 +2090,42 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 					$('#cancelar_add').css('display', 'inline-block');
 				}
 			}
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toastr.warning("No se pudo obtener información de las firmas");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	// carro parado
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaCP/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_carroParado != null && id_perfil == 4){
+					$('#autor_cp').prop('disabled', true);
+					$('#cpCheck1').prop('checked', true);
+					$('#cancelar_cp').css('display', 'inline-block');
+				}
+			}
 		}
 		if (data.estatus) {
 			if (data.data.length > 0) {
-				if(data.data[0].firma_adicionalAdmon != null && id_perfil == 7){
-					$('#autor_add').prop('disabled', true);
-					$('#addCheck1').prop('checked', true);
-					$('#cancelar_add').css('display', 'inline-block');
+				if(data.data[0].firma_carroParado != null && id_perfil == 8){
+					$('#autor_cp').prop('disabled', true);
+					$('#cpCheck1').prop('checked', true);
+					$('#cancelar_cp').css('display', 'inline-block');
 				}
 			}
 		}else {
@@ -2300,21 +2315,16 @@ $(document).on('click', '#autor_cp', function(e){
 	const form = new FormData();
 	form.append('id_orden_servicio', id_orden);
 	swal({
-		title: '¿Autorizar Carro parado?',
+		title: '¿Desea autorizar Carro parado?',
 		showCancelButton: true,
 		confirmButtonText: 'Autorizar',
 		cancelButtonText: 'Cancelar',
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-			swal('CP autorizado.', '', 'success');
-						$("#cpCheck1").prop("checked", true);
-						$("#cpCheck1").css('display', 'inline-block');
-						document.getElementById("autor_cp").disabled = true;
-						$("#cancelar_cp").css('display', 'inline-block');
-				/*$.ajax({
+				$.ajax({
 					cache: false,
-					url: base_url+ "index.php/servicio/autorizar_adicional/",
+					url: base_url+ "index.php/servicio/autorizar_cp/",
 					contentType: false,
 					processData: false,
 					type: 'POST',
@@ -2326,21 +2336,21 @@ $(document).on('click', '#autor_cp', function(e){
 				})
 				.done(function(data) {
 					if (data.estatus) {
-						swal('Adicional autorizada.', '', 'success');
-						$("#addCheck1").prop("checked", true);
-						$("#addCheck1").css('display', 'inline-block');
-						document.getElementById("autor_add").disabled = true;
-						$("#cancelar_add").css('display', 'inline-block');
+						swal('Carro parado autorizado.', '', 'success');
+						$("#cpCheck1").prop("checked", true);
+						$("#cpCheck1").css('display', 'inline-block');
+						document.getElementById("autor_cp").disabled = true;
+						$("#cancelar_cp").css('display', 'inline-block');
 					}else{
 						toastr.warning(data.mensaje);
 					}
 				})
 				.fail(function() {
-					toastr.warning('Hubo un error al autorizar adicional');
+					toastr.warning('Hubo un error al autorizar carro parado');
 				})
 				.always(function() {
 					$("#loading_spin").hide();
-				});*/
+				});
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
@@ -2361,13 +2371,9 @@ $(document).on('click', '#cancelar_cp', function(e){
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-				swal('Carro Parado cancelada.', '', 'success');
-						$("#cpCheck1").prop("checked", false);
-						$("#cancelar_cp").css('display', 'none');
-						document.getElementById("autor_cp").disabled = false;
-				/*$.ajax({
+				$.ajax({
 					cache: false,
-					url: base_url+ "index.php/servicio/cancelar_firma_adicional/",
+					url: base_url+ "index.php/servicio/cancelar_firma_cp/",
 					contentType: false,
 					processData: false,
 					type: 'POST',
@@ -2379,20 +2385,20 @@ $(document).on('click', '#cancelar_cp', function(e){
 				})
 				.done(function(data) {
 					if (data.estatus) {
-						swal('Adicional cancelada.', '', 'success');
-						$("#addCheck1").prop("checked", false);
-						$("#cancelar_add").css('display', 'none');
-						document.getElementById("autor_add").disabled = false;
+						swal('Carro parado autorizado.', '', 'success');
+						$("#cpCheck1").prop("checked", false);
+						$("#cancelar_cp").css('display', 'none');
+						document.getElementById("autor_cp").disabled = false;
 					}else{
 						toastr.warning(data.mensaje);
 					}
 				})
 				.fail(function() {
-					toastr.warning('Hubo un error al cancelar adicional');
+					toastr.warning('Hubo un error al cancelar carro parado');
 				})
 				.always(function() {
 					$("#loading_spin").hide();
-				});*/
+				});
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
@@ -2742,18 +2748,18 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 $(document).on('click', '.tabla_hist tbody tr td button.CP', function(e) {
 	let id_orden_servicio = $(this).prop('id');
 	let vin               = $(this).data('vin');
-	let id_orden_intelsis = $(this).data('inte');
+	let id_orden_intelisis = $(this).data('inte');
 	id_orden_servicio     = id_orden_servicio.split('-')[1];
 	vin                   = vin.replace(".", "");
 	vin                   = vin.replace(" ", "");
 	localStorage.setItem("hist_id_orden", id_orden_servicio);
 	e.preventDefault();
-	if (id_orden_intelsis == 'null' || id_orden_intelsis == 'undefined' || id_orden_intelsis == null || id_orden_intelsis == undefined) {
+	if (id_orden_intelisis == 'null' || id_orden_intelisis == 'undefined' || id_orden_intelisis == null || id_orden_intelisis == undefined) {
 		toastr.info('No existen información para mostrar el formato de Carro Parado.');
 		return;
 	}
 	$.ajax({
-		url: `${base_url}index.php/servicio/obtener_datos_cp/${id_orden_intelsis}/${vin}`,
+		url: `${base_url}index.php/servicio/obtener_datos_cp/${id_orden}/${id_orden_intelisis}/${vin}`,
 		type: 'GET',
 		dataType: 'json',
 		beforeSend: function() {
