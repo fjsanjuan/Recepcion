@@ -1321,7 +1321,9 @@ $(document).ready(function() {
 							<br>
 							<br>
 							<p>Comentarios:</p>
-							<textarea class="form-control" id="comentscoments"></textarea>
+							<textarea class="form-control" id="comentscoments">
+								<?php echo ($orden_servicio['comentario_tecnico_multip'] ? $orden_servicio['comentario_tecnico_multip'] : ''); ?>
+							</textarea>
 						</div>
 					</div>
 				</div>
