@@ -2202,3 +2202,4 @@ class Servicio extends CI_Controller {
 			}
 			echo json_encode($response);
 		}
+}
