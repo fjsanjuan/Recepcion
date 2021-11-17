@@ -604,8 +604,12 @@
                 </div>
             </div>
             <div class="modal-footer">
+			<div class="form-check">
+			<input class="form-check-input" type="checkbox" id="firmaCheck1" disabled>
+			<label class="form-check-label" for="firmaCheck1">Firma Jefe Taller</label>
+			</div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Generar Reverso</button>
+                <button type="button" class="btn btn-primary">Generar Anverso</button>
             </div>
     </div>
     </div>

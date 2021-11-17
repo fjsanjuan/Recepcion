@@ -230,6 +230,7 @@ $(document).ready(function() {
 				//action_jefe    = `<button type="button" class="btn btn-primary btn-sm diagnostico" id='autorizar_diagnostico-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Diagnóstico</button>`;
 				//action_jefe		+=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
 				action_jefe		="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
+				action_jefe		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Firmar Anverso</button>`;
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
@@ -244,8 +245,9 @@ $(document).ready(function() {
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				//action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
-				action_tecnico		= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
-				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Reverso</button>`;
+				//action_tecnico		= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
+				action_tecnico		="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Anverso</button>`;
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
 				btn		+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
@@ -269,7 +271,8 @@ $(document).ready(function() {
 				btn_comentario = "<div style='display: none;' id='comentario-"+val["id"]+"'>"+val["comentario_tecnico_multip"]+"</div><button class='btn btn-sm btn-info comentario-tec' data-id='"+val["id"]+"'><i class='fa fa-edit'></i>&nbsp&nbsp Ver</button>";
 				action2  ="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action2  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
-				action2  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
+				action2	 +="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+				//action2  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				if(id_perfil == 6)
 				{
 					tabla_historico.fnAddData([
@@ -2554,7 +2557,6 @@ $(document).on('click', '.borrar_registro', function (e) {
 // nueva linea en requisiciones
 $(document).on('click', '.nueva_linea', function (e) {
 	e.preventDefault();
-	//clone.find('input[type="text"]').prop('value', "");
 	$(this).closest('tr').clone().insertBefore($(this).closest('tr'));
 	$(this).closest('tr').find('input[type="text"]').val("");
 })
@@ -2571,6 +2573,377 @@ $(document).on('click', '.borra_linea', function (e) {
         toastr.warning('Debes matener una linea');
     }
 });
+// autorizar refacciones
+$(document).on('click', '#refaccCheck1', function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("data-orden");
+	console.log('id orden', id_orden);
+	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
+	swal({
+		title: '¿Autorizar refacciones?',
+		showCancelButton: true,
+		confirmButtonText: 'Autorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/autorizar_refacc/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Refacciones autorizadas.', '', 'success');
+						$("#refaccCheck1").prop("disabled", true);
+						$("#refaccCheck1").prop("checked", true);
+						$("#cancelar_refacc").css("display", 'inline-block');
+						
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al autorizar refacciones');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+});
+// firmar recibo de refacciones
+$(document).on('click', '#reciboCheck1', function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("data-orden");
+	console.log('id orden', id_orden);
+	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
+	swal({
+		title: '¿Firmar de recibido de refacciones?',
+		showCancelButton: true,
+		confirmButtonText: 'Firmar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/recibo_refacc/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Refacciones recibidas.', '', 'success');
+						$("#reciboCheck1").prop("disabled", true);
+						$("#reciboCheck1").prop("checked", true);
+						$("#cancelar_recibo").css("display", 'inline-block');
+						
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al recibir refacciones');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+});
+
+$(document).off('click', '.requisiciones').on('click', '.requisiciones', function (e) {
+	let id_orden = $(this).prop('id');
+    id_orden = id_orden.split('-')[1];
+	e.preventDefault();
+	console.log('id', id_orden);
+	if (id_perfil == 6){$('#checkTecn').hide();}
+	if (id_perfil == 5){$('#checkRefacc').hide();}
+	$('#refaccCheck1').prop('data-orden', id_orden);
+	$('#reciboCheck1').prop('data-orden', id_orden);
+	$('#cancelar_refacc').prop('data-orden', id_orden);
+	$('#cancelar_recibo').prop('data-orden', id_orden);
+	/*$('#autoriza_refacc').prop('data-orden', id_orden);
+	$('#recibe_refacc').prop('data-orden', id_orden);
+	$('#cancelar_refacc').prop('data-orden', id_orden);
+	$('#cancelar_recibo').prop('data-orden', id_orden);
+	
+	$('#autoriza_refacc').prop('disabled', false);
+	$('#recibe_refacc').prop('disabled', false);
+	$('#cancelar_refacc').css('display', 'none');
+	$('#cancelar_recibo').css('display', 'none');*/
+	$('#refaccCheck1').prop('disabled', false);
+	$('#reciboCheck1').prop('disabled', false);
+	$('#refaccCheck1').prop('checked', false);
+	$('#reciboCheck1').prop('checked', false);
+	$('#cancelar_refacc').css('display', 'none');
+	$('#cancelar_recibo').css('display', 'none');
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaRefacc/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_refacc != null && id_perfil == 6){
+					$('#refaccCheck1').prop('disabled', true);
+					$('#refaccCheck1').prop('checked', true);
+					$('#cancelar_refacc').css('display', 'inline-block');
+
+				}
+			}
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toastr.warning("No se pudo obtener información de las firmas");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaTecnico/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_tecnico != null && id_perfil == 5){
+					$('#reciboCheck1').prop('disabled', true);
+					$('#reciboCheck1').prop('checked', true);
+					$('#cancelar_recibo').css('display', 'inline-block');
+				}
+			}
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toastr.warning("No se pudo obtener información de las firmas");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	//cancelar Refacciones
+	$(document).on('click', '#cancelar_refacc', function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("data-orden");
+		localStorage.setItem("hist_id_orden", id_orden);
+		const form = new FormData();
+		form.append('id_orden_servicio', id_orden);
+		swal({
+			title: '¿Desea cancelar refacciones?',
+			showCancelButton: true,
+			confirmButtonText: 'Cancelar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				if (result.value) {
+					$.ajax({
+						cache: false,
+						url: base_url+ "index.php/servicio/cancelar_firma_refacc/",
+						contentType: false,
+						processData: false,
+						type: 'POST',
+						dataType: 'json',
+						data: form,
+						beforeSend: function(){
+							$("#loading_spin").show();
+						}
+					})
+					.done(function(data) {
+						if (data.estatus) {
+							swal('refacciones canceladas.', '', 'success');
+							$('#refaccCheck1').prop('disabled', false);
+							$("#refaccCheck1").prop("checked", false);
+							$("#cancelar_refacc").css("display", 'none');
+							
+						}else{
+							toastr.warning(data.mensaje);
+						}
+					})
+					.fail(function() {
+						toastr.warning('Hubo un error al cancelar refacciones');
+					})
+					.always(function() {
+						$("#loading_spin").hide();
+					});
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+			});	
+		});
+	//cancelar recibo de refacciones
+	$(document).on('click', '#cancelar_recibo', function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("data-orden");
+		localStorage.setItem("hist_id_orden", id_orden);
+		const form = new FormData();
+		form.append('id_orden_servicio', id_orden);
+		swal({
+			title: '¿Desea cancelar recibido de refacciones?',
+			showCancelButton: true,
+			confirmButtonText: 'Cancelar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				if (result.value) {
+					$.ajax({
+						cache: false,
+						url: base_url+ "index.php/servicio/cancelar_firma_tecnico/",
+						contentType: false,
+						processData: false,
+						type: 'POST',
+						dataType: 'json',
+						data: form,
+						beforeSend: function(){
+							$("#loading_spin").show();
+						}
+					})
+					.done(function(data) {
+						if (data.estatus) {
+							swal('refacciones canceladas.', '', 'success');
+							$('#reciboCheck1').prop('disabled', false);
+							$("#reciboCheck1").prop("checked", false);
+							$("#cancelar_recibo").css("display", 'none');
+				
+						}else{
+							toastr.warning(data.mensaje);
+						}
+					})
+					.fail(function() {
+						toastr.warning('Hubo un error al cancelar recibido de refacciones');
+					})
+					.always(function() {
+						$("#loading_spin").hide();
+					});
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+			});	
+		});
+	
+	// carro parado
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaCP/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_carroParado != null && id_perfil == 4){
+					$('#autor_cp').prop('disabled', true);
+					$('#cpCheck1').prop('checked', true);
+					$('#cancelar_cp').css('display', 'inline-block');
+				}
+			}
+		}
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_carroParado != null && id_perfil == 8){
+					$('#autor_cp').prop('disabled', true);
+					$('#cpCheck1').prop('checked', true);
+					$('#cancelar_cp').css('display', 'inline-block');
+				}
+			}
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toastr.warning("No se pudo obtener información de las firmas");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+});
+
+$(document).on('click', '#cancelar_preg', function(e){
+	e.preventDefault();
+	var id_orden = $(this).prop("data-orden");
+	localStorage.setItem("hist_id_orden", id_orden);
+	const form = new FormData();
+	form.append('id_orden_servicio', id_orden);
+	swal({
+		title: '¿Desea cancelar pregarantia?',
+		showCancelButton: true,
+		confirmButtonText: 'Cancelar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/cancelar_firma_pregarantia/",
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Pregarantia cancelada.', '', 'success');
+						$("#pregCheck1").prop("checked", false);
+						$("#cancelar_preg").css('display', 'none');
+						document.getElementById("autor_preg").disabled = false;
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al cancelar pregarantia');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+	});
+
 // seleccionar linea revision quejas
 $("#select_queja").empty();
             $("#select_queja").append('<option value=""></option>');
@@ -2759,7 +3132,7 @@ $(document).on('click', '.tabla_hist tbody tr td button.CP', function(e) {
 		return;
 	}
 	$.ajax({
-		url: `${base_url}index.php/servicio/obtener_datos_cp/${id_orden}/${id_orden_intelisis}/${vin}`,
+		url: `${base_url}index.php/servicio/obtener_datos_cp/${id_orden_servicio}/${id_orden_intelisis}/${vin}`,
 		type: 'GET',
 		dataType: 'json',
 		beforeSend: function() {

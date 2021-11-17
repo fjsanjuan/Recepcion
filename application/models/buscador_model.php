@@ -3122,9 +3122,6 @@ class Buscador_Model extends CI_Model{
 				if ($perfil == 8){
 					$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => $firma['firma_electronica']]);
 				}
-				if ($perfil == 7){
-					$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => $firma['firma_electronica']]);
-				}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
 					$this->db->trans_rollback();
@@ -3161,7 +3158,6 @@ class Buscador_Model extends CI_Model{
 				$this->db->where('id_orden_servicio', $id_orden);
 				if($perfil == 4){$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => null]);}
 				if($perfil == 8){$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => null]);}
-				if($perfil == 7){$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -3195,9 +3191,6 @@ class Buscador_Model extends CI_Model{
 				}
 				if($perfil == 8){
 				$this->db->update('firma_electronica', ['firma_adicionalGerente' => $firma['firma_electronica']]);
-				}
-				if($perfil == 7){
-				$this->db->update('firma_electronica', ['firma_adicionalAdmon' => $firma['firma_electronica']]);
 				}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
@@ -3236,7 +3229,6 @@ class Buscador_Model extends CI_Model{
 				$this->db->where('id_orden_servicio', $id_orden);
 				if($perfil == 4){$this->db->update('firma_electronica', ['firma_adicionalJefe' => null]);}
 				if($perfil == 8){$this->db->update('firma_electronica', ['firma_adicionalGerente' => null]);}
-				if($perfil == 7){$this->db->update('firma_electronica', ['firma_adicionalAdmon' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -3333,7 +3325,7 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_datos_cp($id_orden, $id_orden_intelisis, $vin)
 	{
-		$result = $this->db->select('IIF(carro_parado IS NOT NULL, 1, 0) AS "Carro Parado"')->from('orden_servicio')->where('id_orden', $id_orden)->get();
+		$result = $this->db->select('IIF(carro_parado IS NOT NULL, 1, 0) AS "Carro Parado"')->from('orden_servicio')->where('id', $id_orden)->get();
 		if ($result->num_rows() > 0) {
 			$this->db2 = $this->load->database('other',true);
 		$datos = $this->db2->select('v.Cliente AS cliente, v.ServicioIdentificador, ServicioNumero, MovID')->from('Venta AS v')->where('id', $id_orden)->get()->row_array();
@@ -3353,6 +3345,138 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = false;
 			$response['mensaje'] = "Formato de Carro Parado no necesario, el vehículo es apto para entregarse al cliente.";
 		}
+		return $response;
+	}
+	public function autorizar_refacc($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas registradas.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 6){
+				$this->db->update('firma_electronica', ['firma_refacc' => $firma['firma_electronica']]);
+				}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo autorizar firma.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	
+	public function obtenerFirmaRefacc($id_orden)
+	{
+		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+	}
+
+	public function cancelar_firma_refacc($id_orden)
+	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas para cancelar.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 6){$this->db->update('firma_electronica', ['firma_refacc' => null]);}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
+			}
+		return $response;
+	}
+	public function recibo_refacc($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas registradas.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 5){
+				$this->db->update('firma_electronica', ['firma_tecnico' => $firma['firma_electronica']]);
+				}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo autorizar firma.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	
+	public function obtenerFirmaTecnico($id_orden)
+	{
+		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+	}
+
+	public function cancelar_firma_tecnico($id_orden)
+	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		$existe_firma = $this->db->select("*")
+								 ->from("firma_electronica")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas para cancelar.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 5){$this->db->update('firma_electronica', ['firma_tecnico' => null]);}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
+			}
 		return $response;
 	}
 }

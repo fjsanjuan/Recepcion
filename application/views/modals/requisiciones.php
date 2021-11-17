@@ -36,9 +36,22 @@
                         <table class="table table-border text-center">
                             <tbody>
                                 <tr>
-                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacciones</b></td>
-                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b></td></td>
-                                </tr>
+                                    <td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Resp. Refacc.</b>
+									<div class="form-check" id="checkRefacc" >
+									<input class="form-check-input" type="checkbox" id="refaccCheck1" >
+									<label class="form-check-label" for="refaccCheck1">Firma</label>
+									<button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_refacc">X</button>
+									</div>
+									</td>
+									<td><input type="text"  class="form-control" name="" id="" style="width: 330px;" /><b>Nombre y Firma Técnico</b>
+									<div class="form-check" id="checkTecn" >
+									<input class="form-check-input" type="checkbox" id="reciboCheck1">
+									<label class="form-check-label" for="reciboCheck1">Firma</label>
+									<button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_recibo">X</button>
+									</div>
+									</td>
+								
+								</tr>
                             </tbody>
                         </table>
                     </div>

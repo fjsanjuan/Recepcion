@@ -2127,13 +2127,78 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}*/
-	public function obtener_datos_cp($id_orden = null, $id_orden_intelisis = null, $vin = null){
-		if ($id_orden == null || $id_orden_intelisis == null || $vin == null) {
+	public function obtener_datos_cp($id_orden_servicio = null, $id_orden_intelisis = null, $vin = null){
+		if ($id_orden_servicio == null || $id_orden_intelisis == null || $vin == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = "Orden no válida.";
 		} else {
-			$response = $this->buscador_model->obtener_datos_cp($id_orden, $id_orden_intelisis, $vin);
+			$response = $this->buscador_model->obtener_datos_cp($id_orden_servicio, $id_orden_intelisis, $vin);
 		}
 		echo json_encode($response);
 	}
-}
+	public function autorizar_refacc()
+	{
+		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->autorizar_refacc($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function obtenerFirmaRefacc($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "orden no válida.";
+		}else {
+			$response['estatus'] = true;
+			$response['data'] = $this->buscador_model->obtenerFirmaRefacc($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function cancelar_firma_refacc()
+		{
+			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
+			if ($id_orden == null) {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'no existe autorizacion';
+			}else {
+				$response = $this->buscador_model->cancelar_firma_refacc($id_orden);
+			}
+			echo json_encode($response);
+		}
+	public function recibo_refacc()
+	{
+		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->recibo_refacc($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function obtenerFirmaTecnico($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "orden no válida.";
+		}else {
+			$response['estatus'] = true;
+			$response['data'] = $this->buscador_model->obtenerFirmaTecnico($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function cancelar_firma_tecnico()
+		{
+			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
+			if ($id_orden == null) {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'no existe autorizacion';
+			}else {
+				$response = $this->buscador_model->cancelar_firma_tecnico($id_orden);
+			}
+			echo json_encode($response);
+		}
