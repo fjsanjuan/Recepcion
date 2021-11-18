@@ -3481,16 +3481,10 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_pdf_api($token, $datos)
 	{
-		$data = [
-				'name'       => $datos['name'],
-				'dwn'        => 0,
-				'opt'        => $datos['opt'],
-				'path'       => $datos['path'],
-				'vin'        => $datos['vin'],
-				'garantia'   => $datos['garantia'],
-				'nomCte'     => $datos['nomCte'],
-				'signAsesor' => $datos['signAsesor']
-		];
+		$data = [];
+		foreach ($datos as $key => $dato) {
+			$data[$key] = $dato;
+		}
 		$payload = json_encode($data);
 		$headers = [
 			'Content-Type:application/json',
