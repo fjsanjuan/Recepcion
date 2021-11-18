@@ -2192,14 +2192,26 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 	public function cancelar_firma_tecnico()
-		{
-			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-			if ($id_orden == null) {
-				$response['estatus'] = false;
-				$response['mensaje'] = 'no existe autorizacion';
-			}else {
-				$response = $this->buscador_model->cancelar_firma_tecnico($id_orden);
-			}
-			echo json_encode($response);
+	{
+		$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'no existe autorizacion';
+		}else {
+			$response = $this->buscador_model->cancelar_firma_tecnico($id_orden);
 		}
+		echo json_encode($response);
+	}
+	public function obtener_pdf_api($token = null)
+	{
+		$datos = $this->input->post();
+		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
+		if ($token == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Token no válido.";
+		} else {
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+		}
+		echo json_encode($response);
+	}
 }

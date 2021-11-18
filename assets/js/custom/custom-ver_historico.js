@@ -454,7 +454,7 @@ $(document).ready(function() {
 						archivos += `<tr>
 							<td>Carta de Renuncia a Beneficios</td>
 							<td>PDF</td>
-							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver carte de renuncia a beneficios"><a class="renunciaGrtia" id="renunGrtia-${id_orden}" href="#!"><i class="fa fa-eye"></i></a></td>`;
+							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver carte de renuncia a beneficios"><a class="renunciaGrtia" id="renunGrtia-${id_orden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
 							archivos += id_perfil == 7 ? '<td></td>' : '';
 						archivos +=`<tr>`;
 					}
@@ -560,51 +560,43 @@ $(document).ready(function() {
 			},
 			success: function (data){
 				tok=data.token;
-			}
-		});
-		$.ajax({
-			url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
-			type: "POST",
-			headers: {
-				Authorization: `Token ${tok}`,
-			},
-			//habilitar xhrFields cuando se requiera descargar
-			//xhrFields: {responseType: "blob"},
-			data: {
-				name:'WRACRN001',
-				dwn:'1',
-				opt:'1',
-				path:'None',
-				vin:t_vin,
-				garantia:signGrtia,
-				nomCte:t_nomCte,
-				signAsesor:t_signAsesor
-			},
-			beforeSend: function(){
-				$("#loading_spin").show();
-			},
-			error: function(){
-				console.log('error al consumir getPDF de ApiReporter');
-				toastr.error("Error al generar el formato");
-				$("#loading_spin").hide();
-			},
-			success: function (blob){
-				$("#loading_spin").hide();
-				//console.log(blob);
-				// habilitar en caso de descarga xhrFields
-				// var link = document.createElement('a');
-				// link.href = window.URL.createObjectURL(blob);
-				// para vizualiar formato en pc y descargar en tablet
-				// window.open(link);
-				// para de descargar el formato 
-				//link.download = "WRACRN001.pdf";
-				//link.click();
-				// URL.revokeObjectURL(link.href);
-
-				var win = window.open("", "_blank");
-				//win.document.body.innerHTML = blob;
-				win.document.write(blob);
-		
+				$.ajax({
+					// url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					url: `${base_url}index.php/servicio/obtener_pdf_api/${tok}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'WRACRN001',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:t_vin,
+						garantia:signGrtia,
+						nomCte:t_nomCte,
+						signAsesor:t_signAsesor,
+						id_orden:id_orden,
+						url:'https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF'
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
+					}
+				});
 			}
 		});
 	});

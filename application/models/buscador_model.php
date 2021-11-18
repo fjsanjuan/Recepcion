@@ -3479,4 +3479,65 @@ class Buscador_Model extends CI_Model{
 			}
 		return $response;
 	}
+	public function obtener_pdf_api($token, $datos)
+	{
+		$data = [
+				'name'       => $datos['name'],
+				'dwn'        => 0,
+				'opt'        => $datos['opt'],
+				'path'       => $datos['path'],
+				'vin'        => $datos['vin'],
+				'garantia'   => $datos['garantia'],
+				'nomCte'     => $datos['nomCte'],
+				'signAsesor' => $datos['signAsesor']
+		];
+		$payload = json_encode($data);
+		$headers = [
+			'Content-Type:application/json',
+			'Authorization: Token '. $token,
+			'Content-Length: ' . strlen($payload)
+		];
+		$URL = $datos['url'] ? $datos['url'] : "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF";
+		$request = curl_init();
+		$response= [];
+		curl_setopt($request, CURLOPT_URL, $URL);
+		curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($request, CURLOPT_HEADER, 1);
+		curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($request, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($request, CURLOPT_POST, 1);
+		curl_setopt($request, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($request, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($request, CURLOPT_BINARYTRANSFER, TRUE);
+		$result = curl_exec($request);
+		if (curl_errno($request)) {
+			$response['estatus'] = false;
+			$response['mensaje'] = curl_error($request);
+		} else {
+			curl_close($request);
+			$ruta = $this->ruta_formts.$datos['vin']."/".$datos['id_orden']."/";
+			if(!file_exists($ruta)) 
+			{
+				mkdir($ruta, 0777, true);
+			}
+			$pdf = fopen("{$ruta}{$datos['name']}.pdf", 'w');
+			fwrite($pdf, $result);
+			fclose($pdf);
+			if (file_exists("{$ruta}{$datos['name']}.pdf")) {
+				$archivo = file_get_contents("{$ruta}{$datos['name']}.pdf");
+				$archivo64 = 'data:application/pdf;base64,' . base64_encode($archivo);
+				$response['estatus'] = true;
+				$response['mensaje'] = "Archivo creado exitosamente.";
+				$response['data'] = [
+					'ruta' => base_url("{$ruta}{$datos['name']}.pdf"),
+					'nombre' => $datos['name'],
+					'archivo' => $archivo64
+				];
+			}else {
+				$response['estatus'] = false;
+				$response['mensaje'] = "No fue posible guardar el archivo.";
+			}
+		}
+		return $response;
+	}
 }
