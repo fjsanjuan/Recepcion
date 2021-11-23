@@ -3226,16 +3226,40 @@ function guardar_formatos( img, img2, img_correo, img_reverso, img3)
         success: function(data) {
             if(data)
             {
-                $('#loading_spin').hide();
-                if (data.orden_servicio.estatus == true) {
-                    toastr.success('Orden de Servicio cargada exitosamente.', {timeOut: 5000});
-                }else{
-                    toastr.error('No fue posible cargar la orden de servicio.', {timeOut: 5000});
+                //console.log(data);
+                var orSaveDocs = true
+                if(data.orden_servicio.estatusSaveDocs){
+                    orSaveDocs = data.orden_servicio.estatusSaveDocs
                 }
-                if (data.inventario.estatus == true) {
+
+                $('#loading_spin').hide();
+                if (data.orden_servicio.estatus == true && orSaveDocs == true) {
+                    toastr.success('Orden de Servicio cargada exitosamente.', {timeOut: 5000});
+                }else if (data.orden_servicio.estatus == false){
+                    toastr.error('No fue posible generar orden de servicio.', {timeOut: 5000});
+                }
+                else if (orSaveDocs == false){
+                    toastr.error('No fue posible guardar en base de datos orden de servicio.', {timeOut: 5000});
+                }
+                else{
+                    toastr.error('Error de peticion para guardar orden de servicio.', {timeOut: 5000});
+                }
+                
+                var invSaveDocs = true
+                if(data.orden_servicio.inventario){
+                    invSaveDocs = data.inventario.estatusSaveDocs
+                }
+
+                if (data.inventario.estatus == true && invSaveDocs == true) {
                     toastr.success('Formato de Inventario cargado exitosamente.', {timeOut: 5000});
-                }else{
-                    toastr.error('No fue posible cargar el formato de Inventario.', {timeOut: 5000});
+                }else if (data.inventario.estatus == false){
+                    toastr.error('No fue posible generar Formato de Inventario.', {timeOut: 5000});
+                }
+                else if (invSaveDocs == false){
+                    toastr.error('No fue posible guardar en base de datos el Formato de Inventario.', {timeOut: 5000});
+                }
+                else{
+                    toastr.error('Error de peticion para guardar el formato de Inventario.', {timeOut: 5000});
                 }
             }else 
             {

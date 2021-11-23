@@ -2372,33 +2372,54 @@ class Buscador_Model extends CI_Model{
 		// var_dump($datos);die;
 		return $datos;
 	}
-	public function SaveDocsIntelisis($ruta, $id_orden, $tipo){
-		//load database
-		$this->db2 = $this->load->database("other", true);
-		// variables
-		$logged_in = $this->session->userdata("logged_in");
+	
+	// public function SaveDocsIntelisis($ruta, $id_orden, $tipo){
+	// 	//load database
+	// 	$this->db2 = $this->load->database("other", true);
+	// 	// variables
+	// 	$logged_in = $this->session->userdata("logged_in");
 		
-		$rama      = 'VTAS';
-		if($tipo == 'orden'){
-			$nombre    = 'FormatoDeOrdenServicio'.$id_orden.'.pdf';
-		}else{
-			$nombre    = 'HojaMultipuntos'.$id_orden.'.pdf';
-		}
-		$id        = $id_orden;
-		$new_ruta  = str_replace("/", "\\", $ruta);
-		$new_ruta  = substr($new_ruta,2);
-		//corregir ruta dependiendo de donde esta la instalacion.
-		$ruta      = 'C:\wamp\www\WebProyectos2'.$new_ruta;
-		$icono     = 754;
-		$tipo      = 'Archivo';
-		$sucursal  = $logged_in["id_sucursal"];
-		$fecha     =  date("d-m-Y");
-		$cfd       = 0;
+	// 	$rama      = 'VTAS';
+	// 	if($tipo == 'orden'){
+	// 		$nombre    = 'FormatoDeOrdenServicio'.$id_orden.'.pdf';
+	// 	}else{
+	// 		$nombre    = 'HojaMultipuntos'.$id_orden.'.pdf';
+	// 	}
+	// 	$id        = $id_orden;
+	// 	$new_ruta  = str_replace("/", "\\", $ruta);
+	// 	$new_ruta  = substr($new_ruta,2);
+	// 	//corregir ruta dependiendo de donde esta la instalacion.
+	// 	$ruta      = 'C:\wamp\www\WebProyectos2'.$new_ruta;
+	// 	$icono     = 754;
+	// 	$tipo      = 'Archivo';
+	// 	$sucursal  = $logged_in["id_sucursal"];
+	// 	$fecha     =  date("d-m-Y");
+	// 	$cfd       = 0;
 
-		//insert 
-		$this->db2->query("INSERT INTO AnexoMov (Rama, ID, Nombre, Direccion, Icono, Tipo, Sucursal,
-			FechaEmision, CFD) VALUES (?,?,?,?,?,?,?,?,?);", array($rama, $id, $nombre, $ruta, $icono, $tipo, 
-			$sucursal,$fecha,$cfd));
+	// 	//insert 
+	// 	$this->db2->query("INSERT INTO AnexoMov (Rama, ID, Nombre, Direccion, Icono, Tipo, Sucursal,
+	// 		FechaEmision, CFD) VALUES (?,?,?,?,?,?,?,?,?);", array($rama, $id, $nombre, $ruta, $icono, $tipo, 
+	// 		$sucursal,$fecha,$cfd));
+	// }
+
+	public function save_docs_anexo_mov($id_orden,$nomArchivo,$rutaArchivo){
+		$this->db2 = $this->load->database("other", true);
+		$xp  = "xpCA_GenerarAnexoMovRa";
+		$modulo = "VTAS";
+		$tipo   = "PDF";
+		
+		//$sqlXp = "DECLARE @OkRef varchar(250) EXEC ".$nomXp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef",array($modulo,$tipo,$Sucursal,$nomArchivo,$rutaArchivo);
+		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef", 
+		array($modulo, $id_orden, $tipo, $nomArchivo, $rutaArchivo));
+		
+		//echo $this->db2->last_query();
+		
+		if ($ok) {
+    		return $ok;
+		}
+		else{
+			return false;
+		}
 	}
 
 	public function guardar_bitacora( $msj, $id_){
@@ -2837,7 +2858,7 @@ class Buscador_Model extends CI_Model{
 	{
 		$this->db2 = $this->load->database('other',true);
 		$query['orden'] = $this->db->select('id_orden_intelisis AS folio_intelisis, id AS folio, cliente')->from('orden_servicio')->where('id', $id_orden)->get()->row();
-		$query['cliente'] = $this->db2->select("c.PersonalNombres,ISNULL(c.PersonalNombres2,' ') AS 'PersonalNombres2',ISNULL(c.PersonalApellidoPaterno,'') AS 'PersonalApellidoPaterno',ISNULL(c.PersonalApellidoMaterno,'') AS 'PersonalApellidoMaterno' ")->from("Cte c")->where("c.Cliente",$query['orden']->cliente)->get()->row();
+		$query['cliente'] = $this->db->select('nombre_cliente as nomCte, ap_cliente as apCte, am_cliente amCte')->from('orden_servicio')->where('id', $id_orden)->get()->row();
 		if ($query['orden'] && $query['orden']->folio_intelisis !== null) {
 			$query['orden']->folio_intelisis = $this->db2->select("movID")->from("Venta")->where("id",$query['orden']->folio_intelisis)->get()->row()->movID;
 		}
@@ -2845,7 +2866,9 @@ class Buscador_Model extends CI_Model{
 	}
 	public function orden_existente($id_orden)
 	{
+		$this->db2 = $this->load->database('other',true);
 		$existe = $this->db->select('id_orden_intelisis AS folio_intelisis, id AS folio, cliente')->from('orden_servicio')->where('id', $id_orden)->get()->row();
-		return sizeof($existe) > 0 ? true : false;
+		$existeIntelisis = $this->db2->select('id')->from('venta')->where('id', $existe->folio_intelisis)->where("estatus <> 'CANCELADO' ")->get()->row();
+		return sizeof($existe) > 0 && sizeof($existeIntelisis) > 0 ? true : false;
 	}
 }

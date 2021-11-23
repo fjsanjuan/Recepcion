@@ -15,6 +15,8 @@ class Servicio extends CI_Controller {
 		//variable para hablitar o deshabilitar el adjunto de fotos de recepcion al envio de correo
 		// se solicito en cever hyundai aeropuero
 		$this->adjuntar_fotos = true;
+		// se solicito en Farerra guardara formatos generados a intelisis en tabla AnexoMov
+		$this->saveDocs = true;
 
 		//datos de configuracion por default para envio de correos
 		$this->mail_host = "smtp.gmail.com";
@@ -1463,6 +1465,27 @@ class Servicio extends CI_Controller {
 		return $creado;
 	}
 
+	public function save_docs_anexo_mov($id_orden = null, $formato)
+	{
+		$nomArchivo = $formato.$id_orden.".pdf";
+		$rutaArchivo = realpath('./archivos_recepcion/'.$nomArchivo); // ruta para produccion
+		//$rutaArchivo = '\\\\10.251.0.10\\www\\Demos\\Ford\\demosV2\\Recepcion\\archivos_recepcion\\'.$nomArchivo; // ruta para pruebas
+
+		$ok = $this->buscador_model->save_docs_anexo_mov($id_orden, $nomArchivo, $rutaArchivo);
+		
+		if(file_exists('./archivos_recepcion/'.$nomArchivo))
+		{
+			$creado["estatusSaveDocs"] = true;
+			$creado["rutaFisica"] = realpath('./archivos_recepcion/'.$nomArchivo);
+		}else
+		{
+			$creado["estatusSaveDocs"] = false;
+			$creado["rutaFisica"] = "";
+		}
+
+		return $creado;
+	}
+
 	public function crear_pdfInv($finventario = null, $id_orden = null)
 	{
 		include_once('./application/libraries/MPDF60/mpdf.php');
@@ -1893,6 +1916,12 @@ class Servicio extends CI_Controller {
 			$finventario["estatus"] = false;
 			$finventario["ruta"] = "";
 		}
+
+		if($this->saveDocs){
+			$formato += $this->save_docs_anexo_mov($id_orden,"FormatoDeOrdenServicio"); 
+			$finventario += $this->save_docs_anexo_mov($id_orden,"FormatoDeInventario"); 
+		}
+
 		$respuesta = [
 			'orden_servicio' => $formato,
 			'inventario'     => $finventario
