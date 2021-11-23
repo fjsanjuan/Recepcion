@@ -45,7 +45,7 @@
                          <table class="table" id="table_datos">
                             <thead class="blue-grey lighten-4">
                                 <th>Nombre cliente</th>
-                                <th>Folio</th>
+                                <th><?php echo $orden->folio_intelisis ? "Folio" : "Folio <label style='color:red'>(Pre Orden)</label>"; ?></th>
                             </thead>
                             <tbody>
                                 <tr>
@@ -128,10 +128,18 @@
         var random = 0;
         const imagenes = JSON.parse('<?php echo json_encode($imagenes); ?>');
         $("#links_light").empty();
-        for(i = 0; i<imagenes.length; i++){
-            $("#links_light").append(`<a target="_blank"><img class="img_hist" src="${imagenes[i]}" style="width:100%"></a>`);
+        if(imagenes.length > 0){
+            
+            for(i = 0; i<imagenes.length; i++){
+                $("#links_light").append(`<a target="_blank"><img class="img_hist" src="${imagenes[i]}" style="width:100%"></a>`);
+            }
+        
+            $("#links_light").tosrus();
         }
-        $("#links_light").tosrus();
+        else{
+            $("#links_light").append(' <center style="color:red " > Sin imágenes para mostrar</center>');
+        }
+       
     }
     </script>
 </body>

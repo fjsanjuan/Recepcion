@@ -54,7 +54,7 @@ class Peticiones extends CI_Controller {
 			$data['estatus'] = true;
 			$data['imagenes'] = $array;
 			$data['orden'] = $orden['orden'];
-			$data['cliente'] = $orden['cliente']->PersonalNombres.' '.$orden['cliente']->PersonalNombres.' '.$orden['cliente']->PersonalApellidoPaterno.' '.$orden['cliente']->PersonalApellidoMaterno;
+			$data['cliente'] = $orden['cliente']->nomCte.' '.$orden['cliente']->apCte.' '.$orden['cliente']->amCte;
 		}else {
 			$data['estatus'] = false;
 		}
