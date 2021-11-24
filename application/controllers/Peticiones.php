@@ -49,7 +49,8 @@ class Peticiones extends CI_Controller {
 				// Cargando la imagen
 				$file = file_get_contents($path);
 				// Decodificando la imagen en base64
-				$array[$key] = $base64 = 'data:image/' . $type . ';base64,' . base64_encode($file);
+				$array[$key]['nom'] = "Img ".($key+1).".".$type;
+				$array[$key]['nomfoto'] = $base64 = 'data:image/' . $type . ';base64,' . base64_encode($file);
 		}
 			$data['estatus'] = true;
 			$data['imagenes'] = $array;

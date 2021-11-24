@@ -131,7 +131,7 @@
         if(imagenes.length > 0){
             
             for(i = 0; i<imagenes.length; i++){
-                $("#links_light").append(`<a target="_blank"><img class="img_hist" src="${imagenes[i]}" style="width:100%"></a>`);
+                $("#links_light").append(`<a href="${imagenes[i]['nomfoto']}" target="_blank" download="${imagenes[i]['nom']}"><img class="img_hist" src="${imagenes[i]['nomfoto']}" style="width:100%"></a>`);
             }
         
             $("#links_light").tosrus();
