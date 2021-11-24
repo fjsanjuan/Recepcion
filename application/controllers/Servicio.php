@@ -17,6 +17,8 @@ class Servicio extends CI_Controller {
 		$this->adjuntar_fotos = true;
 		// se solicito en Farerra guardara formatos generados a intelisis en tabla AnexoMov
 		$this->saveDocs = true;
+		// se solicito en Farerra  enviará un enlace para poder ver fotos cargadas de recepcion
+		$this->linkSegimto = true;
 
 		//datos de configuracion por default para envio de correos
 		$this->mail_host = "smtp.gmail.com";
@@ -237,8 +239,13 @@ class Servicio extends CI_Controller {
 			$correo_cliente = $this->input->post('correo_cliente');
 			//mano de obras y datos
 			$create=$this->buscador_model->guardar_orden_na($datar, $elementos);
+			
+			$envio= false;
 			if($create){
-				$envio = $this->enviar_seguimiento_mail($correo_cliente, $nombre_cliente, $datar['id_orden']);
+				if($this->linkSegimto){
+					$envio = $this->enviar_seguimiento_mail($correo_cliente, $nombre_cliente, $datar['id_orden']);
+				}
+				
 				$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'), 'enviado' => $envio);
 			}else{
 				$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'), 'enviado' => false);
