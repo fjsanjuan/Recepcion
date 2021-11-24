@@ -2407,10 +2407,13 @@ class Buscador_Model extends CI_Model{
 		$xp  = "xpCA_GenerarAnexoMovRa";
 		$modulo = "VTAS";
 		$tipo   = "PDF";
+
+		$orden_servicio = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where('id', $id_orden)->get()->row();
+		$idIntelisis = $this->db2->select('id')->from('venta')->where('id',$orden_servicio->id_orden_intelisis)->where("estatus <> 'CANCELADO' ")->get()->row();
 		
 		//$sqlXp = "DECLARE @OkRef varchar(250) EXEC ".$nomXp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef",array($modulo,$tipo,$Sucursal,$nomArchivo,$rutaArchivo);
 		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef", 
-		array($modulo, $id_orden, $tipo, $nomArchivo, $rutaArchivo));
+		array($modulo, $idIntelisis->id, $tipo, $nomArchivo, $rutaArchivo));
 		
 		//echo $this->db2->last_query();
 		
