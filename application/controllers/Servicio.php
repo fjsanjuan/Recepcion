@@ -348,6 +348,116 @@ class Servicio extends CI_Controller {
        
         echo json_encode($envio);	
 	}
+	public function envia_presupuesto_mail()
+	{
+		$datos = $this->input->post();
+		$data = $this->buscador_model->datos_presupuesto($datos);
+		$url = base_url()."Servicio/email_presupuestos/".$datos['id'];
+		$data['datos_cliente'] = $data['usuario'];
+		$data['datos_tecnico'] = $data['user'];
+		$data['datos_refacciones'] = $data['userTecnico'];
+		$data["datos_suc"] = $data["datos_sucursal"];
+		$data['movID'] = $data["usuario"];
+		$data['cve_articulo'] = $data["detalle"];
+		$tecnico = $data['user']['nombre']." ".$data['user']['apellidos']." ";
+		$refacciones = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
+		$data["datos_rafacciones"]["refacciones"] = $refacciones;
+		$data["datos_refacciones"]["actualizado"] =date('Y-m-d');
+		$data["datos_refacciones"]["autorizado"] = 1;
+		$data["bandera_correo"] = 1;
+		$correo_refacciones=$data['user']['correo_refacciones'];
+		$data["datos_tecnico"]["tecnico"] = $correo_refacciones;
+		$correo_tecnico=$data['userTecnico']['correo_tecnico'];
+		$data["datos_refacciones"]["refacciones"] = $correo_tecnico;
+		ini_set('memory_limit', '1024M');
+		// cargando las librerias para envío de correo.
+		$html = $this->load->view('formatos/formato_verificacion_refacciones', $data, true);
+        // $this->load->helper('dompdf');
+        // $pdf = pdf_create($html, '', false);
+
+		// no se utliza pdf_create por que vuelve a enviar importar la libreria y causa conflicto
+        $dompdf = new DOMPDF();
+    	$dompdf->load_html($html);
+    	$dompdf->render();
+    	$pdf = $dompdf->output();
+    
+        #$correo_tecnico = $this->session->userdata["logged_in"]["correo"];
+        // $correo_asesor = "lorozco@intelisis.com";
+
+        // enviar correo       
+       	$this->load->library("PhpMailerLib");
+		$mail = $this->phpmailerlib->load();
+			try {
+			    //Server settings
+			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    // $mail->ErrorInfo;
+			    // $mail->isSMTP();// Set mailer to use SMTP
+			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    // $mail->SMTPAuth = true;// Enable SMTP authentication
+			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    // $mail->Password = '9F8a*37x';  // SMTP password
+			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    // $mail->Port = 465;// TCP port to connect to
+
+			    //Server settings
+			    //$mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->ErrorInfo;
+			    $mail->isSMTP();// Set mailer to use SMTP
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
+			    
+			    //Recipients
+			     $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			    //$mail->addAddress($data['usuario']['email_cliente']);// Name is optional
+			    // $mail->AddReplyTo($correo_asesor,'Service Excellence');  //A quien debe ir dirigida la respuesta
+			    $mail->addCC($correo_refacciones);											//Con copia a
+			    $mail->addBCC('tpena@intelisis.com');	 //Con copia oculta a
+			    $mail->addCC($correo_tecnico);											//Con copia a
+			    //$mail->addBCC('mlopez@intelisis.com');	 //Con copia oculta a
+			    
+			    //Attachments
+			    $mail->AddStringAttachment($pdf, 'Verificación.pdf');                 // Agregar archivo adjunto
+			    $datos["comentarios"] = "Hello there";
+			    //Content
+			                                     // Set email format to HTML
+			    $mail->CharSet = 'UTF-8';
+			    $mail->Subject = 'Verificación';
+			    $mail->Body      = "<html><body><p>Estimado ".$tecnico.":
+				En base a la verificación solicitada, requiriendo una validación de piezas, deberá acceder a la siguiente liga para ver las piezas existentes: </p>
+				<p><a href='".$url."' target='_blank' >REVISAR VALIDACIÓN</a></p>
+				<p>Sin más por el momento, saludos cordiales. <br>
+
+				Agradecemos su preferencia! </p></html></body>";
+			    $mail->isHTML(true); 
+				$envia = $mail->send();
+				
+			    $data = array('success' => 1, 'data' => ('Verificación enviada.'));
+			    //$this->eliminar_archivoTemp($formato["ruta"]);
+				//$enviar = false;
+			    if($envia)
+			    {
+			    	$envio = true;
+			    }else 
+			    {
+			    	$envio = false;
+			    	var_dump($mail->ErrorInfo);
+			    }
+			} catch (Exception $e) {
+			    echo 'Message could not be sent.';
+			    echo 'Mailer Error: ' . $mail->ErrorInfo;
+
+			    $envio = false;
+			}
+       
+        echo json_encode($envio);	
+	}
 
 	function pkts_detalle(){
 		$idp = $this->input->post('idp');
@@ -1248,6 +1358,8 @@ class Servicio extends CI_Controller {
 		$correo_b64 = file_get_contents($correo_b64);//para obtener solo el string de la imagen sin la cabecera base64 firma valida e invalida
         $formato_inventario = $this->input->post("inv");
         $correo_asesor = $this->session->userdata["logged_in"]["correo"];
+        $correo_refacciones = $this->session->userdata["logged_in"]["correo"];
+        $correo_tecnico = $this->session->userdata["logged_in"]["correo"];
 		
 		//$multipunto = $this->crear_pdf_multipunto($multipunto, $id_orden);
 		
@@ -1288,6 +1400,8 @@ class Servicio extends CI_Controller {
 			    $mail->addAddress($email_envio, $cliente_envio);// Name is optional
 			    $mail->AddReplyTo($mail_username_env,'Service Excellence');  //A quien debe ir dirigida la respuesta
 			    $mail->addCC($correo_asesor);						  			  			//Con copia a
+			    $mail->addCC($correo_refacciones);						  			  			//Con copia a
+			    $mail->addCC($correo_tecnico);						  			  			//Con copia a
 			    //$mail->addBCC('fsanjuan@intelisis.com');						  			//Con copia oculta a
 			    
 			    //Content
@@ -1645,6 +1759,25 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($presupuesto);
 	}
+	public function GuardaVerificacion(){
+		$datos = $this->input->post();
+		$presupuesto = $this->buscador_model->GuardaVerificacion($datos);
+		$logged_in =  $this->session->userdata("logged_in");
+		$perfil    =  $logged_in["perfil"];
+		if($perfil == 6 && $presupuesto["estatus"] == true){ //si es de refacciones enviar mail al tecnico
+			$info["perfil"] = $perfil;
+			$info["id"] = $presupuesto["id_presupuesto"];
+			$notify = $this->notificar_tecnico($info);
+			$presupuesto["correo_refacciones"] = $notify;
+		if($perfil == 5 && $presupuesto["estatus"] == true){ //si es de tecnico enviar mail a refacciones
+			$info["perfil"] = $perfil;
+			$info["id"] = $presupuesto["id_presupuesto"];
+			$notify = $this->notificar_tecnico($info);
+			$presupuesto["correo_tecnico"] = $notify;
+		}
+	}
+		echo json_encode($presupuesto);
+	}
 	// public function ver_presupuestoPdF(){
 	// 	$datos = $this->input->post();
 	// 	$data = $this->buscador_model->datos_presupuesto($datos);
@@ -1658,8 +1791,25 @@ class Servicio extends CI_Controller {
 		$data = $this->buscador_model->datos_presupuesto($data);
 		$data['datos_cliente'] = $data['usuario'];
 		$data["datos_suc"] = $data["datos_sucursal"];
-		// print_r($data);
+		//print_r($data);
 		$this->load->view('formatos/formato_presupuesto',$data);
+	}
+	public function ve_presupuestoPdF($datos= 0){
+		$data["id"] = $datos;
+		$data = $this->buscador_model->datos_presupuesto($data);
+		$data['datos_cliente'] = $data['usuario'];
+		$data["datos_suc"] = $data["datos_sucursal"];
+		$data['movID'] = $data["usuario"];
+		$data['cve_articulo'] = $data["detalle"];
+		$refacciones = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
+		//print_r($data['id_orden']);
+		$data["datos_refacciones"]["refacciones"] = $refacciones;
+		$data["datos_refacciones"]["actualizado"] =date('Y-m-d');
+		$data["datos_refacciones"]["correo_tecnico"] = $refacciones;
+		$data['datos_refacciones'] = $data['userTecnico'];
+		$data['datos_tecnico'] = $data['user'];
+		//print_r($data);
+		$this->load->view('formatos/formato_verificacion_refacciones',$data);
 	}
 	public function email_presupuesto($datos= 0){
 		$data["id"] = $datos;
@@ -1671,6 +1821,23 @@ class Servicio extends CI_Controller {
 		$data['id_orden'] = $data["usuario"]["id_orden"];
 		if($data['usuario']['vista_email'] == 0)
 			$this->load->view('formatos/formato_presupuesto_mail',$data);
+		else show_404();
+	}
+	public function email_presupuestos($datos= 0){
+		$data["id"] = $datos;
+		$data = $this->buscador_model->datos_presupuesto($data);
+		$refacciones = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
+		$data['datos_refacciones'] = $data['userTecnico'];
+		$data['datos_tecnico'] = $data['user'];
+		$data['id_presupuesto'] = $datos;
+		$data['cve_articulo'] = $data["detalle"];
+		//$correo_refacciones = $datos["datos_sucursal"]["email_refacciones"];
+		$data["datos_suc"] = $data["datos_sucursal"];
+		$data['id_presupuesto'] = $datos;
+		//$data['vin'] = $data["user"]["vin"];
+		$data['id_orden'] = $data["usuario"]["id_orden"];
+		if($data['usuario']['vista_email'] == 0)
+			$this->load->view('formatos/formato_verificacion_mail',$data);
 		else show_404();
 	}
 	public function autorizar_presupuesto($estatus = null,  $id_presupuesto = null){
@@ -1862,6 +2029,99 @@ class Servicio extends CI_Controller {
 			    //$this->eliminar_archivoTemp($formato["ruta"]);
 
 			    if($enviar)
+			    {
+			    	$envio = true;
+			    }else 
+			    {
+			    	$envio = false;
+			    	var_dump($mail->ErrorInfo);
+			    }
+			} catch (Exception $e) {
+			    echo 'Message could not be sent.';
+			    echo 'Mailer Error: ' . $mail->ErrorInfo;
+
+			    $envio = false;
+			}
+       
+        return $envio;	
+	}
+	public function notificar_tecnico($info)
+	{
+		ini_set('memory_limit', '1024M');
+
+		$data = $this->buscador_model->datos_presupuesto($info);
+		$tecnico = $data['user']['nombre']." ".$data['user']['apellidos'];
+		$refacciones = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
+		// print_r($data);die();
+		$tecnico = $data['user']['tecnico'];
+		$refacciones = $data['userTecnico']['refacciones'];
+		$correo_refacciones = $datos["datos_sucursal"]["email_refacciones"];
+		#$num_cita = $data['user']['num_cita'];
+		#$vin = $data['user']['vin'];
+		$vin = "";
+		$num_cita = "";
+		if($info["perfil"] == 6){ //notificar a tecnico de la validacion de refacciones
+			$comentario_email = "Buen día ".$tecnico.", este mensaje es para informarle que se ha generado una nueva validación de refacciones: ".$tecnico.". <br> La cita tiene el número: <b>".$num_cita."</b>. Y el vin relacionado es: <b>".$vin.".</b><br> Favor de verificarlo en el sistema a la brevedad. <br>Saludos.";
+			$correo_refacciones = $data['user']['correo_refacciones'];
+		}else{
+			$correo_refacciones = "";
+			$comentario_email = "";
+		}
+		if($info["perfil"] == 5){ //notificar a refacciones de la validacion de refacciones
+			$comentario_email = "Buen día ".$refacciones.", este mensaje es para informarle que se ha generado una nueva validación de refacciones: ".$refacciones.". <br> La cita tiene el número: <b>".$num_cita."</b>. Y el vin relacionado es: <b>".$vin.".</b><br> Favor de verificarlo en el sistema a la brevedad. <br>Saludos.";
+			$correo_tecnico = $data['userTecnico']['correo_tecnico'];
+		}else{
+			$correo_tecnico = "";
+			$comentario_email = "";
+		}
+        
+        // enviar correo       
+       	$this->load->library("PhpMailerLib");
+		$mail = $this->phpmailerlib->load();
+			try {
+			    //Server settings
+			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->ErrorInfo;
+			    // $mail->isSMTP();// Set mailer to use SMTP
+			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    // $mail->SMTPAuth = true;// Enable SMTP authentication
+			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    // $mail->Password = '9F8a*37x';  // SMTP password
+			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    // $mail->Port = 465;// TCP port to connect to
+
+			    //Server settings
+			    // $mail->SMTPDebug = 2;// Enable verbose debug output
+			    //$mail->ErrorInfo;
+			    $mail->isSMTP();// Set mailer to use SMTP
+			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
+			    $mail->Username = $this->mail_username; // SMTP username
+			    $mail->Password = $this->mail_password;  // SMTP password
+			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = $this->mail_port;// TCP port to connect to
+				
+				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
+				$mail_username_env = $this->mail_username;
+			    
+			    //Recipients
+			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			    $mail->addAddress($correo_tenico);// Name is optional
+				$mail->addCC("tlopez@intelisis.com");
+			    $mail->addAddress($correo_refacciones);// Name is optional
+				$mail->addCC("tpena@intelisis.com");
+			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
+			                              // Set email format to HTML
+			    $mail->CharSet = 'UTF-8';
+			    $mail->Subject = 'Verificación';
+			    $mail->Body      = "<html><body><p>".$comentario_email."</p></html></body>";
+			    $mail->isHTML(true); 
+				$envia = $mail->send();
+				
+			    $data = array('success' => 1, 'data' => ('Verificación enviada.'));
+			    //$this->eliminar_archivoTemp($formato["ruta"]);
+
+			    if($envia)
 			    {
 			    	$envio = true;
 			    }else 
