@@ -59,6 +59,12 @@
     #cpModal td{
         vertical-align: middle;
     }
+	#modalBuscArt{
+        overflow:scroll;
+    }
+	#modalValidacion td{
+        vertical-align: middle;
+    }
 </style>
 <div class="container">
     <br>
@@ -979,3 +985,156 @@
 </div>-->
 
 <?php $this->load->view('modals/cp'); ?>
+
+<!-- modal verificacion de refacciones-->
+<div class="modal fade" id="modalBuscArt" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleValidacion">Nueva Verificación de Refacciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4 ui-front">
+                                    <input type="hidden" name="input_claveArt" id="input_claveArt2">
+                                    <input class="form-control ui-autocomplete-input" type="text" id="ajax_arts2" placeholder="Buscar Artículo" autocomplte="off">
+                                    <!-- <datalist id="json-datalist-art"></datalist> -->
+                                </div>
+                                <div class="col-sm-1">
+                                    <label for="input_precio2">Precio:</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="form-control" type="text" id="input_precio2" name="input_precio">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label for="input_cantidad2">Cantidad:</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="number" class="form-control" id="input_cantidad2" name="input_cantidad" value="1" style="width: 150% !important" >
+                                </div>
+                                <div class="col-sm-1">
+                                        <label for="input_stock2">Stock:</label>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input type="text" class="form-control" id="input_stock2" name="input_stock" value="0" readonly="true">
+                                    </div>
+                                <div class="col-sm-1">
+                                    <button class="btn btn-sm btn-success float-right" id="boton_agregarArt2"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <br><br>
+                                 <div class="col-sm-4">
+                                    <textarea name="comentario_art" id="comentario_art2" cols="50" rows="5" placeholder="comentario" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                         <br>
+                        <div class="loader loader5" id="spinner">
+                          <svg width="40px" height="40px" viewBox="0 0 40 40" fill="transparent">
+                            <circle cx="20" cy="20" r="4" stroke="#1976D2"/>
+                          </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" id="card_articulos2" style="display: none;">
+                    <div class="card-body">
+                        <h5>Artículos</h5>
+                        <div class="table-responsive">
+                            <?php
+                                $attributes = array('id' => 'formPresupuesto2');
+                                echo form_open('',$attributes);
+                            ?>
+                            <table class="table table-condensed" id="table_invoice2">
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td><strong>Artículo</strong></td>
+                                        <td class="text-center"><strong>Descripción</strong></td>
+                                        <td class="text-center"><strong>Cantidad</strong></td>
+                                        <td class="text-center"><strong>Precio U</strong></td>
+                                        <td class="text-center"><strong>Comentarios</strong></td>
+                                        <td class="text-center"><strong>Total</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><label for="totalFin">Total Fin:</label></td>
+                                    <td class="price"><input class="cost md-textarea" id="precioTotal2" name="precioTotal" readonly="true"></td>
+                                </tbody>
+                            </table>
+                            <input type="hidden" id="id_orden_b2" name="id_orden_b2">
+                            <input type="hidden" id="numero_articulos2" name="numero_articulos">
+                            <input type="hidden" id="id_presupuesto2" name="id_presupuesto">
+                            <?php
+                                echo form_close();
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="bnGuardarPres2">Guardar Verificación</button>
+                <button type="button" class="btn btn-success" id="bnActualizarPres2" style="display: none">Actualizar Verificación</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalValidacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="false">
+    <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Verificaciones de la Orden</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-success" id="bnGuardarPres2">Guardar Validación</button> -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal para email de Verificacion de refacciones -->
+<div class="modal fade" id="modalemailP2" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mandar Verificación por Correo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6>Añadir Comentarios</h6>
+                <?php
+                    $attributes = array('id' => 'mandar_pres_mail2');
+                    echo form_open('',$attributes);
+                ?>   
+                <textarea name="comentario" id="comentario2" cols="100" rows="10"></textarea>
+                <input type="hidden" name="id" id="id2" value="">
+                <?php
+                    echo form_close();
+                ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="enviar_presupuesto2">Enviar Email</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
