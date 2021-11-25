@@ -2331,6 +2331,9 @@ class Buscador_Model extends CI_Model{
 			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
 		}else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){
+			$usuario = "AM2";
+			$cond_claveUs = "clave_asesor = '".$usuario."'";
+		}else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){ //se debe reacomodar esta condicional
 			//$usuario = "AM2";
 			$cond_claveUs = " movimiento IS NOT NULL";
 		}else 
