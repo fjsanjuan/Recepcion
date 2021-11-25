@@ -2589,6 +2589,37 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function GuardaVerificacion($data){
+		$data["detalles"] = parse_str($data["detalles"],$arr);
+		// var_dump($arr);die();
+		$insertP["fecha_creacion"] = date('d-m-Y');
+		$insertP["eliminado"] = 0;
+		$insertP["id_orden"] = $arr['id_orden_b2'];
+		$insertP["total_presupuesto"] = $arr['precioTotal2'];
+		$insertP["autorizado"] = 0;
+		$insertP["vista_email"] = 0;
+
+		$this->db->trans_start();
+		$this->db->insert('verificacion_refacciones',$insertP);
+		$id_pres = $this->db->select("IDENT_CURRENT('presupuestos') as id")->get()->row_array();
+		$arts = $data["articulos"];
+		foreach ($arts as $key => $value) {
+			$value["id_presupuesto"] = $id_pres['id'];
+			$value["autorizado"] = 0;
+			$this->db->insert('detalles_verificacion_refacciones',$value);
+		}
+		$this->db->trans_complete();
+		if($this->db->trans_status() == true)
+		{
+			$response["estatus"] = true;
+			$response["id_presupuesto"] = $id_pres['id'];
+		}else
+		{
+			$response["estatus"] = false;
+			$response["id_presupuesto"] = 'no';
+		}
+		return $response;
+	}
 	// public function GuardarPresupuesto($data){
 	// 	$insertP["fecha_creacion"] = date("d-m-Y H:i:s");
 	// 	$insertP["eliminado"] = 0;
@@ -2652,8 +2683,20 @@ class Buscador_Model extends CI_Model{
 						->join("usuarios", "usuarios.cve_intelisis = orden_servicio.clave_asesor")
 						->where("presupuestos.id_presupuesto", $data['id'])
 						->get()->row_array();
-
+						/*echo "<pre>";
+						print_r($this->db->last_query());
+						echo "</pre>";*/
+		$ret['user'] = $this->db->select("usuarios.nombre, usuarios.apellidos, usuarios.email as correo_refacciones")->from("usuarios")
+						->where("usuarios.perfil", 6, "presupuestos.id_presupuesto", $data['id'])
+						->get()->row_array();
+		$ret['userTecnico'] = $this->db->select("usuarios.nombre, usuarios.apellidos, usuarios.actualizado, usuarios.email as correo_tecnico")->from("usuarios")
+						->where("usuarios.perfil", 5, "presupuestos.id_presupuesto", $data['id'])
+						->get()->row_array();
+		
 		$ret['detalle'] = $this->db->select("*")->from("presupuesto_detalle")->where("id_presupuesto", $data['id'])->get()->result_array();
+		/*echo "<pre>";
+		print_r($ret['detalle']);
+		echo "</pre>";*/
 		$sucursal = $ret["usuario"]["id_sucursal_intelisis"];
 		$ret["datos_sucursal"] = $this->db->select("datos_sucursal.*, sucursal.email_refacciones")
 										  ->from("datos_sucursal")
