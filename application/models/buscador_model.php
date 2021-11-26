@@ -2600,7 +2600,7 @@ class Buscador_Model extends CI_Model{
 		// var_dump($arr);die();
 		$insertP["fecha_creacion"] = date('d-m-Y');
 		$insertP["eliminado"] = 0;
-		$insertP["id_orden"] = $arr['id_orden_b2'];
+		$insertP["id_orden"] = $arr['id_orden_b'];
 		$insertP["total_presupuesto"] = $arr['precioTotal2'];
 		$insertP["autorizado"] = 0;
 		$insertP["vista_email"] = 0;

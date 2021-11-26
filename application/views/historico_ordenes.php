@@ -1046,7 +1046,7 @@
                         <h5>Artículos</h5>
                         <div class="table-responsive">
                             <?php
-                                $attributes = array('id' => 'formPresupuesto');
+                                $attributes = array('id' => 'formPresupuesto2');
                                 echo form_open('',$attributes);
                             ?>
                             <table class="table table-condensed" id="table_invoice2">
@@ -1066,11 +1066,11 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><label for="totalFin">Total Fin:</label></td>
+                                    <td><label for="totalFin2">Total Fin:</label></td>
                                     <td class="price"><input class="cost md-textarea" id="precioTotal2" name="precioTotal" readonly="true"></td>
                                 </tbody>
                             </table>
-                            <input type="hidden" id="id_orden_b2" name="id_orden_b2">
+                            <input type="hidden" id="id_orden_b2" name="id_orden_b">
                             <input type="hidden" id="numero_articulos2" name="numero_articulos">
                             <input type="hidden" id="id_presupuesto2" name="id_presupuesto">
                             <?php
@@ -1122,7 +1122,7 @@
             <div class="modal-body">
                 <h6>Añadir Comentarios</h6>
                 <?php
-                    $attributes = array('id' => 'mandar_pres_mail');
+                    $attributes = array('id' => 'mandar_pres_mail2');
                     echo form_open('',$attributes);
                 ?>   
                 <textarea name="comentario" id="comentario2" cols="100" rows="10"></textarea>

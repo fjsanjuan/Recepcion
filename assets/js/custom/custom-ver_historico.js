@@ -1654,7 +1654,7 @@
 		table_body_default += "<td></td>";
 		 table_body_default +=		"<td></td>";
 		 table_body_default +=	"<td></td>";
-		 table_body_default +=	"<td><label for='totalFin'>Total Fin:</label></td>";
+		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 		 table_body_default +="id='precioTotal2' name='";
 		table_body_default +="precioTotal2' readonly='true'></td>";
@@ -1675,7 +1675,7 @@
 		var cte = $this.parent().parent().find('td:eq(1)').text();
 		var numerowhats = parent.substring(3);
 		$("#oden_hide2").val(idOrden);
-		//var textoWhats = "Buen día estimado (a) "+ cte + " le envíamos la siguiente información acerca de los detalles que se encontraron en su vehículo. Saludos";
+		var textoWhats = "Buen día estimado (a) "+ cte + " le envíamos la siguiente información acerca de los detalles que se encontraron en su vehículo. Saludos";
 		$("#numerowhats2").val(numerowhats);
 		$("#TextWhats2").val(textoWhats);
 		$('#modalValidacion .modal-body').empty();
@@ -1707,7 +1707,7 @@
 					$.each(data.pres, function(index, value){
 						
 						var idpres = value.id_presupuesto;
-						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+index+"'><i class='fa fa-edit'></i> Editar</button></div></div>");
+						var row_title = $("<div class='row'><div class='col-md-4'><label>#VerificacionInterna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+index+"'><i class='fa fa-edit'></i> Editar</button></div></div>");
 						/*if(value.autorizado == 1)
 							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
 						else
@@ -1802,7 +1802,7 @@
 		var idIndex =  $(this).attr('data-id_presupuesto');
 		var datos = presupuestos_array[idIndex];
 		var id_presupuesto = datos["id_presupuesto"];
-		$("#id_presupuesto").val(id_presupuesto);
+		$("#id_presupuesto2").val(id_presupuesto);
 		$("#table_invoice2 tbody").empty();
 		var table_body_default = "<td></td>";
 		table_body_default += "<td></td>";
@@ -1856,7 +1856,7 @@
 				url: base_url+ "index.php/Servicio/EditarPresupuesto",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},
@@ -1871,7 +1871,7 @@
 					table_body_default += "<td></td>";
 					 table_body_default +=		"<td></td>";
 					 table_body_default +=	"<td></td>";
-					 table_body_default +=	"<td><label for='totalFin'>Total Fin:</label></td>";
+					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 					 table_body_default +="id='precioTotal2' name='";
 					table_body_default +="precioTotal2' readonly='true'></td>";
@@ -1938,7 +1938,7 @@
 			type: 'post',
 			url: base_url+ "index.php/Servicio/envia_presupuesto_mail",
 			dataType: "json",
-			data: $("#mandar_pres_mail").serialize(),
+			data: $("#mandar_pres_mail2").serialize(),
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
@@ -2146,7 +2146,7 @@
 				url: base_url+ "index.php/Servicio/GuardaVerificacion",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},

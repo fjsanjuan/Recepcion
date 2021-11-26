@@ -107,8 +107,8 @@
                             echo form_close();
                         ?>
 						 <!--
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>-->
-						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>-->
 					</div>
 				</div>
 			</div>
@@ -147,7 +147,7 @@
 	</div>-->
 </body>
 </html> 
-<script>
+<script>/*
 $(document).ready(function() {
 	//variables que controlan la ruta donde se guardan las fotos de la inspeccion y seguimiento en el presupuesto
 	//mostrar guardadas en el mismo proyecto dejarlas vacias alias_exists = '' var dir_fotos= '';
