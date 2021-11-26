@@ -3603,7 +3603,7 @@ class Buscador_Model extends CI_Model{
 			}
 		return $response;
 	}
-	public function obtener_pdf_api($token, $datos)
+	public function obtener_pdf_api($token, $datos, $contentType = 'Content-Type:application/json')
 	{
 		$data = [];
 		foreach ($datos as $key => $dato) {
@@ -3611,7 +3611,7 @@ class Buscador_Model extends CI_Model{
 		}
 		$payload = json_encode($data);
 		$headers = [
-			'Content-Type:application/json',
+			$contentType,
 			'Authorization: Token '. $token,
 			'Content-Length: ' . strlen($payload)
 		];
@@ -3662,46 +3662,41 @@ class Buscador_Model extends CI_Model{
 	public function get_archivos_f1863($id_orden = null, $tipo = 7)
 	{
 		$this->load->database();
-		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 order by archivo.id desc;");
+		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo <= {$tipo} and archivo.eliminado = 0 order by archivo.id desc;");
 		if($query->num_rows() > 0){
 			return $query->result_array();
 		}else
 			return [];
 	}
-	public function obtener_union_pdf($id_orden)
+	public function obtener_union_pdf($token, $datos)
 	{
-		$pdf = new PDFMerger;
-		$archivos = $this->get_archivos_f1863($id_orden, 7);
 		$aux = 0;
 		$mensaje = "";
-		$pdfs = "";
-		$ruta = $this->ruta_formts."archivos_recepcion/{$id_orden}/";
+		#$pdfs = "";
+		$pdfs = [];
+		$response = [];
+		$ruta = $this->ruta_formts."archivos_recepcion/{$datos['id_orden']}/";
 		if(!file_exists($ruta)) {
 			mkdir($ruta, 0777, true);
 		}
-		foreach ($archivos as $key => $archivo) {;
+		foreach ($datos['archivos'] as $key => $archivo) {;
 			if (file_exists($archivo["ruta_archivo"])) {
-				$pdfs .= realpath($archivo["ruta_archivo"])." ";
-				#$pdf->addPDF(realpath($archivo["ruta_archivo"]));
+				$pdf['data']= chunk_split(base64_encode(file_get_contents($archivo['ruta_archivo'])));
+				$pdf['extension'] = pathinfo($archivo['ruta_archivo'], PATHINFO_EXTENSION);
+				$pdfs[] = $pdf;
 				$aux++;
 			}
 		}
 		if ($aux > 0) {
-			#$archivoAux = $pdf->merge('string', 'f1863.pdf');
-			#file_put_contents($ruta.'f1863.pdf', $archivoAux);
-			$ruta_salida = realpath("{$ruta}");
-			$ruta_salida .= "\\formato.pdf";
-			
-			$cmd = "\"C:\Program Files\gs\gs9.55.0\bin\gswin64\" -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile={$ruta_salida} ".$pdfs;
-			$result = shell_exec($cmd);
+			$datos['archivos'] = $pdfs;
+			$response = $this->obtener_pdf_api($token, $datos);
 		}else {
 			$mensaje = "No hay documentación generada en PDF, ";
 		}
-		if (file_exists($ruta_salida)) {
+		if (file_exists("{$response['data']['ruta_rel']}")) {
 			$response["estatus"] = true;
 			$response["mensaje"] = "Archivo generado exitosamente.";
-			$response["ruta"] = base_url("{$ruta}formato.pdf");
-			$response["nombre"] = "formato-{$id_orden}";
+			$response["nombre"] = "formato-{$datos['id_orden']}";
 		} else {
 			$response["estatus"] = false;
 			$response["mensaje"] = "{$mensaje}Archivo no generado.";

@@ -2512,13 +2512,17 @@ class Servicio extends CI_Controller {
     	#$dompdf->create('save');
     	echo json_encode($response);
 	}
-	public function obtener_union_pdf($id_orden = null)
+	public function obtener_union_pdf($token = null, $id_orden = null)
 	{
-		if ($id_orden == null) {
+		$data = [];
+		$datos = $this->input->post();
+		if ($id_orden == null || $token == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
 		}else {
-			$response = $this->buscador_model->obtener_union_pdf($id_orden);
+			$archivos = $this->buscador_model->get_archivos_f1863($id_orden, 7);
+			$datos["archivos"] = $archivos;
+			$response = $this->buscador_model->obtener_union_pdf($token, $datos);
 		}
 		echo json_encode($response);
 	}

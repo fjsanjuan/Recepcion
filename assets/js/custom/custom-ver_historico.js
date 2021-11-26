@@ -3813,37 +3813,62 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 		var t_nomCte = $("#api_nomCte-"+id_orden).val();
 		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
 		//console.log(t_signAsesor);
-		var tok=""
+		var tok="";
 		$.ajax({
-					// url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
-					url: `${base_url}index.php/servicio/obtener_union_pdf/${id_orden}`,
+			url: "http://127.0.0.1:8000/auth/",
+			//url: "https://apiintelisis.intelisis-solutions.com:8443/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'Angelin20',
+				password:'3210995'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					url: `${base_url}index.php/servicio/obtener_union_pdf/${tok}/${id_orden}`,
+					//url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					//url: `${base_url}index.php/servicio/obtener_union_pdf/${tok}`,
 					type: "POST",
 					headers: {
 						Authorization: `Token ${tok}`,
 					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
 					data: {
+						name:'FormatoF1863',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:t_vin,
+						garantia:signGrtia,
+						nomCte:t_nomCte,
+						signAsesor:t_signAsesor,
+						id_orden:id_orden,
+						url:'http://127.0.0.1:8000/reports/getFormatoF1863'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
 						toastr.info("Generando Formato");
 					},
 					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
 						toastr.error("Error al generar el formato");
 						$("#loading_spin").hide();
 					},
-					success: function (response){
+					success: function (blob){
 						$("#loading_spin").hide();
-						data = JSON.parse(response);
-						console.log('data', data);
-						if (data.estatus) {
-							const link = $('<a>', {'href':data['ruta'], 'download':data['nombre']+'.pdf', 'target':'_blank'});
-							link[0].click();
-						}else{
-							toastr.warning(data.mensaje);
-						}
-						/*console.log('data', data);
-						const link = $('<a>', {'href':data.data['ruta'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
-						link[0].click();*/
+						data = JSON.parse(blob);
+						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
 					}
 				});
+			}
+		});
 });
