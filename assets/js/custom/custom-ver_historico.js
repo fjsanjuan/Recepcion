@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -249,7 +249,7 @@
 				action_tecnico		="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Anverso</button>`;
 				action_tecnico		 += "<button class='btn btn-sm new_budget2' style='background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
-				action_tecnico		 += "<button class='btn btn-sm search_budget2' style='background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Enviar Verificación</button>";
+				action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				//action_tecnico		+= "<button type='button' class='btn btn-sm verificar_refacc' style='background: #17A2B8;' data-toggle='modal' data-target='#modalValidacion' id='verificar_refacc-"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i> &nbsp&nbsp Refacciones</button>";
 				//action_tecnico 		+= "<button class='btn btn-sm buscar_presupuesto' style='background: #607d8b;' data-toggle='modal' data-target='#modalPresupuestos' id='buscar_presupuesto-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Existencias</button>";
 				// se usara para ver a que cliente se envia en presupuesto
@@ -1657,7 +1657,7 @@
 		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 		 table_body_default +="id='precioTotal2' name='";
-		table_body_default +="precioTotal2' readonly='true'></td>";
+		table_body_default +="precioTotal' readonly='true'></td>";
 		$("#table_invoice2 tbody").append(table_body_default);
 		$("#card_articulos2").hide();
 		numArt = 0;
@@ -1667,9 +1667,9 @@
 		$("#bnGuardarPres2").show();
 		$('#modalBuscArt').modal('show');
 	});
-	$(".tabla_hist tbody").on("click", "tr td button.search_budget2", function(e){
+	$(".tabla_hist tbody").on("click", "tr td button.search_verificacion", function(e){
 		var idOrden =  $(this).attr('id');
-		search_budget2(idOrden);
+		search_verificacion(idOrden);
 		var $this = $(this);
 		var parent = $this.parent().parent().find('td:eq(2)').text();
 		var cte = $this.parent().parent().find('td:eq(1)').text();
@@ -1688,9 +1688,9 @@
 	
 	var presupuestos_array;
 	
-	function search_budget2(id_orden){
+	function search_verificacion(id_orden){
 		$.ajax({
-			url: base_url+ "index.php/Buscador/search_budget",
+			url: base_url+ "index.php/Buscador/search_verificacion",
 			type: "POST",
 			dataType: 'json',
 			data: {id:id_orden},
@@ -1707,7 +1707,7 @@
 					$.each(data.pres, function(index, value){
 						
 						var idpres = value.id_presupuesto;
-						var row_title = $("<div class='row'><div class='col-md-4'><label>#VerificacionInterna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+index+"'><i class='fa fa-edit'></i> Editar</button></div></div>");
+						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+index+"'><i class='fa fa-edit'></i> Editar</button></div></div>");
 						/*if(value.autorizado == 1)
 							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
 						else
@@ -1715,7 +1715,7 @@
 	
 						row_title.append(check);*/
 	
-						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia<br><input type='checkbox' class='check check_all2' value='1' id='"+idpres+"'></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia<br><input type='checkbox' class='check check_all2' value='1' id='"+idpres+"'></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 						$.each(value.detalle, function(index2, value2){
 							if (value2.comentario != "" && value2.comentario != null){
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
@@ -1811,7 +1811,7 @@
 		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 		 table_body_default +="id='precioTotal2' name='";
-		table_body_default +="precioTotal2' readonly='true'></td>";
+		table_body_default +="precioTotal' readonly='true'></td>";
 		$("#table_invoice2 tbody").append(table_body_default);
 		$("#card_articulos2").hide();
 		numArt = 0;
@@ -1856,7 +1856,7 @@
 				url: base_url+ "index.php/Servicio/EditarPresupuesto",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},
@@ -1874,7 +1874,7 @@
 					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 					 table_body_default +="id='precioTotal2' name='";
-					table_body_default +="precioTotal2' readonly='true'></td>";
+					table_body_default +="precioTotal' readonly='true'></td>";
 					$("#table_invoice2 tbody").append(table_body_default);
 					$("#card_articulos2").hide();
 					numArt = 0;
@@ -1930,15 +1930,15 @@
 		var idIndex =  $(this).attr('data-index');
 		var datos = presupuestos_array[idIndex];
 		var id_press = datos.id_presupuesto;
-		window.open(base_url+"index.php/Servicio/ve_presupuestoPdF/"+ id_press, "_blank");
+		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 	});
 	$("#enviar_presupuesto2").click(function(){
 		$.ajax({
 			cache: false,
 			type: 'post',
-			url: base_url+ "index.php/Servicio/envia_presupuesto_mail",
+			url: base_url+ "index.php/Servicio/envia_verificacion_mail",
 			dataType: "json",
-			data: $("#mandar_pres_mail").serialize(),
+			data: $("#mandar_pres_mail2").serialize(),
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
@@ -2088,7 +2088,7 @@
 	  price = formatear_numero(price);
 	  // total = formatear_numero(total);
 	  iva = formatear_numero(iva);
-	  $("#precioTotal2").val(total);
+	  $("#precioTotal").val(total);
 	  $('#subtotal').val(total);
 	  $('#ivatotal').val(iva); 
 	  
@@ -2146,7 +2146,7 @@
 				url: base_url+ "index.php/Servicio/GuardaVerificacion",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},
@@ -2171,7 +2171,7 @@
 					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 					 table_body_default +="id='precioTotal2' name='";
-					table_body_default +="precioTotal2' readonly='true'></td>";
+					table_body_default +="precioTotal' readonly='true'></td>";
 					$("#table_invoice2 tbody").append(table_body_default);
 					$("#card_articulos2").hide();
 					numArt = 0;

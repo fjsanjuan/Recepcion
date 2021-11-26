@@ -74,7 +74,7 @@
 					<div class="card-body">
 						<h6>PARTES REQUERIDAS</h6>
 						<?php
-                            $attributes = array('id' => 'form_presupuesto');
+                            $attributes = array('id' => 'form_presupuesto2');
                             echo form_open('',$attributes);
                         ?>
 						<table class="table table-bordered table-striped table-hover animated fadeIn no-footer tablepres">
@@ -106,9 +106,9 @@
 						<?php
                             echo form_close();
                         ?>
-						 <!--
+						 
                         <button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>
-						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>-->
+						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>
 					</div>
 				</div>
 			</div>
@@ -147,7 +147,7 @@
 	</div>-->
 </body>
 </html> 
-<script>/*
+<script>
 $(document).ready(function() {
 	//variables que controlan la ruta donde se guardan las fotos de la inspeccion y seguimiento en el presupuesto
 	//mostrar guardadas en el mismo proyecto dejarlas vacias alias_exists = '' var dir_fotos= '';
@@ -161,7 +161,7 @@ $(document).ready(function() {
 			url: base_url+ "index.php/Servicio/presupuesto_mail_cte",
 			type: "POST",
 			dataType: 'json',
-			data: {datos:$("#form_presupuesto").serializeArray(),id_presupuesto: $("#id_presupuesto").val()},
+			data: {datos:$("#form_presupuesto2").serializeArray(),id_presupuesto: $("#id_presupuesto").val()},
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
@@ -178,7 +178,7 @@ $(document).ready(function() {
 			}
 		});
 	}); 
-	/*$('.printMe').click(function(){
+	$('.printMe').click(function(){
 	     window.print();
 	});
 	$("#ver_fotos").on("click", function(e){
@@ -226,6 +226,6 @@ $(document).ready(function() {
 				}
 			}
 		});
-	});*/
+	});
 });
-</script>-->
+</script>

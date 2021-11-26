@@ -349,11 +349,11 @@ class Servicio extends CI_Controller {
        
         echo json_encode($envio);	
 	}
-	public function envia_presupuesto_mail()
+	public function envia_verificacion_mail()
 	{
 		$datos = $this->input->post();
-		$data = $this->buscador_model->datos_presupuesto($datos);
-		$url = base_url()."Servicio/email_presupuestos/".$datos['id'];
+		$data = $this->buscador_model->datos_verificacion($datos);
+		$url = base_url()."Servicio/email_verificacion/".$datos['id'];
 		$data['datos_cliente'] = $data['usuario'];
 		$data['datos_tecnico'] = $data['user'];
 		$data['datos_refacciones'] = $data['userTecnico'];
@@ -421,7 +421,7 @@ class Servicio extends CI_Controller {
 			    $mail->addCC($correo_refacciones);											//Con copia a
 			    $mail->addBCC('tpena@intelisis.com');	 //Con copia oculta a
 			    $mail->addCC($correo_tecnico);											//Con copia a
-			    //$mail->addBCC('mlopez@intelisis.com');	 //Con copia oculta a
+			    $mail->addBCC('mlopez@intelisis.com');	 //Con copia oculta a
 			    
 			    //Attachments
 			    $mail->AddStringAttachment($pdf, 'Verificación.pdf');                 // Agregar archivo adjunto
@@ -1776,7 +1776,7 @@ class Servicio extends CI_Controller {
 			$notify = $this->notificar_tecnico($info);
 			$presupuesto["correo_tecnico"] = $notify;
 		}
-	}
+	}print_r($presupuesto);
 		echo json_encode($presupuesto);
 	}
 	// public function ver_presupuestoPdF(){
@@ -1795,9 +1795,9 @@ class Servicio extends CI_Controller {
 		//print_r($data);
 		$this->load->view('formatos/formato_presupuesto',$data);
 	}
-	public function ve_presupuestoPdF($datos= 0){
+	public function ver_verificacionPdF($datos= 0){
 		$data["id"] = $datos;
-		$data = $this->buscador_model->datos_presupuesto($data);
+		$data = $this->buscador_model->datos_verificacion($data);
 		$data['datos_cliente'] = $data['usuario'];
 		$data["datos_suc"] = $data["datos_sucursal"];
 		$data['movID'] = $data["usuario"];
@@ -1824,9 +1824,9 @@ class Servicio extends CI_Controller {
 			$this->load->view('formatos/formato_presupuesto_mail',$data);
 		else show_404();
 	}
-	public function email_presupuestos($datos= 0){
+	public function email_verificacion($datos= 0){
 		$data["id"] = $datos;
-		$data = $this->buscador_model->datos_presupuesto($data);
+		$data = $this->buscador_model->datos_verificacion($data);
 		$refacciones = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
 		$data['datos_refacciones'] = $data['userTecnico'];
 		$data['datos_tecnico'] = $data['user'];
@@ -2050,7 +2050,7 @@ class Servicio extends CI_Controller {
 	{
 		ini_set('memory_limit', '1024M');
 
-		$data = $this->buscador_model->datos_presupuesto($info);
+		$data = $this->buscador_model->datos_verificacion($info);
 		$tecnico = $data['user']['nombre']." ".$data['user']['apellidos'];
 		$refacciones = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
 		// print_r($data);die();

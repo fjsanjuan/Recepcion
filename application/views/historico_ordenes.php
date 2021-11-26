@@ -1003,7 +1003,7 @@
                             <div class="row">
                                 <div class="col-sm-4 ui-front">
                                     <input type="hidden" name="input_claveArt" id="input_claveArt2">
-                                    <input class="form-control ui-autocomplete-input" type="text" id="ajax_arts2" placeholder="Buscar Artículo" autocomplte="off">
+                                    <input class="form-control ui-autocomplete-input" type="text" id="ajax_arts2" placeholder="Busca Artículo" autocomplte="off">
                                     <!-- <datalist id="json-datalist-art"></datalist> -->
                                 </div>
                                 <div class="col-sm-1">
@@ -1046,7 +1046,7 @@
                         <h5>Artículos</h5>
                         <div class="table-responsive">
                             <?php
-                                $attributes = array('id' => 'formPresupuesto');
+                                $attributes = array('id' => 'formPresupuesto2');
                                 echo form_open('',$attributes);
                             ?>
                             <table class="table table-condensed" id="table_invoice2">
@@ -1059,6 +1059,7 @@
                                         <td class="text-center"><strong>Precio U</strong></td>
                                         <td class="text-center"><strong>Comentarios</strong></td>
                                         <td class="text-center"><strong>Total</strong></td>
+                                        <td class="text-center"><strong>En Existencia</strong></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1066,7 +1067,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><label for="totalFin2">Total Fin:</label></td>
+                                    <td><label for="totalFin">Total Fin:</label></td>
                                     <td class="price"><input class="cost md-textarea" id="precioTotal2" name="precioTotal" readonly="true"></td>
                                 </tbody>
                             </table>
@@ -1094,7 +1095,7 @@
     <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Verificaciones de la Orden</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Verificaciones de la Orden</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1114,7 +1115,7 @@
     <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Mandar Verificación por Correo</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Mandar Verificación por Correo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1122,7 +1123,7 @@
             <div class="modal-body">
                 <h6>Añadir Comentarios</h6>
                 <?php
-                    $attributes = array('id' => 'mandar_pres_mail');
+                    $attributes = array('id' => 'mandar_pres_mail2');
                     echo form_open('',$attributes);
                 ?>   
                 <textarea name="comentario" id="comentario2" cols="100" rows="10"></textarea>

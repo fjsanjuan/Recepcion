@@ -2333,7 +2333,10 @@ class Buscador_Model extends CI_Model{
 		{
 			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
-		}else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){
+		}else if($perfil == 4 || $perfil == 5 || $perfil == 6 || $perfil == 7 || $perfil == 8){
+			$usuario = "AM2";
+			$cond_claveUs = "clave_asesor = '".$usuario."'";
+		}else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){ //se debe reacomodar esta condicional
 			//$usuario = "AM2";
 			$cond_claveUs = " movimiento IS NOT NULL";
 		}else 
@@ -2594,17 +2597,17 @@ class Buscador_Model extends CI_Model{
 	}
 	public function GuardaVerificacion($data){
 		$data["detalles"] = parse_str($data["detalles"],$arr);
-		// var_dump($arr);die();
+		//var_dump($arr);die();
 		$insertP["fecha_creacion"] = date('d-m-Y');
 		$insertP["eliminado"] = 0;
 		$insertP["id_orden"] = $arr['id_orden_b'];
-		$insertP["total_presupuesto"] = $arr['precioTotal2'];
+		$insertP["total_presupuesto"] = $arr['precioTotal'];
 		$insertP["autorizado"] = 0;
 		$insertP["vista_email"] = 0;
 
 		$this->db->trans_start();
 		$this->db->insert('verificacion_refacciones',$insertP);
-		$id_pres = $this->db->select("IDENT_CURRENT('presupuestos') as id")->get()->row_array();
+		$id_pres = $this->db->select("IDENT_CURRENT('verificacion_refacciones') as id")->get()->row_array();
 		$arts = $data["articulos"];
 		foreach ($arts as $key => $value) {
 			$value["id_presupuesto"] = $id_pres['id'];
@@ -2678,6 +2681,25 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function search_verificacion($id_orden){
+		$num_pres = $this->db->select("id_presupuesto, total_presupuesto, autorizado")->from("verificacion_refacciones")->where("id_orden", $id_orden)->where("eliminado",0)->get()->result_array();
+		if($num_pres){
+			foreach ($num_pres as $key => $value) {
+				$detalle = $this->db->select("*")->FROM("detalles_verificacion_refacciones")->where("id_presupuesto", $value['id_presupuesto'])->get()->result_array();
+				$array[$key]['detalle'] = $detalle;
+				$array[$key]['total_presupuesto'] = $value['total_presupuesto'];
+				$array[$key]['autorizado'] = $value['autorizado'];
+				$array[$key]['id_presupuesto'] = $value['id_presupuesto'];
+			}
+			$response["estatus"] = true;
+			$response["pres"] = $array;
+		}
+		else{
+			$response["mensaje"] = "No hay verificaciones relacionadas con la orden";
+			$response["estatus"] = false;
+		}
+		return $response;
+	}
 
 	public function datos_presupuesto($data = 0)
 	{
@@ -2697,6 +2719,48 @@ class Buscador_Model extends CI_Model{
 						->get()->row_array();
 		
 		$ret['detalle'] = $this->db->select("*")->from("presupuesto_detalle")->where("id_presupuesto", $data['id'])->get()->result_array();
+		/*echo "<pre>";
+		print_r($ret['detalle']);
+		echo "</pre>";*/
+		$sucursal = $ret["usuario"]["id_sucursal_intelisis"];
+		$ret["datos_sucursal"] = $this->db->select("datos_sucursal.*, sucursal.email_refacciones")
+										  ->from("datos_sucursal")
+										  ->join("sucursal","datos_sucursal.id_sucursal = sucursal.id")
+										  ->where("sucursal.sucursal_int", $sucursal)
+										  ->get()->row_array();
+		$ret['agencia'] = $this->db->select("*")
+										  ->from("agencia")
+										  ->join("sucursal", "sucursal.id_agencia = agencia.id")
+										  ->where("sucursal.sucursal_int", $sucursal)
+										  ->get()->row_array();
+
+		$intelisis = $this->load->database("other", TRUE);								  
+		$ret["usuario"]["movID"] = $intelisis->select("MovID")
+											 ->from("Venta")
+											 ->where("ID", $ret["usuario"]["id_orden_intelisis"])
+											 ->get()->row_array();	
+		$intelisis->close();
+
+		return $ret;
+	}
+	public function datos_verificacion($data = 0)
+	{
+		$ret['usuario'] = $this->db->select("verificacion_refacciones.*,orden_servicio.*, orden_servicio.id as id_orden, usuarios.email as correo_asesor")->from("verificacion_refacciones")
+						->join("orden_servicio", "orden_Servicio.id = verificacion_refacciones.id_orden")
+						->join("usuarios", "usuarios.cve_intelisis = orden_servicio.clave_asesor")
+						->where("verificacion_refacciones.id_presupuesto", $data['id'])
+						->get()->row_array();
+						/*echo "<pre>";
+						print_r($this->db->last_query());
+						echo "</pre>";*/
+		$ret['user'] = $this->db->select("usuarios.nombre, usuarios.apellidos, usuarios.email as correo_refacciones")->from("usuarios")
+						->where("usuarios.perfil", 6, "verificacion_refacciones.id_presupuesto", $data['id'])
+						->get()->row_array();
+		$ret['userTecnico'] = $this->db->select("usuarios.nombre, usuarios.apellidos, usuarios.actualizado, usuarios.email as correo_tecnico")->from("usuarios")
+						->where("usuarios.perfil", 5, "verificacion_refacciones.id_presupuesto", $data['id'])
+						->get()->row_array();
+		
+		$ret['detalle'] = $this->db->select("*")->from("detalles_verificacion_refacciones")->where("id_presupuesto", $data['id'])->get()->result_array();
 		/*echo "<pre>";
 		print_r($ret['detalle']);
 		echo "</pre>";*/
@@ -3628,7 +3692,7 @@ class Buscador_Model extends CI_Model{
 			$ruta_salida = realpath("{$ruta}");
 			$ruta_salida .= "\\formato.pdf";
 			
-			$cmd = "gswin64 -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile={$ruta_salida} ".$pdfs;
+			$cmd = "\"C:\Program Files\gs\gs9.55.0\bin\gswin64\" -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile={$ruta_salida} ".$pdfs;
 			$result = shell_exec($cmd);
 		}else {
 			$mensaje = "No hay documentación generada en PDF, ";

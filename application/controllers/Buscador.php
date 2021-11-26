@@ -203,6 +203,11 @@ class Buscador extends CI_Controller {
 		$presupuestos = $this->buscador_model->search_budget($id_orden);
 		echo json_encode($presupuestos);
 	}
+	public function search_verificacion(){
+		$id_orden = $this->input->post("id");
+		$verificacion_refacciones = $this->buscador_model->search_verificacion($id_orden);
+		echo json_encode($verificacion_refacciones);
+	}
 
 	public function revisar_tickaje()
 	{
