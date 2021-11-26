@@ -2634,7 +2634,7 @@ $(document).on("click", "#btn_guardarInspeccion", function(e){
             {
                 toastr.success("Se ha guardado la inspección.");
                 $("#loading_spin").hide();
-                
+                generar_causa_raiz_componente(id_orden);
                 $("#ok_nextwo").show();
             }else
             {
@@ -3616,3 +3616,63 @@ $(document).on('click', '.btn_delete_page', function (e) {
         toastr.warning('Debes matener un formato causa raíz componente');
     }
 });
+
+function generar_causa_raiz_componente(idOrden) {
+    var t_vin = $("#vin").val();
+    var tok=""
+        $.ajax({
+            url: "http://127.0.0.1:8000/auth/",
+            type: "POST",
+            dataType: 'json',
+            data: {
+                username:'Angelin20',
+                password:'3210995'
+            },
+            beforeSend: function(){
+                $("#loading_spin").show();
+            },
+            error: function(){
+                console.log('error al consumir token de ApiReporter');
+            },
+            success: function (data){
+                tok=data.token;
+                $.ajax({
+                    // url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+                    url: `${base_url}index.php/servicio/generar_formato_causa_raiz_componente/${tok}/${id_orden}`,
+                    type: "POST",
+                    headers: {
+                        Authorization: `Token ${tok}`,
+                    },
+                    //habilitar xhrFields cuando se requiera descargar
+                    //xhrFields: {responseType: "blob"},
+                    data: {
+                        name:'CRC',
+                        dwn:'0',
+                        opt:'1',
+                        path:'None',
+                        vin:t_vin,
+                        garantia:"None",
+                        nomCte:"None",
+                        signAsesor:"None",
+                        id_orden:idOrden,
+                        url:'http://127.0.0.1:8000/reports/getPDFCausaRaizComponente'
+                    },
+                    beforeSend: function(){
+                        $("#loading_spin").show();
+                        toastr.info("Generando Formato");
+                    },
+                    error: function(){
+                        console.log('error al consumir getPDF de ApiReporter');
+                        toastr.error("Error al generar el formato");
+                        $("#loading_spin").hide();
+                    },
+                    success: function (blob){
+                        $("#loading_spin").hide();
+                        data = JSON.parse(blob);
+                        const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+                        link[0].click();
+                    }
+                });
+            }
+        });
+}

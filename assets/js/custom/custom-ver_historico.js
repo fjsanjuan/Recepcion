@@ -3834,8 +3834,10 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 					success: function (response){
 						$("#loading_spin").hide();
 						data = JSON.parse(response);
+						console.log('data', data);
 						if (data.estatus) {
-
+							const link = $('<a>', {'href':data['ruta'], 'download':data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
 						}else{
 							toastr.warning(data.mensaje);
 						}

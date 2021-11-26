@@ -3613,26 +3613,33 @@ class Buscador_Model extends CI_Model{
 		$archivos = $this->get_archivos_f1863($id_orden, 7);
 		$aux = 0;
 		$mensaje = "";
+		$pdfs = "";
 		$ruta = $this->ruta_formts."archivos_recepcion/{$id_orden}/";
 		if(!file_exists($ruta)) {
 			mkdir($ruta, 0777, true);
 		}
 		foreach ($archivos as $key => $archivo) {;
 			if (file_exists($archivo["ruta_archivo"])) {
-				$pdf->addPDF(realpath($archivo["ruta_archivo"]));
+				$pdfs .= realpath($archivo["ruta_archivo"])." ";
+				#$pdf->addPDF(realpath($archivo["ruta_archivo"]));
 				$aux++;
 			}
 		}
 		if ($aux > 0) {
-			$archivoAux = $pdf->merge('string', 'f1863.pdf');
-			file_put_contents($ruta.'f1863.pdf', $archivoAux);
+			#$archivoAux = $pdf->merge('string', 'f1863.pdf');
+			#file_put_contents($ruta.'f1863.pdf', $archivoAux);
+			$ruta_salida = realpath("{$ruta}");
+			$ruta_salida .= "\\formato.pdf";
+			
+			$cmd = "gswin64 -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile={$ruta_salida} ".$pdfs;
+			$result = shell_exec($cmd);
 		}else {
 			$mensaje = "No hay documentación generada en PDF, ";
 		}
-		if (file_exists($ruta.'f1863.pdf')) {
+		if (file_exists($ruta_salida)) {
 			$response["estatus"] = true;
 			$response["mensaje"] = "Archivo generado exitosamente.";
-			$response["ruta"] = base_url($ruta.'f1863.pdf');
+			$response["ruta"] = base_url("{$ruta}formato.pdf");
 			$response["nombre"] = "formato-{$id_orden}";
 		} else {
 			$response["estatus"] = false;

@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <button class="btn-btn-outline btn-success tooltip down_f1816" title="Descargar documentación"><i class="fa fa-file-o-pdf"></i></button>
+            <button class="btn btn-outline btn-success down_f1816" title="Descargar documentación" style="z-index: 9999;"><i class="fa fa-file-pdf"></i></button>
         </div>
     </div>
     <div class="row">
