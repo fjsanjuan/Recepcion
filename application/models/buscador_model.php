@@ -10,6 +10,9 @@
 *    Author: Luis Fernando Zapien Perez
 *	 Revision: Roberto Ortiz Gomez	Abril 2020
 */
+require_once APPPATH.'libraries/PDFMerger/PDFMerger.php';
+use PDFMerger\PDFMerger;
+
 class Buscador_Model extends CI_Model{
 
 	private $Version = 'V4000';
@@ -3577,6 +3580,44 @@ class Buscador_Model extends CI_Model{
 				$response['estatus'] = false;
 				$response['mensaje'] = "No fue posible guardar el archivo.";
 			}
+		}
+		return $response;
+	}
+	public function get_archivos_f1863($id_orden = null, $tipo = 7)
+	{
+		$this->load->database();
+		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 order by archivo.id desc;");
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else
+			return [];
+	}
+	public function obtener_union_pdf($id_orden)
+	{
+		$pdf = new PDFMerger;
+		$archivos = $this->get_archivos_f1863($id_orden, 7);
+		$aux = 0;
+		$ruta = $this->ruta_formts."archivos_recepcion/{$id_orden}/";
+		if(!file_exists($ruta) {
+			mkdir($ruta, 0777, true);
+		}
+		foreach ($archivos as $key => $archivo) {;
+			if (file_exists($archivo["ruta_archivo"])) {
+				$pdf->addPDF($archivo["ruta_archivo"], 'all');
+				$aux++;
+			}
+		}
+		if ($aux > 0) {
+			$archivo_aux = $pdf->merge('string', 'f1863.pdf');
+			file_put_contents($ruta.'f1863.pdf', $archivo_aux);
+		}
+		if (file_exists($ruta.'f1863.pdf')) {
+			$response["estatus"] = true;
+			$response["mensaje"] = "Archivo generado exitosamente.";
+			$response["ruta"] = base_url($ruta.'f1863.pdf');
+		} else {
+			$response["estatus"] = false;
+			$response["mensaje"] = "Archivo no generado.";
 		}
 		return $response;
 	}

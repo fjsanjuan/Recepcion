@@ -1,6 +1,11 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
+            <button class="btn-btn-outline btn-success tooltip down_f1816" title="Descargar documentación"><i class="fa fa-file-o-pdf"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
         	<div class="table-responsive">
         		<table class="table table-border text-center">
         			<thead>

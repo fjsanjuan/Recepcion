@@ -23,6 +23,7 @@ class Servicio extends CI_Controller {
 		$this->mail_password = "1234*Sistema";
 		$this->mail_smtpSecure = "ssl";
 		$this->mail_port = 465;
+		$this->APPLICATION_PATH = realpath("/");
 
 		$this->obtener_configEmail();
 		
@@ -2471,6 +2472,50 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = "Token no válido.";
 		} else {
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+		}
+		echo json_encode($response);
+	}
+
+	public function generar_formato_causa_raiz_componente($token = null, $id_orden = null)
+	{
+		#$id_orden = 34762;  orden de prueba
+		$data = [];
+    	$data = $this->buscador_model->obtener_datos_quejas($id_orden);
+    	$datos = $this->input->post();
+    	$datos["quejas"] = $data;
+		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
+		if ($token == null || $id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Orden no válida.";
+		} else {
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+		}
+    	/*$html = $this->load->view('formatos/causa_raiz_componente', $data, TRUE);
+		$dompdf = new DOMPDF();
+		$dompdf->setBasePath(realpath("{$this->ruta_formts}/assets"));
+    	$dompdf->load_html($html);
+    	$dompdf->render();
+    	//$dompdf->stream();
+    	$output = $dompdf->output();
+    	$pdf = fopen("{$this->ruta_formts}prueba.pdf", 'w');
+		fwrite($pdf, $output);
+		fclose($pdf);
+    	if (file_exists("{$this->ruta_formts}prueba.pdf")) {
+    		$response = ['value' => 'si'];
+    	} else {
+    		$response = ['value' => 'no'];
+    	}*/
+    	#$dompdf->folder($this->ruta_formts);
+    	#$dompdf->create('save');
+    	echo json_encode($response);
+	}
+	public function obtener_union_pdf($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'no existe autorizacion';
+		}else {
+			$response = $this->buscador_model->obtener_union_pdf($id_orden);
 		}
 		echo json_encode($response);
 	}
