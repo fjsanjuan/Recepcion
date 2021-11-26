@@ -3119,6 +3119,20 @@ class Buscador_Model extends CI_Model{
 			$response["estatus"] = true;
 			$response["update"] = $this->db->affected_rows() > 0;
 		}
+
+		$this->db2 = $this->load->database("other", true);
+		$xp       = "xpCA_CopiarSoloEncabezadoGarantia";
+		$modulo   = "VTAS";
+		$mov      = "Servicio";
+		$usuario  = $this->session->userdata('logged_in')['usuario_intelisis'];
+
+		$orServicio = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where('id', $id_orden_servicio)->get()->row();
+		$idIntelisis= $orServicio->id_orden_intelisis;
+
+		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,?,?,?,?,?,?,?,?,@OkRef OUTPUT,0,0 SELECT @OkRef", 
+		array($modulo, $idIntelisis, $mov, $usuario, '26/11/2021','SINAFECTAR','Pesos', 1 , NULL, 1, 'Servicio', NULL, NULL));
+
+
 		return $response;
 	}
 	public function obtener_datos_quejas($id_orden_servicio)
