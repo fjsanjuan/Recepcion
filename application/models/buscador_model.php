@@ -3597,8 +3597,9 @@ class Buscador_Model extends CI_Model{
 		$pdf = new PDFMerger;
 		$archivos = $this->get_archivos_f1863($id_orden, 7);
 		$aux = 0;
+		$mensaje = "";
 		$ruta = $this->ruta_formts."archivos_recepcion/{$id_orden}/";
-		if(!file_exists($ruta) {
+		if(!file_exists($ruta)) {
 			mkdir($ruta, 0777, true);
 		}
 		foreach ($archivos as $key => $archivo) {;
@@ -3610,14 +3611,17 @@ class Buscador_Model extends CI_Model{
 		if ($aux > 0) {
 			$archivo_aux = $pdf->merge('string', 'f1863.pdf');
 			file_put_contents($ruta.'f1863.pdf', $archivo_aux);
+		}else {
+			$mensaje = "No hay documentación generada en PDF, ";
 		}
 		if (file_exists($ruta.'f1863.pdf')) {
 			$response["estatus"] = true;
 			$response["mensaje"] = "Archivo generado exitosamente.";
 			$response["ruta"] = base_url($ruta.'f1863.pdf');
+			$response["nombre"] = "f1863-{$id_orden}";
 		} else {
 			$response["estatus"] = false;
-			$response["mensaje"] = "Archivo no generado.";
+			$response["mensaje"] = "{$mensaje}Archivo no generado.";
 		}
 		return $response;
 	}
