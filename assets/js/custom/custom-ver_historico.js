@@ -1856,7 +1856,7 @@
 				url: base_url+ "index.php/Servicio/EditarPresupuesto",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},
@@ -1938,7 +1938,7 @@
 			type: 'post',
 			url: base_url+ "index.php/Servicio/envia_presupuesto_mail",
 			dataType: "json",
-			data: $("#mandar_pres_mail2").serialize(),
+			data: $("#mandar_pres_mail").serialize(),
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
@@ -2146,7 +2146,7 @@
 				url: base_url+ "index.php/Servicio/GuardaVerificacion",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},

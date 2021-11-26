@@ -1046,7 +1046,7 @@
                         <h5>Artículos</h5>
                         <div class="table-responsive">
                             <?php
-                                $attributes = array('id' => 'formPresupuesto2');
+                                $attributes = array('id' => 'formPresupuesto');
                                 echo form_open('',$attributes);
                             ?>
                             <table class="table table-condensed" id="table_invoice2">
@@ -1122,7 +1122,7 @@
             <div class="modal-body">
                 <h6>Añadir Comentarios</h6>
                 <?php
-                    $attributes = array('id' => 'mandar_pres_mail2');
+                    $attributes = array('id' => 'mandar_pres_mail');
                     echo form_open('',$attributes);
                 ?>   
                 <textarea name="comentario" id="comentario2" cols="100" rows="10"></textarea>
