@@ -2489,6 +2489,9 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = "Orden no válida.";
 		} else {
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($id_orden, $response["data"]["ruta_rel"]);
+			}
 		}
     	/*$html = $this->load->view('formatos/causa_raiz_componente', $data, TRUE);
 		$dompdf = new DOMPDF();

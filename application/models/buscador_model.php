@@ -3574,7 +3574,8 @@ class Buscador_Model extends CI_Model{
 				$response['data'] = [
 					'ruta' => base_url("{$ruta}{$datos['name']}.pdf"),
 					'nombre' => $datos['name'],
-					'archivo' => $archivo64
+					'archivo' => $archivo64,
+					'ruta_rel' => "{$ruta}{$datos['name']}.pdf"
 				];
 			}else {
 				$response['estatus'] = false;
@@ -3604,13 +3605,13 @@ class Buscador_Model extends CI_Model{
 		}
 		foreach ($archivos as $key => $archivo) {;
 			if (file_exists($archivo["ruta_archivo"])) {
-				$pdf->addPDF($archivo["ruta_archivo"], 'all');
+				$pdf->addPDF(realpath($archivo["ruta_archivo"]));
 				$aux++;
 			}
 		}
 		if ($aux > 0) {
-			$archivo_aux = $pdf->merge('string', 'f1863.pdf');
-			file_put_contents($ruta.'f1863.pdf', $archivo_aux);
+			$archivoAux = $pdf->merge('string', 'f1863.pdf');
+			file_put_contents($ruta.'f1863.pdf', $archivoAux);
 		}else {
 			$mensaje = "No hay documentación generada en PDF, ";
 		}
@@ -3618,11 +3619,42 @@ class Buscador_Model extends CI_Model{
 			$response["estatus"] = true;
 			$response["mensaje"] = "Archivo generado exitosamente.";
 			$response["ruta"] = base_url($ruta.'f1863.pdf');
-			$response["nombre"] = "f1863-{$id_orden}";
+			$response["nombre"] = "formato-{$id_orden}";
 		} else {
 			$response["estatus"] = false;
 			$response["mensaje"] = "{$mensaje}Archivo no generado.";
 		}
 		return $response;
+	}
+	public function guardar_formato($id_orden, $ruta)
+	{
+		$existe = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' =>$id_orden, 'ruta_archivo' => $ruta])->get()->row_array();
+		$creado = false;
+		if(isset($existe['id'])){
+			$creado = true;
+		}else {
+			$archivo = [
+				'id_orden_servicio' => $id_orden,
+				'tipo_archivo' => 7,
+				'fecha_creacion' => date("d-m-Y H:i:s"),
+				'fecha_actualizacion' => date("d-m-Y H:i:s"),
+				'eliminado' => 0,
+				'comentario' => '',
+				'ruta_archivo' => $ruta
+			];
+			$this->db->trans_start();
+			$this->db->insert("archivo", $archivo);
+			$this->db->trans_complete();
+			if($this->db->trans_status() === FALSE)
+			{
+				$creado = false;
+				$this->db->trans_rollback();
+			}else
+			{
+				$this->db->trans_commit();
+				$creado = true;
+			}
+		}
+			return $creado;
 	}
 }
