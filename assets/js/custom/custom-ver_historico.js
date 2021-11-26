@@ -457,10 +457,16 @@ $(document).ready(function() {
 						archivos += `<tr>
 							<td>Carta de Renuncia a Beneficios</td>
 							<td>PDF</td>
-							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver carte de renuncia a beneficios"><a class="renunciaGrtia" id="renunGrtia-${id_orden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
+							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver carta de renuncia a beneficios"><a class="renunciaGrtia" id="renunGrtia-${id_orden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
 							archivos += id_perfil == 7 ? '<td></td>' : '';
 						archivos +=`<tr>`;
 					}
+					archivos += `<tr>
+							<td>Causa Raíz Componente</td>
+							<td>PDF</td>
+							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver formato causa raíz Componente"><a class="causaraizcomponente" id="causaraizcomponente-${id_orden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
+							archivos += id_perfil == 7 ? '<td></td>' : '';
+						archivos +=`<tr>`;
 					if (data.archivos && data.archivos.length >0) {
 						$.each(data.archivos, function(index, archivo){
 							archivos += `<tr>`;
@@ -564,7 +570,8 @@ $(document).ready(function() {
 			success: function (data){
 				tok=data.token;
 				$.ajax({
-					// url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					//url: "http://127.0.0.1:8000/auth/",
+					url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
 					url: `${base_url}index.php/servicio/obtener_pdf_api/${tok}`,
 					type: "POST",
 					headers: {
@@ -583,6 +590,75 @@ $(document).ready(function() {
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
 						url:'https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF'
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
+					}
+				});
+			}
+		});
+	});
+	//formato causa raíz componente
+	$("#archivos_documentacion").on("click", "tr td a.causaraizcomponente", function(e){
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		var t_vin = $("#api_vin-"+id_orden).val();
+		//var vin = $("#api_vin-26590").val();
+		var signGrtia = $("#api_signGrtia-"+id_orden).val();
+		//  t_nomCte  -> t_ = this
+		var t_nomCte = $("#api_nomCte-"+id_orden).val();
+		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+		//console.log(t_signAsesor);
+		var tok=""
+		$.ajax({
+			url: "http://127.0.0.1:8000/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'Angelin20',
+				password:'3210995'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					// url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					url: `${base_url}index.php/servicio/generar_formato_causa_raiz_componente/${tok}/${id_orden}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'CRC',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:t_vin,
+						garantia:signGrtia,
+						nomCte:t_nomCte,
+						signAsesor:t_signAsesor,
+						id_orden:id_orden,
+						url:'http://127.0.0.1:8000/reports/getPDFCausaRaizComponente'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
