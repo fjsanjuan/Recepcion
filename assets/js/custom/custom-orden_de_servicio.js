@@ -2750,7 +2750,7 @@ function enviar_correo( img, img2, img_correo, img_reverso, img3)
             {
                 $('#loading_spin').hide();
                 $("#modalsendmail").modal("hide");
-                $("#enviar_whatsapp").show();
+                $("#enviar_whatsapp").hide();
                 toastr.success('El correo electrónico ha sido enviado.', {timeOut: 5000});
             }else 
             {

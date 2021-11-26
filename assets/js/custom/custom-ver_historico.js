@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -1856,7 +1856,7 @@ $(document).ready(function() {
 				url: base_url+ "index.php/Servicio/EditarPresupuesto",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},
@@ -1938,7 +1938,7 @@ $(document).ready(function() {
 			type: 'post',
 			url: base_url+ "index.php/Servicio/envia_presupuesto_mail",
 			dataType: "json",
-			data: $("#mandar_pres_mail2").serialize(),
+			data: $("#mandar_pres_mail").serialize(),
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
@@ -2146,7 +2146,7 @@ $(document).ready(function() {
 				url: base_url+ "index.php/Servicio/GuardaVerificacion",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},

@@ -386,7 +386,7 @@
                                         <a class="btn-floating indigo waves-effect waves-light" id="mostrar_modalemail"><i class="fa fa-at"></i></a>
                                     </li>                            
                                     <li>
-                                        <a class="btn-floating white waves-effect waves-light" id="enviar_whatsapp"><img src="<?=base_url()?>assets/img/whatsapp.png" alt="logo whatsapp" class="icono_whatsapp"></a>
+                                        <a class="btn-floating white waves-effect waves-light" id="enviar_whatsapp" style ="display:none;" ><img src="<?=base_url()?>assets/img/whatsapp.png" alt="logo whatsapp" class="icono_whatsapp"></a>
                                     </li>
                                     <li>
                                         <a class="btn-floating red waves-effect waves-light" id="generar_pdf"><i class="far fa-file-pdf" aria-hidden="true"></i></a>
