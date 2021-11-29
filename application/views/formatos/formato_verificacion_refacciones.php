@@ -116,10 +116,10 @@
 						<div class="card-body">
 							<h6>TECNICO</h6>
 							<p>
-							<b>Nombre Técnico:</b> <?=$datos_refacciones['nombre']?> <?=$datos_refacciones['apellidos']?><br>
-							<b>Email: </b> <?=$datos_refacciones['correo_tecnico']?><br>
-							<b>Fecha Verificación:</b> <?=$datos_refacciones['actualizado']?><br>
-							<!-- <b>Presupuesto Autorizado:</b> <?=($datos_refacciones['autorizado'] == 1)?"SI":"NO"?> -->
+							<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
+							<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
+							<b>Fecha Verificación:</b> <?=$datos_tecnico['actualizado']?><br>
+							<!-- <b>Presupuesto Autorizado:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 							</p>
 						</div>
 					</div>
@@ -131,8 +131,8 @@
 						<div class="card-body">
 							<h6>REFACCIONES</h6>
 							<p>
-							<b>Nombre Responsable:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
-							<b>Email: </b> <?=$datos_tecnico['correo_refacciones']?><br>
+							<b>Nombre Responsable:</b> <?=$datos_refacciones['nombre']?> <?=$datos_refacciones['apellidos']?><br>
+							<b>Email: </b> <?=$datos_refacciones['correo_refacciones']?><br>
 							
 							</p>
 						</div>
@@ -231,10 +231,10 @@
 						<div class="card-body">
 							<h6>TÉCNICO</h6>
 							<p>
-							<b>Nombre Técnico:</b> <?=$datos_refacciones['nombre']?> <?=$datos_refacciones['apellidos']?><br>
-							<b>Email: </b> <?=$datos_refacciones['correo_tecnico']?><br>
-							<b>Fecha Verificación:</b> <?=$datos_refacciones['actualizado']?><br>
-							<!-- <b>Validación Autorizada:</b> <?=($datos_refacciones['autorizado'] == 1)?"SI":"NO"?> -->
+							<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
+							<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
+							<b>Fecha Verificación:</b> <?=$datos_tecnico['actualizado']?><br>
+							<!-- <b>refacciones Autorizadas:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 							</p>
 						</div>
 					</div>
@@ -246,8 +246,8 @@
 						<div class="card-body">
 							<h6>REFACCIONES</h6>
 							<p>
-							<b>Nombre Responsable:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
-							<b>Email: </b> <?=$datos_tecnico['correo_refacciones']?><br>
+							<b>Nombre Responsable:</b> <?=$datos_refacciones['nombre']?> <?=$datos_refacciones['apellidos']?><br>
+							<b>Email: </b> <?=$datos_refacciones['correo_refacciones']?><br>
 							
 							</p>
 						</div>

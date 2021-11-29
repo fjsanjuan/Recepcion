@@ -1746,7 +1746,7 @@ $(document).ready(function() {
 		var id_presupuesto = $(this).attr("id");
 		var estatus = this.checked;
 		$.ajax({
-			url: base_url+ "index.php/Servicio/Autorizar_todo",
+			url: base_url+ "index.php/Servicio/verificar_todo",
 			type: "POST",
 			dataType: 'json',
 			data: {id_presupuesto:id_presupuesto, autorizado:estatus},
@@ -1778,11 +1778,11 @@ $(document).ready(function() {
 		valueTopush["id_presupuesto"] = presupuesto;
 		valueTopush["autorizado"] = aut;
 		arts.push(valueTopush)
-		autorizar_articulo(arts);
+		verificar_articulo(arts);
 	});
-	function autorizar_articulo(cve_arts){
+	function verificar_articulo(cve_arts){
 		$.ajax({
-			url: base_url+ "index.php/Servicio/Autorizar_articulo",
+			url: base_url+ "index.php/Servicio/verificar_articulo",
 			type: "POST",
 			dataType: 'json',
 			data: {articulo:cve_arts},
@@ -1853,7 +1853,7 @@ $(document).ready(function() {
 		if(arrayArticulos.length > 0){
 			var presupuestoDato = arrayArticulos;
 			$.ajax({
-				url: base_url+ "index.php/Servicio/EditarPresupuesto",
+				url: base_url+ "index.php/Servicio/EditarVerificacion",
 				type: "POST",
 				dataType: 'json',
 				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
@@ -1895,7 +1895,7 @@ $(document).ready(function() {
 		$.ajax({
 			cache: false,
 			type: 'get',
-			url: base_url+ "index.php/Servicio/autorizar_presupuesto/"+aut+"/"+id,
+			url: base_url+ "index.php/Servicio/autorizar_verificacion/"+aut+"/"+id,
 			dataType: "json",
 			beforeSend: function(){
 				$("#loading_spin").show();
@@ -2088,9 +2088,9 @@ $(document).ready(function() {
 	  price = formatear_numero(price);
 	  // total = formatear_numero(total);
 	  iva = formatear_numero(iva);
-	  $("#precioTotal").val(total);
-	  $('#subtotal').val(total);
-	  $('#ivatotal').val(iva); 
+	  $("#precioTotal2").val(total);
+	  $('#subtotal2').val(total);
+	  $('#ivatotal2').val(iva); 
 	  
 	  // update_balance();
 	}
@@ -2099,8 +2099,8 @@ $(document).ready(function() {
 	  $(".qty").blur(update_price);
 	}
 	function update_balance() {
-		var due = parseFloat($("#subtotal").val().replace(/,/g, ''));
-		var iva = parseFloat($("#ivatotal").val().replace(/,/g, ''));
+		var due = parseFloat($("#subtotal2").val().replace(/,/g, ''));
+		var iva = parseFloat($("#ivatotal2").val().replace(/,/g, ''));
 	
 		due = roundNumber((due+iva),2);
 		due = formatear_numero(due);

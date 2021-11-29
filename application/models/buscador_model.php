@@ -2806,6 +2806,27 @@ class Buscador_Model extends CI_Model{
 		}
 		return $cliente;
 	}
+	public function autorizar_verificacion($estatus = null, $id_presupuesto = null){
+		$dat["autorizado"] = $estatus;
+		$this->db->trans_start();
+
+		$this->db->where("id_presupuesto", $id_presupuesto);
+		$this->db->update("verificacion_refacciones", $dat);
+
+		$this->db->trans_complete();
+
+		if($this->db->trans_status() == true)
+		{
+			$refacciones["estatus"] = true;
+			$refacciones["mensaje"] ="Estatus del presupuesto actualizado";
+			$refacciones["id"] =$id_presupuesto;
+		}else
+		{
+			$refacciones["estatus"] = false;
+			$refacciones["mensaje"] = 'no';
+		}
+		return $refacciones;
+	}
 	public function EditarPresupuesto($datos){
 		$datos["detalles"] = parse_str($datos["detalles"],$arr);
 		$existen = $this->db->select("*")->from("presupuesto_detalle")->where("id_presupuesto", $arr["id_presupuesto"])->get()->result_array();
@@ -2834,6 +2855,34 @@ class Buscador_Model extends CI_Model{
 		}
 		return $cliente;
 	}
+	public function EditarVerificacion($datos){
+		$datos["detalles"] = parse_str($datos["detalles"],$arr);
+		$existen = $this->db->select("*")->from("detalles_verificacion_refacciones")->where("id_presupuesto", $arr["id_presupuesto"])->get()->result_array();
+		$new = $datos["articulos"];
+		$this->db->trans_start();
+		foreach ($existen as $value) {
+			$this->db->where('id_presupuesto', $value["id_presupuesto"]);
+			$this->db->delete('detalles_verificacion_refacciones'); 
+		}
+		foreach ($new as $key => $value) {
+			$value["id_presupuesto"] = $arr["id_presupuesto"];
+			$value["autorizado"] = 0;
+			$this->db->insert("detalles_verificacion_refacciones", $value);
+		}
+		$this->db->where("id_presupuesto", $arr["id_presupuesto"]);
+		$this->db->update("verificacion_refacciones", array("total_presupuesto"=>$arr["precioTotal"]));
+		$this->db->trans_complete();
+		if($this->db->trans_status() == true)
+		{
+			$refacciones["estatus"] = true;
+			$refacciones["mensaje"] ="Verificación actualizada";
+		}else
+		{
+			$refacciones["estatus"] = false;
+			$refacciones["mensaje"] = 'Error al editar';
+		}
+		return $refacciones;
+	}
 	public function Autorizar_articulo($datos){
 		// print_r($datos);die();
 		foreach ($datos["articulo"] as $value) {
@@ -2854,6 +2903,27 @@ class Buscador_Model extends CI_Model{
 			$cliente["mensaje"] = 'Error al actualizar';
 		}
 		return $cliente;
+	}
+	public function verificar_articulo($datos){
+		// print_r($datos);die();
+		foreach ($datos["articulo"] as $value) {
+			$this->db->trans_start();
+			$this->db->where("id_presupuesto", $value["id_presupuesto"]);
+			$this->db->where("cve_articulo", $value["clave_art"]);
+			$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>$value["autorizado"], "quien_autoriza" => $this->session->userdata["logged_in"]["cve_intelisis"], "fecha_autorizacion" => date("d-m-Y H:i:s")));
+			$this->db->trans_complete();
+		}
+		
+		if($this->db->trans_status() == true)
+		{
+			$refacciones["estatus"] = true;
+			$refacciones["mensaje"] ="Estatus actualizado";
+		}else
+		{
+			$refacciones["estatus"] = false;
+			$refacciones["mensaje"] = 'Error al actualizar';
+		}
+		return $refacciones;
 	}
 	public function presupuesto_mail_cte($datos =  null){
 		// print_r($datos);die();
@@ -2921,6 +2991,91 @@ class Buscador_Model extends CI_Model{
 			$cliente["mensaje"] = 'Error al actualizar';
 		}
 		return $cliente;
+	}
+	public function verificacion_mail_refacciones($datos =  null){
+		// print_r($datos);die();
+		$id_pres = $datos["id_presupuesto"];
+		$this->db->trans_start();
+		$this->db->where("id_presupuesto", $id_pres);
+		$this->db->update("verificacion_refacciones", array("vista_email"=>1));
+		$this->db->trans_complete();
+		
+		$elem = $this->db->select("cve_articulo")
+								 ->from("detalles_verificacion_refacciones")
+								 ->where("id_presupuesto", $id_pres)
+								 ->get()->result_array();
+								 
+		if(isset($datos["datos"]))
+		{			
+			foreach ($datos["datos"] as $value) {
+				$this->db->trans_start();
+				$this->db->where("id_presupuesto", $id_pres);
+				$this->db->where("cve_articulo", $value["value"]);
+				$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>1, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y")));
+				$this->db->trans_complete();
+			}
+
+			$elem1 = [];
+			foreach($elem as $key => $value) 
+			{
+				array_push($elem1, $value["cve_articulo"]);
+			}
+
+			$elem2 = [];
+			foreach($datos["datos"] as $key => $value) 
+			{
+				array_push($elem2, $value["value"]);
+			}
+
+			$diferencia = array_diff($elem1, $elem2); 
+			foreach($diferencia as $key => $value) 
+			{
+				$this->db->trans_start();
+				$this->db->where("id_presupuesto", $id_pres);
+				$this->db->where("cve_articulo", $value);
+				$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>0, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y H:i:s")));
+				$this->db->trans_complete();
+		}
+		}else 
+		{		
+			foreach($elem as $key => $value) 
+			{
+				$this->db->trans_start();
+				$this->db->where("id_presupuesto", $id_pres);
+				$this->db->where("cve_articulo", $value["cve_articulo"]);
+				$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>0, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y H:i:s")));
+				$this->db->trans_complete();
+			}
+		}
+		
+		if($this->db->trans_status() == true)
+		{
+			$refacciones["estatus"] = true;
+			$refacciones["mensaje"] ="Estatus actualizado";
+		}else
+		{
+			$refacciones["estatus"] = false;
+			$refacciones["mensaje"] = 'Error al actualizar';
+		}
+		return $refacciones;
+	}
+	public function verificar_todo($datos){
+		
+		$this->db->trans_start();
+		$this->db->where("id_presupuesto", $datos["id_presupuesto"]);
+		$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>$datos["autorizado"]));
+		$this->db->trans_complete();
+
+		if($this->db->trans_status() == true)
+		{
+			$refacciones["estatus"] = true;
+			$refacciones["mensaje"] ="Estatus actualizado";
+		}else
+		{
+			$refacciones["estatus"] = false;
+			$refacciones["mensaje"] = 'Error al actualizar';
+		}
+		return $refacciones;
 	}
 	public function Autorizar_todo($datos){
 		
@@ -3634,6 +3789,7 @@ class Buscador_Model extends CI_Model{
 		} else {
 			curl_close($request);
 			$ruta = $this->ruta_formts.$datos['vin']."/".$datos['id_orden']."/";
+			$ruta = str_replace('.', '', $ruta);
 			if(!file_exists($ruta)) 
 			{
 				mkdir($ruta, 0777, true);

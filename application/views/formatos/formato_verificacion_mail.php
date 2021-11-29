@@ -45,10 +45,10 @@
 					<div class="card-body">
 						<h6>TÉCNICO</h6>
 						<p>
-						<b>Nombre Técnico:</b> <?=$datos_refacciones['nombre']?> <?=$datos_refacciones['apellidos']?><br>
-						<b>Email: </b> <?=$datos_refacciones['correo_tecnico']?><br>
-						<b>Fecha Verificación:</b> <?=$datos_refacciones['actualizado']?><br>
-						<!-- <b>refacciones Autorizadas:</b> <?=($datos_refacciones['autorizado'] == 1)?"SI":"NO"?> -->
+						<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
+						<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
+						<b>Fecha Verificación:</b> <?=$datos_tecnico['actualizado']?><br>
+						<!-- <b>refacciones Autorizadas:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 						</p>
 					</div>
 				</div>
@@ -60,8 +60,8 @@
 					<div class="card-body">
 						<h6>REFACCIONES</h6>
 						<p>
-						<b>Nombre Responsable:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
-						<b>Email: </b> <?=$datos_tecnico['correo_refacciones']?><br>
+						<b>Nombre Responsable:</b> <?=$datos_refacciones['nombre']?> <?=$datos_refacciones['apellidos']?><br>
+						<b>Email: </b> <?=$datos_refacciones['correo_refacciones']?><br>
 						
 						</p>
 					</div>
@@ -94,7 +94,7 @@
 										echo "<td>".$totalIva."</td>";
 										echo "<td>".($value["total_arts"]+$totalIva)."</td>";
 										//echo "<td>".$value["en_existencia"]."</td>";
-										echo "<td><input type='checkbox' class='check chk_aut2' value='".$value['cve_articulo']."' name='check_aut[]'></td></tr>";
+										echo "<td><input type='checkbox' class='check chk_aut2' value='".$value['cve_articulo']."' name='check_aut2[]'></td></tr>";
 										
 										$total += ($value["total_arts"]+$totalIva);
 									}
@@ -107,7 +107,7 @@
                             echo form_close();
                         ?>
 						 
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>
+                        <!--<button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>-->
 						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>
 					</div>
 				</div>
@@ -156,9 +156,9 @@ $(document).ready(function() {
 	//var dir_fotos= '';
 
 	var base_url = "<?=base_url();?>";
-	$("#btn_update_mail").on("click", function(){
+	$("#btn_update_mail2").on("click", function(){
 		$.ajax({
-			url: base_url+ "index.php/Servicio/presupuesto_mail_cte",
+			url: base_url+ "index.php/Servicio/verificacion_mail_refacciones",
 			type: "POST",
 			dataType: 'json',
 			data: {datos:$("#form_presupuesto2").serializeArray(),id_presupuesto: $("#id_presupuesto").val()},
@@ -170,7 +170,7 @@ $(document).ready(function() {
 			},
 			success: function (data){
 				if(data.estatus == true){
-					alert("Presupuesto Actualizado");
+					alert("Verificación Actualizada");
 					// window.close();
 				}else{
 					alert(data.mensaje);
@@ -180,52 +180,6 @@ $(document).ready(function() {
 	}); 
 	$('.printMe').click(function(){
 	     window.print();
-	});
-	$("#ver_fotos").on("click", function(e){
-		var id_orden = $("#id_orden").val();
-		var vin = $("#vin").val();
-		// var id_orden = $("#id_orden").val();
-		// alert('orden: ' + id_orden);
-		$.ajax({
-			url: base_url+ "index.php/Servicio/fotos_presupuesto_email",
-			type: "POST",
-			dataType: 'json',
-			data: {id:id_orden, vin:vin},
-			beforeSend: function(){
-				$("#loading_spin").show();
-			},
-			error: function(){
-				console.log('error fotos');
-			},
-			success: function (data){
-				if(data.mensaje=="ok"){
-					var img = document.createElement("img");
-
-					if(alias_exists != ''){
-						//variable que contiene la ruta con el alias del virtual host donde se encuentra la unidad donde se alojaran las imagenes
-						var vhost=window.location.origin+'/'+alias_exists+'/';
-						for(i = 0; i<data.fotos.length; i++){
-							str =  data.fotos[i]['ruta_archivo'];
-							var str_res = str.replace(dir_fotos, "");
-							$("#links_light").append('<img src="'+vhost+str_res+'">');
-						}
-					}
-					else{
-						for(i = 0; i<data.fotos.length; i++){
-							ruta = base_url + data.fotos[i]['ruta_archivo'];
-							$("#links_light").append('<img src="'+ruta +'">');
-						}
-					}
-					
-					$("#links_light").tosrus();
-					$('#modalFotos').modal('show');
-					$("#loading_spin").hide();
-				}else{
-					alert(data.mensaje);
-					$("#loading_spin").hide();
-				}
-			}
-		});
 	});
 });
 </script>
