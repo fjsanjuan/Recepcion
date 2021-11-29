@@ -553,7 +553,9 @@ $(document).ready(function() {
 		var t_nomCte = $("#api_nomCte-"+id_orden).val();
 		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
 		//console.log(t_signAsesor);
-		var tok=""
+		var tok="";
+		t_vin = t_vin.replace(".", "");
+		t_vin = t_vin.replace(" ", "");
 		$.ajax({
 			url: "https://apiintelisis.intelisis-solutions.com:8443/auth/",
 			type: "POST",
@@ -622,6 +624,8 @@ $(document).ready(function() {
 		//  t_nomCte  -> t_ = this
 		var t_nomCte = $("#api_nomCte-"+id_orden).val();
 		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+		t_vin = t_vin.replace(".", "");
+		t_vin = t_vin.replace(" ", "");
 		//console.log(t_signAsesor);
 		var tok=""
 		$.ajax({
@@ -3804,16 +3808,18 @@ $(document).off('click', '#cpModal .dltPiezaCp').on('click', '#cpModal .dltPieza
 $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#modalarchivosadjuntos .down_f1816', function (e) {
 	e.preventDefault();
 	var id_orden = $(this).prop("id");
-		id_orden = id_orden.split("-");
-		id_orden = id_orden[1];
-		var t_vin = $("#api_vin-"+id_orden).val();
-		//var vin = $("#api_vin-26590").val();
-		var signGrtia = $("#api_signGrtia-"+id_orden).val();
-		//  t_nomCte  -> t_ = this
-		var t_nomCte = $("#api_nomCte-"+id_orden).val();
-		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
-		//console.log(t_signAsesor);
-		var tok="";
+	id_orden = id_orden.split("-");
+	id_orden = id_orden[1];
+	var t_vin = $("#api_vin-"+id_orden).val();
+	//var vin = $("#api_vin-26590").val();
+	var signGrtia = $("#api_signGrtia-"+id_orden).val();
+	//  t_nomCte  -> t_ = this
+	var t_nomCte = $("#api_nomCte-"+id_orden).val();
+	var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+	//console.log(t_signAsesor);
+	var tok="";
+	t_vin = t_vin.replace(".", "");
+	t_vin = t_vin.replace(" ", "");
 		$.ajax({
 			url: "http://127.0.0.1:8000/auth/",
 			//url: "https://apiintelisis.intelisis-solutions.com:8443/auth/",
