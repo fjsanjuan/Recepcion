@@ -77,6 +77,7 @@
                             $attributes = array('id' => 'form_presupuesto2');
                             echo form_open('',$attributes);
                         ?>
+                        <input type="hidden" name="id_presupuesto" id="id_presupuesto" value="<?=$id_presupuesto;?>">
 						<table class="table table-bordered table-striped table-hover animated fadeIn no-footer tablepres">
 							<thead><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th>
 								<th>I.V.A.</th><th>Total</th><th>En Existencia</th></tr></thead>

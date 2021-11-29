@@ -1894,9 +1894,12 @@ class Servicio extends CI_Controller {
 	public function verificacion_mail_refacciones(){
 		$datos = $this->input->post();
 		$presupuesto = $this->buscador_model->verificacion_mail_refacciones($datos);
+		$logged_in =  $this->session->userdata("logged_in");
+		$perfil    =  $logged_in["perfil"];
 		if($presupuesto["estatus"])
 		{
 			$datos_verificacion["id"] = $datos["id_presupuesto"];
+			$datos_verificacion["perfil"] = $perfil;
 			$this->notificar_verificacionRefacciones($datos_verificacion);
 		}
 		echo json_encode($presupuesto);
@@ -1907,29 +1910,22 @@ class Servicio extends CI_Controller {
 		ini_set('memory_limit', '1024M');
 		//$datos = $this->buscador_model->datos_verificacion($datos);
 		$data = $this->buscador_model->datos_verificacion($datos);
-		
 		$refacciones = $data['user']['nombre']." ".$data['user']['apellidos'];
 		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
 		// print_r($data);die();
-		$refacciones = $data['user']['refacciones'];
-		$tecnico = $data['userTecnico']['tecnico'];
-		$correo_refacciones = $datos["datos_sucursal"]["email_refacciones"];
+		#$refacciones = $data['user']['refacciones'];
+		#$tecnico = $data['userTecnico']['tecnico'];
+		$correo_refacciones = $data["datos_sucursal"]["email_refacciones"];
 		#$num_cita = $data['user']['num_cita'];
 		#$vin = $data['user']['vin'];
 		$vin = "";
 		$num_cita = "";
-		if($info["perfil"] == 6){ //notificar a tecnico de la verificación de refacciones
-			$comentario_email = "Buen día ".$tecnico.", este mensaje es para informarle que se ha revisado verificación de refacciones: ".$tecnico.".</b><br> Ya puede verificarlo en el sistema. <br>Saludos.";
+		$correo_tecnico = "";
+		if($datos["perfil"] == 6){ //notificar a tecnico de la verificación de refacciones
+			$comentario_email = "Buen día ".$tecnico.", este mensaje es para informarle que se ha revisado verificación de refacciones: ".$tecnico.".</b><br> Ya puede verificarlo en el sistema. <br>Saludos.<br><a href='".base_url("index.php/Servicio/email_verificacion/{$datos['id']}")." ' target='_blank'>REVISAR VERIFICACIÓN</a>";
 			$correo_refacciones = $data['user']['correo_refacciones'];
 		}else{
 			$correo_tecnico = "";
-			$comentario_email = "";
-		}
-		if($info["perfil"] == 5){ //notificar a refacciones de la verificación de refacciones
-			$comentario_email = "Buen día ".$refacciones.", este mensaje es para informarle que se ha generado una nueva verificación de refacciones: ".$refacciones.".</b><br> Favor de verificarlo en el sistema a la brevedad. <br>Saludos.";
-			$correo_tecnico = $data['userTecnico']['correo_tecnico'];
-		}else{
-			$correo_refacciones = "";
 			$comentario_email = "";
 		}
         
@@ -1964,9 +1960,9 @@ class Servicio extends CI_Controller {
 			    
 			    //Recipients
 			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
-			    $mail->addAddress($correo_tenico);// Name is optional
+			    #$mail->addAddress($correo_tecnico);// Name is optional
 				$mail->addCC("mlopez@intelisis.com");
-			    $mail->addAddress($correo_refacciones);// Name is optional
+			    #$mail->addAddress($correo_refacciones);// Name is optional
 				$mail->addCC("tpena@intelisis.com");
 			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
 			                              // Set email format to HTML
