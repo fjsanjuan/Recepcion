@@ -3320,23 +3320,6 @@ class Buscador_Model extends CI_Model{
 	}
 	public function abrir_pregarantia($id_orden_servicio)
 	{
-		$this->db->trans_start();
-		$this->db->where('id', $id_orden_servicio);
-		$this->db->update('orden_servicio', ['movimiento' => $id_orden_servicio]);
-		$this->db->trans_complete();
-
-		if( $this->db->trans_status() === FALSE)
-		{
-			$response["estatus"] = false;
-			$response["update"] = $this->db->affected_rows() > 0;
-			$this->db->trans_rollback();
-		}else
-		{
-			$this->db->trans_commit();
-			$response["estatus"] = true;
-			$response["update"] = $this->db->affected_rows() > 0;
-		}
-
 		$this->db2 = $this->load->database("other", true);
 		$xp       = "xpCA_CopiarSoloEncabezadoGarantia";
 		$modulo   = "VTAS";
@@ -3348,7 +3331,32 @@ class Buscador_Model extends CI_Model{
 
 		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,?,?,?,?,?,?,?,?,@OkRef OUTPUT,0,0 SELECT @OkRef", 
 		array($modulo, $idIntelisis, $mov, $usuario, '26/11/2021','SINAFECTAR','Pesos', 1 , NULL, 1, 'Servicio', NULL, NULL));
-
+		$id = $this->db2->query("SELECT ident_current('Venta') AS id;")->row_array()['id'];
+		$response['id'] = $id;
+		$ordenServicioRecep = $this->db->select('*')->from('orden_servicio')->where('id', $id_orden_servicio)->get()->row_array();
+		$this->db->trans_start();
+		$ordenServicioRecep['movimiento']          = $ordenServicioRecep['id'];
+		$ordenServicioRecep['fecha_creacion']      = date('d-m-Y H:i:s');
+		$ordenServicioRecep['fecha_actualizacion'] = date('d-m-Y H:i:s');
+		$ordenServicioRecep['fecha_recepcion'] = date('d-m-Y H:i:s',strtotime($ordenServicioRecep['fecha_recepcion']));
+		$ordenServicioRecep['fecha_entrega'] = date('d-m-Y H:i:s',strtotime($ordenServicioRecep['fecha_entrega']));
+		$ordenServicioRecep['fecha_termCond'] = date('d-m-Y H:i:s.v',strtotime($ordenServicioRecep['fecha_termCond']));
+		$ordenServicioRecep['tipo_orden'] = 'Garantia';
+		$ordenServicioRecep['id_orden_intelisis'] = $id;
+		$this->db->trans_complete();
+		if( $this->db->trans_status() === FALSE)
+		{
+			$response["estatus"] = false;
+			$response["update"] = $this->db->affected_rows() > 0;
+			$this->db->trans_rollback();
+		}else
+		{
+			$this->db->trans_commit();
+			$response["estatus"] = true;
+			$response["update"] = $this->db->affected_rows() > 0;
+		}
+		unset($ordenServicioRecep['id']);
+		$this->db->insert('orden_servicio', $ordenServicioRecep);
 
 		return $response;
 	}

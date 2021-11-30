@@ -2548,7 +2548,7 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 							dataType: 'json',
 							data: {id_orden_servicio: id_orden},
 							beforeSend: function(){
-								toastr.info();
+								toastr.info('Abriendo pregarantía');
 								$("#loading_spin").show();
 							}
 						})
