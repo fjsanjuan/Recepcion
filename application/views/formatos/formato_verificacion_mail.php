@@ -94,8 +94,9 @@
 										echo "<td>".$value["cantidad"]."</td>";
 										echo "<td>".$totalIva."</td>";
 										echo "<td>".($value["total_arts"]+$totalIva)."</td>";
+										//echo "<td>$totalIva</td>";
 										//echo "<td>".$value["en_existencia"]."</td>";
-										echo "<td><input type='checkbox' class='check chk_aut2' value='".$value['cve_articulo']."' name='check_aut2[]'></td></tr>";
+										echo "<td><input type='checkbox' class='check chk_aut2' value='".$value['cve_articulo']."' name='check_aut2[]' ".($value['en_existencia'] == 1? 'checked' : '')." ".($perfil == 6? '': 'disabled')."></td></tr>";
 										
 										$total += ($value["total_arts"]+$totalIva);
 									}
@@ -109,7 +110,9 @@
                         ?>
 						 
                         <!--<button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>-->
+						<?php if($perfil == 6): ?>
 						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>

@@ -208,6 +208,11 @@ $(document).ready(function() {
 				// si la firma renucia extension garantia es diferente a la vacia y diferente de null entonces muestra el boton para ver formato firmado
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
+				btn_refacciones 	=``;
+				action_refacciones	 = "<button class='btn btn-sm search_verificacion' style='background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
+				action_refacciones  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
+				action_refacciones  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
+
 				btn_garantias	=``;
 				btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
@@ -288,9 +293,8 @@ $(document).ready(function() {
 						val["tel_movil"],
 						val["vin"],
 						val["anio_modelo_v"],
-						btn,
-						action2,
-						btn_presupuesto,
+						btn_refacciones,
+						action_refacciones,
 						btn_comentario
 					]);
 				} else if(id_perfil == 4){
@@ -1719,7 +1723,7 @@ $(document).ready(function() {
 	
 						row_title.append(check);*/
 	
-						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia<br><input type='checkbox' class='check check_all2' value='1' id='"+idpres+"'></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia<br><input type='checkbox' class='check check_all2' value='1' id='check_all2' id='"+idpres+"' "+(id_perfil == 6? '': 'disabled')+"></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 						$.each(value.detalle, function(index2, value2){
 							if (value2.comentario != "" && value2.comentario != null){
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
@@ -1727,9 +1731,9 @@ $(document).ready(function() {
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
 							}
 							if(value2.autorizado == 0){
-								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1'></td></tr>");
+								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' class='check chk_aut2' id='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
 							}else{
-								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked></td></tr>");
+								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' class='check chk_aut2' id='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
 							}
 							table.append(row);
 						});
@@ -1746,6 +1750,8 @@ $(document).ready(function() {
 		});
 	}
 	$(document).on("click", "input.check_all2", function(){
+		//e.preventDefault();
+		//if ($perfil == 5){$('#check_all2').prop('checked', false);}
 		$(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
 		var id_presupuesto = $(this).attr("id");
 		var estatus = this.checked;
@@ -1767,6 +1773,8 @@ $(document).ready(function() {
 		});
 	});
 	$(document).on("click", "input.chk_aut2", function(){
+		//e.preventDefault();
+		//if (id_perfil == 5){$('.chk_aut2').hide();} console.log(id_perfil);
 		var id_aut = $(this).attr("id");
 		id_aut = id_aut.split("-");
 		

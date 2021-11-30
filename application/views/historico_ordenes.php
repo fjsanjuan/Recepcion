@@ -1067,7 +1067,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><label for="totalFin">Total Fin:</label></td>
+                                    <td><label for="totalFin2">Total Fin:</label></td>
                                     <td class="price"><input class="cost md-textarea" id="precioTotal2" name="precioTotal" readonly="true"></td>
                                 </tbody>
                             </table>
