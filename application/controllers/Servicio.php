@@ -1826,6 +1826,8 @@ class Servicio extends CI_Controller {
 	}
 	public function email_verificacion($datos= 0){
 		$data["id"] = $datos;
+		$logged_in =  $this->session->userdata("logged_in");
+		$perfil    =  $logged_in["perfil"];
 		$data = $this->buscador_model->datos_verificacion($data);
 		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
 		$data['datos_tecnico'] = $data['userTecnico'];
