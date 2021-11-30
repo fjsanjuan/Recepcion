@@ -3010,7 +3010,7 @@ class Buscador_Model extends CI_Model{
 			foreach ($datos["datos"] as $value) {
 				//print_r($value['name']);
 				$this->db->trans_start();
-				//$this->db->where("id_presupuesto", $id_pres);
+				$this->db->where("id_presupuesto", $id_pres);
 				$this->db->where("cve_articulo", $value["value"]);
 				$this->db->update("detalles_verificacion_refacciones", array("en_existencia"=>1, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y")));
 				$this->db->trans_complete();
@@ -3034,7 +3034,7 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->where("id_presupuesto", $id_pres);
 				$this->db->where("cve_articulo", $value);
-				$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>0, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y H:i:s")));
+				$this->db->update("detalles_verificacion_refacciones", array("en_existencia"=>0, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y H:i:s")));
 				$this->db->trans_complete();
 		}
 		}else 
@@ -3044,7 +3044,7 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->where("id_presupuesto", $id_pres);
 				$this->db->where("cve_articulo", $value["cve_articulo"]);
-				$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>0, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y H:i:s")));
+				$this->db->update("detalles_verificacion_refacciones", array("en_existencia"=>0, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y H:i:s")));
 				$this->db->trans_complete();
 			}
 		}
@@ -3064,7 +3064,7 @@ class Buscador_Model extends CI_Model{
 		
 		$this->db->trans_start();
 		$this->db->where("id_presupuesto", $datos["id_presupuesto"]);
-		$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>$datos["autorizado"]));
+		$this->db->update("detalles_verificacion_refacciones", array("en_existencia"=>$datos["en_existencia"]));
 		$this->db->trans_complete();
 
 		if($this->db->trans_status() == true)
