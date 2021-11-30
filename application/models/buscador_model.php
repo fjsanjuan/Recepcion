@@ -3008,9 +3008,10 @@ class Buscador_Model extends CI_Model{
 		if(isset($datos["datos"]))
 		{			
 			foreach ($datos["datos"] as $value) {
+				//print_r($value['name']);
 				$this->db->trans_start();
-				$this->db->where("id_presupuesto", $id_pres);
-				//$this->db->where("cve_articulo", $value["value"]);
+				//$this->db->where("id_presupuesto", $id_pres);
+				$this->db->where("cve_articulo", $value["value"]);
 				$this->db->update("detalles_verificacion_refacciones", array("en_existencia"=>1, "quien_autoriza" => "refacciones", "fecha_autorizacion" => date("d-m-Y")));
 				$this->db->trans_complete();
 			}

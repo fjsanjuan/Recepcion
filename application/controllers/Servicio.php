@@ -2173,7 +2173,7 @@ class Servicio extends CI_Controller {
        
         return $envio;	
 	}
-	/*public function notificar_refacciones($info)
+	public function notificar_refacciones($info)
 	{
 		ini_set('memory_limit', '1024M');
 
@@ -2265,7 +2265,7 @@ class Servicio extends CI_Controller {
 			}
        
         return $envio;	
-	}*/
+	}
 	public function fotos_presupuesto_email(){
 		$datos = $this->input->post();
 		$fotos = $this->buscador_model->fotos_seguimiento($datos);
