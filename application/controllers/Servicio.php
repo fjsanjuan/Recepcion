@@ -2639,17 +2639,90 @@ class Servicio extends CI_Controller {
     	#$dompdf->create('save');
     	echo json_encode($response);
 	}
-	public function obtener_union_pdf($token = null, $id_orden = null)
+	public function obtener_union_pdf($token = null, $idOrden = null)
 	{
 		$data = [];
 		$datos = $this->input->post();
-		if ($id_orden == null || $token == null) {
+		if ($idOrden == null || $token == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
 		}else {
-			$archivos = $this->buscador_model->get_archivos_f1863($id_orden, 7);
+			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7);
 			$datos["archivos"] = $archivos;
 			$response = $this->buscador_model->obtener_union_pdf($token, $datos);
+		}
+		echo json_encode($response);
+	}
+	public function guardar_requisiciones($idOrden = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		$logged_in = $this->session->userdata("logged_in");
+		#TODO
+		/*if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif(!isset($datos['piezas']) || sizeof($datos['piezas']) <= 0) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos de requisiciones faltantes.';
+		}else {
+			$response = $this->buscador_model->guardar_requisiciones($idOrden, $datos);
+		}
+		echo json_encode($response);*/
+	}
+	public function guardar_diagnostico($idOrden = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos del diagnóstico faltantes.';
+		}else {
+			$response = $this->buscador_model->guardar_diagnostico($idOrden, $datos);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_diagnosticos($idOrden = null)
+	{
+		$datos = [];
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_diagnosticos($idOrden);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_detalles_diagnostico($idRevision = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idRevision == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_detalles_diagnostico($idRevision);
+		}
+		echo json_encode($response);
+	}
+	public function editar_diagnostico($idOrden = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif (!isset($datos['id_diagnostico'])) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Diagnóstico no válido.';
+		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos del diagnóstico faltantes.';
+		}else {
+			$response = $this->buscador_model->editar_diagnostico($idOrden, $datos);
 		}
 		echo json_encode($response);
 	}

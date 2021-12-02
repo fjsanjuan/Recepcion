@@ -241,6 +241,10 @@ $(document).ready(function() {
 				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+					btn_refacciones     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+					btn_garantias     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+					btn_gerente     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+					btn_jefe     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
@@ -573,6 +577,7 @@ $(document).ready(function() {
 			},
 			error: function(){
 				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
 			},
 			success: function (data){
 				tok=data.token;
@@ -645,6 +650,7 @@ $(document).ready(function() {
 			},
 			error: function(){
 				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
 			},
 			success: function (data){
 				tok=data.token;
@@ -3842,6 +3848,7 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 			},
 			error: function(){
 				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
 			},
 			success: function (data){
 				tok=data.token;

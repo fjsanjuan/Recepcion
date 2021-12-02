@@ -3899,4 +3899,189 @@ class Buscador_Model extends CI_Model{
 		}
 			return $creado;
 	}
+	public function guardar_requisiciones($idOrden, $datos)
+	{
+		$requisicion = [
+			'no_requisicion'    => null,
+			'fecha_requisicion' => date('d-m-Y H:i:s.v'),
+			'fecha_recepcion'   => null,
+			'nom_tecnico'       => $datos['nom_tecnico'],
+			'id_orden'          => $idOrden
+		];
+		$this->db->trans_start();
+		$this->db->insert('requisiciones', $requisicion);
+		$id = $this->db->insert_id();
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar la requisición.';
+			return;
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Requisición guardada.';
+		}
+		foreach ($datos['piezas'] as $key => $pieza) {
+			$insert = [
+				'id_requisicion' => $id,
+				'cantidad'       => $pieza['cantidad'],
+				'num_parte'      => $pieza['num_parte'],
+				'descripcion'    => $pieza['descripcion'],
+				'precio'         => $pieza['precio'],
+				'total'          => $pieza['total']
+			];
+			$this->db->insert('detalles_requisicion', $insert);
+		}
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar las piezas de la requisición.';
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Requisición guardada.';
+		}
+		return $response;
+	}
+	public function guardar_diagnostico($idOrden, $datos)
+	{
+		$diagnostico = [
+			'id_orden' => $idOrden,
+			'queja_cliente'        => isset($datos['queja_cliente']) ? $datos['queja_cliente'] : null,
+			'sintomas_falla'       => isset($datos['sintomas_falla']) ? $datos['sintomas_falla'] : null,
+			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
+			'comentarios_tecnicos' => isset($datos['comentarios_tecnicos']) ? $datos['comentarios_tecnicos'] : null,
+			'publica'              => isset($datos['publica']) ? $datos['publica'] : 0,
+			'garantia'             => isset($datos['garantia']) ? $datos['garantia'] : 0,
+			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0 ,
+		];
+		$this->db->trans_start();
+		$this->db->insert('diagnostico_tecnico', $diagnostico);
+		$id = $this->db->insert_id();
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar el diagnóstico.';
+			return;
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Diagnóstico guardado.';
+		}
+		$this->db->trans_start();
+		foreach ($datos['detalles'] as $key => $detalle) {
+			$insert = [
+				'num_reparacion' => null,
+				'fecha_creacion' => date('d-m-Y H:i:s'),
+				'tren_motriz'    => $detalle['tren_motriz'],
+				'codigos'        => $detalle['codigos'],
+				'luz_de_falla'   => $detalle['luz_de_falla'],
+				#'id_orden'       => $idOrden,
+				'id_diagnostico' => $id
+			];
+			$this->db->insert('detalles_diagnostico_tecnico', $insert);
+		}
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar las fallas del diagnóstico.';
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Diagnóstico guardado.';
+		}
+		return $response;
+	}
+	public function obtener_diagnosticos($idOrden)
+	{
+		$response['diagnosticos'] = $this->db->select('*')->from('diagnostico_tecnico')->where('id_orden', $idOrden)->get()->result_array();
+		foreach ($response['diagnosticos'] as $key => $diagnostico) {
+			$response['diagnosticos'][$key]['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $diagnostico['id_diagnostico']])->get()->result_array();
+			
+		}
+		return $response;
+	}
+	public function obtener_detalles_diagnostico($idRevision)
+	{
+		$response = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $idRevision])->get()->result_array();
+		return $response;
+	}
+	public function editar_diagnostico($idOrden, $datos)
+	{
+		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'id_diagnostico' => $datos['id_diagnostico']])->get()->row_array();
+		if (!isset($existe['id_diagnostico'])) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Diagnóstico inexistente.';
+			return $response;
+		}
+		$diagnostico = [
+			'id_orden' => $idOrden,
+			'queja_cliente'        => isset($datos['queja_cliente']) ? $datos['queja_cliente'] : null,
+			'sintomas_falla'       => isset($datos['sintomas_falla']) ? $datos['sintomas_falla'] : null,
+			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
+			'comentarios_tecnicos' => isset($datos['comentarios_tecnicos']) ? $datos['comentarios_tecnicos'] : null,
+			'publica'              => isset($datos['publica']) ? $datos['publica'] : 0,
+			'garantia'             => isset($datos['garantia']) ? $datos['garantia'] : 0,
+			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0 ,
+		];
+		$this->db->trans_start();
+		$this->db->where('id_diagnostico', $datos['id_diagnostico']);
+		$this->db->update('diagnostico_tecnico', $diagnostico);
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar el diagnóstico.';
+			return $response;
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Diagnóstico guardado.';
+		}
+		$this->db->trans_start();
+		foreach ($datos['detalles'] as $key => $detalle) {
+			$data = [
+				'tren_motriz'    => $detalle['tren_motriz'],
+				'codigos'        => $detalle['codigos'],
+				'luz_de_falla'   => $detalle['luz_de_falla'],
+				'num_reparacion'   => $detalle['num_reparacion'],
+				#'id_orden'       => $idOrden,
+			];
+			if (isset($detalle['id_revision'])) {
+				$this->db->where(['id_revision' =>	$detalle['id_revision'], 'id_diagnostico' => $datos['id_diagnostico']]);
+				$this->db->update('detalles_diagnostico_tecnico', $data);
+			}else {
+				$data['fecha_creacion'] = date('d-m-Y H:i:s');
+				$data['id_diagnostico'] = $datos['id_diagnostico'];
+				$data['num_reparacion'] = null;
+				$this->db->insert('detalles_diagnostico_tecnico', $data);
+			}
+		}
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar las fallas del diagnóstico.';
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Diagnóstico guardado.';
+		}
+		return $response;
+	}
 }

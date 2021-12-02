@@ -3633,6 +3633,7 @@ function generar_causa_raiz_componente(idOrden) {
             },
             error: function(){
                 console.log('error al consumir token de ApiReporter');
+                $("#loading_spin").hide();
             },
             success: function (data){
                 tok=data.token;
