@@ -3621,7 +3621,7 @@ function generar_causa_raiz_componente(idOrden) {
     var t_vin = $("#vin").val();
     var tok=""
         $.ajax({
-            url: "http://127.0.0.1:8000/auth/",
+            url: "https://isapi.intelisis-solutions.com/auth/",
             type: "POST",
             dataType: 'json',
             data: {
@@ -3656,7 +3656,7 @@ function generar_causa_raiz_componente(idOrden) {
                         nomCte:"None",
                         signAsesor:"None",
                         id_orden:idOrden,
-                        url:'http://127.0.0.1:8000/reports/getPDFCausaRaizComponente'
+                        url:'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente'
                     },
                     beforeSend: function(){
                         $("#loading_spin").show();
