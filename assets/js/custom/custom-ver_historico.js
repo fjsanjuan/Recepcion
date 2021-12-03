@@ -565,12 +565,12 @@ $(document).ready(function() {
 		t_vin = t_vin.replace(".", "");
 		t_vin = t_vin.replace(" ", "");
 		$.ajax({
-			url: "https://apiintelisis.intelisis-solutions.com:8443/auth/",
+			url: "https://isapi.intelisis-solutions.com/auth/",
 			type: "POST",
 			dataType: 'json',
 			data: {
-				username:'Angelin20',
-				password:'3210995'
+				username:'TEST001',
+				password:'intelisis'
 			},
 			beforeSend: function(){
 				$("#loading_spin").show();
@@ -582,8 +582,8 @@ $(document).ready(function() {
 			success: function (data){
 				tok=data.token;
 				$.ajax({
-					//url: "http://127.0.0.1:8000/auth/",
-					url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					//url: "https://isapi.intelisis-solutions.com/auth/",
+					url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
 					url: `${base_url}index.php/servicio/obtener_pdf_api/${tok}`,
 					type: "POST",
 					headers: {
@@ -601,7 +601,7 @@ $(document).ready(function() {
 						nomCte:t_nomCte,
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
-						url:'https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF'
+						url:'https://isapi.intelisis-solutions.com/reportes/getPDF'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
@@ -638,12 +638,12 @@ $(document).ready(function() {
 		//console.log(t_signAsesor);
 		var tok=""
 		$.ajax({
-			url: "http://127.0.0.1:8000/auth/",
+			url: "https://isapi.intelisis-solutions.com/auth/",
 			type: "POST",
 			dataType: 'json',
 			data: {
-				username:'Angelin20',
-				password:'3210995'
+				username:'TEST001',
+				password:'intelisis'
 			},
 			beforeSend: function(){
 				$("#loading_spin").show();
@@ -655,7 +655,7 @@ $(document).ready(function() {
 			success: function (data){
 				tok=data.token;
 				$.ajax({
-					// url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
 					url: `${base_url}index.php/servicio/generar_formato_causa_raiz_componente/${tok}/${id_orden}`,
 					type: "POST",
 					headers: {
@@ -673,7 +673,7 @@ $(document).ready(function() {
 						nomCte:t_nomCte,
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
-						url:'http://127.0.0.1:8000/reports/getPDFCausaRaizComponente'
+						url:'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
@@ -3835,13 +3835,13 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 	t_vin = t_vin.replace(".", "");
 	t_vin = t_vin.replace(" ", "");
 		$.ajax({
-			url: "http://127.0.0.1:8000/auth/",
-			//url: "https://apiintelisis.intelisis-solutions.com:8443/auth/",
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			//url: "https://isapi.intelisis-solutions.com/auth/",
 			type: "POST",
 			dataType: 'json',
 			data: {
-				username:'Angelin20',
-				password:'3210995'
+				username:'TEST001',
+				password:'intelisis'
 			},
 			beforeSend: function(){
 				$("#loading_spin").show();
@@ -3854,7 +3854,7 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 				tok=data.token;
 				$.ajax({
 					url: `${base_url}index.php/servicio/obtener_union_pdf/${tok}/${id_orden}`,
-					//url: "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF",
+					//url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
 					//url: `${base_url}index.php/servicio/obtener_union_pdf/${tok}`,
 					type: "POST",
 					headers: {
@@ -3872,7 +3872,7 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 						nomCte:t_nomCte,
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
-						url:'http://127.0.0.1:8000/reports/getFormatoF1863'
+						url:'https://isapi.intelisis-solutions.com/reportes/getFormatoF1863'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
@@ -3886,8 +3886,12 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 					success: function (blob){
 						$("#loading_spin").hide();
 						data = JSON.parse(blob);
-						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
-						link[0].click();
+						if (data.estatus) {
+							const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+						}else {
+							toastr.info(data.mensaje);
+						}
 					}
 				});
 			}

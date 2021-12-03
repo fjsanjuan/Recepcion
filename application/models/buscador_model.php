@@ -3779,7 +3779,7 @@ class Buscador_Model extends CI_Model{
 			'Authorization: Token '. $token,
 			'Content-Length: ' . strlen($payload)
 		];
-		$URL = $datos['url'] ? $datos['url'] : "https://apiintelisis.intelisis-solutions.com:8443/reports/getPDF";
+		$URL = $datos['url'] ? $datos['url'] : "https://isapi.intelisis-solutions.com/reportes/getPDF";
 		$request = curl_init();
 		$response= [];
 		curl_setopt($request, CURLOPT_URL, $URL);
@@ -3858,7 +3858,7 @@ class Buscador_Model extends CI_Model{
 		}else {
 			$mensaje = "No hay documentación generada en PDF, ";
 		}
-		if (file_exists("{$response['data']['ruta_rel']}")) {
+		if ($aux > 0 && file_exists("{$response['data']['ruta_rel']}")) {
 			$response["estatus"] = true;
 			$response["mensaje"] = "Archivo generado exitosamente.";
 			$response["nombre"] = "formato-{$datos['id_orden']}";
