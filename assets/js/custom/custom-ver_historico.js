@@ -674,6 +674,7 @@ $(document).ready(function() {
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
 						url:'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente'
+						//url:'http://127.0.0.1:8000/reportes/getPDFCausaRaizComponente'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
@@ -687,8 +688,12 @@ $(document).ready(function() {
 					success: function (blob){
 						$("#loading_spin").hide();
 						data = JSON.parse(blob);
-						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
-						link[0].click();
+						if(data.estatus) {
+							const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+						} else {
+							toastr.info(data.mensaje);
+						}
 					}
 				});
 			}

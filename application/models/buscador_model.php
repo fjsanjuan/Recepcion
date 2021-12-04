@@ -3792,17 +3792,23 @@ class Buscador_Model extends CI_Model{
 		curl_setopt($request, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($request, CURLOPT_BINARYTRANSFER, TRUE);
 		$result = curl_exec($request);
+		$info = curl_getinfo($request);
 		if (curl_errno($request)) {
 			$response['estatus'] = false;
-			$response['mensaje'] = curl_error($request);
+			$response['mensaje'] = "Error al consumir la api";
+		} elseif (empty($info['http_code']) || $info['http_code'] != 200) {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible generar el formato.';
+				curl_close($request);
 		} else {
 			curl_close($request);
-			$ruta = $this->ruta_formts.$datos['vin']."/".$datos['id_orden']."/";
-			$ruta = str_replace('.', '', $ruta);
+			$datos['vin'] = str_replace('.', '', $datos['vin']);
+			$ruta = $this->ruta_formts.$datos['vin']."/".$datos['id_orden'];
 			if(!file_exists($ruta)) 
 			{
 				mkdir($ruta, 0777, true);
 			}
+			$ruta .= "/";
 			$pdf = fopen("{$ruta}{$datos['name']}.pdf", 'w');
 			fwrite($pdf, $result);
 			fclose($pdf);
@@ -3873,7 +3879,23 @@ class Buscador_Model extends CI_Model{
 		$existe = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' =>$id_orden, 'ruta_archivo' => $ruta])->get()->row_array();
 		$creado = false;
 		if(isset($existe['id'])){
-			$creado = true;
+			$archivo = [
+				'fecha_actualizacion' => date("d-m-Y H:i:s"),
+				'ruta_archivo' => $ruta
+			];
+			$this->db->trans_start();
+			$this->db->where('id', $existe['id']);
+			$this->db->update("archivo", $archivo);
+			$this->db->trans_complete();
+			if($this->db->trans_status() === FALSE)
+			{
+				$creado = false;
+				$this->db->trans_rollback();
+			}else
+			{
+				$this->db->trans_commit();
+				$creado = true;
+			}
 		}else {
 			$archivo = [
 				'id_orden_servicio' => $id_orden,
