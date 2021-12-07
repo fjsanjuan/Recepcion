@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -3353,10 +3353,17 @@ $(document).on('click', '.borrar_registro', function (e) {
 });
 
 // nueva linea en requisiciones
+let index_nueva_linea = 1;
 $(document).on('click', '.nueva_linea', function (e) {
 	e.preventDefault();
-	$(this).closest('tr').clone().insertBefore($(this).closest('tr'));
-	$(this).closest('tr').find('input[type="text"]').val("");
+	const clone =$(this).closest('tr').clone();
+	clone.find('input[type="text"]').val("");
+	$.each(clone.find('input'), function(index, element){
+		$(element).prop('name', $(element).prop('name').replace(/\[\d\]/, `[${index_nueva_linea}]`))
+		console.log($(element).prop('name'));
+	});
+	clone.insertAfter($(this).closest('tr'));
+	index_nueva_linea++;
 })
 
 $(document).on('click', '.borra_linea', function (e) {
@@ -3422,7 +3429,7 @@ $(document).on('click', '#refaccCheck1', function(e){
 		});
 });
 // firmar recibo de refacciones
-$(document).on('click', '#reciboCheck1', function(e){
+/*$(document).on('click', '#reciboCheck1', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
 	console.log('id orden', id_orden);
@@ -3437,46 +3444,19 @@ $(document).on('click', '#reciboCheck1', function(e){
 		type: 'info'
 		}).then((result) => {
 			if (result.value) {
-				$.ajax({
-					cache: false,
-					url: base_url+ "index.php/servicio/recibo_refacc/",
-					contentType: false,
-					processData: false,
-					type: 'POST',
-					dataType: 'json',
-					data: form,
-					beforeSend: function(){
-						$("#loading_spin").show();
-					}
-				})
-				.done(function(data) {
-					if (data.estatus) {
-						swal('Refacciones recibidas.', '', 'success');
-						$("#reciboCheck1").prop("disabled", true);
-						$("#reciboCheck1").prop("checked", true);
-						$("#cancelar_recibo").css("display", 'inline-block');
-						
-					}else{
-						toastr.warning(data.mensaje);
-					}
-				})
-				.fail(function() {
-					toastr.warning('Hubo un error al recibir refacciones');
-				})
-				.always(function() {
-					$("#loading_spin").hide();
-				});
+				
 			} else if (result.dismiss) {
 				swal('Cancelado', '', 'error');
 			}
 		});
-});
+});*/
 
 $(document).off('click', '.requisiciones').on('click', '.requisiciones', function (e) {
 	let id_orden = $(this).prop('id');
-    id_orden = id_orden.split('-')[1];
+	id_orden = id_orden.split('-')[1];
 	e.preventDefault();
 	console.log('id', id_orden);
+	localStorage.setItem('hist_id_orden',id_orden);
 	if (id_perfil == 6){$('#checkTecn').hide();}
 	if (id_perfil == 5){$('#checkRefacc').hide();}
 	$('#refaccCheck1').prop('data-orden', id_orden);
@@ -3484,13 +3464,13 @@ $(document).off('click', '.requisiciones').on('click', '.requisiciones', functio
 	$('#cancelar_refacc').prop('data-orden', id_orden);
 	$('#cancelar_recibo').prop('data-orden', id_orden);
 	
-	$('#refaccCheck1').prop('disabled', false);
-	$('#reciboCheck1').prop('disabled', false);
+	$('#refaccCheck1').prop('disabled', true);
+	$('#reciboCheck1').prop('disabled', true);
 	$('#refaccCheck1').prop('checked', false);
 	$('#reciboCheck1').prop('checked', false);
 	$('#cancelar_refacc').css('display', 'none');
 	$('#cancelar_recibo').css('display', 'none');
-	$.ajax({
+	/*$.ajax({
 		cache: false,
 		url: base_url+ "index.php/servicio/obtenerFirmaRefacc/"+id_orden,
 		contentType: false,
@@ -3546,7 +3526,7 @@ $(document).off('click', '.requisiciones').on('click', '.requisiciones', functio
 	})
 	.always(function() {
 		$("#loading_spin").hide();
-	});
+	});*/
 	//cancelar Refacciones
 	$(document).on('click', '#cancelar_refacc', function(e){
 		e.preventDefault();
@@ -4048,4 +4028,129 @@ $(document).off('click', '#modalarchivosadjuntos .down_f1816').on('click', '#mod
 				});
 			}
 		});
+});
+
+$(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on("click", "#archivos_documentacion tr td a.formatoInventario", function(e){
+	var id_orden = $(this).prop("id");
+	id_orden = id_orden.split("-");
+	id_orden = id_orden[1];
+	var t_vin = $("#api_vin-"+id_orden).val();
+	//var vin = $("#api_vin-26590").val();
+	var signGrtia = $("#api_signGrtia-"+id_orden).val();
+	//  t_nomCte  -> t_ = this
+	var t_nomCte = $("#api_nomCte-"+id_orden).val();
+	var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+	t_vin = t_vin.replace(".", "");
+	t_vin = t_vin.replace(" ", "");
+	//console.log(t_signAsesor);
+	var tok=""
+	$.ajax({
+		url: "https://isapi.intelisis-solutions.com/auth/",
+		type: "POST",
+		dataType: 'json',
+		data: {
+			username:'TEST001',
+			password:'intelisis'
+		},
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			console.log('error al consumir token de ApiReporter');
+			$("#loading_spin").hide();
+		},
+		success: function (data){
+			tok=data.token;
+			$.ajax({
+				// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+				url: `${base_url}index.php/servicio/generar_formato_causa_raiz_componente/${tok}/${id_orden}`,
+				type: "POST",
+				headers: {
+					Authorization: `Token ${tok}`,
+				},
+				//habilitar xhrFields cuando se requiera descargar
+				//xhrFields: {responseType: "blob"},
+				data: {
+					name:'INV',
+					dwn:'0',
+					opt:'1',
+					path:'None',
+					vin:t_vin,
+					garantia:signGrtia,
+					nomCte:t_nomCte,
+					signAsesor:t_signAsesor,
+					id:id_orden,
+					id_orden:id_orden,
+					type: 'inventario',
+					idsucursal: 110, //sucursal temporal de pruebas
+					//url:'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente'
+					url:'http://127.0.0.1:8000/reportes/imprimir'
+				},
+				beforeSend: function(){
+					$("#loading_spin").show();
+					toastr.info("Generando Formato");
+				},
+				error: function(){
+					console.log('error al consumir getPDF de ApiReporter');
+					toastr.error("Error al generar el formato");
+					$("#loading_spin").hide();
+				},
+				success: function (blob){
+					$("#loading_spin").hide();
+					data = JSON.parse(blob);
+					if(data.estatus) {
+						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
+					} else {
+						toastr.info(data.mensaje);
+					}
+				}
+			});
+		}
+	});
+});
+$(document).off('click', '#requisModal .guardarReq').on('click', '#requisModal .guardarReq', function(event) {
+	console.log("click guardaReq");
+	event.preventDefault();
+	const detalles = document.getElementById('form_requisicion');
+	const form = new FormData(detalles);
+	idOrden = localStorage.getItem('hist_id_orden');
+	console.log('orden', idOrden);
+	$.validator.addClassRules("digitos", {
+		required: true,
+		digits: true
+	});
+	if (!$('#form_requisicion').valid()) {
+		return;
+	}
+	$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/guardar_requisiciones/${idOrden}`,
+		type: 'POST',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		data: form,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			toastr.info(resp.mensaje);
+			$('#form_requisicion').trigger('reset');
+			$('#requisModal').modal('toggle');
+			$
+		}else {
+			toastr.warning(resp.mensaje);
+		}
+	})
+	.fail(function(resp) {
+		console.log('error', resp);
+		toastr.warning("Ocurrió un error al generar la requisición.");
+	})
+	.always(function(resp) {
+		$("#loading_spin").hide();
+	});
+	
 });

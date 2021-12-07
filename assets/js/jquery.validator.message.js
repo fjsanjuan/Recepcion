@@ -6,7 +6,7 @@ jQuery.extend(jQuery.validator.messages, {
     date: "Please enter a valid date.",
     dateISO: "Please enter a valid date (ISO).",
     number: "Please enter a valid number.",
-    digits: "Please enter only digits.",
+    digits: "Solo dígitos.",
     creditcard: "Please enter a valid credit card number.",
     equalTo: "Please enter the same value again.",
     accept: "Please enter a value with a valid extension.",

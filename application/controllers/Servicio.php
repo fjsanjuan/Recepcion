@@ -2657,18 +2657,16 @@ class Servicio extends CI_Controller {
 	{
 		$datos = [];
 		$datos = $this->input->post();
-		$logged_in = $this->session->userdata("logged_in");
-		#TODO
-		/*if ($idOrden == null ) {
+		if ($idOrden == null ) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
-		}elseif(!isset($datos['piezas']) || sizeof($datos['piezas']) <= 0) {
+		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Datos de requisiciones faltantes.';
 		}else {
 			$response = $this->buscador_model->guardar_requisiciones($idOrden, $datos);
 		}
-		echo json_encode($response);*/
+		echo json_encode($response);
 	}
 	public function guardar_diagnostico($idOrden = null)
 	{

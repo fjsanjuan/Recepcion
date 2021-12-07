@@ -3923,11 +3923,13 @@ class Buscador_Model extends CI_Model{
 	}
 	public function guardar_requisiciones($idOrden, $datos)
 	{
+		$logged_in = $this->session->userdata("logged_in");
+	$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
 		$requisicion = [
 			'no_requisicion'    => null,
 			'fecha_requisicion' => date('d-m-Y H:i:s.v'),
 			'fecha_recepcion'   => null,
-			'nom_tecnico'       => $datos['nom_tecnico'],
+			'nom_tecnico'       => isset($tecnico['nombre']) ? $tecnico['nombre'] : null,
 			'id_orden'          => $idOrden
 		];
 		$this->db->trans_start();
@@ -3939,23 +3941,24 @@ class Buscador_Model extends CI_Model{
 			$this->db->trans_rollback();
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No fue posible guardar la requisición.';
-			return;
+			return $response;
 		}else
 		{
 			$this->db->trans_commit();
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Requisición guardada.';
+			$response['id']      = $id;
 		}
-		foreach ($datos['piezas'] as $key => $pieza) {
+		foreach ($datos['detalles'] as $key => $detalles) {
 			$insert = [
 				'id_requisicion' => $id,
-				'cantidad'       => $pieza['cantidad'],
-				'num_parte'      => $pieza['num_parte'],
-				'descripcion'    => $pieza['descripcion'],
-				'precio'         => $pieza['precio'],
-				'total'          => $pieza['total']
+				'cantidad'       => isset($detalles['cantidad']) ? $detalles['cantidad'] : null,
+				'num_parte'      => isset($detalles['num_parte']) ? $detalles['num_parte'] : null,
+				'descripcion'    => isset($detalles['descripcion']) ? $detalles['descripcion'] : null,
+				'precio'         => isset($detalles['precio']) ? $detalles['precio'] : null,
+				'total'          => isset($detalles['total']) ? $detalles['total'] : null
 			];
-			$this->db->insert('detalles_requisicion', $insert);
+			$this->db->insert('detalles_requisiciones', $insert);
 		}
 		if($this->db->trans_status() === FALSE)
 		{
