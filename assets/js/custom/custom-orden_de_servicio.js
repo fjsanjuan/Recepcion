@@ -3625,8 +3625,8 @@ function generar_causa_raiz_componente(idOrden) {
             type: "POST",
             dataType: 'json',
             data: {
-                username:'Angelin20',
-                password:'3210995'
+                username:'TEST001',
+                password:'intelisis'
             },
             beforeSend: function(){
                 $("#loading_spin").show();

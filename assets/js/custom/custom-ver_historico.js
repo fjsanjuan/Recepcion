@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -209,9 +209,10 @@ $(document).ready(function() {
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
 				btn_refacciones 	=``;
-				action_refacciones	 = "<button class='btn btn-sm search_verificacion' style='background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
-				action_refacciones  +="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
+				//action_refacciones	 = "<button class='btn btn-sm search_verificacion' style='background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
+				action_refacciones  ="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action_refacciones  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
+				action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 
 				btn_garantias	=``;
 				btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
@@ -239,7 +240,7 @@ $(document).ready(function() {
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
+				action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
 					btn_refacciones     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
 					btn_garantias     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
@@ -255,8 +256,9 @@ $(document).ready(function() {
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				//action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				//action_tecnico		= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
-				action_tecnico		="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Anverso</button>`;
+				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary diagnostico_tecnico' style='background: #152f6d;' data-toggle='modal' data-target='#technicalDiagnostic' id='diagnostico_tecnico-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Diagnóstico</button>";
 				action_tecnico		 += "<button class='btn btn-sm new_budget2' style='background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
 				action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				//action_tecnico		+= "<button type='button' class='btn btn-sm verificar_refacc' style='background: #17A2B8;' data-toggle='modal' data-target='#modalValidacion' id='verificar_refacc-"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i> &nbsp&nbsp Refacciones</button>";
@@ -299,6 +301,7 @@ $(document).ready(function() {
 						val["anio_modelo_v"],
 						btn_refacciones,
 						action_refacciones,
+						"",
 						btn_comentario
 					]);
 				} else if(id_perfil == 4){
@@ -340,7 +343,7 @@ $(document).ready(function() {
 						val["anio_modelo_v"],
 						btn_garantias,
 						action_garantias,
-						btn_presupuesto,
+						"",
 						btn_comentario
 					]);
 				} else if(id_perfil == 8){
@@ -1734,7 +1737,7 @@ $(document).ready(function() {
 	
 						row_title.append(check);*/
 	
-						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia<br><input type='checkbox' class='check check_all2' value='1' id='check_all2' id='"+idpres+"' "+(id_perfil == 6? '': 'disabled')+"></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 						$.each(value.detalle, function(index2, value2){
 							if (value2.comentario != "" && value2.comentario != null){
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
@@ -1742,13 +1745,13 @@ $(document).ready(function() {
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
 							}
 							if(value2.autorizado == 0){
-								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' class='check chk_aut2' id='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='background-color: blue;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
 							}else{
-								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' class='check chk_aut2' id='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='background-color: blue;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked></td></tr>");
 							}
 							table.append(row);
 						});
-						var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailP2' id='"+index+"'><i class='fas fa-envelope'></i> Email</button><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+						var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailP2' id='"+index+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
 						table.append(row_importe);
 						$('#modalValidacion .modal-body').append(row_title);
 						$('#modalValidacion .modal-body').append(table);
@@ -1760,7 +1763,7 @@ $(document).ready(function() {
 			}
 		});
 	}
-	$(document).on("click", "input.check_all2", function(){
+	/*$(document).on("click", "input.check_all2", function(){
 		//e.preventDefault();
 		//if ($perfil == 5){$('#check_all2').prop('checked', false);}
 		$(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
@@ -1782,7 +1785,7 @@ $(document).ready(function() {
 				$("#loading_spin").hide();
 			}
 		});
-	});
+	});*/
 	$(document).on("click", "input.chk_aut2", function(){
 		//e.preventDefault();
 		//if (id_perfil == 5){$('.chk_aut2').hide();} console.log(id_perfil);
@@ -1839,7 +1842,7 @@ $(document).ready(function() {
 		$("#card_articulos2").hide();
 		numArt = 0;
 		arrayArticulos = [];
-		$.each(datos["detalle"], function(index, value){
+		$.each(datos["detail"], function(index, value){
 			var valueTopush ={};
 			var table = "<tr class='item-row arst_add2' style='text-align:center;'>";
 					table += "<td class='item-name'><div class='delete-wpr2'><a class='delete2' id='"+numArt+"'>X</a> </div></td>";
@@ -3167,17 +3170,169 @@ $(document).on('click', 'a.deladjunto', function (e) {
 	
 })
 
-//para modal jefe taller asigna tecnico
-$("#asigna_tecnico").empty();
-            $("#asigna_tecnico").append('<option value="">Seleccione</option>');
-            /*for (var i = 0; i < data.Nombre.length; i++) {
-                if (data.Nombre[i]['Nombre'] == data.Datos[0].Nombre)
-                    $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '" selected>' + data.Nombre[i]['Nombre'] + '</option>');
-                else
-                    $("#asigna_tecnico").append('<option value="' + data.Nombre[i]['Nombre'] + '">' + data.Nombre[i]['Nombre'] + '</option>');
-            }*/
+//PARA MODAL DIAGNOSTICO DE TECNICO
+$(document).off('click', '.diagnostico_tecnico').on('click', '.diagnostico_tecnico', function (e) {
+	let id_orden = $(this).prop('id');
+    id_orden = id_orden.split('-')[1];
+	e.preventDefault();
+	if (id_perfil == 4){$('#checkTecnico1').hide();}
+	if (id_perfil == 5){$('#checkeaJefe1').hide();}
+	console.log('id orden', id_orden);
+	$('#saveDiagnostico').prop('data-orden', id_orden);
+	$('#checkTecn1').prop('data-orden', id_orden);
+	$('#checkJefe1').prop('data-orden', id_orden);
+	$('#cancelTecn1').prop('data-orden', id_orden);
+	$('#cancelJefe1').prop('data-orden', id_orden);
+	
+	$('#checkTecn1').prop('disabled', false);
+	$('#checkJefe1').prop('disabled', false);
+	$('#checkTecn1').prop('checked', false);
+	$('#checkJefe1').prop('checked', false);
+	$('#cancelTecn1').css('display', 'none');
+	$('#cancelJefe1').css('display', 'none');
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaDiagnostico/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_tecnico != null && id_perfil == 5){
+					$("#checkTecn1").prop("disabled", true);
+					$('#checkTecn1').prop('checked', true);
+					$('#cancelTecn1').css('display', 'inline-block');
+					$("#checkJefe1").css("display", 'inline-block');
 
-// nueva linea de registro de labor en codigo diagnostico del problema
+				}
+			}
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toastr.warning("No se pudo obtener información de las firmas");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+});
+$(document).on("click", '#saveDiagnostico', function(e){
+	e.preventDefault();
+	var idOrden = $(this).prop("data-orden");
+	console.log('id_orden', idOrden);
+	localStorage.setItem("hist_id_orden", idOrden);
+	const form = new FormData(document.getElementById("formDiagnosticoTecnico"));
+	form.append('id_orden', idOrden);
+	swal({
+		title: '¿Desea guardar el diagnóstico?',
+		showCancelButton: true,
+		confirmButtonText: 'Guardar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+	}).then((result) => {
+		if (result.value) {
+			if ($('#formDiagnosticoTecnico').valid()){
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/guardar_diagnostico/"+idOrden,
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						if (data.id_diagnostico){ 
+							$.ajax({
+								cache: false,
+								url: base_url+ "index.php/servicio/firmar_diagnostico/"+data.id_diagnostico,
+								contentType: false,
+								processData: false,
+								type: 'POST',
+								dataType: 'json',
+								data: '',
+								beforeSend: function(){
+									$("#loading_spin").show();
+								}
+							})
+							.done(function(data) {
+								if (data.estatus) {
+									swal('Diagnóstico Firmado y guardado.', '', 'success');
+									$("#checkTecn1").prop("disabled", true);
+									$("#checkTecn1").prop("checked", true);
+									$("#cancelTecn1").css("display", 'none');
+									$('#technicalDiagnostic').modal('hide');
+									$("#nreparacion, #lfalla, #tmotriz, #icodigo, #qcliente, #ediagnostico, #ctecnicos, #sfalla").val("");
+									$("#tpublica").prop('checked', false);
+									$("#tgarantia").prop('checked', false);
+									$("#tadicional").prop('checked', false);
+								}else{
+									toastr.warning(data.mensaje);
+								}
+							})
+							.fail(function() {
+								toastr.warning('Hubo un error al firmar diagnóstico');
+							})
+							.always(function() {
+								$("#loading_spin").hide();
+							});	
+						}
+						swal('Diagnóstico guardado.', '', 'success');
+					}else{
+						toastr.warning('Ingrese la información requerida.');
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al guardar el diagnóstico');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
+			}else{
+				toastr.warning('Ingrese la información requerida');
+			}
+		}else if (result.dismiss) {
+			swal('Cancelado', '', 'error');
+		}
+		
+	});
+})
+
+var newlinecode = 1;
+$(document).on('click', '.nuevo_codigo', function (e) {
+	e.preventDefault();
+	const code = $(this).closest('tr').clone();
+	code.find('input[type="text"]').val("");
+	code.find('input[name="detalles[0][num_reparacion]"]').prop('name',`detalles[${newlinecode}][num_reparacion]`);
+	code.find('input[name="detalles[0][luz_de_falla]"]').prop('name',`detalles[${newlinecode}][luz_de_falla]`);
+	code.find('select[name="detalles[0][tren_motriz]"]').prop('name',`detalles[${newlinecode}][tren_motriz]`);
+	code.find('input[name="detalles[0][codigos]"]').prop('name',`detalles[${newlinecode}][codigos]`);
+	newlinecode++;
+	code.find('select').val("");
+	code.insertAfter($(this).closest('tr'));
+	
+})
+$(document).on('click', '.erase_line', function (e) {
+	e.preventDefault();
+	if ($(this).closest('.code_lines tr').find('tr').length > 0) {
+        toastr.warning('No puedes eliminar la primer linea');
+        return;
+    }
+    if ($('.code_lines tr').length > 1) {
+        $(this).closest('.code_lines tr').remove();
+    }else {
+        toastr.warning('Debes matener una linea');
+    }
+});
 $(document).on('click', '.nuevo_registro', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').clone().insertBefore($(this).closest('tr'));
@@ -3328,15 +3483,7 @@ $(document).off('click', '.requisiciones').on('click', '.requisiciones', functio
 	$('#reciboCheck1').prop('data-orden', id_orden);
 	$('#cancelar_refacc').prop('data-orden', id_orden);
 	$('#cancelar_recibo').prop('data-orden', id_orden);
-	/*$('#autoriza_refacc').prop('data-orden', id_orden);
-	$('#recibe_refacc').prop('data-orden', id_orden);
-	$('#cancelar_refacc').prop('data-orden', id_orden);
-	$('#cancelar_recibo').prop('data-orden', id_orden);
 	
-	$('#autoriza_refacc').prop('disabled', false);
-	$('#recibe_refacc').prop('disabled', false);
-	$('#cancelar_refacc').css('display', 'none');
-	$('#cancelar_recibo').css('display', 'none');*/
 	$('#refaccCheck1').prop('disabled', false);
 	$('#reciboCheck1').prop('disabled', false);
 	$('#refaccCheck1').prop('checked', false);

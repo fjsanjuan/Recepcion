@@ -2856,7 +2856,7 @@ class Buscador_Model extends CI_Model{
 		return $cliente;
 	}
 	public function EditarVerificacion($datos){
-		$datos["detalles"] = parse_str($datos["detalles"],$arr);
+		$datos["details"] = parse_str($datos["details"],$arr);
 		$existen = $this->db->select("*")->from("detalles_verificacion_refacciones")->where("id_presupuesto", $arr["id_presupuesto"])->get()->result_array();
 		$new = $datos["articulos"];
 		$this->db->trans_start();
@@ -2866,11 +2866,11 @@ class Buscador_Model extends CI_Model{
 		}
 		foreach ($new as $key => $value) {
 			$value["id_presupuesto"] = $arr["id_presupuesto"];
-			$value["autorizado"] = 0;
+			$value["en_existencia"] = 0;
 			$this->db->insert("detalles_verificacion_refacciones", $value);
 		}
 		$this->db->where("id_presupuesto", $arr["id_presupuesto"]);
-		$this->db->update("verificacion_refacciones", array("total_presupuesto"=>$arr["precioTotal"]));
+		$this->db->update("verificacion_refacciones", array("total_presupuesto"=>$arr["precioTotal2"]));
 		$this->db->trans_complete();
 		if($this->db->trans_status() == true)
 		{
@@ -3060,7 +3060,7 @@ class Buscador_Model extends CI_Model{
 		}
 		return $refacciones;
 	}
-	public function verificar_todo($datos){
+	/*public function verificar_todo($datos){
 		
 		$this->db->trans_start();
 		$this->db->where("id_presupuesto", $datos["id_presupuesto"]);
@@ -3077,7 +3077,7 @@ class Buscador_Model extends CI_Model{
 			$refacciones["mensaje"] = 'Error al actualizar';
 		}
 		return $refacciones;
-	}
+	}*/
 	public function Autorizar_todo($datos){
 		
 		$this->db->trans_start();
@@ -3978,9 +3978,12 @@ class Buscador_Model extends CI_Model{
 			'sintomas_falla'       => isset($datos['sintomas_falla']) ? $datos['sintomas_falla'] : null,
 			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
 			'comentarios_tecnicos' => isset($datos['comentarios_tecnicos']) ? $datos['comentarios_tecnicos'] : null,
-			'publica'              => isset($datos['publica']) ? $datos['publica'] : 0,
-			'garantia'             => isset($datos['garantia']) ? $datos['garantia'] : 0,
-			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0 ,
+			'tecnico' => isset($datos['tecnico']) ? $datos['tecnico'] : null,
+			'jefe_de_taller' => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
+			'publica'              => isset($datos['publica']) ? ($datos['publica'] == 'on' ? 1 : 0) : 0,
+			'garantia'             => isset($datos['garantia']) ? ($datos['garantia'] == 'on' ? 1 : 0) : 0,
+			'adicional'            => isset($datos['adicional']) ? ($datos['adicional'] == 'on' ? 1 : 0) : 0 ,
+			
 		];
 		$this->db->trans_start();
 		$this->db->insert('diagnostico_tecnico', $diagnostico);
@@ -4021,6 +4024,7 @@ class Buscador_Model extends CI_Model{
 		{
 			$this->db->trans_commit();
 			$response['estatus'] = true;
+			$response['id_diagnostico'] = $id;
 			$response['mensaje'] = 'Diagnóstico guardado.';
 		}
 		return $response;
@@ -4038,6 +4042,7 @@ class Buscador_Model extends CI_Model{
 	{
 		$response = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $idRevision])->get()->result_array();
 		return $response;
+		
 	}
 	public function editar_diagnostico($idOrden, $datos)
 	{
@@ -4053,6 +4058,8 @@ class Buscador_Model extends CI_Model{
 			'sintomas_falla'       => isset($datos['sintomas_falla']) ? $datos['sintomas_falla'] : null,
 			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
 			'comentarios_tecnicos' => isset($datos['comentarios_tecnicos']) ? $datos['comentarios_tecnicos'] : null,
+			'tecnico' => isset($datos['tecnico']) ? $datos['tecnico'] : null,
+			'jefe_de_taller' => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
 			'publica'              => isset($datos['publica']) ? $datos['publica'] : 0,
 			'garantia'             => isset($datos['garantia']) ? $datos['garantia'] : 0,
 			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0 ,
@@ -4088,7 +4095,7 @@ class Buscador_Model extends CI_Model{
 			}else {
 				$data['fecha_creacion'] = date('d-m-Y H:i:s');
 				$data['id_diagnostico'] = $datos['id_diagnostico'];
-				$data['num_reparacion'] = null;
+				$data['num_reparacion'] = $detalle['num_reparacion'];
 				$this->db->insert('detalles_diagnostico_tecnico', $data);
 			}
 		}
@@ -4104,6 +4111,108 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Diagnóstico guardado.';
 		}
+		return $response;
+	}
+	public function detalles_formato_diagnostico($data = 0)
+	{
+		$ret['usuario'] = $this->db->select("presupuestos.*,orden_servicio.*, orden_servicio.id as id_orden, usuarios.email as correo_asesor")->from("presupuestos")
+						->join("orden_servicio", "orden_Servicio.id = presupuestos.id_orden")
+						->join("usuarios", "usuarios.cve_intelisis = orden_servicio.clave_asesor")
+						->where("presupuestos.id_presupuesto", $data['id'])
+						->get()->row_array();
+		$ret['userTecnico'] = $this->db->select("diagnostico_tecnico.tecnico")->from("diagnostico_tecnico")
+						->where("diagnostico_tecnico.id_diagnostico", $data['id'])
+						->get()->row_array();
+		$ret['userJefe'] = $this->db->select("diagnostico_tecnico.jefe_de_taller")->from("diagnostico_tecnico")
+						->where("diagnostico_tecnico.id_diagnostico", $data['id'])
+						->get()->row_array();
+		$ret['codigo'] = $this->db->select("detalles_diagnostico_tecnico.num_reparacion, detalles_diagnostico_tecnico.luz_de_falla, detalles_diagnostico_tecnico.tren_motriz, detalles_diagnostico_tecnico.codigos, detalles_diagnostico_tecnico.fecha_creacion")->from("detalles_diagnostico_tecnico")
+						->where("detalles_diagnostico_tecnico.id_diagnostico", $data['id'])
+						->get()->row_array();
+		$ret['anotaciones'] = $this->db->select("diagnostico_tecnico.queja_cliente, diagnostico_tecnico.sintomas_falla, diagnostico_tecnico.equipo_diagnostico, diagnostico_tecnico.comentarios_tecnicos, diagnostico_tecnico.publica, diagnostico_tecnico.garantia, diagnostico_tecnico.adicional, diagnostico_tecnico.firma_tecnico, diagnostico_tecnico.firma_jefe_taller")->from("diagnostico_tecnico")
+						->where("diagnostico_tecnico.id_diagnostico", $data['id'])
+						->get()->row_array();
+		
+		$ret['detalle'] = $this->db->select("*")->from("presupuesto_detalle")->where("id_presupuesto", $data['id'])->get()->result_array();
+		/*echo "<pre>";
+		print_r($ret['detalle']);
+		echo "</pre>";*/
+		$sucursal = $ret["usuario"]["id_sucursal_intelisis"];
+		$ret["datos_sucursal"] = $this->db->select("datos_sucursal.*, sucursal.email_refacciones")
+										  ->from("datos_sucursal")
+										  ->join("sucursal","datos_sucursal.id_sucursal = sucursal.id")
+										  ->where("sucursal.sucursal_int", $sucursal)
+										  ->get()->row_array();
+		$ret['agencia'] = $this->db->select("*")
+										  ->from("agencia")
+										  ->join("sucursal", "sucursal.id_agencia = agencia.id")
+										  ->where("sucursal.sucursal_int", $sucursal)
+										  ->get()->row_array();
+
+		$intelisis = $this->load->database("other", TRUE);								  
+		$ret["usuario"]["movID"] = $intelisis->select("MovID")
+											 ->from("Venta")
+											 ->where("ID", $ret["usuario"]["id_orden_intelisis"])
+											 ->get()->row_array();	
+		$intelisis->close();
+
+		return $ret;
+	}
+	public function autorizar_diagnostico($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			
+				$this->db->trans_start();
+				$this->db->where('id_diagnostico', $id_orden);
+				if ($perfil == 4){
+					$this->db->update('diagnostico_tecnico', ['firma_jefe_taller' => $firma['firma_electronica']]);
+				}
+				if ($perfil == 5){
+					$this->db->update('diagnostico_tecnico', ['firma_tecnico' => $firma['firma_electronica']]);
+				}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo autorizar firma.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	public function obtenerFirmaDiagnostico($id_orden)
+	{
+		return $this->db->select("*")->from('diagnostico_tecnico')->where('id_diagnostico', $id_orden)->get()->result_array();
+	}
+
+	public function cancela_diagnostico($id_orden)
+	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		/*$existe_firma = $this->db->select("*")
+								 ->from("diagnostico_tecnico")
+								 ->where("id_diagnostico", $id_orden)
+								 ->count_all_results();*/
+			
+				$this->db->trans_start();
+				$this->db->where('id_diagnostico', $id_orden);
+				if($perfil == 4){$this->db->update('diagnostico_tecnico', ['firma_jefe_taller' => null]);}
+				if($perfil == 5){$this->db->update('diagnostico_tecnico', ['firma_tecnico' => null]);}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
 		return $response;
 	}
 }

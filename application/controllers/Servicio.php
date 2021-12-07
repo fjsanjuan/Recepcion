@@ -1882,11 +1882,11 @@ class Servicio extends CI_Controller {
 		$presupuesto = $this->buscador_model->verificar_articulo($datos);
 		echo json_encode($presupuesto);
 	}
-	public function verificar_todo(){
+	/*public function verificar_todo(){
 		$datos = $this->input->post();
 		$presupuesto = $this->buscador_model->verificar_todo($datos);
 		echo json_encode($presupuesto);
-	}
+	}*/
 	public function presupuesto_mail_cte(){
 		$datos = $this->input->post();
 		$presupuesto = $this->buscador_model->presupuesto_mail_cte($datos);
@@ -2680,7 +2680,7 @@ class Servicio extends CI_Controller {
 		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Datos del diagnóstico faltantes.';
-		}else {
+		}else { 
 			$response = $this->buscador_model->guardar_diagnostico($idOrden, $datos);
 		}
 		echo json_encode($response);
@@ -2723,6 +2723,59 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Datos del diagnóstico faltantes.';
 		}else {
 			$response = $this->buscador_model->editar_diagnostico($idOrden, $datos);
+		}
+		echo json_encode($response);
+	}
+	public function ver_diagnosticoPdf($datos = 0){
+		$data["id"] = $datos;
+		$data = $this->buscador_model->detalles_formato_diagnostico($data);
+		$data["datos_suc"] = $data["datos_sucursal"];
+		$data['movID'] = $data["usuario"];
+		$tecnico = $data['userTecnico']['tecnico']." ";
+		$jefeTaller = $data['userJefe']['jefe_de_taller']." ";
+		$codig = $data['codigo']['num_reparacion']." ".$data['codigo']['luz_de_falla']." ".$data['codigo']['tren_motriz']." ".$data['codigo']['codigos']." ".$data['codigo']['fecha_creacion']." ";
+		$notes = $data['anotaciones']['queja_cliente']." ".$data['anotaciones']['sintomas_falla']." ".$data['anotaciones']['equipo_diagnostico']." ".$data['anotaciones']['comentarios_tecnicos']." ".$data['anotaciones']['publica']." ".$data['anotaciones']['garantia']." ".$data['anotaciones']['adicional']." ".$data['anotaciones']['firma_tecnico']." ".$data['anotaciones']['firma_jefe_taller']." ";
+		//print_r($data['id_orden']);
+		$data["datos_notes"]["notes"] = $notes;
+		$data['datos_notes'] = $data['anotaciones'];
+		$data["datos_code"]["codig"] = $codig;
+		$data['datos_code'] = $data['codigo'];
+		$data["datos_tecnico"]["tecnico"] = $tecnico;
+		$data['datos_tecnico'] = $data['userTecnico'];
+		$data["datos_jefe"]["jefeTaller"] = $jefeTaller;
+		$data['datos_jefe'] = $data['userJefe'];
+		//print_r($data);
+		$this->load->view("formatos/formato_diagnostico_tecnico",$data);
+		
+	}
+	public function firmar_diagnostico($idDiagnostico = null){
+		if ($idDiagnostico == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Firma no valida.';
+		}else {
+			$response = $this->buscador_model->autorizar_diagnostico($idDiagnostico);
+		}
+		echo json_encode($response);
+	}
+	public function obtenerFirmaDiagnostico($idDiagnostico = null)
+	{
+		if ($idDiagnostico == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "no existen firmas.";
+		}else {
+			$response['estatus'] = true;
+			$response['data'] = $this->buscador_model->obtenerFirmaDiagnostico($idDiagnostico);
+		}
+		echo json_encode($response);
+	}
+	public function cancela_diagnostico()
+	{
+		$idDiagnostico = $this->input->post('id_diagnostico') !=''? $this->input->post('id_diagnostico') : null;
+		if ($idDiagnostico == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'no existe autorizacion';
+		}else {
+			$response = $this->buscador_model->cancela_diagnostico($idDiagnostico);
 		}
 		echo json_encode($response);
 	}
