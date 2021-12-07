@@ -2779,4 +2779,19 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function generar_formato_inventario($token = null, $id_orden = null)
+	{
+		#$id_orden = 34762;  orden de prueba
+		$data = [];
+		$datos = $this->input->post();
+		if ($token == null || $id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Orden no válida.";
+		} else {
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($id_orden, $response["data"]["ruta_rel"]);
+			}
+		}
+	}
 }
