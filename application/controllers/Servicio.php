@@ -2792,4 +2792,27 @@ class Servicio extends CI_Controller {
 			}
 		}
 	}
+	public function obtener_requisiciones($idOrden = null)
+	{
+		$datos = [];
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_requisiciones($idOrden);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_detalles_requisicion($idReq = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idReq == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_detalles_requisicion($idReq);
+		}
+		echo json_encode($response);
+	}
 }

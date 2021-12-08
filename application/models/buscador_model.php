@@ -4037,7 +4037,6 @@ class Buscador_Model extends CI_Model{
 		$response['diagnosticos'] = $this->db->select('*')->from('diagnostico_tecnico')->where('id_orden', $idOrden)->get()->result_array();
 		foreach ($response['diagnosticos'] as $key => $diagnostico) {
 			$response['diagnosticos'][$key]['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $diagnostico['id_diagnostico']])->get()->result_array();
-			
 		}
 		return $response;
 	}
@@ -4045,7 +4044,6 @@ class Buscador_Model extends CI_Model{
 	{
 		$response = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $idRevision])->get()->result_array();
 		return $response;
-		
 	}
 	public function editar_diagnostico($idOrden, $datos)
 	{
@@ -4216,6 +4214,26 @@ class Buscador_Model extends CI_Model{
 					$response['estatus'] = false;
 					$response['mensaje'] = 'No se pudo cancelar la autorización.';
 				}
+		return $response;
+	}
+	public function obtener_requisiciones($idOrden)
+	{
+		$response['requisiciones'] = $this->db->select('*')->from('requisiciones')->where('id_orden', $idOrden)->get()->result_array();
+		foreach ($response['requisiciones'] as $key => $requisicion) {
+			$response['requisiciones'][$key]['detalles'] = $this->db->select('*')->from('detalles_requisiciones')->where(['id_requisicion' => $requisicion['id_requisicion']])->get()->result_array();
+		}
+		if ( sizeof($response['requisiciones']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = "Ok.";
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "La orden no tiene requisiciones.";
+		}
+		return $response;
+	}
+	public function obtener_detalles_requisicion($idReq)
+	{
+		$response = $this->db->select('*')->from('detalles_requisiciones')->where(['id_requisicion' => $idReq])->get()->result_array();
 		return $response;
 	}
 }

@@ -966,3 +966,6 @@
         </div>
     </div>
 </div>
+
+<!-- modal para ver requisiciones-->
+<?php $this->load->view('modals/ver_requisiciones'); ?>

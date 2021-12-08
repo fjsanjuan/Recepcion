@@ -213,7 +213,7 @@ $(document).ready(function() {
 				action_refacciones  ="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action_refacciones  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
-
+				action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				btn_garantias	=``;
 				btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
@@ -257,6 +257,7 @@ $(document).ready(function() {
 				//action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				//action_tecnico		= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#requisModal"><i class="fas fa-bars"></i>&nbsp&nbsp Requisiciones</button>`;
 				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				action_tecnico		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Generar Anverso</button>`;
 				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary diagnostico_tecnico' style='background: #152f6d;' data-toggle='modal' data-target='#technicalDiagnostic' id='diagnostico_tecnico-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Diagnóstico</button>";
 				action_tecnico		 += "<button class='btn btn-sm new_budget2' style='background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
@@ -287,6 +288,7 @@ $(document).ready(function() {
 				action2  ="<button class='btn btn-sm anexofotos' style='background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action2  +="<button class='btn btn-sm cargardocumentacion' style='background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				action2	 +="<button type='button' class='btn btn-sm btn-primary requisiciones' style='background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+				action2  +="<button type='button' class='btn btn-sm btn-primary ver_req' style='background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				//action2  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
 				if(id_perfil == 6)
 				{
@@ -4154,3 +4156,96 @@ $(document).off('click', '#requisModal .guardarReq').on('click', '#requisModal .
 	});
 	
 });
+
+$(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
+	event.preventDefault();
+	idOrden = $(this).prop('id');
+	idOrden = idOrden.split('-')[1];
+	$('#verReqModal .modal-body').empty();
+	obtener_requisiciones(idOrden);
+	/*$.ajax({
+		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
+		type: 'GET',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		beforeSend: function () {
+			$("#loading_spin").show();
+		}
+	})
+	.done(function() {
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});*/
+	
+});
+
+function obtener_requisiciones(idOrden){
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
+		type: 'GET',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			console.log('error al buscar');
+		},
+		success: function (data){
+			console.log('resp', data);
+			$("#loading_spin").hide();
+			if(data.estatus == true){
+				requisicionesArray = data.requisiciones;
+				$.each(data.requisiciones, function(index, value){
+					var idReq = value.id_requisicion;
+					var row_title = $("<div class='row'></div>");
+					row_title.append($(`<div class='row'>
+						<div class='col-md-4'><button class='btn btn-sm btn-primary editarReq' data-id_presupuesto='"+idReq+"'><i class='fa fa-edit'></i> Editar</button></div>
+						<div class='col-md-4'>
+							<label>Num. Requisición: ${(value.id_requisicion ? value.id_requisicion : 'N/D')}</label>
+						</div>
+						<div class='col-md-4'>
+							<label>Solicito: ${(value.nom_tecnico ? value.nom_tecnico : 'N/D')}</label>
+						</div>
+						<div class='col-md-6'>
+							<label>Fecha Requisición: ${(value.fecha_requisicion ? value.fecha_requisicion : 'N/D')}</label>
+						</div>
+						<div class='col-md-6'>
+							<label>Fecha Entrega: ${(value.recepcion ? value.recepcion : 'N/D')}</label>
+						</div>
+					</div>`));
+					/*if(value.autorizado == 1)
+						var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
+					else
+						var check = $("<label for='"+idpres+"' class='no_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1'>Autorizado</label>");
+
+					row_title.append(check);*/
+
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Num. Parte</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado</th><th>Entregado</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					$.each(value.detalles, function(index2, value2){
+						if(value2.autorizado == 0){
+							var row = $("<tr><td>"+(value2.num_parte ? value2.num_parte : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio ? value2.precio : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total ? value2.total : '')+"</td><td><input type='checkbox' style='background-color: blue;' class='check auth_req' id='"+idReq+"-"+value2.id_requisicion+"' name='auth_req[]' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td><td><input type='checkbox' style='background-color: blue;' class='check entregado_req' id='"+idReq+"-"+value2.id_requisicion+"' name='entregado_req[]' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+						}else{
+							var row = $("<tr><td>"+(value2.num_parte ? value2.num_parte : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio ? value2.precio : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total ? value2.total : '')+"</td><td><input type='checkbox' style='background-color: blue;' class='check auth_req' id='"+idReq+"-"+value2.id_requisicion+"' name='auth_req[]' value='1' checked></td><td><input type='checkbox' style='background-color: blue;' class='check entregado_req' id='"+idReq+"-"+value2.id_requisicion+"' name='entregado_req[]' value='1' checked></td></tr>");
+						}
+						table.append(row);
+					});
+					/*var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailReq' id='"+idReq+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdfReq' data-index='"+idReq+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+					table.append(row_importe);*/
+					$('#verReqModal .modal-body').append(row_title);
+					$('#verReqModal .modal-body').append(table);
+				});
+				$('#verReqModal').modal('show');
+			}else{
+				toastr.error(data.mensaje);
+			}
+		}
+	});
+}
