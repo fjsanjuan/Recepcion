@@ -429,6 +429,8 @@
 		</div>
 	</div>
 </div>
+<!--modal para ver diagnostico tecnico-->
+<?php $this->load->view("modals/ver_diagnostico");?>
 <!-- modal para codigo diagnostico del problema -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -237,6 +237,7 @@ $(document).ready(function() {
 				//action_jefe		+=`<button type="button" class="btn btn-primary btn-sm add" id='autorizar_add-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar ADD</button>`;
 				action_jefe		="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				action_jefe		+= `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bars"></i>&nbsp&nbsp Firmar Anverso</button>`;
+				action_jefe		 += "<button class='btn btn-sm obtener_diagnosticos' style='background: #607d8b;' id='obtener_diagnosticos-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Diagnóstico</button>";
 				btn_tecnico    = ``;
 				btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
@@ -2958,55 +2959,55 @@ $(document).on('click', '#cancelar_add', function(e){
 		});	
 	});
 	//carro parado
-$(document).on('click', '#autor_cp', function(e){
-	e.preventDefault();
-	var id_orden = $(this).prop("data-orden");
-	console.log('id orden', id_orden);
-	localStorage.setItem("hist_id_orden", id_orden);
-	const form = new FormData();
-	form.append('id_orden_servicio', id_orden);
-	swal({
-		title: '¿Desea autorizar Carro parado?',
-		showCancelButton: true,
-		confirmButtonText: 'Autorizar',
-		cancelButtonText: 'Cancelar',
-		type: 'info'
-		}).then((result) => {
-			if (result.value) {
-				$.ajax({
-					cache: false,
-					url: base_url+ "index.php/servicio/autorizar_cp/",
-					contentType: false,
-					processData: false,
-					type: 'POST',
-					dataType: 'json',
-					data: form,
-					beforeSend: function(){
-						$("#loading_spin").show();
-					}
-				})
-				.done(function(data) {
-					if (data.estatus) {
-						swal('Carro parado autorizado.', '', 'success');
-						$("#cpCheck1").prop("checked", true);
-						$("#cpCheck1").css('display', 'inline-block');
-						document.getElementById("autor_cp").disabled = true;
-						$("#cancelar_cp").css('display', 'inline-block');
-					}else{
-						toastr.warning(data.mensaje);
-					}
-				})
-				.fail(function() {
-					toastr.warning('Hubo un error al autorizar carro parado');
-				})
-				.always(function() {
-					$("#loading_spin").hide();
-				});
-			} else if (result.dismiss) {
-				swal('Cancelado', '', 'error');
-			}
-		});
-});
+	$(document).on('click', '#autor_cp', function(e){
+		e.preventDefault();
+		var id_orden = $(this).prop("data-orden");
+		console.log('id orden', id_orden);
+		localStorage.setItem("hist_id_orden", id_orden);
+		const form = new FormData();
+		form.append('id_orden_servicio', id_orden);
+		swal({
+			title: '¿Desea autorizar Carro parado?',
+			showCancelButton: true,
+			confirmButtonText: 'Autorizar',
+			cancelButtonText: 'Cancelar',
+			type: 'info'
+			}).then((result) => {
+				if (result.value) {
+					$.ajax({
+						cache: false,
+						url: base_url+ "index.php/servicio/autorizar_cp/",
+						contentType: false,
+						processData: false,
+						type: 'POST',
+						dataType: 'json',
+						data: form,
+						beforeSend: function(){
+							$("#loading_spin").show();
+						}
+					})
+					.done(function(data) {
+						if (data.estatus) {
+							swal('Carro parado autorizado.', '', 'success');
+							$("#cpCheck1").prop("checked", true);
+							$("#cpCheck1").css('display', 'inline-block');
+							document.getElementById("autor_cp").disabled = true;
+							$("#cancelar_cp").css('display', 'inline-block');
+						}else{
+							toastr.warning(data.mensaje);
+						}
+					})
+					.fail(function() {
+						toastr.warning('Hubo un error al autorizar carro parado');
+					})
+					.always(function() {
+						$("#loading_spin").hide();
+					});
+				} else if (result.dismiss) {
+					swal('Cancelado', '', 'error');
+				}
+			});
+	});
 
 $(document).on('click', '#cancelar_cp', function(e){
 	e.preventDefault();
@@ -3335,6 +3336,90 @@ $(document).on('click', '.erase_line', function (e) {
         toastr.warning('Debes matener una linea');
     }
 });
+//MODAL PARA VER DIAGNOSTICO TECNICO
+	$(document).off('click', '.obtener_diagnosticos').on('click', '.obtener_diagnosticos', function(event) {
+		event.preventDefault();
+		idOrden = $(this).prop('id');
+		idOrden = idOrden.split('-')[1];
+		$('#verDiagnostico .modal-body').empty();
+		obtener_diagnosticos(idOrden);
+		/*$.ajax({
+			url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
+			type: 'GET',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$("#loading_spin").show();
+			}
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			$("#loading_spin").hide();
+		});*/
+		
+	});
+	
+	function obtener_diagnosticos(idOrden){
+		$.ajax({
+			url: `${base_url}index.php/servicio/obtener_diagnosticos/${idOrden}`,
+			type: 'GET',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al buscar');
+			},
+			success: function (data){
+				console.log('resp', data);
+				$("#loading_spin").hide();
+				if(data.estatus == true){
+					diagnosticoArray = data.diagnosticos;
+					$.each(data.diagnosticos, function(index, value){
+						var idReq = value.id_diagnostico;
+						var row_title = $("<div class='row'></div>");
+						row_title.append($(`<div class='row'>
+							<div class='col-md-4'><button class='btn btn-sm btn-primary editarDia' data-id_diagnostico='"+idDia+"'><i class='fa fa-edit'></i> Editar</button></div>
+							<div class='col-md-4'><label>No. Reparacion: ${(value.id_diagnostico ? value.id_diagnostico : 'N/D')}</label></div>
+							<div class='col-md-4'><label>Fecha Diagnostico: ${(value.fecha_creacion ? value.fecha_creacion : 'N/D')}</label></div>
+						</div>`));
+						/*if(value.autorizado == 1)
+							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
+						else
+							var check = $("<label for='"+idpres+"' class='no_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1'>Autorizado</label>");
+	
+						row_title.append(check);*/
+	
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablediag' id='tbl_dia"+(index+1)+"'><thead style='text-align:center;'><tr><th>No. Reparación</th><th>Luz de Falla</th><th>Tren Motriz</th><th>Códigos</th><th>Publica</th><th>Garantia</th><th>Adicional</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						$.each(value.detalles, function(index2, value2){
+							if(value2.autorizado == 0){
+								var row = $("<tr><td>"+(value2.num_reparacion ? value2.num_reparacion : '')+"</td><td>"+(value2.luz_de_falla ? value2.luz_de_falla : '')+"</td><td>"+(value2.tren_motriz ? value2.tren_motriz : '')+"</td><td>"+(value2.codigos ? value2.codigos: '')+"</td><td>"+(value2.publica ? value2.publica : '')+"</td><td>"+(value2.garantia ? value2.garantia : '')+"</td><td>"+(value2.adicional ? value2.adicional : '')+"</td></tr>");
+							}else{
+								var row = $("<tr><td>"+(value2.num_reparacion ? value2.num_reparacion : '')+"</td><td>"+(value2.luz_de_falla ? value2.luz_de_falla : '')+"</td><td>"+(value2.tren_motriz ? value2.tren_motriz : '')+"</td><td>"+(value2.codigos ? value2.codigos : '')+"</td><td>"+(value2.publica ? value2.publica : '')+"</td><td>"+(value2.garantia ? value2.garantia : '')+"</td><td>"+(value2.adicional ? value2.adicional : '')+"</td></tr>");
+							}
+							table.append(row);
+						});
+						/*var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailReq' id='"+idReq+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdfReq' data-index='"+idReq+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+						table.append(row_importe);*/
+						$('#verDiagnostico .modal-body').append(row_title);
+						$('#verDiagnostico .modal-body').append(table);
+					});
+					$('#verDiagnostico').modal('show');
+				}else{
+					toastr.error(data.mensaje);
+				}
+			}
+		});
+	}
+
 $(document).on('click', '.nuevo_registro', function (e) {
 	e.preventDefault();
 	$(this).closest('tr').clone().insertBefore($(this).closest('tr'));
@@ -4228,17 +4313,17 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Num. Parte</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado</th><th>Entregado</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='check auth_all' value='1' id='"+idReq+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></th><th>Entregado<br><input type='checkbox' class='check auth_all' value='1' id='"+idReq+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"'></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
-							var row = $("<tr><td>"+(value2.num_parte ? value2.num_parte : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio ? value2.precio : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total ? value2.total : '')+"</td><td><input type='checkbox' style='background-color: blue;' class='check auth_req' id='"+idReq+"-"+value2.id_requisicion+"' name='auth_req[]' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td><td><input type='checkbox' style='background-color: blue;' class='check entregado_req' id='"+idReq+"-"+value2.id_requisicion+"' name='entregado_req[]' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
 						}else{
-							var row = $("<tr><td>"+(value2.num_parte ? value2.num_parte : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio ? value2.precio : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total ? value2.total : '')+"</td><td><input type='checkbox' style='background-color: blue;' class='check auth_req' id='"+idReq+"-"+value2.id_requisicion+"' name='auth_req[]' value='1' checked></td><td><input type='checkbox' style='background-color: blue;' class='check entregado_req' id='"+idReq+"-"+value2.id_requisicion+"' name='entregado_req[]' value='1' checked></td></tr>");
+							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
 						}
 						table.append(row);
 					});
-					/*var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailReq' id='"+idReq+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdfReq' data-index='"+idReq+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
-					table.append(row_importe);*/
+					var row_importe = $("<tr><td></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+					table.append(row_importe);
 					$('#verReqModal .modal-body').append(row_title);
 					$('#verReqModal .modal-body').append(table);
 				});

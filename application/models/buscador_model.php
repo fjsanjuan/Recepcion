@@ -4040,6 +4040,13 @@ class Buscador_Model extends CI_Model{
 		foreach ($response['diagnosticos'] as $key => $diagnostico) {
 			$response['diagnosticos'][$key]['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $diagnostico['id_diagnostico']])->get()->result_array();
 		}
+		if ( sizeof($response['diagnosticos']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = "Ok.";
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "La orden no tiene diagnosticos.";
+		}
 		return $response;
 	}
 	public function obtener_detalles_diagnostico($idRevision)
@@ -4065,7 +4072,7 @@ class Buscador_Model extends CI_Model{
 			'jefe_de_taller' => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
 			'publica'              => isset($datos['publica']) ? $datos['publica'] : 0,
 			'garantia'             => isset($datos['garantia']) ? $datos['garantia'] : 0,
-			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0 ,
+			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0,
 		];
 		$this->db->trans_start();
 		$this->db->where('id_diagnostico', $datos['id_diagnostico']);
