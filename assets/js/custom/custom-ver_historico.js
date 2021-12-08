@@ -1731,7 +1731,7 @@ $(document).ready(function() {
 					$.each(data.pres, function(index, value){
 						
 						var idpres = value.id_presupuesto;
-						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+index+"'><i class='fa fa-edit'></i> Editar</button></div></div>");
+						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+idpres+"'><i class='fa fa-edit'></i> Editar</button></div><div class='col-md-4'><button class='btn btn-sm btn-primary convertirReq' data-id_presupuesto='"+idpres+"'><i class='fa fa-exchange-alt'></i> Convertir en Requisición</button></div></div>");
 						/*if(value.autorizado == 1)
 							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
 						else
@@ -4249,3 +4249,34 @@ function obtener_requisiciones(idOrden){
 		}
 	});
 }
+
+$(document).off('click', '#modalValidacion .convertirReq').on('click', '#modalValidacion .convertirReq', function(event) {
+	event.preventDefault();
+	let id = $(this).data('id_presupuesto');
+	console.log('id presupuesto', id);
+	$.ajax({
+		url: `${base_url}index.php/servicio/convertir_cotizacion/${id}`,
+		type: 'POST',
+		dataType: 'json',
+		processData: false,
+		contentType: false,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			toastr.info(resp.mensaje);
+			$('#requisModal').modal('toggle');
+			$('#modalValidacion').modal('toggle');
+		}else {
+			toastr.warning(resp.mensaje);
+		}
+	})
+	.fail(function(resp) {
+		toastr.warning('Hubo un error al convertir la Cotización de piezas en Requisición.');
+	})
+	.always(function(resp) {
+		$('#loading_spin').hide();
+	});
+});

@@ -3924,13 +3924,15 @@ class Buscador_Model extends CI_Model{
 	public function guardar_requisiciones($idOrden, $datos)
 	{
 		$logged_in = $this->session->userdata("logged_in");
-	$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
+		$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
 		$requisicion = [
 			'no_requisicion'    => null,
 			'fecha_requisicion' => date('d-m-Y H:i:s.v'),
 			'fecha_recepcion'   => null,
 			'nom_tecnico'       => isset($tecnico['nombre']) ? $tecnico['nombre'] : null,
-			'id_orden'          => $idOrden
+			'id_orden'          => $idOrden,
+			'total_presupuesto' => $datos['total_presupuesto'],
+			'id_usuario'        => $logged_in['id']
 		];
 		$this->db->trans_start();
 		$this->db->insert('requisiciones', $requisicion);
@@ -3951,12 +3953,12 @@ class Buscador_Model extends CI_Model{
 		}
 		foreach ($datos['detalles'] as $key => $detalles) {
 			$insert = [
-				'id_requisicion' => $id,
-				'cantidad'       => isset($detalles['cantidad']) ? $detalles['cantidad'] : null,
-				'num_parte'      => isset($detalles['num_parte']) ? $detalles['num_parte'] : null,
-				'descripcion'    => isset($detalles['descripcion']) ? $detalles['descripcion'] : null,
-				'precio'         => isset($detalles['precio']) ? $detalles['precio'] : null,
-				'total'          => isset($detalles['total']) ? $detalles['total'] : null
+				'id_requisicion'  => $id,
+				'cantidad'        => isset($detalles['cantidad']) ? $detalles['cantidad'] : null,
+				'cve_articulo'    => isset($detalles['cve_articulo']) ? $detalles['cve_articulo'] : null,
+				'descripcion'     => isset($detalles['descripcion']) ? $detalles['descripcion'] : null,
+				'precio_unitario' => isset($detalles['precio_unitario']) ? $detalles['precio_unitario'] : null,
+				'total_arts'      => isset($detalles['total_arts']) ? $detalles['total_arts'] : null
 			];
 			$this->db->insert('detalles_requisiciones', $insert);
 		}
@@ -4234,6 +4236,40 @@ class Buscador_Model extends CI_Model{
 	public function obtener_detalles_requisicion($idReq)
 	{
 		$response = $this->db->select('*')->from('detalles_requisiciones')->where(['id_requisicion' => $idReq])->get()->result_array();
+		return $response;
+	}
+	public function obtener_detalles_cotizacion($id)
+	{
+		$response['cotizacion'] = $this->db->select('*')->from('verificacion_refacciones')->where('id_presupuesto', $id)->get()->row_array();
+		if (sizeof($response['cotizacion']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
+			$response['cotizacion']['detalles'] = $this->db->select('*')->from('detalles_verificacion_refacciones')->where('id_presupuesto', $id)->get()->result_array();
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No existe la cotización de piezas.';
+		}
+		return $response;
+	}
+	public function convertir_cotizacion($id)
+	{
+		$existe = $this->obtener_detalles_cotizacion($id);
+		if ($existe['estatus']) {
+			$pregarantia = $this->db->select('id')->from('orden_servicio')->where('movimiento', $existe['cotizacion']['id_orden'])->get()->row_array();
+			if (isset($pregarantia['id'])) {
+				$datos = [
+					'total_presupuesto' => $existe['cotizacion']['total_presupuesto'],
+					'detalles'          => $existe['cotizacion']['detalles']
+				];
+				$response = $this->guardar_requisiciones($pregarantia['id'],$datos);
+			} else {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'La orden pública no tiene una pregarantía abierta para cargar la requisicion';
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = $existe['mensaje'];
+		}
 		return $response;
 	}
 }

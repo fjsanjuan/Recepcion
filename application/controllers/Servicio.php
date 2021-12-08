@@ -2815,4 +2815,16 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function convertir_cotizacion($idPresupuesto = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idPresupuesto == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Presupuesto no válido.';
+		}else {
+			$response = $this->buscador_model->convertir_cotizacion($idPresupuesto);
+		}
+		echo json_encode($response);
+	}
 }
