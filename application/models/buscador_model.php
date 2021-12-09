@@ -2860,7 +2860,7 @@ class Buscador_Model extends CI_Model{
 		return $cliente;
 	}
 	public function EditarVerificacion($datos){
-		$datos["details"] = parse_str($datos["details"],$arr);
+		$datos["detalles"] = parse_str($datos["detalles"],$arr);
 		$existen = $this->db->select("*")->from("detalles_verificacion_refacciones")->where("id_presupuesto", $arr["id_presupuesto"])->get()->result_array();
 		$new = $datos["articulos"];
 		$this->db->trans_start();

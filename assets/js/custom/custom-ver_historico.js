@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -34,6 +34,8 @@
   		selectYears: 4,
   		max: true
 	});*/
+
+	var verificaciones_array = [];
 
 	$(".datepicker").flatpickr({
 		"altInput": true,
@@ -214,7 +216,7 @@
 				action_refacciones  ="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action_refacciones  +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				if (val["movimiento"] != null) {
-					action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+					action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+" data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
 				btn_garantias	=``;
@@ -267,7 +269,7 @@
 					action_tecnico		 += "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				}else {
-					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
 				//action_tecnico		+= "<button type='button' class='btn btn-sm verificar_refacc' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #17A2B8;' data-toggle='modal' data-target='#modalValidacion' id='verificar_refacc-"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i> &nbsp&nbsp Refacciones</button>";
@@ -296,7 +298,7 @@
 				action2  ="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action2  +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				if (val["movimiento"] != null) {
-					action2	 +="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+					action2	 +="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action2  +="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
 				//action2  +="<button class='btn btn-sm pregarantia' style='background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Abrir Pregarantía</button>";
@@ -1701,6 +1703,7 @@
 		$("#bnGuardarPres2").show();
 		$('#modalBuscArt').modal('show');
 	});
+	
 	$(".tabla_hist tbody").on("click", "tr td button.search_verificacion", function(e){
 		var idOrden =  $(this).attr('id');
 		search_verificacion(idOrden);
@@ -1717,10 +1720,11 @@
 		var $this = $(this);
 		var parent_email_cte = $this.parent().parent().find('#btn_email_cte2').val();
 		$("#email_envio_p2").val(parent_email_cte);
+		console.log('ver', verificaciones_array);
 		//alert(parent_email_cte);
 	});
 	
-	var presupuestos_array;
+	
 	
 	function search_verificacion(id_orden){
 		$.ajax({
@@ -1737,11 +1741,12 @@
 			success: function (data){
 				$("#loading_spin").hide();
 				if(data.estatus == true){
-					presupuestos_array = data.pres;
+					verificaciones_array = data.pres;
+					console.log('ver', verificaciones_array);
 					$.each(data.pres, function(index, value){
 						
 						var idpres = value.id_presupuesto;
-						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4'><button class='btn btn-sm btn-primary editarPres2' data-id_presupuesto='"+idpres+"'><i class='fa fa-edit'></i> Editar</button></div><div class='col-md-4'><button class='btn btn-sm btn-primary convertirReq' data-id_presupuesto='"+idpres+"'><i class='fa fa-exchange-alt'></i> Convertir en Requisición</button></div></div>");
+						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4' style='display:"+(value.autorizado ? 'none': 'inline-block')+";'><button class='btn btn-sm btn-primary editarPres2' data-index='"+index+"' data-id_presupuesto='"+idpres+"'><i class='fa fa-edit'></i> Editar</button></div><div class='col-md-4'><button class='btn btn-sm btn-primary convertirReq' data-id_presupuesto='"+idpres+"'><i class='fa fa-exchange-alt'></i> Convertir en Requisición</button></div></div>");
 						/*if(value.autorizado == 1)
 							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
 						else
@@ -1837,8 +1842,11 @@
 		});
 	}
 	$(document).on("click", "button.editarPres2", function(){
-		var idIndex =  $(this).attr('data-id_presupuesto');
-		var datos = presupuestos_array[idIndex];
+		var idIndex =  $(this).attr('data-index');
+		var datos = verificaciones_array[idIndex];
+		console.log('index,', idIndex);
+		console.log('ars', verificaciones_array);
+		console.log('datos verificacion', datos);
 		var id_presupuesto = datos["id_presupuesto"];
 		$("#id_presupuesto2").val(id_presupuesto);
 		$("#table_invoice2 tbody").empty();
@@ -1849,12 +1857,12 @@
 		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
 		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
 		 table_body_default +="id='precioTotal2' name='";
-		table_body_default +="precioTotal' readonly='true'></td>";
+		table_body_default +="precioTotal2' readonly='true'></td>";
 		$("#table_invoice2 tbody").append(table_body_default);
 		$("#card_articulos2").hide();
 		numArt = 0;
 		arrayArticulos = [];
-		$.each(datos["detail"], function(index, value){
+		$.each(datos["detalle"], function(index, value){
 			var valueTopush ={};
 			var table = "<tr class='item-row arst_add2' style='text-align:center;'>";
 					table += "<td class='item-name'><div class='delete-wpr2'><a class='delete2' id='"+numArt+"'>X</a> </div></td>";
@@ -1887,7 +1895,11 @@
 		$("#modalValidacion").modal("hide");
 	});
 	$("#bnActualizarPres2").on("click", function(){
-		countArticulos();
+		console.log('articulos',arrayArticulos);
+		console.log('articulos',arrayArticulos.length);
+		countArticulos2();
+		console.log('articulos',arrayArticulos);
+		console.log('articulos',arrayArticulos.length);
 		if(arrayArticulos.length > 0){
 			var presupuestoDato = arrayArticulos;
 			$.ajax({
@@ -1959,14 +1971,15 @@
 	});
 	$(document).on("click", "button.btn-mailP2", function(e){
 		var idIndex =  $(this).attr('id');
-		var datos = presupuestos_array[idIndex];
+		var datos = verificaciones_array[idIndex];
 		$("#id2").val(datos.id_presupuesto);
 		// $("#modalemailP").modal('show');
 		$("#enviar_presupuesto2").click();
 	});
 	$(document).on("click", "button.btnPdf2", function(e){
+		console.log('pres', verificaciones_array);
 		var idIndex =  $(this).attr('data-index');
-		var datos = presupuestos_array[idIndex];
+		var datos = verificaciones_array[idIndex];
 		var id_press = datos.id_presupuesto;
 		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 	});
@@ -2234,18 +2247,8 @@
 	//para agregar nueva requisicion
 	$(document).off('click', '#requisModal').on('click', '#requisModal', function(event) {
 		//console.log("click guardarReq");
+		//$('#requisModal #cotizaciones row').empty();
 		event.preventDefault();
-		const detalles = document.getElementById('form_requisicion');
-		const form = new FormData(detalles);
-		idOrden = localStorage.getItem('hist_id_orden');
-		console.log('orden', idOrden);
-		$.validator.addClassRules("digitos", {
-			required: true,
-			digits: true
-		});
-		if (!$('#form_requisicion').valid()) {
-			return;
-		}
 		/*$.ajax({
 			cache: false,
 			url: `${base_url}index.php/servicio/guardar_requisiciones/${idOrden}`,
@@ -2322,12 +2325,12 @@
 		});
 		$("#card_articulos2").show();
 		$("#titleValidacion").text("Editar Verificación de Refacciones");
-		$("#bnGuardarPres2").hide();
-		$("#bnActualizarPres2").show();
+		$("#bnGuardarPres3").hide();
+		$("#bnActualizarPres3").show();
 		$("#modalBuscArt").modal("show");
 		$("#modalValidacion").modal("hide");
 	});
-	$("#bnActualizarPres2").on("click", function(){
+	$("#bnActualizarPres3").on("click", function(){
 		countArticulos();
 		if(arrayArticulos.length > 0){
 			var presupuestoDato = arrayArticulos;
@@ -2456,8 +2459,8 @@
 	table += "<td class='item-name'><div class='delete-lreq'><a class='delet3' id='"+numArt+"'>X</a> </div></td>";
 	table += "<td class='artmoo'>"+clave_art+`<input type='hidden' name='detalles[${numArt}][cve_articulo]`+"' id='cve_"+numArt+"' value='"+clave_art+"'/> </td>";
 	table += "<td>"+art+`<input type='hidden' name='detalles[${numArt}][descripcion]`+"' id='descrip_"+numArt+"' value='"+art+"'/> </td>";
-	table += `<td><input class='qty md-textarea' name='detalles[${numArt}][cantidad]`+"' id='art_qty_"+numArt+"' value='"+cantidad+"'/></td>";
-	table += `<td><input class='cost md-textarea' name='detalles[${numArt}][precio_unitario]`+"' id='art_cost_"+numArt+"' value='"+precio+"'/></td>";
+	table += `<td><input required class='qty md-textarea digitos' name='detalles[${numArt}][cantidad]`+"' id='art_qty_"+numArt+"' value='"+cantidad+"'/></td>";
+	table += `<td><input required class='cost md-textarea' name='detalles[${numArt}][precio_unitario]`+"' id='art_cost_"+numArt+"' value='"+precio+"'/></td>";
 	table += "<td><label class='price'>"+total+`</label><input type='hidden' class='atotal' name='detalles[${numArt}][total_arts]`+"' id='atotal_"+numArt+"' value='"+total1+"'/></td>";
 	/*table +="<td style='display:none;' name='articulosad_"+numArt+"' id='articulosad_"+numArt+"'>single</td>";
 	table += "<td style='display:none;' name='idpq_"+numArt+"' id='idpq_"+numArt+"'>" + 'NA' + "</td>";*/
@@ -2466,7 +2469,7 @@
 	$("#table_invoice3 tbody").prepend(table);
 	bind();
 	//$("#requisModal").modal("hide");
-	update_total();
+	update_total3();
 	$("#ajax_arts3, #input_precio3, #input_claveArt3, #comentario_art3").val("");
 	$("#input_cantidad3").val(1);
 	$("#card_articulos3").show();
@@ -2475,7 +2478,7 @@
 
 	});
 
-	function update_total() {
+	function update_total3() {
 		var total = 0;
 		var iva = 0;
 		var price = 0;
@@ -2548,9 +2551,9 @@
 		event.preventDefault();
 		const detalles = document.getElementById('form_requisicion');
 		const form = new FormData(detalles);
-		form.append('total_presupuesto', 0);
+		form.append('total_presupuesto', $('#precioTotal3').val());
 		idOrden = localStorage.getItem('hist_id_orden');
-		console.log('orden', idOrden);
+
 		$.validator.addClassRules("digitos", {
 			required: true,
 			digits: true
@@ -2573,8 +2576,11 @@
 		.done(function(resp) {
 			if (resp.estatus) {
 				toastr.info(resp.mensaje);
+				arrayArticulos = [];
+				$('#requisModal #card_articulos3 #table_invoice3 tbody').empty();
 				$('#form_requisicion').trigger('reset');
 				$('#requisModal').modal('toggle');
+				$('#precioTotal3').val('');
 				
 			}else {
 				toastr.warning(resp.mensaje);
@@ -2765,6 +2771,27 @@ function formatear_numero(numero)
 function countArticulos(){
 	arrayArticulos = [];
 	$.each($("tr.arst_add"),function(index, val){
+		var valueTopush ={};
+		var clave = $(this).find("td").eq(1).text();  
+		var descripcion = $(this).find("td").eq(2).text();  
+		var cantidad = $(this).find("td").eq(3).find("input").val();  
+		var precio_unitario = stringToFloat($(this).find("td").eq(4).find("input").val()); 
+		var comentarios = $(this).find("td").eq(5).find("input").val();
+		var total = $(this).find("td").eq(6).find("input").val();
+		
+		valueTopush["cve_articulo"] = clave;
+	    valueTopush["descripcion"] = descripcion;
+	    valueTopush["cantidad"] = cantidad;
+	    valueTopush["precio_unitario"] = precio_unitario;
+	    valueTopush["comentario"] = comentarios;
+	    valueTopush["total_arts"] = total;
+	    arrayArticulos.push(valueTopush);
+	    console.log(valueTopush);
+	})
+}
+function countArticulos2(){
+	arrayArticulos = [];
+	$.each($("tr.arst_add2"),function(index, val){
 		var valueTopush ={};
 		var clave = $(this).find("td").eq(1).text();  
 		var descripcion = $(this).find("td").eq(2).text();  
@@ -3916,6 +3943,7 @@ $(document).on('click', '#refaccCheck1', function(e){
 
 $(document).off('click', '.requisiciones').on('click', '.requisiciones', function (e) {
 	let id_orden = $(this).prop('id');
+	let id_orden_publica = $(this).data('mov');
 	id_orden = id_orden.split('-')[1];
 	e.preventDefault();
 	console.log('id', id_orden);
@@ -3933,6 +3961,17 @@ $(document).off('click', '.requisiciones').on('click', '.requisiciones', functio
 	$('#reciboCheck1').prop('checked', false);
 	$('#cancelar_refacc').css('display', 'none');
 	$('#cancelar_recibo').css('display', 'none');
+	$('#requisModal #cotizaciones .contentCot').empty();
+	$("#table_invoice3 tbody").empty();
+	$('#precioTotal3').val('');
+	$('#req-tab').trigger('click');
+	if (id_orden_publica) {
+		$('.actualizarCot').show();
+		$('.actualizarCot').data('id_orden_publica', id_orden_publica);
+		obtener_cotizaciones(id_orden_publica);
+	}else {
+		$('.actualizarCot').hide();
+	}
 	/*$.ajax({
 		cache: false,
 		url: base_url+ "index.php/servicio/obtenerFirmaRefacc/"+id_orden,
@@ -4711,7 +4750,7 @@ function obtener_requisiciones(idOrden){
 	});
 }
 
-$(document).off('click', '#modalValidacion .convertirReq').on('click', '#modalValidacion .convertirReq', function(event) {
+$(document).off('click', '#requisModal #cotizaciones .convertirReq').on('click', '#requisModal #cotizaciones .convertirReq', function(event) {
 	event.preventDefault();
 	let id = $(this).data('id_presupuesto');
 	console.log('id presupuesto', id);
@@ -4729,7 +4768,7 @@ $(document).off('click', '#modalValidacion .convertirReq').on('click', '#modalVa
 		if (resp.estatus) {
 			toastr.info(resp.mensaje);
 			$('#requisModal').modal('toggle');
-			$('#modalValidacion').modal('toggle');
+			//$('#modalValidacion').modal('toggle');
 		}else {
 			toastr.warning(resp.mensaje);
 		}
@@ -4741,3 +4780,71 @@ $(document).off('click', '#modalValidacion .convertirReq').on('click', '#modalVa
 		$('#loading_spin').hide();
 	});
 });
+
+function obtener_cotizaciones(id_orden){
+	$.ajax({
+		url: base_url+ "index.php/Buscador/search_verificacion",
+		type: "POST",
+		dataType: 'json',
+		data: {id:id_orden},
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			$("#loading_spin").hide();
+			console.log('error al buscar');
+		},
+		success: function (data){
+			$("#loading_spin").hide();
+			if(data.estatus == true){
+				presupuestos_array = data.pres;
+				console.log('carg',presupuestos_array);
+				$.each(data.pres, function(index, value){
+					console.log('value', value);
+					var idpres = value.id_presupuesto;
+					var row_title = $("<div class='row'><div class='col-md-6'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-6' style='display:"+(value.autorizado ? 'inline-block' : 'none')+";'><button class='btn btn-sm btn-primary convertirReq' data-id_presupuesto='"+idpres+"'><i class='fa fa-exchange-alt'></i> Convertir en Requisición</button></div></div>");
+					/*if(value.autorizado == 1)
+						var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
+					else
+						var check = $("<label for='"+idpres+"' class='no_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1'>Autorizado</label>");
+
+					row_title.append(check);*/
+
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					$.each(value.detalle, function(index2, value2){
+						if (value2.comentario != "" && value2.comentario != null){
+							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
+						}else{
+							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
+						}
+						if(value2.autorizado == 0){
+							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='background-color: blue;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+						}else{
+							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='background-color: blue;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked></td></tr>");
+						}
+						table.append(row);
+					});
+					var row_importe = $("<tr><td><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"' data-idpres='"+idpres+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+					console.log(row_importe);
+					table.append(row_importe);
+					console.log(table);
+					$('#requisModal #cotizaciones .contentCot').append(row_title);
+					$('#requisModal #cotizaciones .contentCot').append(table);
+				});
+			}else{
+				toastr.error(data.mensaje);
+			}
+		}
+	});
+}
+$(document).off('click', '#requisModal #cotizaciones .actualizarCot').on('click', '#requisModal #cotizaciones .actualizarCot', function(event) {
+	event.preventDefault();
+	$('#requisModal #cotizaciones .contentCot').empty();
+	console.log($(this).data('id_orden_publica'));
+	obtener_cotizaciones($(this).data('id_orden_publica'));
+});
+$(document).off("click", "#requisModal #cotizaciones button.btnPdf2").on("click", "#requisModal #cotizaciones button.btnPdf2", function(e){
+		var id_press = $(this).data('idpres');
+		console.log('data',$(this).data('idpres'));
+		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
+	});
