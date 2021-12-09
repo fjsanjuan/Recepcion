@@ -3925,6 +3925,7 @@ class Buscador_Model extends CI_Model{
 	{
 		$logged_in = $this->session->userdata("logged_in");
 		$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
+		$datos['total_presupuesto'] = str_ireplace(',', '', $datos['total_presupuesto']);
 		$requisicion = [
 			'no_requisicion'    => null,
 			'fecha_requisicion' => date('d-m-Y H:i:s.v'),
@@ -3952,6 +3953,8 @@ class Buscador_Model extends CI_Model{
 			$response['id']      = $id;
 		}
 		foreach ($datos['detalles'] as $key => $detalles) {
+			$detalles['precio_unitario'] = str_ireplace(',', '', $detalles['precio_unitario']);
+			$detalles['total_arts'] = str_ireplace(',', '', $detalles['total_arts']);
 			$insert = [
 				'id_requisicion'  => $id,
 				'cantidad'        => isset($detalles['cantidad']) ? $detalles['cantidad'] : null,

@@ -579,7 +579,7 @@
 </div>
 <!-- modal para requisiciones-->
 <div class="modal fade" id="requisModal" tabindex="-1" aria-labelledby="requisModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg" style="max-width: 1000px">
     <div class="modal-content">
       <div class="modal-header">
         <h5 style="color: #4285f4;" class="modal-title" id="requisModalLabel">REQUISICIÓN DE REFACCIONES POR GARANTÍA</h5>
@@ -590,10 +590,6 @@
         <div class="modal-body">
             <?php $this->load->view('modals/requisiciones'); ?>
         </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary guardarReq">Guardar</button>
-      </div>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -2231,6 +2231,373 @@ $(document).ready(function() {
 		console.log(arrayArticulos);
 		// if ($(".delete").length < 2) $(".delete").hide();                             //para que haya minimo un elemento
 	});
+	//para agregar nueva requisicion
+	$(document).off('click', '#requisModal').on('click', '#requisModal', function(event) {
+		//console.log("click guardarReq");
+		event.preventDefault();
+		const detalles = document.getElementById('form_requisicion');
+		const form = new FormData(detalles);
+		idOrden = localStorage.getItem('hist_id_orden');
+		console.log('orden', idOrden);
+		$.validator.addClassRules("digitos", {
+			required: true,
+			digits: true
+		});
+		if (!$('#form_requisicion').valid()) {
+			return;
+		}
+		/*$.ajax({
+			cache: false,
+			url: `${base_url}index.php/servicio/guardar_requisiciones/${idOrden}`,
+			type: 'POST',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			data: form,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				$('#form_requisicion').trigger('reset');
+				$('#requisModal').modal('toggle');
+				
+			}else {
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(resp) {
+			console.log('error', resp);
+			toastr.warning("Ocurrió un error al generar la requisición.");
+		})
+		.always(function(resp) {
+			$("#loading_spin").hide();
+		});*/
+		
+	});
+	$(document).on("click", "button.editarPres3", function(){
+		var idIndex =  $(this).attr('data-id_presupuesto');
+		var datos = presupuestos_array[idIndex];
+		var id_presupuesto = datos["id_presupuesto"];
+		$("#id_presupuesto2").val(id_presupuesto);
+		$("#table_invoice2 tbody").empty();
+		var table_body_default = "<td></td>";
+		table_body_default += "<td></td>";
+		 table_body_default +=		"<td></td>";
+		 table_body_default +=	"<td></td>";
+		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
+		 table_body_default +="id='precioTotal2' name='";
+		table_body_default +="precioTotal' readonly='true'></td>";
+		$("#table_invoice2 tbody").append(table_body_default);
+		$("#card_articulos2").hide();
+		numArt = 0;
+		arrayArticulos = [];
+		$.each(datos["detail"], function(index, value){
+			var valueTopush ={};
+			var table = "<tr class='item-row arst_add2' style='text-align:center;'>";
+					table += "<td class='item-name'><div class='delete-wpr2'><a class='delete2' id='"+numArt+"'>X</a> </div></td>";
+			table += "<td class='artmoo'>"+value.cve_articulo+"<input type='hidden' name='cve_"+numArt+"' id='cve2_"+numArt+"' value='"+value.cve_articulo+"'/> </td>";
+			table += "<td>"+value.descripcion+"<input type='hidden' name='descrip_"+numArt+"' id='descrip2_"+numArt+"' value='"+value.descripcion+"'/> </td>";
+			table += "<td><input class='qty md-textarea' name='art_qty_"+numArt+"' id='art_qty2_"+numArt+"' value='"+value.cantidad+"'/></td>";
+			table += "<td><input class='cost md-textarea' name='art_cost_"+numArt+"' id='art_cost2_"+numArt+"' value='"+value.precio_unitario+"'/></td>";
+			table +="<td><button class='btn btn-sm btn-info coment_presupuesto' id='comen_"+numArt+"'> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment2_"+numArt+"' value='"+value.comentario+"'/></td>";
+			table += "<td><label class='price'>"+value.total_arts+"</label><input type='hidden' class='atotal' name='atotal_"+numArt+"' id='atotal2_"+numArt+"' value='"+value.total_arts+"'/></td>";
+			table +="<td style='display:none;' name='articulosad_"+numArt+"' id='articulosad2_"+numArt+"'>single</td>";
+			table += "<td style='display:none;' name='idpq_"+numArt+"' id='idpq2_"+numArt+"'>" + 'NA' + "</td>";
+			table += "</tr>";
+			valueTopush["cve_articulo"] = value.cve_articulo;
+			valueTopush["descripcion"] = value.descripcion;
+			valueTopush["cantidad"] = value.cantidad;
+			valueTopush["precio_unitario"] = value.precio_unitario;
+			valueTopush["total_arts"] = value.total_arts;
+			update_total();
+			$("#table_invoice2 tbody").prepend(table);
+			bind();
+			numArt++;
+			arrayArticulos.push(valueTopush);
+			update_total();
+		});
+		$("#card_articulos2").show();
+		$("#titleValidacion").text("Editar Verificación de Refacciones");
+		$("#bnGuardarPres2").hide();
+		$("#bnActualizarPres2").show();
+		$("#modalBuscArt").modal("show");
+		$("#modalValidacion").modal("hide");
+	});
+	$("#bnActualizarPres2").on("click", function(){
+		countArticulos();
+		if(arrayArticulos.length > 0){
+			var presupuestoDato = arrayArticulos;
+			$.ajax({
+				url: base_url+ "index.php/Servicio/EditarVerificacion",
+				type: "POST",
+				dataType: 'json',
+				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
+				beforeSend: function(){
+					$("#loading_spin").show();
+				},
+				error: function(){
+					toastr.error("error");
+				},
+				success: function (data){
+					toastr.success(data.mensaje);
+					$("#loading_spin").hide();
+					$("#table_invoice2 tbody").empty();
+					var table_body_default = "<td></td>";
+					table_body_default += "<td></td>";
+					 table_body_default +=		"<td></td>";
+					 table_body_default +=	"<td></td>";
+					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
+					 table_body_default +="id='precioTotal2' name='";
+					table_body_default +="precioTotal' readonly='true'></td>";
+					$("#table_invoice2 tbody").append(table_body_default);
+					$("#card_articulos2").hide();
+					numArt = 0;
+					arrayArticulos = [];
+					$('#modalBuscArt').modal('hide');
+				}
+			});
+		}else{
+			toastr.error('Debe agregar articulos para verificar');
+		}
+	});
+
+	// busqueda articulo para Requisicion 
+	$("#ajax_arts3").autocomplete({
+		source: function(request, response) {
+			filtro = "";
+			$.ajax({
+				cache: false,
+				url: base_url+"index.php/buscador/buscar_art",
+				data:  {term : request.term , li: filtro },
+				dataType: "json",
+			beforeSend: function(){
+				$('#spinner').show();
+			},
+			complete: function(){
+				$('#spinner').hide();                       
+			},
+			success: function(data) {
+				console.log("datos")
+				if(data.length == 0){
+						swal({
+							title: 'No se encontraron coincidencias',
+								icon: "error"
+							});
+				}
+
+				response( $.map( data, function( item ) {
+					// console.log(item);
+					return {
+					label: item.art+' -- '+ item.clave_art,
+					value: item.art,
+					precio: item.descrip,
+					clave_art: item.clave_art,
+					stock:item.stock
+					}
+				}));
+			},
+			error : function(xhr, status) {
+				alert('Disculpe, existió un problema');
+			}
+		});
+	},
+	minLength: 3,
+	select: function( event, ui ) {
+		$("#input_precio3").val((ui["item"]["precio"] == null) ? 0 : ui["item"]["precio"]);
+		$("#input_stock3").val(ui["item"]["stock"]);
+	}
+	});
+
+	$("#ajax_arts3").on("autocompleteselect", function(event, ui){
+	$("#input_precio3").val(ui.item.precio);
+	$("#input_claveArt3").val(ui.item.clave_art);
+	$("#input_stock3").val(ui.item.stock);
+	});
+	var numArt = 0;
+	arrayArticulos = [];
+	$(document).on("click", '#boton_agregarArt3', function (e){
+	// numArt+=1;
+	var valueTopush ={};
+	e.preventDefault();
+	var art = $("#ajax_arts3").val();
+	var precio = $("#input_precio3").val();
+	var cantidad = $("#input_cantidad3").val();
+	var clave_art = $("#input_claveArt3").val();
+	var total = precio * cantidad;
+	var table = "<tr class='item-row arst_agreg' style='text-align:center;'>";
+	var comentarios  = $("#comentario_art3").val();
+	if(comentarios == null || comentarios == ""){
+		var coment = "<td><button class='btn btn-sm btn-info come_presupuesto' id='comen_"+numArt+"' disabled> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='comen_"+numArt+"' value='"+comentarios+"'/></td>";
+	}else{
+		var coment = "<td><button class='btn btn-sm btn-info come_presupuesto' id='comen_"+numArt+"'> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='comen_"+numArt+"' value='"+comentarios+"'/></td>";
+	}
+	if(art == "" || precio == "")
+	{
+		toastr.error("No se ha especificado ningún artículo");
+		return false;
+	}
+	valueTopush["cve_articulo"] = clave_art;
+	valueTopush["descripcion"] = art;
+	valueTopush["cantidad"] = cantidad;
+	precio = roundNumber(precio,2);
+	valueTopush["precio_unitario"] = precio;
+	precio = formatear_numero(precio);
+
+	total1 = total;
+	valueTopush["total_arts"] = total1;
+	valueTopush["comentario"] = comentarios;
+	total = formatear_numero(total);
+
+	table += "<td class='item-name'><div class='delete-lreq'><a class='delet3' id='"+numArt+"'>X</a> </div></td>";
+	table += "<td class='artmoo'>"+clave_art+`<input type='hidden' name='detalles[${numArt}][cve_articulo]`+"' id='cve_"+numArt+"' value='"+clave_art+"'/> </td>";
+	table += "<td>"+art+`<input type='hidden' name='detalles[${numArt}][descripcion]`+"' id='descrip_"+numArt+"' value='"+art+"'/> </td>";
+	table += `<td><input class='qty md-textarea' name='detalles[${numArt}][cantidad]`+"' id='art_qty_"+numArt+"' value='"+cantidad+"'/></td>";
+	table += `<td><input class='cost md-textarea' name='detalles[${numArt}][precio_unitario]`+"' id='art_cost_"+numArt+"' value='"+precio+"'/></td>";
+	table += "<td><label class='price'>"+total+`</label><input type='hidden' class='atotal' name='detalles[${numArt}][total_arts]`+"' id='atotal_"+numArt+"' value='"+total1+"'/></td>";
+	/*table +="<td style='display:none;' name='articulosad_"+numArt+"' id='articulosad_"+numArt+"'>single</td>";
+	table += "<td style='display:none;' name='idpq_"+numArt+"' id='idpq_"+numArt+"'>" + 'NA' + "</td>";*/
+	table += "</tr>";
+
+	$("#table_invoice3 tbody").prepend(table);
+	bind();
+	//$("#requisModal").modal("hide");
+	update_total();
+	$("#ajax_arts3, #input_precio3, #input_claveArt3, #comentario_art3").val("");
+	$("#input_cantidad3").val(1);
+	$("#card_articulos3").show();
+	numArt++;
+	arrayArticulos.push(valueTopush);
+
+	});
+
+	function update_total() {
+		var total = 0;
+		var iva = 0;
+		var price = 0;
+		$('.price').each(function(i){
+		price = $(this).html().replace("$","");
+		price = parseFloat(price.replace(/,/g, ''));
+		if (!isNaN(price)) total += Number(price);
+		});
+	
+	
+		total = roundNumber(total,2);
+		iva = roundNumber((total * .16),2)
+	
+		price = formatear_numero(price);
+		// total = formatear_numero(total);
+		iva = formatear_numero(iva);
+		$("#precioTotal3").val(total);
+		$('#subtotal').val(total);
+		$('#ivatotal').val(iva); 
+		
+		// update_balance();
+	}
+	function bind() {
+		$(".cost").blur(update_price);
+		$(".qty").blur(update_price);
+	}
+	function update_balance() {
+		var due = parseFloat($("#subtotal").val().replace(/,/g, ''));
+		var iva = parseFloat($("#ivatotal").val().replace(/,/g, ''));
+	
+		due = roundNumber((due+iva),2);
+		due = formatear_numero(due);
+	
+		$('.due').val(due);
+	}
+	function update_price() {
+		$(this).closest('tr').find('.qty').each(
+		function (i) {
+			cuantos = $(this).val();
+			$(this).val(cuantos);
+		});
+		$(this).closest('tr').find('.cost').each(
+			function (i) {
+				cuanto = $(this).val();
+				cuanto1 = parseFloat(cuanto.replace(/,/g, ''));
+				$(this).val(cuanto);
+		});
+	
+		price = cuanto1 * cuantos;
+	
+		price = roundNumber(price,2);
+		
+		$(this).closest('tr').find('.atotal').each(
+		function(i){
+			$(this).val(price);
+	
+		})
+		price = formatear_numero(price);
+	
+		$(this).closest('tr').find('.price').each(
+		function(i){
+			$(this).html(price);
+	
+		})
+		
+		update_total();
+	}
+	$("#guardarReq").on("click", function(){
+		console.log("click guardarReq");
+		event.preventDefault();
+		const detalles = document.getElementById('form_requisicion');
+		const form = new FormData(detalles);
+		form.append('total_presupuesto', 0);
+		idOrden = localStorage.getItem('hist_id_orden');
+		console.log('orden', idOrden);
+		$.validator.addClassRules("digitos", {
+			required: true,
+			digits: true
+		});
+		if (!$('#form_requisicion').valid()) {
+			return;
+		}
+		$.ajax({
+			cache: false,
+			url: `${base_url}index.php/servicio/guardar_requisiciones/${idOrden}`,
+			type: 'POST',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			data: form,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				$('#form_requisicion').trigger('reset');
+				$('#requisModal').modal('toggle');
+				
+			}else {
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(resp) {
+			console.log('error', resp);
+			toastr.warning("Ocurrió un error al generar la requisición.");
+		})
+		.always(function(resp) {
+			$("#loading_spin").hide();
+		});
+	});
+	
+	$(document).on('click','.item-name .delete-lreq .delet3' ,function(){
+		$(this).parents('.item-row').remove();
+		var index = $(this).attr('id');
+		update_total();
+		arrayArticulos.splice(index, 1); 
+			numArt-=1;
+		console.log(arrayArticulos);
+		// if ($(".delete").length < 2) $(".delete").hide();                             //para que haya minimo un elemento
+	});
 	
 });
 
@@ -4205,7 +4572,7 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 		}
 	});
 });
-$(document).off('click', '#requisModal .guardarReq').on('click', '#requisModal .guardarReq', function(event) {
+/*$(document).off('click', '#requisModal .guardarReq').on('click', '#requisModal .guardarReq', function(event) {
 	console.log("click guardaReq");
 	event.preventDefault();
 	const detalles = document.getElementById('form_requisicion');
@@ -4249,7 +4616,7 @@ $(document).off('click', '#requisModal .guardarReq').on('click', '#requisModal .
 		$("#loading_spin").hide();
 	});
 	
-});
+});*/
 
 $(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
 	event.preventDefault();
