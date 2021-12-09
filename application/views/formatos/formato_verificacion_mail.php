@@ -111,7 +111,7 @@
 						 
                         <!--<button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>-->
 						<?php if($perfil == 6): ?>
-						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Guardar</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Enviar Verificación</button>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -174,10 +174,9 @@ $(document).ready(function() {
 			},
 			success: function (data){
 				if(data.estatus == true){
-					alert("Verificación Actualizada");
-					// window.close();
+					toastr.success('Verificación Actualizada');
 				}else{
-					alert(data.mensaje);
+					toastr.warning('No fue posible enviar la Verificación');
 				}
 			}
 		});

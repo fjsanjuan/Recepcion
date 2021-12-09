@@ -217,6 +217,7 @@ $(document).ready(function() {
 				action_refacciones  +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file'></i>&nbsp&nbsp Cargar Documentación</button>";
 				if (val["movimiento"] != null) {
 					action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+" data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+					action_refacciones	+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalValidacion' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
 				btn_garantias	=``;
@@ -224,6 +225,7 @@ $(document).ready(function() {
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				action_garantias	= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
 				action_garantias	="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
+				action_garantias	+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Líneas Trabajo</button>";
 				action_garantias	+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-upload'></i>&nbsp&nbsp Fotografías</button>";
 				action_garantias	+="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				action_garantias	+= "<button class='btn btn-sm whatsapp' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
@@ -271,6 +273,7 @@ $(document).ready(function() {
 				}else {
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
+					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Líneas Trabajo</button>";
 				}
 				//action_tecnico		+= "<button type='button' class='btn btn-sm verificar_refacc' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #17A2B8;' data-toggle='modal' data-target='#modalValidacion' id='verificar_refacc-"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i> &nbsp&nbsp Refacciones</button>";
 				//action_tecnico 		+= "<button class='btn btn-sm buscar_presupuesto' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalPresupuestos' id='buscar_presupuesto-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Existencias</button>";
@@ -1969,13 +1972,13 @@ $(document).ready(function() {
 			} 
 		});
 	});
-	$(document).on("click", "button.btn-mailP2", function(e){
+	/*$(document).on("click", "button.btn-mailP2", function(e){
 		var idIndex =  $(this).attr('id');
 		var datos = verificaciones_array[idIndex];
 		$("#id2").val(datos.id_presupuesto);
 		// $("#modalemailP").modal('show');
 		$("#enviar_presupuesto2").click();
-	});
+	});*/
 	$(document).on("click", "button.btnPdf2", function(e){
 		console.log('pres', verificaciones_array);
 		var idIndex =  $(this).attr('data-index');
@@ -1983,7 +1986,8 @@ $(document).ready(function() {
 		var id_press = datos.id_presupuesto;
 		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 	});
-	$("#enviar_presupuesto2").click(function(){
+	$(document).on("click", "button.btn-mailP2", function(e){
+		const _this = this;
 		$.ajax({
 			cache: false,
 			type: 'post',
@@ -1996,9 +2000,12 @@ $(document).ready(function() {
 			success: function(data)
 			{
 				$("#loading_spin").hide();
+				
 				if(data)
 				{
 					toastr.success("Se ha enviado el correo");
+					$(_this).closest('table').prev().find('.editarPres2').hide();
+					
 				}else 
 				{
 					toastr.error("Error al enviar Email");
@@ -2280,22 +2287,22 @@ $(document).ready(function() {
 		});*/
 		
 	});
-	$(document).on("click", "button.editarPres3", function(){
+	$(document).on("click", "button.editarRequi", function(){
 		var idIndex =  $(this).attr('data-id_presupuesto');
 		var datos = presupuestos_array[idIndex];
 		var id_presupuesto = datos["id_presupuesto"];
-		$("#id_presupuesto2").val(id_presupuesto);
-		$("#table_invoice2 tbody").empty();
+		$("#id_presupuesto3").val(id_presupuesto);
+		$("#table_invoice3 tbody").empty();
 		var table_body_default = "<td></td>";
 		table_body_default += "<td></td>";
 		 table_body_default +=		"<td></td>";
 		 table_body_default +=	"<td></td>";
-		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+		 table_body_default +=	"<td><label for='totalFin3'>Total Fin:</label></td>";
 		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
-		 table_body_default +="id='precioTotal2' name='";
+		 table_body_default +="id='precioTotal3' name='";
 		table_body_default +="precioTotal' readonly='true'></td>";
-		$("#table_invoice2 tbody").append(table_body_default);
-		$("#card_articulos2").hide();
+		$("#table_invoice3 tbody").append(table_body_default);
+		$("#card_articulos3").hide();
 		numArt = 0;
 		arrayArticulos = [];
 		$.each(datos["detail"], function(index, value){
@@ -2335,10 +2342,10 @@ $(document).ready(function() {
 		if(arrayArticulos.length > 0){
 			var presupuestoDato = arrayArticulos;
 			$.ajax({
-				url: base_url+ "index.php/Servicio/EditarVerificacion",
+				url: base_url+ "index.php/Servicio/editar_requisicion",
 				type: "POST",
 				dataType: 'json',
-				data: {articulos:presupuestoDato, detalles:$("#formPresupuesto2").serialize()},
+				data: {articulos:presupuestoDato, detalles:$("#form_requisicion").serialize()},
 				beforeSend: function(){
 					$("#loading_spin").show();
 				},
@@ -2348,20 +2355,20 @@ $(document).ready(function() {
 				success: function (data){
 					toastr.success(data.mensaje);
 					$("#loading_spin").hide();
-					$("#table_invoice2 tbody").empty();
+					$("#table_invoice3 tbody").empty();
 					var table_body_default = "<td></td>";
 					table_body_default += "<td></td>";
 					 table_body_default +=		"<td></td>";
 					 table_body_default +=	"<td></td>";
-					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+					 table_body_default +=	"<td><label for='totalFin3'>Total Fin:</label></td>";
 					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
-					 table_body_default +="id='precioTotal2' name='";
+					 table_body_default +="id='precioTotal3' name='";
 					table_body_default +="precioTotal' readonly='true'></td>";
-					$("#table_invoice2 tbody").append(table_body_default);
-					$("#card_articulos2").hide();
+					$("#table_invoice3 tbody").append(table_body_default);
+					$("#card_articulos3").hide();
 					numArt = 0;
 					arrayArticulos = [];
-					$('#modalBuscArt').modal('hide');
+					//$('#modalBuscArt').modal('hide');
 				}
 			});
 		}else{
@@ -4848,3 +4855,50 @@ $(document).off("click", "#requisModal #cotizaciones button.btnPdf2").on("click"
 		console.log('data',$(this).data('idpres'));
 		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 	});
+
+//Para cargar Lineas de Trabajo
+$(document).off('click', '#lineaTrabajo').on('click', '#lineaTrabajo', function(event) {
+	//console.log("click guardarReq");
+	event.preventDefault();
+	const detalles = document.getElementById('form_lineasTrabajo');
+	const form = new FormData(detalles);
+	idOrden = localStorage.getItem('hist_id_orden');
+	console.log('orden', idOrden);
+	$.validator.addClassRules("digitos", {
+		required: true,
+		digits: true
+	});
+	if (!$('#form_lineasTrabajo').valid()) {
+		return;
+	}
+	/*$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/guardar_requisiciones/${idOrden}`,
+		type: 'POST',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		data: form,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			toastr.info(resp.mensaje);
+			$('#form_requisicion').trigger('reset');
+			$('#requisModal').modal('toggle');
+			
+		}else {
+			toastr.warning(resp.mensaje);
+		}
+	})
+	.fail(function(resp) {
+		console.log('error', resp);
+		toastr.warning("Ocurrió un error al generar la requisición.");
+	})
+	.always(function(resp) {
+		$("#loading_spin").hide();
+	});*/
+	
+});
