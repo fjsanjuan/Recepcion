@@ -198,7 +198,7 @@
 
 				nombre  = val["nombre_cliente"]+" "+val["ap_cliente"]+" "+val["am_cliente"];
 				folio   = (val["movID"] == null || val["movID"]["MovID"] == null) ? "-" : val["movID"]["MovID"];
-				tipo	= (val["movimiento"] == null) ? "Pública": "Pregarantía";
+				tipo	= (val["movimiento"] == null) ? "Pública": `Pregarantía (${val["origenID"]["origenID"]})`;
 				btn = "";
 				//btn     =  "<button class='btn btn-sm profeco' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
 				//btn     =  "<button class='btn btn-sm profec' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";

@@ -2376,6 +2376,10 @@ class Buscador_Model extends CI_Model{
 												->from("Venta")
 												->where("ID", $value["id_orden_intelisis"])
 												->get()->row_array(); 
+			$ordenes[$key]["origenID"] = $intelisis->select("origenID")
+												->from("Venta")
+												->where("ID", $value["id_orden_intelisis"])
+												->get()->row_array(); 
 		}
 
 		foreach ($ordenes as $key => $value) 
@@ -4243,9 +4247,17 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function obtener_detalles_requisicion($idReq)
+	public function obtener_detalles_requisicion($id)
 	{
-		$response = $this->db->select('*')->from('detalles_requisiciones')->where(['id_requisicion' => $idReq])->get()->result_array();
+		$response['requisicion'] = $this->db->select('*')->from('requisiciones')->where(['id_requisicion' => $id])->get()->row_array();
+		if (sizeof($response['requisicion']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
+			$response['requisicion']['detalles'] = $this->db->select('*')->from('detalles_requisiciones')->where('id_requisicion', $id)->get()->result_array();
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No existe la requisición.';
+		}
 		return $response;
 	}
 	public function obtener_detalles_cotizacion($id)
