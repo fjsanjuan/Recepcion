@@ -2475,22 +2475,27 @@ $(document).ready(function() {
 					toastr.error("error");
 				},
 				success: function (data){
-					toastr.success(data.mensaje);
-					$("#loading_spin").hide();
-					$("#table_invoice2 tbody").empty();
-					var table_body_default = "<td></td>";
-					table_body_default += "<td></td>";
-					 table_body_default +=		"<td></td>";
-					 table_body_default +=	"<td></td>";
-					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
-					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
-					 table_body_default +="id='precioTotal2' name='";
-					table_body_default +="precioTotal' readonly='true'></td>";
-					$("#table_invoice3 tbody").append(table_body_default);
-					$("#card_articulos3").hide();
-					numArt = 0;
-					arrayArticulos = [];
-					$('#requisModal').modal('toggle');
+					if (data.estatus) {
+						toastr.success(data.mensaje);
+						$("#loading_spin").hide();
+						$("#table_invoice2 tbody").empty();
+						var table_body_default = "<td></td>";
+						table_body_default += "<td></td>";
+						 table_body_default +=		"<td></td>";
+						 table_body_default +=	"<td></td>";
+						 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+						 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
+						 table_body_default +="id='precioTotal2' name='";
+						table_body_default +="precioTotal' readonly='true'></td>";
+						$("#table_invoice3 tbody").append(table_body_default);
+						$("#card_articulos3").hide();
+						numArt = 0;
+						arrayArticulos = [];
+						$('#requisModal').modal('toggle');
+						generar_formato_req(data.id);
+					}else {
+						toastr.info(data.mensaje);
+					}
 				}
 			});
 		}else{
@@ -2710,7 +2715,7 @@ $(document).ready(function() {
 				$('#form_requisicion').trigger('reset');
 				$('#requisModal').modal('toggle');
 				$('#precioTotal3').val('');
-				
+				generar_formato_req(resp.id);
 			}else {
 				toastr.warning(resp.mensaje);
 			}
@@ -4840,7 +4845,7 @@ function obtener_requisiciones(idOrden){
 					var idReq = value.id_requisicion;
 					var row_title = $("<div class='row'></div>");
 					row_title.append($(`<div class='row'>
-						<div class='col-md-4'><button class='btn btn-sm btn-primary editarReq' data-id='${idReq}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
+						<div class='col-md-4' style='display: ${(value.autorizado ? 'none' : 'inline-block')} '><button class='btn btn-sm btn-primary editarReq' data-id='${idReq}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
 						<div class='col-md-4'>
 							<label>Num. Requisición: ${(value.id_requisicion ? value.id_requisicion : 'N/D')}</label>
 						</div>
@@ -4901,6 +4906,7 @@ $(document).off('click', '#requisModal #cotizaciones .convertirReq').on('click',
 		if (resp.estatus) {
 			toastr.info(resp.mensaje);
 			$('#requisModal').modal('toggle');
+			generar_formato_req(resp.id);
 			//$('#modalValidacion').modal('toggle');
 		}else {
 			toastr.warning(resp.mensaje);
@@ -5028,3 +5034,60 @@ $(document).off('click', '#lineaTrabajo').on('click', '#lineaTrabajo', function(
 	});*/
 	
 });
+
+function generar_formato_req(id) {
+	var tok = "";
+	$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					//url: "https://isapi.intelisis-solutions.com/auth/",
+					url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+					url: `${base_url}index.php/servicio/generar_formato_requisicion/${tok}/${id}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'requisicion',
+						dwn:'0',
+						opt:'3',
+						path:'None',
+						url:'https://isapi.intelisis-solutions.com/reportes/reqPDF'
+						//url:'http://127.0.0.1:8000/reportes/reqPDF'
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
+					}
+				});
+			}
+		});
+}

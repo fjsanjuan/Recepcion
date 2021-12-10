@@ -4254,6 +4254,11 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Ok.';
 			$response['requisicion']['detalles'] = $this->db->select('*')->from('detalles_requisiciones')->where('id_requisicion', $id)->get()->result_array();
+			$orden = $this->db->select('*')->from('orden_servicio')->where('id', $response['requisicion']['id_orden'])->get()->row_array();
+			$tec = $this->db->select('*')->from('usuarios')->where('id', $response['requisicion']['id_usuario'])->get()->row_array();
+			$response['vin'] = $orden['vin'];
+			$response['id_orden'] = $orden['id'];
+			$response['firmaTec'] = $tec['firma_electronica'];
 		}else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No existe la requisición.';
@@ -4314,6 +4319,7 @@ class Buscador_Model extends CI_Model{
 		{
 			$refacciones["estatus"] = true;
 			$refacciones["mensaje"] ="requisición actualizada";
+			$refacciones["id"] =$datos['id_requisicion'];
 		}else
 		{
 			$refacciones["estatus"] = false;

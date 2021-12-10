@@ -2837,4 +2837,29 @@ class Servicio extends CI_Controller {
 		$presupuesto = $this->buscador_model->editar_requisicion($datos);
 		echo json_encode($presupuesto);
 	}
+	public function generar_formato_requisicion($token = null, $id = null)
+	{
+		$data = [];
+		$datos = $this->input->post();
+		if ($token == null || $id == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Requisición no válida.";
+		} else {
+			$requisicion = $this->buscador_model->obtener_detalles_requisicion($id);
+			if ($requisicion['estatus']) {
+				$datos = array_merge($datos, $requisicion);
+				$datos['vin'] = $requisicion['vin'];
+				$datos['id_orden'] = $requisicion['id_orden'];
+				$datos['firmaTec'] = $requisicion['firmaTec'];
+				$datos['firmaRef'] = "";
+				$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+				if ($response["estatus"]) {
+					$this->buscador_model->guardar_formato($id, $response["data"]["ruta_rel"]);
+				}
+			}else {
+				$response = $requisicion;
+			}
+		}
+		echo json_encode($response);
+	}
 }
