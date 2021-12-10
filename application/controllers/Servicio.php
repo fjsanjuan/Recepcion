@@ -2334,7 +2334,7 @@ class Servicio extends CI_Controller {
 				$audios = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 8);
 			}
 
-			$oasis  = array_merge($oasis, $this->buscador_model->get_archivos_orden_servicio($id_orden, 7));
+			$oasis  = array_merge($this->buscador_model->get_archivos_orden_servicio($id_orden, 7));
 			$audios = array_merge($this->buscador_model->get_archivos_orden_servicio($id_orden, 8));
 			$array  = [];
 			foreach ($oasis as $key => $value) {
