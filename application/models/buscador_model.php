@@ -4294,4 +4294,31 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function editar_requisicion($datos){
+		//$datos["detalles"] = parse_str($datos["detalles"],$arr);
+		$existen = $this->db->select("*")->from("detalles_requisiciones")->where("id_requisicion", $datos["id_requisicion"])->get()->result_array();
+		$new = $datos["detalles"];
+		$this->db->trans_start();
+		foreach ($existen as $value) {
+			$this->db->where('id_requisicion', $value["id_requisicion"]);
+			$this->db->delete('detalles_requisiciones'); 
+		}
+		foreach ($new as $key => $value) {
+			$value["id_requisicion"] = $datos["id_requisicion"];
+			$this->db->insert("detalles_requisiciones", $value);
+		}
+		$this->db->where("id_requisicion", $datos["id_requisicion"]);
+		$this->db->update("requisiciones", array("total_presupuesto"=>$datos["precioTotal3"]));
+		$this->db->trans_complete();
+		if($this->db->trans_status() == true)
+		{
+			$refacciones["estatus"] = true;
+			$refacciones["mensaje"] ="requisición actualizada";
+		}else
+		{
+			$refacciones["estatus"] = false;
+			$refacciones["mensaje"] = 'Error al editar';
+		}
+		return $refacciones;
+	}
 }

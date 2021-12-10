@@ -89,13 +89,14 @@
 									<td></td>
 									<td></td>
 									<td><label for="totalFin3">Total Fin:</label></td>
-									<td class=""><input class="cost md-textarea" id="precioTotal3" name="precioTotal" readonly="true"></td>
+									<td class=""><input class="cost md-textarea" id="precioTotal3" name="precioTotal3" readonly="true"></td>
 								</tr>
 							</tfoot>
 					</table>
 					<input type="hidden" id="id_orden_b3" name="id_orden_b">
 					<input type="hidden" id="numero_articulos3" name="numero_articulos">
 					<input type="hidden" id="id_presupuesto3" name="id_presupuesto">
+					<input type="hidden" id="id_requisicion3" name="id_requisicion">
 					<?php
 					echo form_close();
 					?>

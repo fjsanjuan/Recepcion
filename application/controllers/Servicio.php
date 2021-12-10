@@ -2827,4 +2827,14 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function editar_requisicion(){
+		$datos = $this->input->post();
+		/*echo "<pre>";
+		print_r ($datos);
+		echo "</pre>";
+		die();*/
+		// print_r($datos);die();
+		$presupuesto = $this->buscador_model->editar_requisicion($datos);
+		echo json_encode($presupuesto);
+	}
 }
