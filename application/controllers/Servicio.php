@@ -2328,8 +2328,14 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['archivos'] = [];
 		}else{
-			$oasis  = $this->buscador_model->get_archivos_orden_servicio($id_orden, 7);
-			$audios = $this->buscador_model->get_archivos_orden_servicio($id_orden, 8);
+			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
+			if (isset($orden['movimiento'])) {
+				$oasis  = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 7);
+				$audios = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 8);
+			}
+
+			$oasis  = array_merge($oasis, $this->buscador_model->get_archivos_orden_servicio($id_orden, 7));
+			$audios = array_merge($this->buscador_model->get_archivos_orden_servicio($id_orden, 8));
 			$array  = [];
 			foreach ($oasis as $key => $value) {
 				$path = base_url().$value['ruta_archivo'];
@@ -2650,7 +2656,11 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
 		}else {
-			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7);
+			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
+			if (isset($orden['movimiento'])) {
+				$archivos = $this->buscador_model->get_archivos_f1863($orden['movimiento'], 7);
+			}
+			$archivos = array_merge($archivos,$this->buscador_model->get_archivos_f1863($idOrden, 7));
 			$datos["archivos"] = $archivos;
 			$response = $this->buscador_model->obtener_union_pdf($token, $datos);
 		}
@@ -2857,7 +2867,7 @@ class Servicio extends CI_Controller {
 				$datos['firmaRef'] = "";
 				$response = $this->buscador_model->obtener_pdf_api($token, $datos);
 				if ($response["estatus"]) {
-					$this->buscador_model->guardar_formato($id, $response["data"]["ruta_rel"]);
+					$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
 				}
 			}else {
 				$response = $requisicion;
