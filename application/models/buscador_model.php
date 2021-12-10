@@ -3406,22 +3406,28 @@ class Buscador_Model extends CI_Model{
 				$response['estatus'] = false;
 				$response['mensaje']=['No tienes firmas registradas.'];
 			}else {
-				$this->db->trans_start();
-				$this->db->where('id_orden_servicio', $id_orden);
-				if ($perfil == 4){
-					$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => $firma['firma_electronica']]);
-				}
-				if ($perfil == 8){
-					$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => $firma['firma_electronica']]);
-				}
-				$this->db->trans_complete();
-				if ($this->db->trans_status() === FALSE) {
-					$this->db->trans_rollback();
-					$response['estatus'] = false;
-					$response['mensaje'] = 'No se pudo autorizar firma.';
+				$verificaciones = $this->db->select('*')->from('verificacion_refacciones')->where("id_orden", $id_orden)->count_all_results();
+				if ($verificaciones > 0) {
+					$this->db->trans_start();
+					$this->db->where('id_orden_servicio', $id_orden);
+					if ($perfil == 4){
+						$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => $firma['firma_electronica']]);
+					}
+					if ($perfil == 8){
+						$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => $firma['firma_electronica']]);
+					}
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+						$this->db->trans_rollback();
+						$response['estatus'] = false;
+						$response['mensaje'] = 'No se pudo autorizar firma.';
+					}else {
+						$this->db->trans_commit();
+						$response['estatus'] = true;
+					}
 				}else {
-					$this->db->trans_commit();
-					$response['estatus'] = true;
+					$response['estatus'] = false;
+					$response['mensaje']='La orden no cuenta con verificaciones registradas.';
 				}
 			}
 		}else {
