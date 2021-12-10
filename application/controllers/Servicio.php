@@ -2878,4 +2878,10 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+
+	public function garantia_anverso($id_orden = null){
+		$datos = $this->buscador_model->ver_datosHojaMult($id_orden);
+		// var_dump($datos);die;
+		$this->load->view("anverso", $datos);
+	}
 }

@@ -1,0 +1,79 @@
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: #fafafa;
+  font: 10pt "Tahoma";
+  min-width: 297mm;
+  padding-top:20px;
+}
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+[contenteditable="true"] {
+  background-color: LightGrey;
+}
+
+.page {
+  position: relative;
+  width: 297mm;
+  /*min-height: 384mm;
+  max-height: 384mm;*/
+  min-height: 229mm;
+  max-height: 229mm;
+  background: white;
+  /*border: 1px #d3d3d3 solid;*/
+  background-repeat: no-repeat;
+  background-position: bottom;
+  overflow: hidden;
+  background-size: 100% auto;
+  background-position-y: 911px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding:15px;
+  margin-top: 10px;
+}
+
+.book {
+  width: 297.5mm;
+  margin: auto;
+  margin-bottom: 10mm;
+}
+
+@page {
+  size: letter;
+  margin: 0;
+}
+@media print {
+  .morris-hover.morris-default-style,
+  .no_print {
+    display: none !important;
+  }
+  /** {margin:0;padding:0}*/
+  @page {
+    size: letter;
+    margin: 0mm;
+  }
+  html,
+  body {
+    height: 100%;
+    padding-top: 0px;
+  }
+  html {
+    background-color: red;
+  }
+  body {
+    background-color: green;
+  }
+  .page {
+    margin: 0 auto;
+  }
+  
+  .book {
+    margin-top: 0px;
+    margin: auto;
+  }
+  [contenteditable="true"] {
+    background-color: LightGrey;
+  }
+}
