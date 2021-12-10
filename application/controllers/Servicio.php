@@ -2324,6 +2324,8 @@ class Servicio extends CI_Controller {
 	}
 	public function get_archivos_orden_servicio($id_orden = null)
 	{
+		$oasis  = [];
+		$audios = [];
 		if ($id_orden == null) {
 			$response['estatus'] = false;
 			$response['archivos'] = [];
@@ -2334,8 +2336,8 @@ class Servicio extends CI_Controller {
 				$audios = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 8);
 			}
 
-			$oasis  = array_merge($this->buscador_model->get_archivos_orden_servicio($id_orden, 7));
-			$audios = array_merge($this->buscador_model->get_archivos_orden_servicio($id_orden, 8));
+			$oasis  = array_merge($oasis, $this->buscador_model->get_archivos_orden_servicio($id_orden, 7));
+			$audios = array_merge($audios, $this->buscador_model->get_archivos_orden_servicio($id_orden, 8));
 			$array  = [];
 			foreach ($oasis as $key => $value) {
 				$path = base_url().$value['ruta_archivo'];
@@ -2650,8 +2652,9 @@ class Servicio extends CI_Controller {
 	}
 	public function obtener_union_pdf($token = null, $idOrden = null)
 	{
-		$data = [];
-		$datos = $this->input->post();
+		$data     = [];
+		$archivos = [];
+		$datos    = $this->input->post();
 		if ($idOrden == null || $token == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
