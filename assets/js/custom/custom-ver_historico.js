@@ -36,6 +36,7 @@ $(document).ready(function() {
 	});*/
 
 	var verificaciones_array = [];
+	var requisicionesArray   = [];
 
 	$(".datepicker").flatpickr({
 		"altInput": true,
@@ -1749,7 +1750,7 @@ $(document).ready(function() {
 					$.each(data.pres, function(index, value){
 						
 						var idpres = value.id_presupuesto;
-						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4' style='display:"+(value.autorizado ? 'none': 'inline-block')+";'><button class='btn btn-sm btn-primary editarPres2' data-index='"+index+"' data-id_presupuesto='"+idpres+"'><i class='fa fa-edit'></i> Editar</button></div><div class='col-md-4'><button class='btn btn-sm btn-primary convertirReq' data-id_presupuesto='"+idpres+"'><i class='fa fa-exchange-alt'></i> Convertir en Requisición</button></div></div>");
+						var row_title = $("<div class='row'><div class='col-md-4'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-4' style='display:"+(value.autorizado ? 'none': 'inline-block')+";'><button class='btn btn-sm btn-primary editarPres2' data-index='"+index+"' data-id_presupuesto='"+idpres+"'><i class='fa fa-edit'></i> Editar</button></div></div>");
 						/*if(value.autorizado == 1)
 							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
 						else
@@ -2333,11 +2334,13 @@ $(document).ready(function() {
 		$("#card_articulos2").show();
 		$("#titleValidacion").text("Editar Verificación de Refacciones");
 		$("#bnGuardarPres3").hide();
-		$("#bnActualizarPres3").show();
+		$("#bnActualizarRequi").show();
 		$("#modalBuscArt").modal("show");
 		$("#modalValidacion").modal("hide");
 	});
-	$("#bnActualizarPres3").on("click", function(){
+
+
+	$("#bnActualizarRequi").on("click", function(){
 		countArticulos();
 		if(arrayArticulos.length > 0){
 			var presupuestoDato = arrayArticulos;
@@ -2373,6 +2376,125 @@ $(document).ready(function() {
 			});
 		}else{
 			toastr.error('Debe agregar articulos para verificar');
+		}
+	});
+
+	$(document).off('click', "button.editarReq").on("click", "button.editarReq", function(){
+		var idIndex =  $(this).attr('data-index');
+		var datos = globalThis.requisicionesArray[idIndex];
+		console.log('index,', idIndex);
+		console.log('datos rq', datos);
+		var id_requisicion = datos["id_requisicion"];
+		console.log('datos rq', id_requisicion);
+		$("#id_requisicion3").val(id_requisicion);
+		$("#table_invoice3 tbody").empty();
+		/*var table_body_default = "<td></td>";
+		table_body_default += "<td></td>";
+		 table_body_default +=		"<td></td>";
+		 table_body_default +=	"<td></td>";
+		 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+		 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
+		 table_body_default +="id='precioTotal3' name='";
+		table_body_default +="precioTotal3' readonly='true'></td>";
+		$("#table_invoice3 tbody").append(table_body_default);*/
+		$("#card_articulos3").hide();
+		numArt = 0;
+		arrayArticulos = [];
+		$.each(datos["detalles"], function(index, value){
+			var valueTopush ={};
+			var table = "<tr class='item-row arst_add2' style='text-align:center;'>";
+			table += "<td class='item-name'><div class='delete-lreq'><a class='delet3' id='"+numArt+"'>X</a> </div></td>";
+			table += "<td class='artmoo'>"+value.cve_articulo+`<input type='hidden' name='detalles[${numArt}][cve_articulo]`+"' id='cve_"+numArt+"' value='"+value.cve_articulo+"'/> </td>";
+			table += "<td>"+value.descripcion+`<input type='hidden' name='detalles[${numArt}][descripcion]`+"' id='descrip_"+numArt+"' value='"+value.descripcion+"'/> </td>";
+			table += `<td><input required class='qty md-textarea digitos' name='detalles[${numArt}][cantidad]`+"' id='art_qty_"+numArt+"' value='"+value.cantidad+"'/></td>";
+			table += `<td><input required class='cost md-textarea' name='detalles[${numArt}][precio_unitario]`+"' id='art_cost_"+numArt+"' value='"+value.precio_unitario+"'/></td>";
+			table += "<td><label class='price'>"+value.total_arts+`</label><input type='hidden' class='atotal' name='detalles[${numArt}][total_arts]`+"' id='atotal_"+numArt+"' value='"+value.total_arts+"'/></td>";
+					/*table += "<td class='item-name'><div class='delete-wpr2'><a class='delete2' id='"+numArt+"'>X</a> </div></td>";
+			table += "<td class='artmoo'>"+value.cve_articulo+"<input type='hidden' name='cve_"+numArt+"' id='cve2_"+numArt+"' value='"+value.cve_articulo+"'/> </td>";
+			table += "<td>"+value.descripcion+"<input type='hidden' name='descrip_"+numArt+"' id='descrip2_"+numArt+"' value='"+value.descripcion+"'/> </td>";
+			table += "<td><input class='qty md-textarea' name='art_qty_"+numArt+"' id='art_qty2_"+numArt+"' value='"+value.cantidad+"'/></td>";
+			table += "<td><input class='cost md-textarea' name='art_cost_"+numArt+"' id='art_cost2_"+numArt+"' value='"+value.precio_unitario+"'/></td>";
+			table += "<td><label class='price'>"+value.total_arts+"</label><input type='hidden' class='atotal' name='atotal_"+numArt+"' id='atotal2_"+numArt+"' value='"+value.total_arts+"'/></td>";
+			table +="<td style='display:none;' name='articulosad_"+numArt+"' id='articulosad2_"+numArt+"'>single</td>";
+			table += "<td style='display:none;' name='idpq_"+numArt+"' id='idpq2_"+numArt+"'>" + 'NA' + "</td>";*/
+			table += "</tr>";
+			valueTopush["cve_articulo"] = value.cve_articulo;
+			valueTopush["descripcion"] = value.descripcion;
+			valueTopush["cantidad"] = value.cantidad;
+			valueTopush["precio_unitario"] = value.precio_unitario;
+			valueTopush["total_arts"] = value.total_arts;
+			//update_total3();
+			$("#table_invoice3 tbody").prepend(table);
+			bind();
+			numArt++;
+			arrayArticulos.push(valueTopush);
+			update_total3();
+		});
+		$("#card_articulos3").show();
+		$("#titleValidacion").text("Editar Requisición");
+		$("#guardarReq").hide();
+		$("#bnActualizarRequi").show();
+		$("#requisModal").modal("toggle");
+		$("#verReqModal").modal("toggle");
+		$('body').addClass('modal-open');
+		$('#requisModal').css('overflow-y','auto');
+	});
+	$("#bnActualizarRequi").off('click').on("click", function(event){
+
+		console.log('articulos',arrayArticulos);
+		console.log('articulos',arrayArticulos.length);
+		countArticulos2();
+		console.log('articulos',arrayArticulos);
+		console.log('articulos',arrayArticulos.length);
+		event.preventDefault();
+		const detalles = document.getElementById('form_requisicion');
+		const form = new FormData(detalles);
+		form.append('total_presupuesto', $('#precioTotal3').val());
+		idOrden = localStorage.getItem('hist_id_orden');
+
+		$.validator.addClassRules("digitos", {
+			required: true,
+			digits: true
+		});
+		if (!$('#form_requisicion').valid()) {
+			return;
+		}
+		if(arrayArticulos.length > 0){
+			var presupuestoDato = arrayArticulos;
+			$.ajax({
+				url: base_url+ "index.php/Servicio/editar_requisicion",
+				type: "POST",
+				dataType: 'json',
+				contentType: false,
+				processData: false,
+				data: form,
+				beforeSend: function(){
+					$("#loading_spin").show();
+				},
+				error: function(){
+					toastr.error("error");
+				},
+				success: function (data){
+					toastr.success(data.mensaje);
+					$("#loading_spin").hide();
+					$("#table_invoice2 tbody").empty();
+					var table_body_default = "<td></td>";
+					table_body_default += "<td></td>";
+					 table_body_default +=		"<td></td>";
+					 table_body_default +=	"<td></td>";
+					 table_body_default +=	"<td><label for='totalFin2'>Total Fin:</label></td>";
+					 table_body_default +=		"<td class='price'><input class='cost md-textarea' ";
+					 table_body_default +="id='precioTotal2' name='";
+					table_body_default +="precioTotal' readonly='true'></td>";
+					$("#table_invoice3 tbody").append(table_body_default);
+					$("#card_articulos3").hide();
+					numArt = 0;
+					arrayArticulos = [];
+					$('#requisModal').modal('toggle');
+				}
+			});
+		}else{
+			toastr.error('Debe agregar articulos para la Requisición');
 		}
 	});
 
@@ -2551,7 +2673,7 @@ $(document).ready(function() {
 	
 		})
 		
-		update_total();
+		update_total3();
 	}
 	$("#guardarReq").on("click", function(){
 		console.log("click guardarReq");
@@ -2605,7 +2727,7 @@ $(document).ready(function() {
 	$(document).on('click','.item-name .delete-lreq .delet3' ,function(){
 		$(this).parents('.item-row').remove();
 		var index = $(this).attr('id');
-		update_total();
+		update_total3();
 		arrayArticulos.splice(index, 1); 
 			numArt-=1;
 		console.log(arrayArticulos);
@@ -3972,6 +4094,8 @@ $(document).off('click', '.requisiciones').on('click', '.requisiciones', functio
 	$("#table_invoice3 tbody").empty();
 	$('#precioTotal3').val('');
 	$('#req-tab').trigger('click');
+	$('#guardarReq').show();
+	$('#bnActualizarRequi').hide();
 	if (id_orden_publica) {
 		$('.actualizarCot').show();
 		$('.actualizarCot').data('id_orden_publica', id_orden_publica);
@@ -4670,6 +4794,7 @@ $(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
 	idOrden = idOrden.split('-')[1];
 	$('#verReqModal .modal-body').empty();
 	obtener_requisiciones(idOrden);
+	//requisicionesArray = [];
 	/*$.ajax({
 		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
 		type: 'GET',
@@ -4710,11 +4835,12 @@ function obtener_requisiciones(idOrden){
 			$("#loading_spin").hide();
 			if(data.estatus == true){
 				requisicionesArray = data.requisiciones;
+				console.log('req', requisicionesArray);
 				$.each(data.requisiciones, function(index, value){
 					var idReq = value.id_requisicion;
 					var row_title = $("<div class='row'></div>");
 					row_title.append($(`<div class='row'>
-						<div class='col-md-4'><button class='btn btn-sm btn-primary editarReq' data-id_presupuesto='"+idReq+"'><i class='fa fa-edit'></i> Editar</button></div>
+						<div class='col-md-4'><button class='btn btn-sm btn-primary editarReq' data-id='${idReq}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
 						<div class='col-md-4'>
 							<label>Num. Requisición: ${(value.id_requisicion ? value.id_requisicion : 'N/D')}</label>
 						</div>
@@ -4851,10 +4977,10 @@ $(document).off('click', '#requisModal #cotizaciones .actualizarCot').on('click'
 	obtener_cotizaciones($(this).data('id_orden_publica'));
 });
 $(document).off("click", "#requisModal #cotizaciones button.btnPdf2").on("click", "#requisModal #cotizaciones button.btnPdf2", function(e){
-		var id_press = $(this).data('idpres');
-		console.log('data',$(this).data('idpres'));
-		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
-	});
+	var id_press = $(this).data('idpres');
+	console.log('data',$(this).data('idpres'));
+	window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
+});
 
 //Para cargar Lineas de Trabajo
 $(document).off('click', '#lineaTrabajo').on('click', '#lineaTrabajo', function(event) {
