@@ -82,7 +82,17 @@ echo form_open('',$attributes);
 			
 		</form>
 	</div>
-</div>		
+</div>
+<table style="width:100%">
+<tr>
+<td style="text-align: center;"><b>FIRMA ADMINISTRADOR DE GARANTÍA</b>
+<div class="form-check" id="checkFirmaAdmon" style="text-align: center;">
+	<input class="form-check-input" type="checkbox" id="firmaAdmon" disabled>
+	<label class="form-check-label" for="firmaAdmon"></label>
+</div>
+</td>
+</tr>
+</table>		
 <?php
 echo form_close();
 ?>

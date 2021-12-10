@@ -141,7 +141,13 @@
 		</table>
 	</div>
 </div>
-<div class="form-check">
+<table style="width:100%">
+<tr>
+<td style="text-align: center;"><b>FIRMA JEFE DE TALLER</b>
+<div class="form-check" id="checkFirmaJefe" style="text-align: center;">
 	<input class="form-check-input" type="checkbox" id="firmaCheck1" disabled>
-	<label class="form-check-label" for="firmaCheck1">Firma Jefe Taller</label>
+	<label class="form-check-label" for="firmaCheck1"></label>
 </div>
+</td>
+</tr>
+</table>
