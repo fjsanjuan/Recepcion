@@ -352,6 +352,7 @@ class Servicio extends CI_Controller {
 	public function envia_verificacion_mail()
 	{
 		$datos = $this->input->post();
+		
 		$data = $this->buscador_model->datos_verificacion($datos);
 		$url = base_url()."index.php/Servicio/email_verificacion/".$datos['id'];
 		$data['datos_cliente'] = $data['usuario'];
@@ -445,6 +446,8 @@ class Servicio extends CI_Controller {
 			    if($envia)
 			    {
 			    	$envio = true;
+			    	$this->db->where('id_presupuesto', $datos['id']);
+			    	$this->db->update('verificacion_refacciones', ['autorizado' => 1]);
 			    }else 
 			    {
 			    	$envio = false;

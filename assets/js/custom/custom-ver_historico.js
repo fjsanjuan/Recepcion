@@ -1989,12 +1989,19 @@ $(document).ready(function() {
 	});
 	$(document).on("click", "button.btn-mailP2", function(e){
 		const _this = this;
+		var idIndex =  $(this).attr('id');
+		var datos = verificaciones_array[idIndex];
+		console.log('datos email', datos);
+		const form = new FormData();
+		form.append('id', datos.id_presupuesto)
 		$.ajax({
 			cache: false,
 			type: 'post',
 			url: base_url+ "index.php/Servicio/envia_verificacion_mail",
 			dataType: "json",
-			data: $("#mandar_pres_mail2").serialize(),
+			data:form,
+			contentType: false,
+			processData: false,
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
