@@ -163,10 +163,10 @@
 											//echo "<td>".$value["en_existencia"]."</td>";
 											if($value["autorizado"] == 1)
 											{
-												echo "<td><input type='checkbox' checked disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' checked disabled></td></tr>";
 											}else 
 											{
-												echo "<td><input type='checkbox' disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' disabled></td></tr>";
 											}
 											$total += ($value["total_arts"]+$totalIva);
 										}
@@ -278,10 +278,10 @@
 											//echo "<td>".$value["en_existencia"]."</td>";
 											if($value["autorizado"] == 1)
 											{
-												echo "<td><input type='checkbox' checked disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' checked disabled></td></tr>";
 											}else 
 											{
-												echo "<td><input type='checkbox' disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' disabled></td></tr>";
 											}
 											$total += ($value["total_arts"]+$totalIva);
 										}

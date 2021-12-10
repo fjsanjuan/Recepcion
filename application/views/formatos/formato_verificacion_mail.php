@@ -12,6 +12,7 @@
 <script src="<?=base_url()?>assets/js/jquery.tosrus.all.min.js"></script>
 <script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.js"></script>
 <script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.min.js"></script>
+<script src="<?=base_url()?>assets/js/toastr.min.js"></script>
 <title>Verificación</title>
 </head>
 <body>
@@ -96,7 +97,7 @@
 										echo "<td>".($value["total_arts"]+$totalIva)."</td>";
 										//echo "<td>$totalIva</td>";
 										//echo "<td>".$value["en_existencia"]."</td>";
-										echo "<td><input type='checkbox' class='check chk_aut2' value='".$value['cve_articulo']."' name='check_aut2[]' ".($value['en_existencia'] == 1? 'checked' : '')." ".($perfil == 6? '': 'disabled')."></td></tr>";
+										echo "<td style='text-align: center;'><input type='checkbox' class='check chk_aut2' style='height: 24px; width: 24px;' value='".$value['cve_articulo']."' name='check_aut2[]' ".($value['en_existencia'] == 1? 'checked' : '')." ".($perfil == 6? '': 'disabled')."></td></tr>";
 										
 										$total += ($value["total_arts"]+$totalIva);
 									}
@@ -153,36 +154,31 @@
 </html> 
 <script>
 $(document).ready(function() {
-	//variables que controlan la ruta donde se guardan las fotos de la inspeccion y seguimiento en el presupuesto
-	//mostrar guardadas en el mismo proyecto dejarlas vacias alias_exists = '' var dir_fotos= '';
-	//mostrar guardadas en otra ruta  alias_exists = 'nom_alias' var dir_fotos= 'F:/recepcion_activa/fotografias/';
-	//var alias_exists = ''; 
+	var alias_exists = ''; 
 	//var dir_fotos= '';
-
 	var base_url = "<?=base_url();?>";
 	$("#btn_update_mail2").on("click", function(){
 		$.ajax({
+			cache: false,
 			url: base_url+ "index.php/Servicio/verificacion_mail_refacciones",
-			type: "POST",
+			type: 'POST',
 			dataType: 'json',
 			data: {datos:$("#form_presupuesto2").serializeArray(),id_presupuesto: $("#id_presupuesto").val()},
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},
 			error: function(){
-				console.log('error');
+				console.log('error al verificar');
 			},
 			success: function (data){
+				$("#loading_spin").hide();
 				if(data.estatus == true){
 					toastr.success('Verificación Actualizada');
 				}else{
-					toastr.warning('No fue posible enviar la Verificación');
+					toastr.console.error();
 				}
 			}
 		});
 	}); 
-	$('.printMe').click(function(){
-	     window.print();
-	});
 });
 </script>
