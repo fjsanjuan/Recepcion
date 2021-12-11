@@ -3610,10 +3610,20 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_firmas($id_orden)
 	{
+		$firmas = [];
 		$result = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL OR firma_pregarantiaGerente IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL AND firma_adicionalGerente IS NOT NULL, 1, 0) AS "ADD(Adicional)", IIF(firma_carroParado IS NOT NULL, 1, 0) AS "Carro Parado"')->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get();
-		if ($result->num_rows() > 0) {
+		$firmas = $result->row_array();
+		$orden = $this->db->select('*')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
+		if ($orden['movimiento']) {
+			$aux = $this->db->select('IIF(firma IS NOT NULL, 1, 0) AS Profeco, IIF(firma_multipuntos IS NOT NULL, 1, 0) AS "Hoja Multipuntos", IIF(firma_formatoInventario IS NOT NULL, 1, 0) AS "Formato Inventiario", IIF(firma_renunciaGarantia IS NOT NULL, 1, 0) AS "Carta Renuncia Garantía", IIF(firma_pregarantiaJefe IS NOT NULL OR firma_pregarantiaGerente IS NOT NULL, 1, 0) AS "Pregarantía", IIF(firma_adicionalJefe IS NOT NULL AND firma_adicionalGerente IS NOT NULL, 1, 0) AS "ADD(Adicional)", IIF(firma_carroParado IS NOT NULL, 1, 0) AS "Carro Parado"')->from('firma_electronica')->where('id_orden_servicio', $orden['movimiento'])->get()->row_array();
+			if (!is_array($firmas)) {
+				$firmas = [];
+			}
+			$firmas = array_merge($firmas, $aux);
+		}
+		if (sizeof($firmas) > 0) {
 			$response['estatus'] = true;
-			$response['data'] = $result->row_array();
+			$response['data'] = $firmas;
 			$response['mensaje'] = "Firmas obtenidas con éxito.";
 		} else {
 			$response['estatus'] = false;
@@ -3819,19 +3829,19 @@ class Buscador_Model extends CI_Model{
 				mkdir($ruta, 0777, true);
 			}
 			$ruta .= "/";
-			$pdf = fopen("{$ruta}{$datos['name']}.pdf", 'w');
+			$pdf = fopen("{$ruta}{$datos['name']}-{$datos['id_orden']}.pdf", 'w');
 			fwrite($pdf, $result);
 			fclose($pdf);
-			if (file_exists("{$ruta}{$datos['name']}.pdf")) {
-				$archivo = file_get_contents("{$ruta}{$datos['name']}.pdf");
+			if (file_exists("{$ruta}{$datos['name']}-{$datos['id_orden']}.pdf")) {
+				$archivo = file_get_contents("{$ruta}{$datos['name']}-{$datos['id_orden']}.pdf");
 				$archivo64 = 'data:application/pdf;base64,' . base64_encode($archivo);
 				$response['estatus'] = true;
 				$response['mensaje'] = "Archivo creado exitosamente.";
 				$response['data'] = [
-					'ruta' => base_url("{$ruta}{$datos['name']}.pdf"),
-					'nombre' => $datos['name'],
+					'ruta' => base_url("{$ruta}{$datos['name']}-{$datos['id_orden']}.pdf"),
+					'nombre' => "{$datos['name']}-{$datos['id_orden']}",
 					'archivo' => $archivo64,
-					'ruta_rel' => "{$ruta}{$datos['name']}.pdf"
+					'ruta_rel' => "{$ruta}{$datos['name']}-{$datos['id_orden']}.pdf"
 				];
 			}else {
 				$response['estatus'] = false;
