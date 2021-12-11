@@ -226,10 +226,10 @@
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				action_garantias	= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
 				action_garantias	="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
-				action_garantias	+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Líneas Trabajo</button>";
 				action_garantias	+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-upload'></i>&nbsp&nbsp Fotografías</button>";
 				action_garantias	+="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				action_garantias	+= "<button class='btn btn-sm whatsapp' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
+				action_garantias	+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Tipo Garantía</button>";
 				action_garantias	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"'><i class='fa fa-file-upload'></i>&nbsp&nbsp Cargar&nbspDocs</button>";
 				//action_garantias	+="<button class='btn btn-sm autorizarefacc' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#17A2B8;' id='autorizarefacc-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Autorizar Refacciones</button>";
 				//action_garantias	 +="<button class='btn btn-sm pregarantia' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Validar Pregarantía</button>";
@@ -270,12 +270,11 @@
 				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Generar Anverso</button>";
 				action_tecnico		+="<button type='button' class='btn btn-sm btn-primary diagnostico_tecnico' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#technicalDiagnostic' id='diagnostico_tecnico-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Diagnóstico</button>";
 				if (val["movimiento"] == null) {
-					action_tecnico		 += "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
+					action_tecnico		 = "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				}else {
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
-					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Líneas Trabajo</button>";
 				}
 				//action_tecnico		+= "<button type='button' class='btn btn-sm verificar_refacc' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #17A2B8;' data-toggle='modal' data-target='#modalValidacion' id='verificar_refacc-"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i> &nbsp&nbsp Refacciones</button>";
 				//action_tecnico 		+= "<button class='btn btn-sm buscar_presupuesto' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalPresupuestos' id='buscar_presupuesto-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Existencias</button>";
@@ -3125,6 +3124,7 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 							if (data.estatus) {
 								swal('Pregarantía abierta.', '', 'success');
 								$("#btn_mostrar").trigger("click");
+								$(".pregarantia").hide();
 									
 							}else{
 								toastr.warning('Pregarantia no autorizada para abrir');
