@@ -4001,17 +4001,20 @@ class Buscador_Model extends CI_Model{
 	public function guardar_diagnostico($idOrden, $datos)
 	{
 		$diagnostico = [
-			'id_orden' => $idOrden,
-			'queja_cliente'        => isset($datos['queja_cliente']) ? $datos['queja_cliente'] : null,
-			'sintomas_falla'       => isset($datos['sintomas_falla']) ? $datos['sintomas_falla'] : null,
+			'id_orden'             => $idOrden,
+			'parte_causante'       => isset($datos['parte_causante']) ? $datos['parte_causante'] : null,
+			'causa_falla'          => isset($datos['causa_falla']) ? $datos['causa_falla'] : null,
 			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
-			'comentarios_tecnicos' => isset($datos['comentarios_tecnicos']) ? $datos['comentarios_tecnicos'] : null,
-			'tecnico' => isset($datos['tecnico']) ? $datos['tecnico'] : null,
-			'jefe_de_taller' => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
-			'publica'              => isset($datos['publica']) ? ($datos['publica'] == 'on' ? 1 : 0) : 0,
-			'garantia'             => isset($datos['garantia']) ? ($datos['garantia'] == 'on' ? 1 : 0) : 0,
-			'adicional'            => isset($datos['adicional']) ? ($datos['adicional'] == 'on' ? 1 : 0) : 0 ,
-			
+			'reparacion_efectuada' => isset($datos['reparacion_efectuada']) ? $datos['reparacion_efectuada'] : null,
+			'clave_defecto'        => isset($datos['clave_defecto']) ? $datos['clave_defecto'] : null,
+			'retorno_partes'       => isset($datos['retorno_partes']) ? $datos['retorno_partes'] : null,
+			'mecanico_clave'       => isset($datos['mecanico_clave']) ? $datos['mecanico_clave'] : null,
+			'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
+			'tecnico'              => isset($datos['tecnico']) ? $datos['tecnico'] : null,
+			'jefe_de_taller'       => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
+			'firma_tecnico'        => isset($datos['firma_tecnico']) ? $datos['firma_tecnico'] : null,
+			'firma_jefe_taller'    => isset($datos['firma_jefe_taller']) ? $datos['firma_jefe_taller'] : null,
+			'terminado'            => 0
 		];
 		$this->db->trans_start();
 		$this->db->insert('diagnostico_tecnico', $diagnostico);
@@ -4032,11 +4035,10 @@ class Buscador_Model extends CI_Model{
 		$this->db->trans_start();
 		foreach ($datos['detalles'] as $key => $detalle) {
 			$insert = [
-				'num_reparacion' => null,
-				'fecha_creacion' => date('d-m-Y H:i:s'),
-				'tren_motriz'    => $detalle['tren_motriz'],
-				'codigos'        => $detalle['codigos'],
-				'luz_de_falla'   => $detalle['luz_de_falla'],
+				'num_reparacion' => isset($detalle['num_reparacion']) ? $detalle['num_reparacion'] : null,
+				'tren_motriz'    => isset($detalle['tren_motriz']) ? $detalle['tren_motriz'] : null,
+				'codigos'        => isset($detalle['codigos']) ? $detalle['codigos'] : null,
+				'luz_de_falla'   => isset($detalle['luz_de_falla']) ? $detalle['luz_de_falla'] : null,
 				#'id_orden'       => $idOrden,
 				'id_diagnostico' => $id
 			];
@@ -4051,30 +4053,40 @@ class Buscador_Model extends CI_Model{
 		}else
 		{
 			$this->db->trans_commit();
-			$response['estatus'] = true;
+			$response['estatus']        = true;
 			$response['id_diagnostico'] = $id;
-			$response['mensaje'] = 'Diagnóstico guardado.';
+			$response['mensaje']        = 'Diagnóstico guardado.';
 		}
 		return $response;
 	}
 	public function obtener_diagnosticos($idOrden)
 	{
-		$response['diagnosticos'] = $this->db->select('*')->from('diagnostico_tecnico')->where('id_orden', $idOrden)->get()->result_array();
-		foreach ($response['diagnosticos'] as $key => $diagnostico) {
-			$response['diagnosticos'][$key]['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $diagnostico['id_diagnostico']])->get()->result_array();
+		$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where('id_orden', $idOrden)->get()->result_array();
+		foreach ($response['data'] as $key => $diagnostico) {
+			$response['data'][$key]['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $diagnostico['id_diagnostico']])->get()->result_array();
 		}
-		if ( sizeof($response['diagnosticos']) > 0) {
+		if ( sizeof($response['data']) > 0) {
 			$response['estatus'] = true;
 			$response['mensaje'] = "Ok.";
 		}else {
 			$response['estatus'] = false;
+			$response['data']    = [];
 			$response['mensaje'] = "La orden no tiene diagnosticos.";
 		}
 		return $response;
 	}
-	public function obtener_detalles_diagnostico($idRevision)
+	public function obtener_detalles_diagnostico($idOrden, $idRevision = null)
 	{
-		$response = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $idRevision])->get()->result_array();
+		$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 0])->get()->row_array();
+		if (sizeof($response['data']) > 0) {
+			$response['data']['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $response['data']['id_diagnostico']])->get()->result_array();
+			$response['estatus']          = true;
+			$response['mensaje']          = 'Ok.';
+		} else {
+			$response['estatus'] = false;
+			$response['data']    = [];
+			$response['mensaje'] = 'La orden no cuenta con una línea activa para realizar el llenado de información.';
+		}
 		return $response;
 	}
 	public function editar_diagnostico($idOrden, $datos)
@@ -4087,15 +4099,19 @@ class Buscador_Model extends CI_Model{
 		}
 		$diagnostico = [
 			'id_orden' => $idOrden,
-			'queja_cliente'        => isset($datos['queja_cliente']) ? $datos['queja_cliente'] : null,
-			'sintomas_falla'       => isset($datos['sintomas_falla']) ? $datos['sintomas_falla'] : null,
+			'parte_causante'       => isset($datos['parte_causante']) ? $datos['parte_causante'] : null,
+			'causa_falla'          => isset($datos['causa_falla']) ? $datos['causa_falla'] : null,
 			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
-			'comentarios_tecnicos' => isset($datos['comentarios_tecnicos']) ? $datos['comentarios_tecnicos'] : null,
-			'tecnico' => isset($datos['tecnico']) ? $datos['tecnico'] : null,
-			'jefe_de_taller' => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
-			'publica'              => isset($datos['publica']) ? $datos['publica'] : 0,
-			'garantia'             => isset($datos['garantia']) ? $datos['garantia'] : 0,
-			'adicional'            => isset($datos['adicional']) ? $datos['adicional'] : 0,
+			'reparacion_efectuada' => isset($datos['reparacion_efectuada']) ? $datos['reparacion_efectuada'] : null,
+			'clave_defecto'        => isset($datos['clave_defecto']) ? $datos['clave_defecto'] : null,
+			'retorno_partes'       => isset($datos['retorno_partes']) ? $datos['retorno_partes'] : null,
+			'mecanico_clave'       => isset($datos['mecanico_clave']) ? $datos['mecanico_clave'] : null,
+			'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
+			'tecnico'              => isset($datos['tecnico']) ? $datos['tecnico'] : null,
+			'jefe_de_taller'       => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
+			'firma_tecnico'        => isset($datos['firma_tecnico']) ? $datos['firma_tecnico'] : null,
+			'firma_jefe_taller'    => isset($datos['firma_jefe_taller']) ? $datos['firma_jefe_taller'] : null,
+			'terminado'            => isset($datos['terminado']) ? $datos['terminado'] : 0,
 		];
 		$this->db->trans_start();
 		$this->db->where('id_diagnostico', $datos['id_diagnostico']);
@@ -4119,14 +4135,13 @@ class Buscador_Model extends CI_Model{
 				'tren_motriz'    => $detalle['tren_motriz'],
 				'codigos'        => $detalle['codigos'],
 				'luz_de_falla'   => $detalle['luz_de_falla'],
-				'num_reparacion'   => $detalle['num_reparacion'],
-				#'id_orden'       => $idOrden,
+				'num_reparacion' => $detalle['num_reparacion'],
+				#'id_orden'      => $idOrden,
 			];
 			if (isset($detalle['id_revision'])) {
 				$this->db->where(['id_revision' =>	$detalle['id_revision'], 'id_diagnostico' => $datos['id_diagnostico']]);
 				$this->db->update('detalles_diagnostico_tecnico', $data);
 			}else {
-				$data['fecha_creacion'] = date('d-m-Y H:i:s');
 				$data['id_diagnostico'] = $datos['id_diagnostico'];
 				$data['num_reparacion'] = $detalle['num_reparacion'];
 				$this->db->insert('detalles_diagnostico_tecnico', $data);

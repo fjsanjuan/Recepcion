@@ -2710,15 +2710,15 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	public function obtener_detalles_diagnostico($idRevision = null)
+	public function obtener_detalles_diagnostico($idOrden = null, $idDiagnostico = null)
 	{
 		$datos = [];
 		$datos = $this->input->post();
-		if ($idRevision == null) {
+		if ($idOrden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		}else {
-			$response = $this->buscador_model->obtener_detalles_diagnostico($idRevision);
+			$response = $this->buscador_model->obtener_detalles_diagnostico($idOrden = null, $idDiagnostico = null);
 		}
 		echo json_encode($response);
 	}
@@ -2879,9 +2879,8 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	public function garantia_anverso($id_orden = null){
-		$datos = $this->buscador_model->ver_datosHojaMult($id_orden);
-		// var_dump($datos);die;
+	public function garantia_anverso($idOrden = null){
+		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
 		$this->load->view("anverso", $datos);
 	}
 }
