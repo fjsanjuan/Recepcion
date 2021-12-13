@@ -2883,4 +2883,5 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
 		$this->load->view("anverso", $datos);
 	}
+
 }

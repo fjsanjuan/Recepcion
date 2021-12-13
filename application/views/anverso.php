@@ -146,13 +146,13 @@ input:focus{
                     <div id="principal">
                         <div class="row header-title-blue">
                             <div class=" bold">
-                                Codigo de Diagnostico del Problema
+                                Código de Diagnóstico del Problema
                             </div>
                         </div>
                         <div id="top-section">
                             <div id="head">
                                 <div id="left" class="header">
-                                    <strong class="header-left-title sfont">(REP)Numero de reparación<br/>(NL) Luz indicadora de falla<br/>(DTC) Codigo de falla</strong>
+                                    <strong class="header-left-title sfont">(REP)Número de reparación<br/>(NL) Luz indicadora de falla<br/>(DTC) Código de falla</strong>
                                 </div>
                                 <div id="center" class="header">
                                     
@@ -228,7 +228,7 @@ input:focus{
                         </div>
                         <div class="row header-title-blue">
                             <div class="column cincuenta border-right-light bold">
-                                COMENTARIOS DEL MECANICO
+                                COMENTARIOS DEL MECÁNICO
                             </div>
                             <div class="column cincuenta bold">
                                 REGISTRO DE LABOR
@@ -236,19 +236,19 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
-                                INCLUYA LA DESCRIPCION DE LA CAUSA DEL PROBLEMA
+                                INCLUYA LA DESCRIPCIÓN DE LA CAUSA DEL PROBLEMA
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
-                                FechaNÚMERO REP.
+                                NÚMERO REP.
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
                                 CLAVE DE DEFECTO
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
-                                RETORNO DE PARTES: BASICO/FECHA
+                                RETORNO DE PARTES: BÁSICO/FECHA
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
-                                MECANICO CLAVE
+                                MECÁNICO CLAVE
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
                                 COSTO O TIEMPO UTILIZADO
@@ -366,7 +366,7 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
-                                IDENTIFIQUE EL EQUIPO DE DIAGNOSTICO
+                                IDENTIFIQUE EL EQUIPO DE DIAGNÓSTICO
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -418,7 +418,7 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
-                                EXPLIQUE LA REPARACIÓN AFECTUADA
+                                EXPLIQUE LA REPARACIÓN EFECTUADA
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
