@@ -4364,4 +4364,153 @@ class Buscador_Model extends CI_Model{
 		}
 		return $refacciones;
 	}
+	public function obtener_datos_f1863($idOrden)
+	{
+		$ordenGarantia = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+		if (sizeof($ordenGarantia) > 0) {
+			$response['garantia'] = $ordenGarantia;
+			$publica = $this->db->select('*')->from('orden_servicio')->where(['id' => $ordenGarantia['movimiento']])->get()->row_array();
+			$response['publica'] = $ordenGarantia;
+
+			$response['lineas'] = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
+
+			$intelisis = $this->load->database("other", TRUE);
+
+			$response["sucursal"] = $this->db->select("ds.*, s.nombre, s.sucursal_marca, a.razon_social, a.dom_calle_fiscal, a.dom_col_fiscal, a.dom_numExt_fiscal, a.dom_numInt_fiscal, a.dom_ciudad_fiscal, a.dom_estado_fiscal, a.dom_cp_fiscal")
+									  ->from("datos_sucursal ds")
+									  ->join("sucursal s", "ds.id_sucursal = s.id")
+									  ->join("agencia a", "s.id_agencia = a.id")
+									  ->where("ds.id_sucursal", $this->session->userdata["logged_in"]["id_sucursal"])
+									  ->get()->row_array();
+
+			// echo $this->db->last_query();die;
+			$response["reverso"] = $this->db->query("
+				SELECT dom_calle, dom_numExt, dom_colonia, dom_ciudad, dom_estado, dom_cp, rfc
+				FROM datos_sucursal WHERE id_sucursal = ?", array($this->session->userdata["logged_in"]["id_sucursal"])) 
+			->row_array();
+		
+			// echo $this->db->last_query();die;						 
+			$response["cliente"] = $intelisis->select("MovID,Pasajeros,ar.Descripcion1")
+													->from("Venta vta")
+													->join("VIN vn", "vta.servicioSerie = vn.vin")
+													->join("art ar", "ar.Articulo = vta.ServicioArticulo")
+													->where("ID", $ordenGarantia["id_orden_intelisis"])
+													->get()->row_array(); 
+
+			$response["inspeccion"] = $this->db->select("*")
+											->from("orden_servicio_inspeccion")
+											->where("id_servicio", $ordenGarantia['movimiento'])
+											->get()->row_array();
+
+			//modificacion para obtener detalle de orden de servicio desde ventaD intelisis
+			$response["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total")
+				->from("VentaD")
+				->where("ID", $ordenGarantia["id_orden_intelisis"])
+				->where('ventad.cantidad > isnull(ventad.cantidadcancelada,0)')
+				->group_by('precio, cantidad, impuesto1, articulo,DescripcionExtra')
+				->get()->result_array();
+
+			$response["asesor"] = $this->db->select("firma_electronica, nombre, apellidos")
+										->from("usuarios")
+										->where("cve_intelisis", $ordenGarantia['clave_asesor'])
+										->get()->row_array();
+
+			$response["firma_cliente"] = $this->db->select("firma, firma_formatoInventario")
+										   ->from("firma_electronica")
+										   ->where("id_orden_servicio", $ordenGarantia['movimiento'])
+										   ->get()->row_array();
+			//$response['venta'] = $intelisis->select('*')->from('Venta')->where(['id' => $ordenGarantia['id_orden_intelisis']])->get()->row_array();
+			//$response['ventaD'] = $intelisis->select('*')->from('Venta')->where(['id' => $ordenGarantia['id_orden_intelisis']])->get()->row_array();
+			//$response['data'] = $datos;
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
+		} else {
+			$response['estatus'] = false;
+			$response['data'] = [];
+			$response['mensaje'] = 'No existe una orden válida.';
+		}
+		return $response;
+	}
+	public function guardar_linea($idOrden, $datos)
+	{
+		$this->db->trans_start(true);
+		$data = [
+			'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
+			'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
+			'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
+			'daños_relacion'             => isset($datos['daños_relacion']) ? $datos['daños_relacion'] : null,
+			'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
+			'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
+			'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
+			'mano_obra_total'            => isset($datos['mano_obra_total']) ? $datos['mano_obra_total'] : null,
+			'misc_total'                 => isset($datos['misc_total']) ? $datos['misc_total'] : null,
+			'iva'                        => isset($datos['iva']) ? $datos['iva'] : null,
+			'participacion_cliente'      => isset($datos['participacion_cliente']) ? $datos['participacion_cliente'] : null,
+			'participacion_distribuidor' => isset($datos['participacion_distribuidor']) ? $datos['participacion_distribuidor'] : null,
+			'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
+			'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
+			'id_orden'                   => $idOrden
+		];
+		$this->db->insert('lineas_reparacion', $data);
+		$id = $this->db->insert_id();
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === TRUE) {
+			$this->db->trans_commit();
+			$response['id']      = $id;
+			$response['mensaje'] = 'Ok.';
+			$response['estatus'] = true;
+		}else {
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No se pudo cancelar la autorización.';
+		}
+		return $response;
+	}
+	public function editar_linea($idOrden, $datos)
+	{
+		$this->db->trans_start(true);
+		$data = [
+			'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
+			'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
+			'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
+			'daños_relacion'             => isset($datos['daños_relacion']) ? $datos['daños_relacion'] : null,
+			'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
+			'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
+			'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
+			'mano_obra_total'            => isset($datos['mano_obra_total']) ? $datos['mano_obra_total'] : null,
+			'misc_total'                 => isset($datos['misc_total']) ? $datos['misc_total'] : null,
+			'iva'                        => isset($datos['iva']) ? $datos['iva'] : null,
+			'participacion_cliente'      => isset($datos['participacion_cliente']) ? $datos['participacion_cliente'] : null,
+			'participacion_distribuidor' => isset($datos['participacion_distribuidor']) ? $datos['participacion_distribuidor'] : null,
+			'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
+			'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
+			'id_orden'                   => $idOrden
+		];
+		$this->db->where(['id' => $datos['id'], 'id_orden' => $idOrden]);
+		$this->db->update('lineas_reparacion', $data);
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === TRUE) {
+			$this->db->trans_commit();
+			$response['mensaje'] = 'Ok.';
+			$response['estatus'] = true;
+		}else {
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No se pudo cancelar la autorización.';
+		}
+		return $response;
+	}
+	public function obtener_lineas($idOrden)
+	{
+		$lineas = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
+		if (sizeof($lineas) > 0) {
+			$response['lineas'] = $lineas;
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+		}
+		return $response;
+	}
 }

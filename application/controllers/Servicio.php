@@ -2886,4 +2886,8 @@ class Servicio extends CI_Controller {
 		echo "</pre>";*/
 		$this->load->view("anverso", $datos);
 	}
+	public function obtener_datos_f1863($idOrden = null){
+		$datos = $this->buscador_model->obtener_datos_f1863($idOrden);
+		echo json_encode($datos);
+	}
 }
