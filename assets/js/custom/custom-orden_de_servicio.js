@@ -256,7 +256,7 @@ $(window).on('load', function() {
             $("#loading_spin").hide();
         },
         error: function(){
-            alert('error');
+            console.log('error');
         }
     });
 
@@ -390,7 +390,14 @@ $(window).on('load', function() {
                 $("#modalcamp").modal("show");
             }else
             {
-                alert("no hay campañas activas para esta unidad");
+                swal({
+                    title:'No hay campañas activas para esta unidad.',
+                    type:'info',
+                    position: 'top',
+                    toast:true,
+                    allowOutsideClick: false
+                });
+                //alert("no hay campañas activas para esta unidad");
             }
             //$("#promesa_cliente").val(datos[0]['FechaRequerida']);
 
@@ -1256,7 +1263,7 @@ $(window).on('load', function() {
         }
         else{
             if(!numtel){
-                alert("Favor de guardar al menos un telefono de contacto para avanzar");
+                toastr.info("Favor de guardar al menos un telefono de contacto para avanzar");
             }
         }
 
@@ -1680,7 +1687,7 @@ $(document).on('click','#levanta_orden' ,function(e){
             }     
         })
         .fail(function() {
-            alert("Hubo un error al crear la orden");
+            toast.error("Hubo un error al crear la orden");
         });
     }
 
@@ -1904,7 +1911,7 @@ $(document).on('click', '#add_mo', function (){
             
         },
         error : function(xhr, status) {
-            alert('Disculpe, existió un problema');
+            toast.error('Disculpe, existió un problema');
         }
     });
 });
@@ -2230,7 +2237,7 @@ $(document).on("click", '#btn_guardarFirma', function (e){
             }
         })
         .fail(function() {
-            alert("Hubo un error al guardar las firma");
+            toastr.error("Hubo un error al guardar las firma");
         }); 
     }
 });
@@ -2556,7 +2563,7 @@ function guardar_imagen(form)
         }
     })
     .fail(function() {
-        alert("Hubo un error al guardar la(s) fotografía(s)");
+        toastr.error("Hubo un error al guardar la(s) fotografía(s)");
         $("#loading_spin").hide();
     });
 }
@@ -2669,12 +2676,12 @@ $(document).on("click", "#btn_guardarInspeccion", function(e){
             }
         })
         .fail(function() {
-            alert("Hubo un error, vuelva a intentarlo.");
+            toastr.error("Hubo un error, vuelva a intentarlo.");
         });
 
     })
     .fail(function() {
-        alert("Hubo un error al guardar la inspección");
+        toastr.error("Hubo un error al guardar la inspección");
     });  
 });
 
@@ -2785,7 +2792,7 @@ function enviar_correo( img, img2, img_correo, img_reverso, img3)
             }               
         },
         error : function(xhr, status) {
-            alert("Hubo un error al enviar el correo");
+            toastr.error("Hubo un error al enviar el correo");
         }
     });
 }
@@ -2984,7 +2991,7 @@ $(document).on("click", '#enviar_whatsapp', function (e){
                     var numero = this.$content.find('.numero').val();
 
                     if(!numero){
-                        $.alert("Por favor, escriba el número de celular del Cliente (10 dígitos).");
+                        toastr.info("Por favor, escriba el número de celular del Cliente (10 dígitos).");
                         return false;
                     }
 
@@ -3022,7 +3029,7 @@ $(document).on("click", '#enviar_whatsapp', function (e){
                         window.open(whatsapp_url, "_blank");
                     })
                     .fail(function() {
-                        alert("Hubo un error al obtener los datos de la orden");
+                        toastr.info("Hubo un error al obtener los datos de la orden");
                     }); 
                 }
             },
@@ -3243,7 +3250,7 @@ function guardar_oasis(form)
         }
     })
     .fail(function() {
-        alert("Hubo un error al guardar el formato Oasis.");
+        toastr.error("Hubo un error al guardar el formato Oasis.");
         $("#loading_spin").hide();
     });
 }
@@ -3269,7 +3276,7 @@ function refrescar() {
     $('#tiempo_grabado').text(convertir_tiempo((Date.now() - tiempo_inicio) / 1000));
 }
 function detener_grabacion() {
-    if (!media_recorder) return alert("No se está grabando");
+    if (!media_recorder) return toastr.warning("No se está grabando");
     media_recorder.stop();
     media_recorder = null;
 }
@@ -3599,7 +3606,7 @@ function guardar_audios(form)
         }
     })
     .fail(function() {
-        alert("Hubo un error al guardar lo(s) audio(s)");
+        toastr.error("Hubo un error al guardar lo(s) audio(s)");
         $("#loading_spin").hide();
     });
 }
