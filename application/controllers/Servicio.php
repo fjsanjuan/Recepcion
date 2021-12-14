@@ -2881,6 +2881,9 @@ class Servicio extends CI_Controller {
 	}
 	public function garantia_anverso($idOrden = null){
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
+		$datos['id_orden']= $idOrden;
+		/*echo "<pre>"; print_r($datos);
+		echo "</pre>";*/
 		$this->load->view("anverso", $datos);
 	}
 }

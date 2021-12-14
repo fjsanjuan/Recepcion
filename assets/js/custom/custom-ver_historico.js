@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -225,7 +225,7 @@ $(document).ready(function() {
 				btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				action_garantias	= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
-				action_garantias	="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
+				action_garantias	+="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action_garantias	+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-upload'></i>&nbsp&nbsp Fotografías</button>";
 				action_garantias	+="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				action_garantias	+= "<button class='btn btn-sm whatsapp' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
@@ -271,7 +271,7 @@ $(document).ready(function() {
 					action_tecnico		 = "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				}else {
-					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Generar Anverso</button>";
+					action_tecnico		+="<a href='"+base_url+ "index.php/servicio/garantia_anverso/"+val["id"]+"' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Generar Anverso</a>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
@@ -3725,7 +3725,7 @@ $(document).on('click', 'a.deladjunto', function (e) {
 })
 
 //PARA MODAL DIAGNOSTICO DE TECNICO
-$(document).off('click', '.diagnostico_tecnico').on('click', '.diagnostico_tecnico', function (e) {
+/*$(document).off('click', '.diagnostico_tecnico').on('click', '.diagnostico_tecnico', function (e) {
 	let id_orden = $(this).prop('id');
     id_orden = id_orden.split('-')[1];
 	e.preventDefault();
@@ -3774,8 +3774,8 @@ $(document).off('click', '.diagnostico_tecnico').on('click', '.diagnostico_tecni
 	.always(function() {
 		$("#loading_spin").hide();
 	});
-});
-$(document).on("click", '#saveDiagnostico', function(e){
+});*/
+/*$(document).on("click", '#saveDiagnostico', function(e){
 	e.preventDefault();
 	var idOrden = $(this).prop("data-orden");
 	console.log('id_orden', idOrden);
@@ -3859,8 +3859,8 @@ $(document).on("click", '#saveDiagnostico', function(e){
 		}
 		
 	});
-})
-
+})*/
+/*
 var newlinecode = 1;
 $(document).on('click', '.nuevo_codigo', function (e) {
 	e.preventDefault();
@@ -3886,39 +3886,11 @@ $(document).on('click', '.erase_line', function (e) {
     }else {
         toastr.warning('Debes matener una linea');
     }
-});
-//MODAL PARA VER DIAGNOSTICO TECNICO
-	$(document).off('click', '.obtener_diagnosticos').on('click', '.obtener_diagnosticos', function(event) {
-		event.preventDefault();
-		idOrden = $(this).prop('id');
-		idOrden = idOrden.split('-')[1];
-		$('#verDiagnostico .modal-body').empty();
-		obtener_diagnosticos(idOrden);
-		/*$.ajax({
-			url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
-			type: 'GET',
-			dataType: 'json',
-			contentType: false,
-			processData: false,
-			beforeSend: function () {
-				$("#loading_spin").show();
-			}
-		})
-		.done(function() {
-			console.log("success");
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-			$("#loading_spin").hide();
-		});*/
-		
-	});
-	
-	function obtener_diagnosticos(idOrden){
+});*/
+//PARA VER DIAGNOSTICO TECNICO y GENERAR ANVERSO
+	/*function obtener_detalles_diagnostico(idOrden){
 		$.ajax({
-			url: `${base_url}index.php/servicio/obtener_diagnosticos/${idOrden}`,
+			url: `${base_url}index.php/servicio/obtener_detalles_diagnostico/${idOrden}, ${idDiagnostico}`,
 			type: 'GET',
 			dataType: 'json',
 			contentType: false,
@@ -3936,40 +3908,28 @@ $(document).on('click', '.erase_line', function (e) {
 					diagnosticoArray = data.diagnosticos;
 					$.each(data.diagnosticos, function(index, value){
 						var idReq = value.id_diagnostico;
-						var row_title = $("<div class='row'></div>");
-						row_title.append($(`<div class='row'>
-							<div class='col-md-4'><button class='btn btn-sm btn-primary editarDia' data-id_diagnostico='"+idDia+"'><i class='fa fa-edit'></i> Editar</button></div>
-							<div class='col-md-4'><label>No. Reparacion: ${(value.id_diagnostico ? value.id_diagnostico : 'N/D')}</label></div>
-							<div class='col-md-4'><label>Fecha Diagnostico: ${(value.fecha_creacion ? value.fecha_creacion : 'N/D')}</label></div>
-						</div>`));
-						/*if(value.autorizado == 1)
-							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
-						else
-							var check = $("<label for='"+idpres+"' class='no_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1'>Autorizado</label>");
 	
-						row_title.append(check);*/
-	
-						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablediag' id='tbl_dia"+(index+1)+"'><thead style='text-align:center;'><tr><th>No. Reparación</th><th>Luz de Falla</th><th>Tren Motriz</th><th>Códigos</th><th>Publica</th><th>Garantia</th><th>Adicional</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablediag' id='tbl_dia"+(index+1)+"'><thead style='text-align:center;'><tr><th>No. Reparación</th><th>Luz de Falla</th><th>Tren Motriz</th><th>Códigos</th><>Publi</tr></thead><tbody style='text-align:center;'></tbody></table>");
 						$.each(value.detalles, function(index2, value2){
 							if(value2.autorizado == 0){
-								var row = $("<tr><td>"+(value2.num_reparacion ? value2.num_reparacion : '')+"</td><td>"+(value2.luz_de_falla ? value2.luz_de_falla : '')+"</td><td>"+(value2.tren_motriz ? value2.tren_motriz : '')+"</td><td>"+(value2.codigos ? value2.codigos: '')+"</td><td>"+(value2.publica ? value2.publica : '')+"</td><td>"+(value2.garantia ? value2.garantia : '')+"</td><td>"+(value2.adicional ? value2.adicional : '')+"</td></tr>");
+								var row = $("<tr><td>"+(value2.num_reparacion ? value2.num_reparacion : '')+"</td><td>"+(value2.luz_de_falla ? value2.luz_de_falla : '')+"</td><td>"+(value2.tren_motriz ? value2.tren_motriz : '')+"</td><td>"+(value2.codigos ? value2.codigos: '')+"</td></tr>");
 							}else{
-								var row = $("<tr><td>"+(value2.num_reparacion ? value2.num_reparacion : '')+"</td><td>"+(value2.luz_de_falla ? value2.luz_de_falla : '')+"</td><td>"+(value2.tren_motriz ? value2.tren_motriz : '')+"</td><td>"+(value2.codigos ? value2.codigos : '')+"</td><td>"+(value2.publica ? value2.publica : '')+"</td><td>"+(value2.garantia ? value2.garantia : '')+"</td><td>"+(value2.adicional ? value2.adicional : '')+"</td></tr>");
+								var row = $("<tr><td>"+(value2.num_reparacion ? value2.num_reparacion : '')+"</td><td>"+(value2.luz_de_falla ? value2.luz_de_falla : '')+"</td><td>"+(value2.tren_motriz ? value2.tren_motriz : '')+"</td><td>"+(value2.codigos ? value2.codigos : '')+"</td></tr>");
 							}
 							table.append(row);
 						});
-						/*var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailReq' id='"+idReq+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdfReq' data-index='"+idReq+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
-						table.append(row_importe);*/
-						$('#verDiagnostico .modal-body').append(row_title);
-						$('#verDiagnostico .modal-body').append(table);
+						//var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailReq' id='"+idReq+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdfReq' data-index='"+idReq+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+						//table.append(row_importe);
+						$('#anverso').append(row_title);
+						$('#anverso').append(table);
 					});
-					$('#verDiagnostico').modal('show');
+					$('#anverso').form('show');
 				}else{
 					toastr.error(data.mensaje);
 				}
 			}
 		});
-	}
+	}*/
 
 $(document).on('click', '.nuevo_registro', function (e) {
 	e.preventDefault();
@@ -5105,9 +5065,3 @@ function generar_formato_req(id) {
 			}
 		});
 }
-$(document).off('click', '.anverso').on('click', '.anverso', function (e) {
-	let id_orden = $(this).prop('id');
-    id_orden = id_orden.split('-')[1];
-	e.preventDefault();
-	console.log('id orden', id_orden);
-});

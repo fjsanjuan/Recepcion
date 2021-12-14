@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Formato</title>
         <link rel="stylesheet" href="<?php echo base_url();?>assets/pdfstyles/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo base_url();?>assets/css/toastr.min.css">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous">
         <link rel="apple-touch-icon" href="<?php echo base_url();?>assets/pdfstyles/images/reporticon.png">
         <link rel="stylesheet" href="<?php echo base_url();?>assets/pdfstyles/css/page.css">
@@ -132,9 +133,13 @@ input:focus{
 
         </style>
     </head>
+	<?php
+	$attributes = array('id' => 'form_anverso');
+	echo form_open('',$attributes);
+	?>
     <body class="gray-bg" style="overflow-x: auto;" cz-shortcut-listen="true">
         <div class="sidebar">
-            <a class="no_print" href="#home">Guardar</a>
+            <a class="no_print" name="" id="save_anverso" type="button" href="#home">Guardar</a>
             <a class="active no_print" href="#home" onclick="window.print();return false;">Imprimir</a>
             <!--<a href="#news">News</a>
             <a href="#contact">Contact</a>
@@ -191,21 +196,22 @@ input:focus{
                                 CÓDIGOS
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt bold">
-                                -
+							NUEVA LÍNEA
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt bold">
-                                -
+							BORRAR LÍNEA
                             </div>
                         </div>
+						<div class="code_lines">
                         <div class="row">
                             <div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%">
+                                <input class="required write" type="text" name="detalles[0][num_reparacion]" id="" style="width: 98%">
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="detalles[0][luz_de_falla]" id="" style="width: 98%;">
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito" style='text-decoration: none;'>
-                            <select id="select_codigo" name="select_codigo" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;">
+                            <select id="select_codigo" name="detalles[0][tren_motriz]" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;">
                                 <option value="">Tipo códigos</option>
                                 <option value="2">KOEO</option>
                                 <option value="3">KOEC</option>
@@ -217,15 +223,17 @@ input:focus{
                             </select>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="detalles[0][codigos]" id="" style="width: 98%;">
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+							<i class="fa fa-plus fa-2x nuevo_codigo" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+							<i class="fa fa-times fa-2x erase_line" style="color:grey; cursor:pointer;"></i>
                             </div>
                         </div>
+						</div>
+						</>
                         <div class="row header-title-blue">
                             <div class="column cincuenta border-right-light bold">
                                 COMENTARIOS DEL MECÁNICO
@@ -695,8 +703,28 @@ input:focus{
             
         </div>
     </body>
-    <script>
+	<?php
+	echo form_close();
+	?>
+	<!--scripts-->
+	<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.min.js"></script>
+	<script src="<?=base_url()?>assets/js/toastr.min.js"></script>
+	<script src="<?= base_url()?>assets/librerias/jq-signature-master/jq-signature.min.js"></script>
+	<script src="<?=base_url();?>assets/librerias/sweetalert2-7.17.0/dist/sweetalert2.all.js"></script>
+	<script src="<?=base_url()?>assets/js/toastr.min.js"></script>
 
+	<script src='<?=base_url()?>assets/js/jquery.validate.js'></script>
+	<script src='<?=base_url()?>assets/js/jquery.validate.min.js'></script>
+	<script src='<?=base_url()?>assets/js/jquery.validator.message.js'></script>
+
+	<?php 
+	date_default_timezone_set('America/Mexico_City');
+	clearstatcache();                //clears the file status cache
+	?>
+
+    <script>
+		var base_url = `<?php echo  base_url(); ?>`;
+		var idOrden = `<?php echo $id_orden; ?>`;
         function myFunction(id) {
             var x = document.getElementById("myDIV");
             //x.innerHTML=id;
@@ -731,5 +759,82 @@ input:focus{
             x.style.visibility = "hidden";
             x.style.opacity = "0";
         }
+		
+	$(document).on("click", '#save_anverso', function(e){
+	e.preventDefault();
+	//var idOrden = $(this).prop("data-orden");
+	console.log('id_orden', idOrden);
+	//localStorage.setItem("hist_id_orden", idOrden);
+	const form = new FormData(document.getElementById("form_anverso"));
+	form.append('id_orden', idOrden);
+	swal({
+		title: '¿Desea guardar el diagnóstico?',
+		showCancelButton: true,
+		confirmButtonText: 'Guardar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+	})
+	.then((result) => {
+		if (result.value) {
+
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/guardar_diagnostico/"+idOrden,
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						swal('Diagnóstico guardado.', '', 'success');
+
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al firmar diagnóstico');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});	
+			
+		}else if (result.dismiss) {
+			swal('Cancelado', '', 'error');
+		}
+	})
+	});
+	var newlinecode = 1;
+$(document).on('click', '.nuevo_codigo', function (e) {
+	e.preventDefault();
+	const code = $(this).closest('div.row').clone();
+	code.find('input[type="text"]').val("");
+	code.find('input[name="detalles[0][num_reparacion]"]').prop('name',`detalles[${newlinecode}][num_reparacion]`);
+	code.find('input[name="detalles[0][luz_de_falla]"]').prop('name',`detalles[${newlinecode}][luz_de_falla]`);
+	code.find('select[name="detalles[0][tren_motriz]"]').prop('name',`detalles[${newlinecode}][tren_motriz]`);
+	code.find('input[name="detalles[0][codigos]"]').prop('name',`detalles[${newlinecode}][codigos]`);
+	newlinecode++;
+	code.find('select').val("");
+	code.insertAfter($(this).closest('div.row'));
+	
+})
+$(document).on('click', '.erase_line', function (e) {
+	e.preventDefault();
+	if ($(this).closest('.code_lines div.row').find('div.row').length > 0) {
+        toastr.warning('No puedes eliminar la primer linea');
+        return;
+    }
+    if ($('.code_lines div.row ').length > 1) {
+        $(this).closest('.code_lines div.row').remove();
+    }else {
+        toastr.warning('Debes matener una linea');
+    }
+});
+
     </script>
 </html>

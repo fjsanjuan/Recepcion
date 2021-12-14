@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/librerias/fontawesome-free-5.2.0-web/css/all.css"/>
 <link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" media="all">
 <link href="<?=base_url()?>assets/css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/toastr.min.css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.tosrus.all.css">
 <script src="<?=base_url()?>assets/js/jquery.min.js"></script>
 <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
