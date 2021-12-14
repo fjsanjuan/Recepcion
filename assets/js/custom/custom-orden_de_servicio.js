@@ -1,3 +1,4 @@
+let cloneID = 0;
 $(window).on('load', function() {
     bind();
     var options = {
@@ -480,6 +481,48 @@ $(window).on('load', function() {
 
         } //llave succes cierre
     }); // cierre funcion ajax
+
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_datos_quejas/${id_orden_servicio_insp}`,
+		type: 'POST',
+		dataType: 'json',
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(data) {
+		console.log('crc', data);
+		if(data.estatus){
+			//TODO
+			let clone = $( "#step-4 .div_causa_raiz_componente:first" );
+			$.each(data.data, function(index, val) {
+				agregar_queja(val, clone);
+				clone = $( "#step-4 .div_causa_raiz_componente:first" ).clone();
+			});
+		}
+	})
+	.fail(function(error) {
+		console.log('error', error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+		// cada firma debe tener su propia config
+		$(document).ready(function() {
+			var config = {
+				autoFit : true,       // Update any forms field with signature when loading the page
+				// format : "image/png",  // Default signature image format
+				background : "#EEE",   // Default signature background
+				lineColor : "#000",          // Default signature pen color
+				lineWidth : 1,          // Default signature pen width
+				border : "#AAA",       // Default signature pen border color
+				height : 210           // Default signature height in px
+			};
+			console.log('cloneID', cloneID);
+			if (cloneID == 0) {
+				firma0 = $("#firma0").jqSignature(config);
+			}
+		});
+	});
 
     function set_value_inspeccion(inspeccion) {
             //se convierte en array el campo de la cajuela que se separan por una coma para obtner su valor del check correspondiente
@@ -2063,22 +2106,6 @@ var firma2 = "";
 //firma3 = Carta de renuncia a a la extensión de garantía
 var firma3 = "";
 
-// cada firma debe tener su propia config
-$(document).ready(function() {
-    var config = {
-        autoFit : true,       // Update any forms field with signature when loading the page
-        // format : "image/png",  // Default signature image format
-        background : "#EEE",   // Default signature background
-        lineColor : "#000",          // Default signature pen color
-        lineWidth : 1,          // Default signature pen width
-        border : "#AAA",       // Default signature pen border color
-        height : 210           // Default signature height in px
-    };
-
-    firma0 = $("#firma0").jqSignature(config);
-});
-
-
 
 $(document).ready(function() {
     var config = {
@@ -3272,213 +3299,212 @@ $(document).on("click", '.remove-audio', function (e){
     //TODO llamada al borrado de archivos de momento no se almacenan
     $(this).closest(".row").remove();
 });
-let cloneID = 0;
 //Añadir causa raíz componente
 $(document).on("click", ".add_causa_raiz", function(event){
-     event.preventDefault();
-     ++cloneID;
-     let clone = $( "#step-4 .div_causa_raiz_componente:first" ).clone();
+	 event.preventDefault();
+	 ++cloneID;
+	 let clone = $( "#step-4 .div_causa_raiz_componente:first" ).clone();
+	 clone.find('input[name="idCRC[]"]').val('');
+	 clone.find('input[name="humedad[]"]').prop('name', `humedad[${cloneID}]`);
+	 clone.find('input[name="viento[]"]').prop('name', `viento[${cloneID}]`);
+	 clone.find('input[name="cambioTransmision[]"]').prop('name', `cambioTransmision[${cloneID}]`);
+	 clone.find('input[name="cambioTipo[]"]').prop('name', `cambioTipo[${cloneID}]`);
+	 clone.find('input[name="estructura[]"]').prop('name', `estructura[${cloneID}]`);
+	 clone.find('input[name="camino[]"]').prop('name', `camino[${cloneID}]`);
+	 clone.find('input[name="pendiente[]"]').prop('name', `pendiente[${cloneID}]`);
 
-     clone.find('input[name="humedad[]"]').prop('name', `humedad[${cloneID}]`);
-     clone.find('input[name="viento[]"]').prop('name', `viento[${cloneID}]`);
-     clone.find('input[name="cambioTransmision[]"]').prop('name', `cambioTransmision[${cloneID}]`);
-     clone.find('input[name="cambioTipo[]"]').prop('name', `cambioTipo[${cloneID}]`);
-     clone.find('input[name="estructura[]"]').prop('name', `estructura[${cloneID}]`);
-     clone.find('input[name="camino[]"]').prop('name', `camino[${cloneID}]`);
-     clone.find('input[name="pendiente[]"]').prop('name', `pendiente[${cloneID}]`);
+	 clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${cloneID}][]`);
+	 clone.find('#humedadSeco0').prop('id', `humedadSeco${cloneID}`);
+	 clone.find('#humedadHumedo0').prop('id', `humedadHumedo${cloneID}`);
+	 clone.find('#humedadMojado0').prop('id', `humedadMojado${cloneID}`);
+	 clone.find('#humedadLluvia0').prop('id', `humedadLluvia${cloneID}`);
+	 clone.find('#humedadHielo0').prop('id', `humedadHielo${cloneID}`);
+	 clone.find('#labelSeco0').prop('for', `humedadSeco${cloneID}`);
+	 clone.find('#labelHumedo0').prop('for', `humedadHumedo${cloneID}`);
+	 clone.find('#labelMojado0').prop('for', `humedadMojado${cloneID}`);
+	 clone.find('#labelLluvia0').prop('for', `humedadLluvia${cloneID}`);
+	 clone.find('#labelHielo0').prop('for', `humedadHielo${cloneID}`);
+	 clone.find('#labelSeco0').prop('id', `labelSeco${cloneID}`);
+	 clone.find('#labelHumedo0').prop('id', `labelHumedo${cloneID}`);
+	 clone.find('#labelMojado0').prop('id', `labelMojado${cloneID}`);
+	 clone.find('#labelLluvia0').prop('id', `labelLluvia${cloneID}`);
+	 clone.find('#labelHielo0').prop('id', `labelHielo${cloneID}`);
+	
+	 clone.find('input[name="viento[0][]"]').prop('name', `viento[${cloneID}][]`);
+	 clone.find('#vientoLigero0').prop('id', `vientoLigero${cloneID}`);
+	 clone.find('#vientoMedio0').prop('id', `vientoMedio${cloneID}`);
+	 clone.find('#vientoFuerte0').prop('id', `vientoFuerte${cloneID}`);
+	 clone.find('#labelLigero0').prop('for', `vientoLigero${cloneID}`);
+	 clone.find('#labelMedio0').prop('for', `vientoMedio${cloneID}`);
+	 clone.find('#labelFuerte0').prop('for', `vientoFuerte${cloneID}`);
+	 clone.find('#labelLigero0').prop('id', `labelLigero${cloneID}`);
+	 clone.find('#labelMedio0').prop('id', `labelMedio${cloneID}`);
+	 clone.find('#labelFuerte0').prop('id', `labelFuerte${cloneID}`);
 
-     clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${cloneID}][]`);
-     clone.find('#humedadSeco0').prop('id', `humedadSeco${cloneID}`);
-     clone.find('#humedadHumedo0').prop('id', `humedadHumedo${cloneID}`);
-     clone.find('#humedadMojado0').prop('id', `humedadMojado${cloneID}`);
-     clone.find('#humedadLluvia0').prop('id', `humedadLluvia${cloneID}`);
-     clone.find('#humedadHielo0').prop('id', `humedadHielo${cloneID}`);
-     clone.find('#labelSeco0').prop('for', `humedadSeco${cloneID}`);
-     clone.find('#labelHumedo0').prop('for', `humedadHumedo${cloneID}`);
-     clone.find('#labelMojado0').prop('for', `humedadMojado${cloneID}`);
-     clone.find('#labelLluvia0').prop('for', `humedadLluvia${cloneID}`);
-     clone.find('#labelHielo0').prop('for', `humedadHielo${cloneID}`);
-     clone.find('#labelSeco0').prop('id', `labelSeco${cloneID}`);
-     clone.find('#labelHumedo0').prop('id', `labelHumedo${cloneID}`);
-     clone.find('#labelMojado0').prop('id', `labelMojado${cloneID}`);
-     clone.find('#labelLluvia0').prop('id', `labelLluvia${cloneID}`);
-     clone.find('#labelHielo0').prop('id', `labelHielo${cloneID}`);
-    
-     clone.find('input[name="viento[0][]"]').prop('name', `viento[${cloneID}][]`);
-     clone.find('#vientoLigero0').prop('id', `vientoLigero${cloneID}`);
-     clone.find('#vientoMedio0').prop('id', `vientoMedio${cloneID}`);
-     clone.find('#vientoFuerte0').prop('id', `vientoFuerte${cloneID}`);
-     clone.find('#labelLigero0').prop('for', `vientoLigero${cloneID}`);
-     clone.find('#labelMedio0').prop('for', `vientoMedio${cloneID}`);
-     clone.find('#labelFuerte0').prop('for', `vientoFuerte${cloneID}`);
-     clone.find('#labelLigero0').prop('id', `labelLigero${cloneID}`);
-     clone.find('#labelMedio0').prop('id', `labelMedio${cloneID}`);
-     clone.find('#labelFuerte0').prop('id', `labelFuerte${cloneID}`);
-
-     clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
-     clone.find('#falla_arranca0').prop('id', `falla_arranca${cloneID}`);
-     clone.find('#falla_inicia0').prop('id', `falla_inicia${cloneID}`);
-     clone.find('#falla_disminuye_vel0').prop('id', `falla_disminuye_vel${cloneID}`);
-     clone.find('#falla_vuelta_izq0').prop('id', `falla_vuelta_izq${cloneID}`);
-     clone.find('#falla_vuelta_der0').prop('id', `falla_vuelta_der${cloneID}`);
-     clone.find('#falla_pasa_tope0').prop('id', `falla_pasa_tope${cloneID}`);
-     clone.find('#falla_pasa_bache0').prop('id', `falla_pasa_bache${cloneID}`);
-     clone.find('#falla_cambia_vel0').prop('id', `falla_cambia_vel${cloneID}`);
-     clone.find('#falla_sin_movimiento0').prop('id', `falla_sin_movimiento${cloneID}`);
-     clone.find('#falla_constantemente0').prop('id', `falla_constantemente${cloneID}`);
-     clone.find('#falla_esporadicamente0').prop('id', `falla_esporadicamnete${cloneID}`);
-     clone.find('#label_arranca0').prop('for', `falla_arranca${cloneID}`);
-     clone.find('#label_inicia0').prop('for', `falla_inicia${cloneID}`);
-     clone.find('#label_disminuye_vel0').prop('for', `falla_disminuye_vel${cloneID}`);
-     clone.find('#label_vuelta_izq0').prop('for', `falla_vuelta_izq${cloneID}`);
-     clone.find('#label_vuelta_der0').prop('for', `falla_vuelta_der${cloneID}`);
-     clone.find('#label_pasa_tope0').prop('for', `falla_pasa_tope${cloneID}`);
-     clone.find('#label_pasa_bache0').prop('for', `falla_pasa_bache${cloneID}`);
-     clone.find('#label_cambia_vel0').prop('for', `falla_cambia_vel${cloneID}`);
-     clone.find('#label_sin_movimiento0').prop('for', `falla_sin_movimiento${cloneID}`);
-     clone.find('#label_constantemente0').prop('for', `falla_constantemente${cloneID}`);
-     clone.find('#label_esporadicamente0').prop('for', `falla_esporadicamnete${cloneID}`);
-     clone.find('#label_arranca0').prop('id', `label_arranca${cloneID}`);
-     clone.find('#label_inicia0').prop('id', `label_inicia${cloneID}`);
-     clone.find('#label_disminuye_vel0').prop('id', `label_disminuye_vel${cloneID}`);
-     clone.find('#label_vuelta_izq0').prop('id', `label_vuelta_izq${cloneID}`);
-     clone.find('#label_vuelta_der0').prop('id', `label_vuelta_der${cloneID}`);
-     clone.find('#label_pasa_tope0').prop('id', `label_pasa_tope${cloneID}`);
-     clone.find('#label_pasa_bache0').prop('id', `label_pasa_bache${cloneID}`);
-     clone.find('#label_cambia_vel0').prop('id', `label_cambia_vel${cloneID}`);
-     clone.find('#label_sin_movimiento0').prop('id', `label_sin_movimiento${cloneID}`);
-     clone.find('#label_constantemente0').prop('id', `label_constantemente${cloneID}`);
-     clone.find('#label_esporadicamente0').prop('id', `label_esporadicamente${cloneID}`);
+	 clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
+	 clone.find('#falla_arranca0').prop('id', `falla_arranca${cloneID}`);
+	 clone.find('#falla_inicia0').prop('id', `falla_inicia${cloneID}`);
+	 clone.find('#falla_disminuye_vel0').prop('id', `falla_disminuye_vel${cloneID}`);
+	 clone.find('#falla_vuelta_izq0').prop('id', `falla_vuelta_izq${cloneID}`);
+	 clone.find('#falla_vuelta_der0').prop('id', `falla_vuelta_der${cloneID}`);
+	 clone.find('#falla_pasa_tope0').prop('id', `falla_pasa_tope${cloneID}`);
+	 clone.find('#falla_pasa_bache0').prop('id', `falla_pasa_bache${cloneID}`);
+	 clone.find('#falla_cambia_vel0').prop('id', `falla_cambia_vel${cloneID}`);
+	 clone.find('#falla_sin_movimiento0').prop('id', `falla_sin_movimiento${cloneID}`);
+	 clone.find('#falla_constantemente0').prop('id', `falla_constantemente${cloneID}`);
+	 clone.find('#falla_esporadicamente0').prop('id', `falla_esporadicamnete${cloneID}`);
+	 clone.find('#label_arranca0').prop('for', `falla_arranca${cloneID}`);
+	 clone.find('#label_inicia0').prop('for', `falla_inicia${cloneID}`);
+	 clone.find('#label_disminuye_vel0').prop('for', `falla_disminuye_vel${cloneID}`);
+	 clone.find('#label_vuelta_izq0').prop('for', `falla_vuelta_izq${cloneID}`);
+	 clone.find('#label_vuelta_der0').prop('for', `falla_vuelta_der${cloneID}`);
+	 clone.find('#label_pasa_tope0').prop('for', `falla_pasa_tope${cloneID}`);
+	 clone.find('#label_pasa_bache0').prop('for', `falla_pasa_bache${cloneID}`);
+	 clone.find('#label_cambia_vel0').prop('for', `falla_cambia_vel${cloneID}`);
+	 clone.find('#label_sin_movimiento0').prop('for', `falla_sin_movimiento${cloneID}`);
+	 clone.find('#label_constantemente0').prop('for', `falla_constantemente${cloneID}`);
+	 clone.find('#label_esporadicamente0').prop('for', `falla_esporadicamnete${cloneID}`);
+	 clone.find('#label_arranca0').prop('id', `label_arranca${cloneID}`);
+	 clone.find('#label_inicia0').prop('id', `label_inicia${cloneID}`);
+	 clone.find('#label_disminuye_vel0').prop('id', `label_disminuye_vel${cloneID}`);
+	 clone.find('#label_vuelta_izq0').prop('id', `label_vuelta_izq${cloneID}`);
+	 clone.find('#label_vuelta_der0').prop('id', `label_vuelta_der${cloneID}`);
+	 clone.find('#label_pasa_tope0').prop('id', `label_pasa_tope${cloneID}`);
+	 clone.find('#label_pasa_bache0').prop('id', `label_pasa_bache${cloneID}`);
+	 clone.find('#label_cambia_vel0').prop('id', `label_cambia_vel${cloneID}`);
+	 clone.find('#label_sin_movimiento0').prop('id', `label_sin_movimiento${cloneID}`);
+	 clone.find('#label_constantemente0').prop('id', `label_constantemente${cloneID}`);
+	 clone.find('#label_esporadicamente0').prop('id', `label_esporadicamente${cloneID}`);
   
-     clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
-     clone.find('#falla_volante0').prop('id', `falla_volante${cloneID}`);
-     clone.find('#falla_cofre0').prop('id', `falla_cofre${cloneID}`);
-     clone.find('#falla_asiento0').prop('id', `falla_asiento${cloneID}`);
-     clone.find('#falla_cajuela0').prop('id', `falla_cajuela${cloneID}`);
-     clone.find('#falla_cristales0').prop('id', `falla_cristales${cloneID}`);
-     clone.find('#falla_toldo0').prop('id', `falla_toldo${cloneID}`);
-     clone.find('#falla_carroceria0').prop('id', `falla_carroceria${cloneID}`);
-     clone.find('#falla_debajo_vehiculo0').prop('id', `falla_debajo_vehiculo${cloneID}`);
-     clone.find('#falla_dentro0').prop('id', `falla_dentro${cloneID}`);
-     clone.find('#falla_fuera0').prop('id', `falla_fuera${cloneID}`);
-     clone.find('#falla_frente0').prop('id', `falla_frente${cloneID}`);
-     clone.find('#falla_detras0').prop('id', `falla_detras${cloneID}`);
-     clone.find('#label_volante0').prop('for', `falla_volante${cloneID}`);
-     clone.find('#label_cofre0').prop('for', `falla_cofre${cloneID}`);
-     clone.find('#label_asiento0').prop('for', `falla_asiento${cloneID}`);
-     clone.find('#label_cajuela0').prop('for', `falla_cajuela${cloneID}`);
-     clone.find('#label_cristales0').prop('for', `falla_cristales${cloneID}`);
-     clone.find('#label_toldo0').prop('for', `falla_toldo${cloneID}`);
-     clone.find('#label_carroceria0').prop('for', `falla_carroceria${cloneID}`);
-     clone.find('#label_debajo_vehiculo0').prop('for', `falla_debajo_vehiculo${cloneID}`);
-     clone.find('#label_dentro0').prop('for', `falla_dentro${cloneID}`);
-     clone.find('#label_fuera0').prop('for', `falla_fuera${cloneID}`);
-     clone.find('#label_frente0').prop('for', `falla_frente${cloneID}`);
-     clone.find('#label_detras0').prop('for', `falla_detras${cloneID}`);
-     clone.find('#label_volante0').prop('id', `label_volante${cloneID}`);
-     clone.find('#label_cofre0').prop('id', `label_cofre${cloneID}`);
-     clone.find('#label_asiento0').prop('id', `label_asiento${cloneID}`);
-     clone.find('#label_cajuela0').prop('id', `label_cajuela${cloneID}`);
-     clone.find('#label_cristales0').prop('id', `label_cristales${cloneID}`);
-     clone.find('#label_toldo0').prop('id', `label_toldo${cloneID}`);
-     clone.find('#label_carroceria0').prop('id', `label_carroceria${cloneID}`);
-     clone.find('#label_debajo_vehiculo0').prop('id', `label_debajo_vehiculo${cloneID}`);
-     clone.find('#label_dentro0').prop('id', `label_dentro${cloneID}`);
-     clone.find('#label_fuera0').prop('id', `label_fuera${cloneID}`);
-     clone.find('#label_frente0').prop('id', `label_frente${cloneID}`);
-     clone.find('#label_detras0').prop('id', `label_detras${cloneID}`);
+	 clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
+	 clone.find('#falla_volante0').prop('id', `falla_volante${cloneID}`);
+	 clone.find('#falla_cofre0').prop('id', `falla_cofre${cloneID}`);
+	 clone.find('#falla_asiento0').prop('id', `falla_asiento${cloneID}`);
+	 clone.find('#falla_cajuela0').prop('id', `falla_cajuela${cloneID}`);
+	 clone.find('#falla_cristales0').prop('id', `falla_cristales${cloneID}`);
+	 clone.find('#falla_toldo0').prop('id', `falla_toldo${cloneID}`);
+	 clone.find('#falla_carroceria0').prop('id', `falla_carroceria${cloneID}`);
+	 clone.find('#falla_debajo_vehiculo0').prop('id', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#falla_dentro0').prop('id', `falla_dentro${cloneID}`);
+	 clone.find('#falla_fuera0').prop('id', `falla_fuera${cloneID}`);
+	 clone.find('#falla_frente0').prop('id', `falla_frente${cloneID}`);
+	 clone.find('#falla_detras0').prop('id', `falla_detras${cloneID}`);
+	 clone.find('#label_volante0').prop('for', `falla_volante${cloneID}`);
+	 clone.find('#label_cofre0').prop('for', `falla_cofre${cloneID}`);
+	 clone.find('#label_asiento0').prop('for', `falla_asiento${cloneID}`);
+	 clone.find('#label_cajuela0').prop('for', `falla_cajuela${cloneID}`);
+	 clone.find('#label_cristales0').prop('for', `falla_cristales${cloneID}`);
+	 clone.find('#label_toldo0').prop('for', `falla_toldo${cloneID}`);
+	 clone.find('#label_carroceria0').prop('for', `falla_carroceria${cloneID}`);
+	 clone.find('#label_debajo_vehiculo0').prop('for', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#label_dentro0').prop('for', `falla_dentro${cloneID}`);
+	 clone.find('#label_fuera0').prop('for', `falla_fuera${cloneID}`);
+	 clone.find('#label_frente0').prop('for', `falla_frente${cloneID}`);
+	 clone.find('#label_detras0').prop('for', `falla_detras${cloneID}`);
+	 clone.find('#label_volante0').prop('id', `label_volante${cloneID}`);
+	 clone.find('#label_cofre0').prop('id', `label_cofre${cloneID}`);
+	 clone.find('#label_asiento0').prop('id', `label_asiento${cloneID}`);
+	 clone.find('#label_cajuela0').prop('id', `label_cajuela${cloneID}`);
+	 clone.find('#label_cristales0').prop('id', `label_cristales${cloneID}`);
+	 clone.find('#label_toldo0').prop('id', `label_toldo${cloneID}`);
+	 clone.find('#label_carroceria0').prop('id', `label_carroceria${cloneID}`);
+	 clone.find('#label_debajo_vehiculo0').prop('id', `label_debajo_vehiculo${cloneID}`);
+	 clone.find('#label_dentro0').prop('id', `label_dentro${cloneID}`);
+	 clone.find('#label_fuera0').prop('id', `label_fuera${cloneID}`);
+	 clone.find('#label_frente0').prop('id', `label_frente${cloneID}`);
+	 clone.find('#label_detras0').prop('id', `label_detras${cloneID}`);
 
-     clone.find('input[name="cambioTransmision[0][]"]').prop('name', `cambioTransmision[${cloneID}][]`);
-     clone.find('#cambioTransmisionR0').prop('id', `cambioTransmisionR${cloneID}`);
-     clone.find('#cambioTransmisionUno0').prop('id', `cambioTransmisionUno${cloneID}`);
-     clone.find('#cambioTransmisionDos0').prop('id', `cambioTransmisionDos${cloneID}`);
-     clone.find('#cambioTransmisionTres0').prop('id', `cambioTransmisionTres${cloneID}`);
-     clone.find('#cambioTransmisionCuatro0').prop('id', `cambioTransmisionCuatro${cloneID}`);
-     clone.find('#cambioTransmisionCinco0').prop('id', `cambioTransmisionCinco${cloneID}`);
-     clone.find('#cambioTransmisionSeis0').prop('id', `cambioTransmisionSeis${cloneID}`);
-     clone.find('#cambioTransmisionSiete0').prop('id', `cambioTransmisionSiete${cloneID}`);
-     clone.find('#cambioTransmisionOcho0').prop('id', `cambioTransmisionOcho${cloneID}`);
-     clone.find('#labelTransmisionR0').prop('for', `cambioTransmisionR${cloneID}`);
-     clone.find('#labelTransmisionUno0').prop('for', `cambioTransmisionUno${cloneID}`);
-     clone.find('#labelTransmisionDos0').prop('for', `cambioTransmisionDos${cloneID}`);
-     clone.find('#labelTransmisionTres0').prop('for', `cambioTransmisionTres${cloneID}`);
-     clone.find('#labelTransmisionCuatro0').prop('for', `cambioTransmisionCuatro${cloneID}`);
-     clone.find('#labelTransmisionCinco0').prop('for', `cambioTransmisionCinco${cloneID}`);
-     clone.find('#labelTransmisionSeis0').prop('for', `cambioTransmisionSeis${cloneID}`);
-     clone.find('#labelTransmisionSiete0').prop('for', `cambioTransmisionSiete${cloneID}`);
-     clone.find('#labelTransmisionOcho0').prop('for', `cambioTransmisionOcho${cloneID}`);
-     clone.find('#labelTransmisionR0').prop('id', `labelTransmisionR${cloneID}`);
-     clone.find('#labelTransmisionUno0').prop('id', `labelTransmisionUno${cloneID}`);
-     clone.find('#labelTransmisionDos0').prop('id', `labelTransmisionDos${cloneID}`);
-     clone.find('#labelTransmisionTres0').prop('id', `labelTransmisionTres${cloneID}`);
-     clone.find('#labelTransmisionCuatro0').prop('id', `labelTransmisionCuatro${cloneID}`);
-     clone.find('#labelTransmisionCinco0').prop('id', `labelTransmisionCinco${cloneID}`);
-     clone.find('#labelTransmisionSeis0').prop('id', `labelTransmisionSeis${cloneID}`);
-     clone.find('#labelTransmisionSiete0').prop('id', `labelTransmisionSiete${cloneID}`);
-     clone.find('#labelTransmisionOcho0').prop('id', `labelTransmisionOcho${cloneID}`);
+	 clone.find('input[name="cambioTransmision[0][]"]').prop('name', `cambioTransmision[${cloneID}][]`);
+	 clone.find('#cambioTransmisionR0').prop('id', `cambioTransmisionR${cloneID}`);
+	 clone.find('#cambioTransmisionUno0').prop('id', `cambioTransmisionUno${cloneID}`);
+	 clone.find('#cambioTransmisionDos0').prop('id', `cambioTransmisionDos${cloneID}`);
+	 clone.find('#cambioTransmisionTres0').prop('id', `cambioTransmisionTres${cloneID}`);
+	 clone.find('#cambioTransmisionCuatro0').prop('id', `cambioTransmisionCuatro${cloneID}`);
+	 clone.find('#cambioTransmisionCinco0').prop('id', `cambioTransmisionCinco${cloneID}`);
+	 clone.find('#cambioTransmisionSeis0').prop('id', `cambioTransmisionSeis${cloneID}`);
+	 clone.find('#cambioTransmisionSiete0').prop('id', `cambioTransmisionSiete${cloneID}`);
+	 clone.find('#cambioTransmisionOcho0').prop('id', `cambioTransmisionOcho${cloneID}`);
+	 clone.find('#labelTransmisionR0').prop('for', `cambioTransmisionR${cloneID}`);
+	 clone.find('#labelTransmisionUno0').prop('for', `cambioTransmisionUno${cloneID}`);
+	 clone.find('#labelTransmisionDos0').prop('for', `cambioTransmisionDos${cloneID}`);
+	 clone.find('#labelTransmisionTres0').prop('for', `cambioTransmisionTres${cloneID}`);
+	 clone.find('#labelTransmisionCuatro0').prop('for', `cambioTransmisionCuatro${cloneID}`);
+	 clone.find('#labelTransmisionCinco0').prop('for', `cambioTransmisionCinco${cloneID}`);
+	 clone.find('#labelTransmisionSeis0').prop('for', `cambioTransmisionSeis${cloneID}`);
+	 clone.find('#labelTransmisionSiete0').prop('for', `cambioTransmisionSiete${cloneID}`);
+	 clone.find('#labelTransmisionOcho0').prop('for', `cambioTransmisionOcho${cloneID}`);
+	 clone.find('#labelTransmisionR0').prop('id', `labelTransmisionR${cloneID}`);
+	 clone.find('#labelTransmisionUno0').prop('id', `labelTransmisionUno${cloneID}`);
+	 clone.find('#labelTransmisionDos0').prop('id', `labelTransmisionDos${cloneID}`);
+	 clone.find('#labelTransmisionTres0').prop('id', `labelTransmisionTres${cloneID}`);
+	 clone.find('#labelTransmisionCuatro0').prop('id', `labelTransmisionCuatro${cloneID}`);
+	 clone.find('#labelTransmisionCinco0').prop('id', `labelTransmisionCinco${cloneID}`);
+	 clone.find('#labelTransmisionSeis0').prop('id', `labelTransmisionSeis${cloneID}`);
+	 clone.find('#labelTransmisionSiete0').prop('id', `labelTransmisionSiete${cloneID}`);
+	 clone.find('#labelTransmisionOcho0').prop('id', `labelTransmisionOcho${cloneID}`);
 
-     clone.find('input[name="estructura[0][]"]').prop('name', `estructura[${cloneID}][]`);
-     clone.find('#estructuraPlano0').prop('id', `estructuraPlano${cloneID}`);
-     clone.find('#estructuraVado0').prop('id', `estructuraVado${cloneID}`);
-     clone.find('#estructuraTope0').prop('id', `estructuraTope${cloneID}`);
-     clone.find('#estructuraBaches0').prop('id', `estructuraBaches${cloneID}`);
-     clone.find('#estructuraVibradores0').prop('id', `estructuraVibradores${cloneID}`);
-     clone.find('#labelPlano0').prop('for', `estructuraPlano${cloneID}`);
-     clone.find('#labelVado0').prop('for', `estructuraVado${cloneID}`);
-     clone.find('#labelTope0').prop('for', `estructuraTope${cloneID}`);
-     clone.find('#labelBaches0').prop('for', `estructuraBaches${cloneID}`);
-     clone.find('#labelVibradores0').prop('for', `estructuraVibradores${cloneID}`);
-     clone.find('#labelPlano0').prop('id', `labelPlano${cloneID}`);
-     clone.find('#labelVado0').prop('id', `labelVado${cloneID}`);
-     clone.find('#labelTope0').prop('id', `labelTope${cloneID}`);
-     clone.find('#labelBaches0').prop('id', `labelBaches${cloneID}`);
-     clone.find('#labelVibradores0').prop('id', `labelVibradores${cloneID}`);
+	 clone.find('input[name="estructura[0][]"]').prop('name', `estructura[${cloneID}][]`);
+	 clone.find('#estructuraPlano0').prop('id', `estructuraPlano${cloneID}`);
+	 clone.find('#estructuraVado0').prop('id', `estructuraVado${cloneID}`);
+	 clone.find('#estructuraTope0').prop('id', `estructuraTope${cloneID}`);
+	 clone.find('#estructuraBaches0').prop('id', `estructuraBaches${cloneID}`);
+	 clone.find('#estructuraVibradores0').prop('id', `estructuraVibradores${cloneID}`);
+	 clone.find('#labelPlano0').prop('for', `estructuraPlano${cloneID}`);
+	 clone.find('#labelVado0').prop('for', `estructuraVado${cloneID}`);
+	 clone.find('#labelTope0').prop('for', `estructuraTope${cloneID}`);
+	 clone.find('#labelBaches0').prop('for', `estructuraBaches${cloneID}`);
+	 clone.find('#labelVibradores0').prop('for', `estructuraVibradores${cloneID}`);
+	 clone.find('#labelPlano0').prop('id', `labelPlano${cloneID}`);
+	 clone.find('#labelVado0').prop('id', `labelVado${cloneID}`);
+	 clone.find('#labelTope0').prop('id', `labelTope${cloneID}`);
+	 clone.find('#labelBaches0').prop('id', `labelBaches${cloneID}`);
+	 clone.find('#labelVibradores0').prop('id', `labelVibradores${cloneID}`);
 
-     clone.find('input[name="camino[0][]"]').prop('name', `camino[${cloneID}][]`);
-     clone.find('#caminoRecto0').prop('id', `caminoRecto${cloneID}`);
-     clone.find('#caminoCurvaLigera0').prop('id', `caminoCurvaLigera${cloneID}`);
-     clone.find('#caminoCurvaCerrada0').prop('id', `caminoCurvaCerrada${cloneID}`);
-     clone.find('#caminoCurvaSinuoso0').prop('id', `caminoCurvaSinuoso${cloneID}`);
-     clone.find('#labelRecto0').prop('for', `caminoRecto${cloneID}`);
-     clone.find('#labelCurvaLigera0').prop('for', `caminoCurvaLigera${cloneID}`);
-     clone.find('#labelCurvaCerrada0').prop('for', `caminoCurvaCerrada${cloneID}`);
-     clone.find('#labelCurvaSinuoso0').prop('for', `caminoCurvaSinuoso${cloneID}`);
-     clone.find('#labelRecto0').prop('id', `labelRecto${cloneID}`);
-     clone.find('#labelCurvaLigera0').prop('id', `labelCurvaLigera${cloneID}`);
-     clone.find('#labelCurvaCerrada0').prop('id', `labelCurvaCerrada${cloneID}`);
-     clone.find('#labelCurvaSinuoso0').prop('id', `labelCurvaSinuoso${cloneID}`);
+	 clone.find('input[name="camino[0][]"]').prop('name', `camino[${cloneID}][]`);
+	 clone.find('#caminoRecto0').prop('id', `caminoRecto${cloneID}`);
+	 clone.find('#caminoCurvaLigera0').prop('id', `caminoCurvaLigera${cloneID}`);
+	 clone.find('#caminoCurvaCerrada0').prop('id', `caminoCurvaCerrada${cloneID}`);
+	 clone.find('#caminoCurvaSinuoso0').prop('id', `caminoCurvaSinuoso${cloneID}`);
+	 clone.find('#labelRecto0').prop('for', `caminoRecto${cloneID}`);
+	 clone.find('#labelCurvaLigera0').prop('for', `caminoCurvaLigera${cloneID}`);
+	 clone.find('#labelCurvaCerrada0').prop('for', `caminoCurvaCerrada${cloneID}`);
+	 clone.find('#labelCurvaSinuoso0').prop('for', `caminoCurvaSinuoso${cloneID}`);
+	 clone.find('#labelRecto0').prop('id', `labelRecto${cloneID}`);
+	 clone.find('#labelCurvaLigera0').prop('id', `labelCurvaLigera${cloneID}`);
+	 clone.find('#labelCurvaCerrada0').prop('id', `labelCurvaCerrada${cloneID}`);
+	 clone.find('#labelCurvaSinuoso0').prop('id', `labelCurvaSinuoso${cloneID}`);
 
-     clone.find('input[name="pendiente[0][]"]').prop('name', `pendiente[${cloneID}][]`);
-     clone.find('#pendienteRecto0').prop('id', `pendienteRecto${cloneID}`);
-     clone.find('#pendienteLigera0').prop('id', `pendienteLigera${cloneID}`);
-     clone.find('#pendienteMediana0').prop('id', `pendienteMediana${cloneID}`);
-     clone.find('#pendienteMontania0').prop('id', `pendienteMontania${cloneID}`);
-     clone.find('#labelPendRecto0').prop('for', `pendienteRecto${cloneID}`);
-     clone.find('#labelLigera0').prop('for', `pendienteLigera${cloneID}`);
-     clone.find('#labelMediana0').prop('for', `pendienteMediana${cloneID}`);
-     clone.find('#labelMontania0').prop('for', `pendienteMontania${cloneID}`);
-     clone.find('#labelPendRecto0').prop('id', `labelPendRecto${cloneID}`);
-     clone.find('#labelLigera0').prop('id', `labelLigera${cloneID}`);
-     clone.find('#labelMediana0').prop('id', `labelMediana${cloneID}`);
-     clone.find('#labelMontania0').prop('id', `labelMontania${cloneID}`);
-     clone.find('#firma0').prop('id', `firma${cloneID}`);
-     var config = {
-        autoFit : true,       // Update any forms field with signature when loading the page
-        // format : "image/png",  // Default signature image format
-        background : "#EEE",   // Default signature background
-        lineColor : "#000",          // Default signature pen color
-        lineWidth : 1,          // Default signature pen width
-        border : "#AAA",       // Default signature pen border color
-        height : 210           // Default signature height in px
-    };
-    clone.find(`#firma${cloneID}`).empty();
-    clone.find('input:checkbox').prop('checked', false);
-    clone.find('input[type="radio"]').prop('checked', false);
-    clone.find('input[type="range"]').prop('value', 0);
-    clone.find('textarea[type="text"]').prop('value', "");
-    clone.appendTo('#step-4');
-    clone.find(`#firma${cloneID}`).jqSignature(config);
-    clone.find('input[type="range"]').trigger('change');
+	 clone.find('input[name="pendiente[0][]"]').prop('name', `pendiente[${cloneID}][]`);
+	 clone.find('#pendienteRecto0').prop('id', `pendienteRecto${cloneID}`);
+	 clone.find('#pendienteLigera0').prop('id', `pendienteLigera${cloneID}`);
+	 clone.find('#pendienteMediana0').prop('id', `pendienteMediana${cloneID}`);
+	 clone.find('#pendienteMontania0').prop('id', `pendienteMontania${cloneID}`);
+	 clone.find('#labelPendRecto0').prop('for', `pendienteRecto${cloneID}`);
+	 clone.find('#labelLigera0').prop('for', `pendienteLigera${cloneID}`);
+	 clone.find('#labelMediana0').prop('for', `pendienteMediana${cloneID}`);
+	 clone.find('#labelMontania0').prop('for', `pendienteMontania${cloneID}`);
+	 clone.find('#labelPendRecto0').prop('id', `labelPendRecto${cloneID}`);
+	 clone.find('#labelLigera0').prop('id', `labelLigera${cloneID}`);
+	 clone.find('#labelMediana0').prop('id', `labelMediana${cloneID}`);
+	 clone.find('#labelMontania0').prop('id', `labelMontania${cloneID}`);
+	 clone.find('#firma0').prop('id', `firma${cloneID}`);
+	 var config = {
+		autoFit : true,       // Update any forms field with signature when loading the page
+		// format : "image/png",  // Default signature image format
+		background : "#EEE",   // Default signature background
+		lineColor : "#000",          // Default signature pen color
+		lineWidth : 1,          // Default signature pen width
+		border : "#AAA",       // Default signature pen border color
+		height : 210           // Default signature height in px
+	};
+	clone.find(`#firma${cloneID}`).empty();
+	clone.find('input:checkbox').prop('checked', false);
+	clone.find('input[type="radio"]').prop('checked', false);
+	clone.find('input[type="range"]').prop('value', 0);
+	clone.find('textarea[type="text"]').prop('value', "");
+	clone.appendTo('#step-4');
+	clone.find(`#firma${cloneID}`).jqSignature(config);
+	clone.find('input[type="range"]').trigger('change');
 });
 $(document).on("click", "#audioInput", function(event){
      event.preventDefault();
@@ -3676,4 +3702,260 @@ function generar_causa_raiz_componente(idOrden) {
                 });
             }
         });
+}
+
+function agregar_queja(datos, clone) {
+	clone.find('input[name="idCRC[]"]').val('');
+	 clone.find('input[name="humedad[]"]').prop('name', `humedad[${cloneID}]`);
+	 clone.find('input[name="viento[]"]').prop('name', `viento[${cloneID}]`);
+	 clone.find('input[name="cambioTransmision[]"]').prop('name', `cambioTransmision[${cloneID}]`);
+	 clone.find('input[name="cambioTipo[]"]').prop('name', `cambioTipo[${cloneID}]`);
+	 clone.find('input[name="estructura[]"]').prop('name', `estructura[${cloneID}]`);
+	 clone.find('input[name="camino[]"]').prop('name', `camino[${cloneID}]`);
+	 clone.find('input[name="pendiente[]"]').prop('name', `pendiente[${cloneID}]`);
+
+	 clone.find('input[name="humedad[0][]"]').prop('name', `humedad[${cloneID}][]`);
+	 clone.find('#humedadSeco0').prop('id', `humedadSeco${cloneID}`);
+	 clone.find('#humedadHumedo0').prop('id', `humedadHumedo${cloneID}`);
+	 clone.find('#humedadMojado0').prop('id', `humedadMojado${cloneID}`);
+	 clone.find('#humedadLluvia0').prop('id', `humedadLluvia${cloneID}`);
+	 clone.find('#humedadHielo0').prop('id', `humedadHielo${cloneID}`);
+	 clone.find('#labelSeco0').prop('for', `humedadSeco${cloneID}`);
+	 clone.find('#labelHumedo0').prop('for', `humedadHumedo${cloneID}`);
+	 clone.find('#labelMojado0').prop('for', `humedadMojado${cloneID}`);
+	 clone.find('#labelLluvia0').prop('for', `humedadLluvia${cloneID}`);
+	 clone.find('#labelHielo0').prop('for', `humedadHielo${cloneID}`);
+	 clone.find('#labelSeco0').prop('id', `labelSeco${cloneID}`);
+	 clone.find('#labelHumedo0').prop('id', `labelHumedo${cloneID}`);
+	 clone.find('#labelMojado0').prop('id', `labelMojado${cloneID}`);
+	 clone.find('#labelLluvia0').prop('id', `labelLluvia${cloneID}`);
+	 clone.find('#labelHielo0').prop('id', `labelHielo${cloneID}`);
+	
+	 clone.find('input[name="viento[0][]"]').prop('name', `viento[${cloneID}][]`);
+	 clone.find('#vientoLigero0').prop('id', `vientoLigero${cloneID}`);
+	 clone.find('#vientoMedio0').prop('id', `vientoMedio${cloneID}`);
+	 clone.find('#vientoFuerte0').prop('id', `vientoFuerte${cloneID}`);
+	 clone.find('#labelLigero0').prop('for', `vientoLigero${cloneID}`);
+	 clone.find('#labelMedio0').prop('for', `vientoMedio${cloneID}`);
+	 clone.find('#labelFuerte0').prop('for', `vientoFuerte${cloneID}`);
+	 clone.find('#labelLigero0').prop('id', `labelLigero${cloneID}`);
+	 clone.find('#labelMedio0').prop('id', `labelMedio${cloneID}`);
+	 clone.find('#labelFuerte0').prop('id', `labelFuerte${cloneID}`);
+
+	 clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
+	 clone.find('#falla_arranca0').prop('id', `falla_arranca${cloneID}`);
+	 clone.find('#falla_inicia0').prop('id', `falla_inicia${cloneID}`);
+	 clone.find('#falla_disminuye_vel0').prop('id', `falla_disminuye_vel${cloneID}`);
+	 clone.find('#falla_vuelta_izq0').prop('id', `falla_vuelta_izq${cloneID}`);
+	 clone.find('#falla_vuelta_der0').prop('id', `falla_vuelta_der${cloneID}`);
+	 clone.find('#falla_pasa_tope0').prop('id', `falla_pasa_tope${cloneID}`);
+	 clone.find('#falla_pasa_bache0').prop('id', `falla_pasa_bache${cloneID}`);
+	 clone.find('#falla_cambia_vel0').prop('id', `falla_cambia_vel${cloneID}`);
+	 clone.find('#falla_sin_movimiento0').prop('id', `falla_sin_movimiento${cloneID}`);
+	 clone.find('#falla_constantemente0').prop('id', `falla_constantemente${cloneID}`);
+	 clone.find('#falla_esporadicamente0').prop('id', `falla_esporadicamnete${cloneID}`);
+	 clone.find('#label_arranca0').prop('for', `falla_arranca${cloneID}`);
+	 clone.find('#label_inicia0').prop('for', `falla_inicia${cloneID}`);
+	 clone.find('#label_disminuye_vel0').prop('for', `falla_disminuye_vel${cloneID}`);
+	 clone.find('#label_vuelta_izq0').prop('for', `falla_vuelta_izq${cloneID}`);
+	 clone.find('#label_vuelta_der0').prop('for', `falla_vuelta_der${cloneID}`);
+	 clone.find('#label_pasa_tope0').prop('for', `falla_pasa_tope${cloneID}`);
+	 clone.find('#label_pasa_bache0').prop('for', `falla_pasa_bache${cloneID}`);
+	 clone.find('#label_cambia_vel0').prop('for', `falla_cambia_vel${cloneID}`);
+	 clone.find('#label_sin_movimiento0').prop('for', `falla_sin_movimiento${cloneID}`);
+	 clone.find('#label_constantemente0').prop('for', `falla_constantemente${cloneID}`);
+	 clone.find('#label_esporadicamente0').prop('for', `falla_esporadicamnete${cloneID}`);
+	 clone.find('#label_arranca0').prop('id', `label_arranca${cloneID}`);
+	 clone.find('#label_inicia0').prop('id', `label_inicia${cloneID}`);
+	 clone.find('#label_disminuye_vel0').prop('id', `label_disminuye_vel${cloneID}`);
+	 clone.find('#label_vuelta_izq0').prop('id', `label_vuelta_izq${cloneID}`);
+	 clone.find('#label_vuelta_der0').prop('id', `label_vuelta_der${cloneID}`);
+	 clone.find('#label_pasa_tope0').prop('id', `label_pasa_tope${cloneID}`);
+	 clone.find('#label_pasa_bache0').prop('id', `label_pasa_bache${cloneID}`);
+	 clone.find('#label_cambia_vel0').prop('id', `label_cambia_vel${cloneID}`);
+	 clone.find('#label_sin_movimiento0').prop('id', `label_sin_movimiento${cloneID}`);
+	 clone.find('#label_constantemente0').prop('id', `label_constantemente${cloneID}`);
+	 clone.find('#label_esporadicamente0').prop('id', `label_esporadicamente${cloneID}`);
+  
+	 clone.find('input[name="falla[0][]"]').prop('name', `falla[${cloneID}][]`);
+	 clone.find('#falla_volante0').prop('id', `falla_volante${cloneID}`);
+	 clone.find('#falla_cofre0').prop('id', `falla_cofre${cloneID}`);
+	 clone.find('#falla_asiento0').prop('id', `falla_asiento${cloneID}`);
+	 clone.find('#falla_cajuela0').prop('id', `falla_cajuela${cloneID}`);
+	 clone.find('#falla_cristales0').prop('id', `falla_cristales${cloneID}`);
+	 clone.find('#falla_toldo0').prop('id', `falla_toldo${cloneID}`);
+	 clone.find('#falla_carroceria0').prop('id', `falla_carroceria${cloneID}`);
+	 clone.find('#falla_debajo_vehiculo0').prop('id', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#falla_dentro0').prop('id', `falla_dentro${cloneID}`);
+	 clone.find('#falla_fuera0').prop('id', `falla_fuera${cloneID}`);
+	 clone.find('#falla_frente0').prop('id', `falla_frente${cloneID}`);
+	 clone.find('#falla_detras0').prop('id', `falla_detras${cloneID}`);
+	 clone.find('#label_volante0').prop('for', `falla_volante${cloneID}`);
+	 clone.find('#label_cofre0').prop('for', `falla_cofre${cloneID}`);
+	 clone.find('#label_asiento0').prop('for', `falla_asiento${cloneID}`);
+	 clone.find('#label_cajuela0').prop('for', `falla_cajuela${cloneID}`);
+	 clone.find('#label_cristales0').prop('for', `falla_cristales${cloneID}`);
+	 clone.find('#label_toldo0').prop('for', `falla_toldo${cloneID}`);
+	 clone.find('#label_carroceria0').prop('for', `falla_carroceria${cloneID}`);
+	 clone.find('#label_debajo_vehiculo0').prop('for', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#label_dentro0').prop('for', `falla_dentro${cloneID}`);
+	 clone.find('#label_fuera0').prop('for', `falla_fuera${cloneID}`);
+	 clone.find('#label_frente0').prop('for', `falla_frente${cloneID}`);
+	 clone.find('#label_detras0').prop('for', `falla_detras${cloneID}`);
+	 clone.find('#label_volante0').prop('id', `label_volante${cloneID}`);
+	 clone.find('#label_cofre0').prop('id', `label_cofre${cloneID}`);
+	 clone.find('#label_asiento0').prop('id', `label_asiento${cloneID}`);
+	 clone.find('#label_cajuela0').prop('id', `label_cajuela${cloneID}`);
+	 clone.find('#label_cristales0').prop('id', `label_cristales${cloneID}`);
+	 clone.find('#label_toldo0').prop('id', `label_toldo${cloneID}`);
+	 clone.find('#label_carroceria0').prop('id', `label_carroceria${cloneID}`);
+	 clone.find('#label_debajo_vehiculo0').prop('id', `label_debajo_vehiculo${cloneID}`);
+	 clone.find('#label_dentro0').prop('id', `label_dentro${cloneID}`);
+	 clone.find('#label_fuera0').prop('id', `label_fuera${cloneID}`);
+	 clone.find('#label_frente0').prop('id', `label_frente${cloneID}`);
+	 clone.find('#label_detras0').prop('id', `label_detras${cloneID}`);
+
+	 clone.find('input[name="cambioTransmision[0][]"]').prop('name', `cambioTransmision[${cloneID}][]`);
+	 clone.find('#cambioTransmisionR0').prop('id', `cambioTransmisionR${cloneID}`);
+	 clone.find('#cambioTransmisionUno0').prop('id', `cambioTransmisionUno${cloneID}`);
+	 clone.find('#cambioTransmisionDos0').prop('id', `cambioTransmisionDos${cloneID}`);
+	 clone.find('#cambioTransmisionTres0').prop('id', `cambioTransmisionTres${cloneID}`);
+	 clone.find('#cambioTransmisionCuatro0').prop('id', `cambioTransmisionCuatro${cloneID}`);
+	 clone.find('#cambioTransmisionCinco0').prop('id', `cambioTransmisionCinco${cloneID}`);
+	 clone.find('#cambioTransmisionSeis0').prop('id', `cambioTransmisionSeis${cloneID}`);
+	 clone.find('#cambioTransmisionSiete0').prop('id', `cambioTransmisionSiete${cloneID}`);
+	 clone.find('#cambioTransmisionOcho0').prop('id', `cambioTransmisionOcho${cloneID}`);
+	 clone.find('#labelTransmisionR0').prop('for', `cambioTransmisionR${cloneID}`);
+	 clone.find('#labelTransmisionUno0').prop('for', `cambioTransmisionUno${cloneID}`);
+	 clone.find('#labelTransmisionDos0').prop('for', `cambioTransmisionDos${cloneID}`);
+	 clone.find('#labelTransmisionTres0').prop('for', `cambioTransmisionTres${cloneID}`);
+	 clone.find('#labelTransmisionCuatro0').prop('for', `cambioTransmisionCuatro${cloneID}`);
+	 clone.find('#labelTransmisionCinco0').prop('for', `cambioTransmisionCinco${cloneID}`);
+	 clone.find('#labelTransmisionSeis0').prop('for', `cambioTransmisionSeis${cloneID}`);
+	 clone.find('#labelTransmisionSiete0').prop('for', `cambioTransmisionSiete${cloneID}`);
+	 clone.find('#labelTransmisionOcho0').prop('for', `cambioTransmisionOcho${cloneID}`);
+	 clone.find('#labelTransmisionR0').prop('id', `labelTransmisionR${cloneID}`);
+	 clone.find('#labelTransmisionUno0').prop('id', `labelTransmisionUno${cloneID}`);
+	 clone.find('#labelTransmisionDos0').prop('id', `labelTransmisionDos${cloneID}`);
+	 clone.find('#labelTransmisionTres0').prop('id', `labelTransmisionTres${cloneID}`);
+	 clone.find('#labelTransmisionCuatro0').prop('id', `labelTransmisionCuatro${cloneID}`);
+	 clone.find('#labelTransmisionCinco0').prop('id', `labelTransmisionCinco${cloneID}`);
+	 clone.find('#labelTransmisionSeis0').prop('id', `labelTransmisionSeis${cloneID}`);
+	 clone.find('#labelTransmisionSiete0').prop('id', `labelTransmisionSiete${cloneID}`);
+	 clone.find('#labelTransmisionOcho0').prop('id', `labelTransmisionOcho${cloneID}`);
+
+	 clone.find('input[name="estructura[0][]"]').prop('name', `estructura[${cloneID}][]`);
+	 clone.find('#estructuraPlano0').prop('id', `estructuraPlano${cloneID}`);
+	 clone.find('#estructuraVado0').prop('id', `estructuraVado${cloneID}`);
+	 clone.find('#estructuraTope0').prop('id', `estructuraTope${cloneID}`);
+	 clone.find('#estructuraBaches0').prop('id', `estructuraBaches${cloneID}`);
+	 clone.find('#estructuraVibradores0').prop('id', `estructuraVibradores${cloneID}`);
+	 clone.find('#labelPlano0').prop('for', `estructuraPlano${cloneID}`);
+	 clone.find('#labelVado0').prop('for', `estructuraVado${cloneID}`);
+	 clone.find('#labelTope0').prop('for', `estructuraTope${cloneID}`);
+	 clone.find('#labelBaches0').prop('for', `estructuraBaches${cloneID}`);
+	 clone.find('#labelVibradores0').prop('for', `estructuraVibradores${cloneID}`);
+	 clone.find('#labelPlano0').prop('id', `labelPlano${cloneID}`);
+	 clone.find('#labelVado0').prop('id', `labelVado${cloneID}`);
+	 clone.find('#labelTope0').prop('id', `labelTope${cloneID}`);
+	 clone.find('#labelBaches0').prop('id', `labelBaches${cloneID}`);
+	 clone.find('#labelVibradores0').prop('id', `labelVibradores${cloneID}`);
+
+	 clone.find('input[name="camino[0][]"]').prop('name', `camino[${cloneID}][]`);
+	 clone.find('#caminoRecto0').prop('id', `caminoRecto${cloneID}`);
+	 clone.find('#caminoCurvaLigera0').prop('id', `caminoCurvaLigera${cloneID}`);
+	 clone.find('#caminoCurvaCerrada0').prop('id', `caminoCurvaCerrada${cloneID}`);
+	 clone.find('#caminoCurvaSinuoso0').prop('id', `caminoCurvaSinuoso${cloneID}`);
+	 clone.find('#labelRecto0').prop('for', `caminoRecto${cloneID}`);
+	 clone.find('#labelCurvaLigera0').prop('for', `caminoCurvaLigera${cloneID}`);
+	 clone.find('#labelCurvaCerrada0').prop('for', `caminoCurvaCerrada${cloneID}`);
+	 clone.find('#labelCurvaSinuoso0').prop('for', `caminoCurvaSinuoso${cloneID}`);
+	 clone.find('#labelRecto0').prop('id', `labelRecto${cloneID}`);
+	 clone.find('#labelCurvaLigera0').prop('id', `labelCurvaLigera${cloneID}`);
+	 clone.find('#labelCurvaCerrada0').prop('id', `labelCurvaCerrada${cloneID}`);
+	 clone.find('#labelCurvaSinuoso0').prop('id', `labelCurvaSinuoso${cloneID}`);
+
+	 clone.find('input[name="pendiente[0][]"]').prop('name', `pendiente[${cloneID}][]`);
+	 clone.find('#pendienteRecto0').prop('id', `pendienteRecto${cloneID}`);
+	 clone.find('#pendienteLigera0').prop('id', `pendienteLigera${cloneID}`);
+	 clone.find('#pendienteMediana0').prop('id', `pendienteMediana${cloneID}`);
+	 clone.find('#pendienteMontania0').prop('id', `pendienteMontania${cloneID}`);
+	 clone.find('#labelPendRecto0').prop('for', `pendienteRecto${cloneID}`);
+	 clone.find('#labelLigera0').prop('for', `pendienteLigera${cloneID}`);
+	 clone.find('#labelMediana0').prop('for', `pendienteMediana${cloneID}`);
+	 clone.find('#labelMontania0').prop('for', `pendienteMontania${cloneID}`);
+	 clone.find('#labelPendRecto0').prop('id', `labelPendRecto${cloneID}`);
+	 clone.find('#labelLigera0').prop('id', `labelLigera${cloneID}`);
+	 clone.find('#labelMediana0').prop('id', `labelMediana${cloneID}`);
+	 clone.find('#labelMontania0').prop('id', `labelMontania${cloneID}`);
+	 clone.find('#firma0').prop('id', `firma${cloneID}`);
+
+	 var config = {
+		autoFit : true,       // Update any forms field with signature when loading the page
+		// format : "image/png",  // Default signature image format
+		background : "#EEE",   // Default signature background
+		lineColor : "#000",          // Default signature pen color
+		lineWidth : 1,          // Default signature pen width
+		border : "#AAA",       // Default signature pen border color
+		height : 210           // Default signature height in px
+	};
+	clone.find(`#firma${cloneID}`).empty();
+	clone.find('input:checkbox').prop('checked', false);
+	clone.find('input[type="radio"]').prop('checked', false);
+	clone.find('input[type="range"]').prop('value', 0);
+	clone.find('textarea[type="text"]').prop('value', "");
+
+
+	/*
+		asignación de valores recuperados de la base de datos
+	*/
+	clone.find(`textarea[name="articulos_personales[]"]`).val(datos['definicion_falla']);
+	clone.find(`input[name="temperatura[]"]`).val(datos['temp_ambiente']);
+	clone.find(`input[name="humedad[${cloneID}]"][value="${datos['humedad']}"]`).prop('checked', true);
+	clone.find(`input[name="viento[${cloneID}]"][value="${datos['viento']}"]`).prop('checked', true);
+	clone.find(`input[name="cambioTransmision[${cloneID}]"][vaue="${datos['cambio_transmision']}"]`).prop('checked', true);
+	clone.find(`input[name="estructura[${cloneID}]"][value="${datos['estructura']}"]`).prop('checked', true);
+	clone.find(`input[name="camino[${cloneID}]"][value="${datos['camino']}"]`).prop('checked', true);
+	clone.find(`input[name="pendiente[${cloneID}]"][value="${datos['pendiente']}"]`).prop('checked', true);
+
+	clone.find(`input[name="velocidad[]"]`).val(datos['vel_km_hr']);
+	clone.find(`input[name="rpm[]"]`).val(datos['rpmx1000']);
+	clone.find(`input[name="carga[]"]`).val(datos['carga']);
+	clone.find(`input[name="pasajeros[]"]`).val(datos['pasajeros']);
+	clone.find(`input[name="cajuela[]"]`).val(datos['cajuela_cond_operativa']);
+	clone.find(`input[name="valor_firma[]"]`).val(datos['firma_cliente']);
+
+	/*checks*/
+	clone.find(`.check-4x2`).prop('checked', datos['cambio_tipo'] == '4x2' ? true : false);
+	clone.find(`.check-4x4`).prop('checked', datos['cambio_tipo'] == '4x4' ? true : false);
+	clone.find(`input[name="arranca[]"]`).prop('checked', datos['arranca_vehiculo'] == 1 ? true : false);
+	clone.find(`input[name="inicia[]"]`).prop('checked', datos['inicia_movimiento'] == 1 ? true : false);
+	clone.find(`input[name="disminuye[]"]`).prop('checked', datos['disminuye_vel'] == 1 ? true : false);
+	clone.find(`input[name="vuelta_izq[]"]`).prop('checked', datos['da_vuelta_izq'] == 1 ? true : false);
+	clone.find(`input[name="vuelta_der[]"]`).prop('checked', datos['da_vuelta_der'] == 1 ? true : false);
+	clone.find(`input[name="bache[]"]`).prop('checked', datos['pasa_bache'] == 1 ? true : false);
+	clone.find(`input[name="tope[]"]`).prop('checked', datos['pasa_tope'] == 1 ? true : false);
+	clone.find(`input[name="cambia[]"]`).prop('checked', datos['cambia_vel'] == 1 ? true : false);
+	clone.find(`input[name="movimiento[]"]`).prop('checked', datos['esta_sin_movimiento'] == 1 ? true : false);
+	clone.find(`input[name="constantemente[]"]`).prop('checked', datos['constantemente'] == 1 ? true : false);
+	clone.find(`input[name="esporadicamente[]"]`).prop('checked', datos['esperodicamente'] == 1 ? true : false);
+	clone.find(`input[name="volante[]"]`).prop('checked', datos['volante'] == 1 ? true : false);
+	clone.find(`input[name="cofre[]"]`).prop('checked', datos['cofre'] == 1 ? true : false);
+	clone.find(`input[name="asiento[]"]`).prop('checked', datos['asiento'] == 1 ? true : false);
+	clone.find(`input[name="cajuela_f[]"]`).prop('checked', datos['cajuela'] == 1 ? true : false);
+	clone.find(`input[name="cristales[]"]`).prop('checked', datos['cristales'] == 1 ? true : false);
+	clone.find(`input[name="toldo[]"]`).prop('checked', datos['toldo'] == 1 ? true : false);
+	clone.find(`input[name="carroceria[]"]`).prop('checked', datos['carroceria'] == 1 ? true : false);
+	clone.find(`input[name="debajo[]"]`).prop('checked', datos['estando_debajo'] == 1 ? true : false);
+	clone.find(`input[name="dentro[]"]`).prop('checked', datos['estando_dentro'] == 1 ? true : false);
+	clone.find(`input[name="fuera[]"]`).prop('checked', datos['estando_fuera'] == 1 ? true : false);
+	clone.find(`input[name="frente[]"]`).prop('checked', datos['estando_frente'] == 1 ? true : false);
+	clone.find(`input[name="detras[]"]`).prop('checked', datos['estando_detras'] == 1 ? true : false);
+	clone.find('input[name="idCRC[]"]').val(datos['id']);
+	console.log('datos', datos);
+	clone.appendTo('#step-4');
+	clone.find(`#firma${cloneID}`).jqSignature(config);
+	clone.find(`#firma${cloneID}`).jSignature("importData",datos['firma_cliente']);
+	clone.find('input[type="range"]').trigger('change');
+	cloneID++;
 }

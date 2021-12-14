@@ -1308,6 +1308,7 @@ class Servicio extends CI_Controller {
 		$dato['camino']               = $this->input->post('camino[]') !== "" ?  $this->input->post('camino[]') : [];
 		$dato['pendiente']            = $this->input->post('pendiente[]') !== "" ?  $this->input->post('pendiente[]') : [];
 		$dato['valor_firma']          = $this->input->post('valor_firma[]') !== "" ?  $this->input->post('valor_firma[]') : [];
+		$dato['id']          = $this->input->post('idCRC[]') !== "" ?  $this->input->post('idCRC[]') : [];
 
 		// var_dump($dato);die;
 		$create = $this->buscador_model->guardar_inspeccion($dato);

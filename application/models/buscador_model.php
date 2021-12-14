@@ -2020,7 +2020,13 @@ class Buscador_Model extends CI_Model{
 				$causa_raiz['pendiente']               = isset($data['pendiente'][$key]) ? $data['pendiente'][$key] : null;
 				$causa_raiz['firma_cliente']           = isset($data['valor_firma'][$key]) ?  $data['valor_firma'][$key] : null;
 				$causa_raiz['cambio_tipo']             = isset($data['cambioTipo'][$key]) ? $data['cambioTipo'][$key] : null;
-				$id_causa_raiz[] = $this->db->insert('causa_raiz_componente', $causa_raiz);
+				if (isset($data['id'][$key]) && $data['id'][$key] != '') {
+					$id_causa_raiz[] = $data['id'][$key];
+					$this->db->where('id', $data['id'][$key]);
+					$this->db->update('causa_raiz_componente', $causa_raiz);
+				} else {
+					$id_causa_raiz[] = $this->db->insert('causa_raiz_componente', $causa_raiz);
+				}
 			}
 		}
 		
@@ -3366,7 +3372,7 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_datos_quejas($id_orden_servicio)
 	{
-		$query = $this->db->select('id, id_orden_servicio, autorizacion_grabar_voz, definicion_falla, arranca_vehiculo, inicia_movimiento, disminuye_vel, da_vuelta_izq, da_vuelta_der, pasa_bache, pasa_tope, cambia_vel, esta_sin_movimiento, constantemente, volante, esperodicamente, asiento, cristales, carroceria, cofre, cajuela, toldo, estando_dentro, estando_fuera, estando_frente, estando_detras, temp_ambiente, humedad, viento, vel_km_hr, cambio_transmision, rpmx1000, cambio_tipo, carga, pasajeros, cajuela_cond_operativa, estructura, camino, pendiente')
+		$query = $this->db->select('id, id_orden_servicio, autorizacion_grabar_voz, definicion_falla, arranca_vehiculo, inicia_movimiento, disminuye_vel, da_vuelta_izq, da_vuelta_der, pasa_bache, pasa_tope, cambia_vel, esta_sin_movimiento, constantemente, volante, esperodicamente, asiento, cristales, carroceria, cofre, cajuela, toldo, estando_dentro, estando_fuera, estando_frente, estando_detras, temp_ambiente, humedad, viento, vel_km_hr, cambio_transmision, rpmx1000, cambio_tipo, carga, pasajeros, cajuela_cond_operativa, estructura, camino, pendiente, firma_cliente')
 			->from('causa_raiz_componente')
 			->where('id_orden_servicio', $id_orden_servicio)
 			->get();
