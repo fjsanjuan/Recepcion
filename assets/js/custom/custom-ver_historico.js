@@ -1941,6 +1941,10 @@ $(document).ready(function() {
 					numArt = 0;
 					arrayArticulos = [];
 					$('#modalBuscArt').modal('hide');
+					if (data.estatus && data.id) {
+						swal
+						notificar_verificacion(data.id);
+					}
 				}
 			});
 		}else{
@@ -2250,6 +2254,9 @@ $(document).ready(function() {
 					numArt = 0;
 					arrayArticulos = [];
 					$('#modalBuscArt').modal('hide');
+					if (data.estatus) {
+						notificar_verificacion(data.id_presupuesto);
+					}
 				}
 			});
 		}else{
@@ -5063,6 +5070,52 @@ function generar_formato_req(id) {
 						link[0].click();
 					}
 				});
+			}
+		});
+}
+
+function notificar_verificacion(id) {
+	const form = new FormData();
+	form.append('id', id);
+	swal({
+		title: 'Notificar a Refacciones',
+		text: 'Cuando notificas a Refacciones se cierra la verificación y ya no sera editable.\nPuedes notificar desde la opción dentro de "Ver Verificaciones"',
+		showCancelButton: true,
+		confirmButtonText: 'Notificar',
+		cancelButtonText: 'Más tarde',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					cache: false,
+					type: 'post',
+					url: base_url+ "index.php/Servicio/envia_verificacion_mail",
+					dataType: "json",
+					data:form,
+					contentType: false,
+					processData: false,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					},
+					success: function(data)
+					{
+						$("#loading_spin").hide();
+						if(data)
+						{
+							toastr.success("Se ha enviado el correo");
+						}else 
+						{
+							toastr.error("Error al enviar Email");
+						}
+					},
+					error: function( jqXHR, textStatus, errorThrown )
+					{
+						toastr.error("Error al enviar Email");
+						$("#loading_spin").hide();
+					} 
+				});
+			} else {
+				toastr.info('La verificación puede seguir editandose hasta que notifiques a refacciones.');
 			}
 		});
 }

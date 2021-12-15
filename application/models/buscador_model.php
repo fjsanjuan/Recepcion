@@ -2887,6 +2887,7 @@ class Buscador_Model extends CI_Model{
 		if($this->db->trans_status() == true)
 		{
 			$refacciones["estatus"] = true;
+			$refacciones['id'] = $arr["id_presupuesto"];
 			$refacciones["mensaje"] ="Verificación actualizada";
 		}else
 		{
