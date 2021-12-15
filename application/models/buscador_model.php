@@ -2390,10 +2390,12 @@ class Buscador_Model extends CI_Model{
 
 		foreach ($ordenes as $key => $value) 
 		{
-			$ordenes[$key] += $this->db->select("firma_electronica as signAsesor")
+			$firma = $this->db->select("firma_electronica as signAsesor")
 							->from("usuarios")
-							->where("cve_intelisis",$value["clave_asesor"])
+							->where("cve_intelisis",$value['clave_asesor'])
 							->get()->row_array();
+							
+			$ordenes[$key] += is_array($firma) ? $firma : ['signAsesor' => null];
 		}
 
 		return $ordenes;					
@@ -3190,7 +3192,8 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->insert("archivo", $archivo);
 				$id_registro = $this->db->select("IDENT_CURRENT('archivo') as id")->get()->row_array();
-
+				$this->db->where('id', $id_orden);
+				$this->db->update('orden_servicio', ['oasis' => 1]);
 				$this->db->trans_complete();
 
 				if($this->db->trans_status() == true)

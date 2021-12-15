@@ -2890,4 +2890,17 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_datos_f1863($idOrden);
 		echo json_encode($datos);
 	}
+	public function generar_formato_f1863($idOrden = null){
+		if ($token == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Token no válido.';
+		} elseif ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válaida.';
+		}else{
+			$datos    = $this->buscador_model->obtener_datos_f1863($idOrden);
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+		}
+		echo json_encode($response);
+	}
 }
