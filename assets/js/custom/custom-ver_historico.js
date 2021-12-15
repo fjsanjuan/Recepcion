@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -4970,53 +4970,6 @@ $(document).off("click", "#requisModal #cotizaciones button.btnPdf2").on("click"
 	window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 });
 
-//Para cargar Lineas de Trabajo
-$(document).off('click', '#lineaTrabajo').on('click', '#lineaTrabajo', function(event) {
-	//console.log("click guardarReq");
-	event.preventDefault();
-	const detalles = document.getElementById('form_lineasTrabajo');
-	const form = new FormData(detalles);
-	idOrden = localStorage.getItem('hist_id_orden');
-	console.log('orden', idOrden);
-	$.validator.addClassRules("digitos", {
-		required: true,
-		digits: true
-	});
-	if (!$('#form_lineasTrabajo').valid()) {
-		return;
-	}
-	/*$.ajax({
-		cache: false,
-		url: `${base_url}index.php/servicio/guardar_requisiciones/${idOrden}`,
-		type: 'POST',
-		dataType: 'json',
-		contentType: false,
-		processData: false,
-		data: form,
-		beforeSend: function(){
-			$("#loading_spin").show();
-		}
-	})
-	.done(function(resp) {
-		if (resp.estatus) {
-			toastr.info(resp.mensaje);
-			$('#form_requisicion').trigger('reset');
-			$('#requisModal').modal('toggle');
-			
-		}else {
-			toastr.warning(resp.mensaje);
-		}
-	})
-	.fail(function(resp) {
-		console.log('error', resp);
-		toastr.warning("Ocurrió un error al generar la requisición.");
-	})
-	.always(function(resp) {
-		$("#loading_spin").hide();
-	});*/
-	
-});
-
 function generar_formato_req(id) {
 	var tok = "";
 	$.ajax({
@@ -5119,3 +5072,158 @@ function notificar_verificacion(id) {
 			}
 		});
 }
+
+//Para cargar Lineas de Trabajo
+$(document).off('click', '#lineaTrabajoModal #guardar_lineas').on('click', '#lineaTrabajoModal #guardar_lineas', function(event) {
+	console.log("click #guardar_lineas");
+	event.preventDefault();
+	console.log('id_orden', idOrden);
+	const detalles = document.getElementById('form_lineasTrabajo');
+	const form = new FormData(detalles);
+	localStorage.getItem('hist_id_orden', idOrden);
+	form.append('id_orden', idOrden);
+	if (!$('#form_lineasTrabajo').valid()) {
+		return;
+	}
+	$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/guardar_linea/${idOrden}`,
+		type: 'POST',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		data: form,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(data) {
+		if (data.estatus) {
+			toastr.info(data.mensaje);
+			$('#form_lineasTrabajo').trigger('reset');
+			$('#lineaTrabajoModal').modal('toggle');
+			
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	})
+	.fail(function(data) {
+		console.log('error', data);
+		toastr.warning("Ocurrió un error al guardar lineas de trabajo.");
+	})
+	.always(function(data) {
+		$("#loading_spin").hide();
+	});
+	
+});
+
+$(document).off('click', '.lineaTrabajo').on('click', '.lineaTrabajo', function (e) {
+	let id_orden = $(this).prop('id');
+    id_orden = id_orden.split('-')[1];
+	e.preventDefault();
+	console.log('id_orden', id_orden);
+	$('#firma_admin').prop('data-orden', id_orden);
+	$('#cancelar_firmaLineas').prop('data-orden', id_orden);
+
+	$('#firma_admin').prop('checked', false);
+	$('#cancelar_firmaLineas').css('display', 'none');
+	
+	$.ajax({
+		cache: false,
+		url: base_url+ "index.php/servicio/obtenerFirmaAdmon/"+id_orden,
+		contentType: false,
+		processData: false,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	}).done(function (data) {
+		if (data.estatus) {
+			if (data.data.length > 0) {
+				if(data.data[0].firma_pregarantiaAdmon != null && id_perfil == 7){
+					$('#firma_linea').prop('checked', true);
+					$('#cancelar_firmaLineas').css('display', 'inline-block');
+
+				}
+			}
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	}).fail(function (error) {
+		toastr.warning("No se pudo obtener información de la firma");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+});
+
+$(document).on('click', '#firma_linea', function(e){
+	e.preventDefault();
+	localStorage.setItem('hist_id_orden', id_orden);
+	console.log('id_orden', id_orden);
+	const form = new FormData();
+	form.append('id_orden', id_orden);
+	swal({
+		title: '¿Firmar línea de trabajo?',
+		showCancelButton: true,
+		confirmButtonText: 'Firmar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/firmar_lineas/"+id_orden,
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						$('input[name="firma_admin"]').val(data.firma_electronica);
+						$("#firma_linea").prop("checked", true);
+						$("#cancelar_firmaLineas").css('display', 'inline-block');
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al firmar lineas');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+});
+
+$(document).on('click', '#cancelar_firmaLineas', function(e){
+	e.preventDefault();
+	var idOrden = $(this).prop("data-orden");
+	localStorage.setItem("hist_id_orden", idOrden);
+	const form = new FormData();
+	form.append('id_orden', idOrden);
+	swal({
+		title: '¿Desea cancelar firma de linea de trabajo?',
+		showCancelButton: true,
+		confirmButtonText: 'Cancelar',
+		cancelButtonText: 'Cerrar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$('input[name="firma_admin"]').val("");
+				$('#firma_linea').prop('checked', false);
+				$("#cancelar_firmaLineas").css('display', 'none');
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+	});
