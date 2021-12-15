@@ -4433,36 +4433,42 @@ class Buscador_Model extends CI_Model{
 	}
 	public function guardar_linea($idOrden, $datos)
 	{
-		$this->db->trans_start(true);
-		$data = [
-			'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
-			'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
-			'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
-			'daños_relacion'             => isset($datos['daños_relacion']) ? $datos['daños_relacion'] : null,
-			'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
-			'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
-			'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
-			'mano_obra_total'            => isset($datos['mano_obra_total']) ? $datos['mano_obra_total'] : null,
-			'misc_total'                 => isset($datos['misc_total']) ? $datos['misc_total'] : null,
-			'iva'                        => isset($datos['iva']) ? $datos['iva'] : null,
-			'participacion_cliente'      => isset($datos['participacion_cliente']) ? $datos['participacion_cliente'] : null,
-			'participacion_distribuidor' => isset($datos['participacion_distribuidor']) ? $datos['participacion_distribuidor'] : null,
-			'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
-			'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
-			'id_orden'                   => $idOrden
-		];
-		$this->db->insert('lineas_reparacion', $data);
-		$id = $this->db->insert_id();
-		$this->db->trans_complete();
-		if ($this->db->trans_status() === TRUE) {
-			$this->db->trans_commit();
-			$response['id']      = $id;
-			$response['mensaje'] = 'Ok.';
-			$response['estatus'] = true;
-		}else {
-			$this->db->trans_rollback();
+		$existen = $this->db->select('*')->from('diagnostico_tecnico')->where('id_orden', $idOrden)->count_all_results();
+		if ($existen > 0) {
+			$this->db->trans_start(true);
+			$data = [
+				'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
+				'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
+				'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
+				'daños_relacion'             => isset($datos['daños_relacion']) ? $datos['daños_relacion'] : null,
+				'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
+				'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
+				'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
+				'mano_obra_total'            => isset($datos['mano_obra_total']) ? $datos['mano_obra_total'] : null,
+				'misc_total'                 => isset($datos['misc_total']) ? $datos['misc_total'] : null,
+				'iva'                        => isset($datos['iva']) ? $datos['iva'] : null,
+				'participacion_cliente'      => isset($datos['participacion_cliente']) ? $datos['participacion_cliente'] : null,
+				'participacion_distribuidor' => isset($datos['participacion_distribuidor']) ? $datos['participacion_distribuidor'] : null,
+				'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
+				'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
+				'id_orden'                   => $idOrden
+			];
+			$this->db->insert('lineas_reparacion', $data);
+			$id = $this->db->insert_id();
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === TRUE) {
+				$this->db->trans_commit();
+				$response['id']      = $id;
+				$response['mensaje'] = 'Ok.';
+				$response['estatus'] = true;
+			}else {
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No se pudo cancelar la autorización.';
+			}
+		} else {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No se pudo cancelar la autorización.';
+			$response['mensaje'] = 'No existen diagnósticos cargados para la orden.';
 		}
 		return $response;
 	}
