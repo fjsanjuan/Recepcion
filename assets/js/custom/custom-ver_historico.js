@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -272,7 +272,7 @@ $(document).ready(function() {
 					action_tecnico		+= "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Verificar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				}else {
-					action_tecnico		+="<a href='"+base_url+ "index.php/servicio/garantia_anverso/"+val["id"]+"' target='_blank' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</a>";
+					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
@@ -5228,6 +5228,27 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 				swal('Cancelado', '', 'error');
 			}
 		});
+	});
+	$(document).on('click', '.anverso', function(e){
+		let id_orden = $(this).prop('id');
+    	id_orden = id_orden.split('-')[1];
+		e.preventDefault();
+		/*if (id_perfil == 4){$('#checkTecnico1').hide();}
+		if (id_perfil == 5){$('#checkeaJefe1').hide();}
+		console.log('id orden', id_orden);
+	$('#checkTecn1').prop('data-orden', id_orden);
+	$('#checkJefe1').prop('data-orden', id_orden);
+	$('#cancelTecn1').prop('data-orden', id_orden);
+	$('#cancelJefe1').prop('data-orden', id_orden);
+	
+	$('#checkTecn1').prop('disabled', false);
+	$('#checkJefe1').prop('disabled', false);
+	$('#checkTecn1').prop('checked', false);
+	$('#checkJefe1').prop('checked', false);
+	$('#cancelTecn1').css('display', 'none');
+	$('#cancelJefe1').css('display', 'none');*/
+	var win = window.open(base_url+ "index.php/servicio/garantia_anverso/"+id_orden, '_blank');
+	win.focus();
 	});
 
 $(document).off('click','.f1863').on('click', '.f1863', function(event) {

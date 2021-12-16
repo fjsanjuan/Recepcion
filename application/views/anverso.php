@@ -226,10 +226,10 @@ input:focus{
                                 <input class="required write" type="text" name="detalles[0][codigos]" id="" style="width: 98%;">
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-							<i class="fa fa-plus fa-2x nuevo_codigo" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
+							<i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-							<i class="fa fa-times fa-2x erase_line" style="color:grey; cursor:pointer;"></i>
+							<i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i>
                             </div>
                         </div>
 						</div>
@@ -273,19 +273,19 @@ input:focus{
                                 IDENTIFIQUE LA PARTE CAUSANTE
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="clave_defecto" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="retorno_partes" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="costo_tiempo" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -296,22 +296,22 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="parte_causante" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -325,19 +325,19 @@ input:focus{
                                 IDENTIFIQUE LA CAUSA DE LA FALLA
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="clave_defecto" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="retorno_partes" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="costo_tiempo" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -348,22 +348,22 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="causa_falla" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -377,19 +377,19 @@ input:focus{
                                 IDENTIFIQUE EL EQUIPO DE DIAGNÓSTICO
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="clave_defecto" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="retorno_partes" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="costo_tiempo" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -400,22 +400,22 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="equipo_diagnostico" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -429,45 +429,19 @@ input:focus{
                                 EXPLIQUE LA REPARACIÓN EFECTUADA
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="clave_defecto" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="retorno_partes" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="costo_tiempo" id="" style="width: 98%;">
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -478,204 +452,22 @@ input:focus{
                         </div>
                         <div class="row">
                             <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <textarea class="required write" type="textarea" name="reparacion_efectuada" id="" style="width: 98%;" rows="10" cols="15" ></textarea>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
                             <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="" id="" style="width: 98%;">
@@ -685,6 +477,20 @@ input:focus{
                             </div>
                         </div>
                     </div>
+					<tbody>
+						<div class="row" style="text-align: center; width:90%; margin: 50px;">
+							<div class="form-check" id="checkTecnico1"><b>FIRMA DE TÉCNICO</b><br><br>
+								<input class="form-check-input no_print" name="firma_tecnico" type="checkbox" id="checkTecn1" style='height: 24px; width: 24px;' required>
+								<label for="checkTecn1"></label>
+								<button type="button" class="btn btn-outline-warning btn-sm no_print" id="cancelTecn1" style="display: none">X</button>
+							</div>
+							<div class="form-check" id="checkeaJefe1" ><b>FIRMA DE JEFE TALLER</b><br><br>
+								<input class="form-check-input no_print" name="firma_jefe_taller" type="checkbox" id="checkJefe1" style="height: 24px; width: 24px;">
+								<label for="checkJefe1"></label>
+								<button type="button" class="btn btn-outline-warning btn-sm no_print" id="cancelJefe1" style="display: none">X</button>
+							</div>
+						</div>
+					</tbody>
                 </div>
             </div>
         </div>

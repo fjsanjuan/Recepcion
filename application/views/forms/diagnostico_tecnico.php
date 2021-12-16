@@ -1,4 +1,4 @@
-
+<!--
 <?php
 $attributes = array('id' => 'formDiagnosticoTecnico');
 echo form_open('',$attributes);
@@ -109,3 +109,4 @@ echo form_open('',$attributes);
 <?php
 echo form_close();
 ?>
+-->
