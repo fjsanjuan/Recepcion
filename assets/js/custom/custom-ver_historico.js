@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -5077,11 +5077,11 @@ function notificar_verificacion(id) {
 $(document).off('click', '#lineaTrabajoModal #guardar_lineas').on('click', '#lineaTrabajoModal #guardar_lineas', function(event) {
 	console.log("click #guardar_lineas");
 	event.preventDefault();
+	const datos = document.getElementById('form_lineasTrabajo');
+	const form = new FormData(datos);
+	form.append('firma_admin', $('input[name="firma_admin"]').val());
+	idOrden = localStorage.getItem('hist_id_orden');
 	console.log('id_orden', idOrden);
-	const detalles = document.getElementById('form_lineasTrabajo');
-	const form = new FormData(detalles);
-	localStorage.getItem('hist_id_orden', idOrden);
-	form.append('id_orden', idOrden);
 	if (!$('#form_lineasTrabajo').valid()) {
 		return;
 	}
@@ -5102,16 +5102,17 @@ $(document).off('click', '#lineaTrabajoModal #guardar_lineas').on('click', '#lin
 			toastr.info(data.mensaje);
 			$('#form_lineasTrabajo').trigger('reset');
 			$('#lineaTrabajoModal').modal('toggle');
+			$('input[name="firma_admin"]').val('');
 			
 		}else {
 			toastr.warning(data.mensaje);
 		}
 	})
-	.fail(function(data) {
-		console.log('error', data);
+	.fail(function() {
+		console.log('error');
 		toastr.warning("Ocurrió un error al guardar lineas de trabajo.");
 	})
-	.always(function(data) {
+	.always(function() {
 		$("#loading_spin").hide();
 	});
 	
@@ -5121,11 +5122,12 @@ $(document).off('click', '.lineaTrabajo').on('click', '.lineaTrabajo', function 
 	let id_orden = $(this).prop('id');
     id_orden = id_orden.split('-')[1];
 	e.preventDefault();
-	console.log('id_orden', id_orden);
-	$('#firma_admin').prop('data-orden', id_orden);
+	console.log('id', id_orden);
+	localStorage.setItem('hist_id_orden', id_orden);
+	$('#firma_linea').prop('data-orden', id_orden);
 	$('#cancelar_firmaLineas').prop('data-orden', id_orden);
 
-	$('#firma_admin').prop('checked', false);
+	$('#firma_linea').prop('checked', false);
 	$('#cancelar_firmaLineas').css('display', 'none');
 	
 	$.ajax({
@@ -5150,7 +5152,7 @@ $(document).off('click', '.lineaTrabajo').on('click', '.lineaTrabajo', function 
 		}else {
 			toastr.warning(data.mensaje);
 		}
-	}).fail(function (error) {
+	}).fail(function () {
 		toastr.warning("No se pudo obtener información de la firma");
 	})
 	.always(function() {
@@ -5160,8 +5162,8 @@ $(document).off('click', '.lineaTrabajo').on('click', '.lineaTrabajo', function 
 
 $(document).on('click', '#firma_linea', function(e){
 	e.preventDefault();
-	localStorage.setItem('hist_id_orden', id_orden);
-	console.log('id_orden', id_orden);
+	var id_orden = localStorage.getItem('hist_id_orden');
+	//console.log('id_orden', id_orden);
 	const form = new FormData();
 	form.append('id_orden', id_orden);
 	swal({

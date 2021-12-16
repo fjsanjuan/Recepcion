@@ -2783,7 +2783,7 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	public function cancela_diagnostico()
+	/*public function cancela_diagnostico()
 	{
 		$idDiagnostico = $this->input->post('id_diagnostico') !=''? $this->input->post('id_diagnostico') : null;
 		if ($idDiagnostico == null) {
@@ -2793,7 +2793,7 @@ class Servicio extends CI_Controller {
 			$response = $this->buscador_model->cancela_diagnostico($idDiagnostico);
 		}
 		echo json_encode($response);
-	}
+	}*/
 	public function generar_formato_inventario($token = null, $id_orden = null)
 	{
 		#$id_orden = 34762;  orden de prueba
@@ -2903,4 +2903,86 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+
+	public function guardar_linea($idOrden = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif(!isset($datos) || sizeof($datos) <= 0) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos de lineas de reparación faltantes.';
+		}else {
+			$response = $this->buscador_model->guardar_linea($idOrden, $datos);
+		}
+		echo json_encode($response);
+	}
+
+	public function editar_linea($idOrden = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif (!isset($datos['id_orden'])) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Carga de líneas no válido.';
+		}elseif(!isset($datos) || sizeof($datos) <= 0) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos de la línea de reparación faltantes.';
+		}else {
+			$response = $this->buscador_model->editar_linea($idOrden, $datos);
+		}
+		echo json_encode($response);
+	}
+
+	public function obtener_lineas($idOrden = null)
+	{
+		$datos = [];
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_lineas($idOrden = null);
+		}
+		echo json_encode($response);
+	}
+
+	public function firmar_lineas($id_orden)
+	{
+		$id_orden = $this->input->post('id_orden') != '' ? $this->input->post('id_orden') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->firmar_lineas($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function obtenerFirmaAdmon($id_orden = null)
+	{
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "orden no válida.";
+		}else {
+			$response['estatus'] = true;
+			$response['data'] = $this->buscador_model->obtenerFirmaAdmon($id_orden);
+		}
+		echo json_encode($response);
+	}
+	public function cancelar_firma_Admon()
+	{
+		$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'no existe autorizacion';
+		}else {
+			$response = $this->buscador_model->cancelar_firma_Admon($id_orden);
+		}
+		echo json_encode($response);
+	}
+
 }

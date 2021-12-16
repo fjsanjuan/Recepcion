@@ -4250,13 +4250,13 @@ class Buscador_Model extends CI_Model{
 		return $this->db->select("*")->from('diagnostico_tecnico')->where('id_diagnostico', $id_orden)->get()->result_array();
 	}
 
-	public function cancela_diagnostico($id_orden)
+	/*public function cancela_diagnostico($id_orden)
 	{
 		$perfil = $this->session->userdata["logged_in"]["perfil"];
-		/*$existe_firma = $this->db->select("*")
+		$existe_firma = $this->db->select("*")
 								 ->from("diagnostico_tecnico")
 								 ->where("id_diagnostico", $id_orden)
-								 ->count_all_results();*/
+								 ->count_all_results();
 			
 				$this->db->trans_start();
 				$this->db->where('id_diagnostico', $id_orden);
@@ -4272,7 +4272,7 @@ class Buscador_Model extends CI_Model{
 					$response['mensaje'] = 'No se pudo cancelar la autorización.';
 				}
 		return $response;
-	}
+	}*/
 	public function obtener_requisiciones($idOrden)
 	{
 		$response['requisiciones'] = $this->db->select('*')->from('requisiciones')->where('id_orden', $idOrden)->get()->result_array();
@@ -4438,13 +4438,14 @@ class Buscador_Model extends CI_Model{
 	public function guardar_linea($idOrden, $datos)
 	{
 		$existen = $this->db->select('*')->from('diagnostico_tecnico')->where('id_orden', $idOrden)->count_all_results();
+		//print_r($this->db->last_query());
 		if ($existen > 0) {
-			$this->db->trans_start(true);
+			$this->db->trans_start();
 			$data = [
 				'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
 				'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
 				'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
-				'daños_relacion'             => isset($datos['daños_relacion']) ? $datos['daños_relacion'] : null,
+				'dannio'            		 => isset($datos['danio_ralacion']) ? $datos['danio_ralacion'] : null,
 				'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
 				'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
 				'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
@@ -4456,19 +4457,19 @@ class Buscador_Model extends CI_Model{
 				'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
 				'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
 				'id_orden'                   => $idOrden
-			];
+			]; 
 			$this->db->insert('lineas_reparacion', $data);
 			$id = $this->db->insert_id();
 			$this->db->trans_complete();
 			if ($this->db->trans_status() === TRUE) {
 				$this->db->trans_commit();
 				$response['id']      = $id;
-				$response['mensaje'] = 'Ok.';
+				$response['mensaje'] = 'Línea guardada correctamente.';
 				$response['estatus'] = true;
 			}else {
 				$this->db->trans_rollback();
 				$response['estatus'] = false;
-				$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				$response['mensaje'] = 'No se pudo guardar la línea.';
 			}
 		} else {
 			$response['estatus'] = false;
@@ -4478,12 +4479,12 @@ class Buscador_Model extends CI_Model{
 	}
 	public function editar_linea($idOrden, $datos)
 	{
-		$this->db->trans_start(true);
+		$this->db->trans_start();
 		$data = [
 			'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
 			'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
 			'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
-			'daños_relacion'             => isset($datos['daños_relacion']) ? $datos['daños_relacion'] : null,
+			'dannio'            		 => isset($datos['danio_relacion']) ? $datos['danio_relacion'] : null,
 			'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
 			'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
 			'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
@@ -4501,7 +4502,7 @@ class Buscador_Model extends CI_Model{
 		$this->db->trans_complete();
 		if ($this->db->trans_status() === TRUE) {
 			$this->db->trans_commit();
-			$response['mensaje'] = 'Ok.';
+			$response['mensaje'] = 'Línea editadas correctamente.';
 			$response['estatus'] = true;
 		}else {
 			$this->db->trans_rollback();
@@ -4521,6 +4522,53 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
 		}
+		return $response;
+	}
+
+	public function firmar_lineas($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$response['estatus'] = true;
+			$response['firma_electronica'] = $firma['firma_electronica'];
+		
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
+	
+	public function obtenerFirmaAdmon($id_orden)
+	{
+		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+	}
+
+	public function cancelar_firma_Admon($id_orden)
+	{
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		$existe_firma = $this->db->select("*")
+								 ->from("lineas_reparacion")
+								 ->where("id_orden_servicio", $id_orden)
+								 ->count_all_results();
+			if($existe_firma == 0){
+				$response['estatus'] = false;
+				$response['mensaje']=['No tienes firmas para cancelar.'];
+			}else {
+				$this->db->trans_start();
+				$this->db->where('id_orden_servicio', $id_orden);
+				if($perfil == 7){$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => null]);}
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === TRUE) {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+				}else {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No se pudo cancelar la autorización.';
+				}
+			}
 		return $response;
 	}
 }

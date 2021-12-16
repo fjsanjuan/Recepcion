@@ -7,11 +7,11 @@ echo form_open('',$attributes);
 		<form role="form">
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="num_rep" class="col-sm-4 control-label" style="white-space: nowrap;">No. Reparación</label>
-				<input type="text" class="form-control" name="" id="num_rep">
+				<input type="text" class="form-control" name="num_reparacion" id="num_rep">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="tipo_garantia" class="col-sm-4 control-label" style="white-space: nowrap;">Tipo de Garantía</label>
-				<select id="tipo_garantia" name="" style="width:auto;" class="browser-default form-control">
+				<select id="tipo_garantia" name="tipo_garantia" style="width:auto;" class="browser-default form-control">
 				<option value="">Tipo Garantías</option>
 				<option value="Cero Defectos">Cero Defectos</option>
 				<option value="Básica">Básica</option>
@@ -24,7 +24,7 @@ echo form_open('',$attributes);
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="sub_garantia" class="col-sm-4 control-label" style="white-space: nowrap;">Sub Tipo de Garantía</label>
-				<select id="sub_garantia" name="" style="width:auto;" class="browser-default form-control">
+				<select id="sub_garantia" name="subtipo_garantia" style="width:auto;" class="browser-default form-control">
 				<option value="">Sub Tipos Garantía</option>
 				<option value="MVC">MVC (Son números de parte de Ford)</option>
 				<option value="ACC">ACC</option>
@@ -37,47 +37,47 @@ echo form_open('',$attributes);
 			</div>
 			<div class="clearfix"></div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-				<label for="dan_relacion" class="col-sm-4 control-label" style="white-space: nowrap;">Daños en Relación</label>
-				<input type="text" class="form-control" name="" id="dan_relacion">
+				<label for="danios_relacion" class="col-sm-4 control-label" style="white-space: nowrap;">Daños en Relación</label>
+				<input type="text" class="form-control" name="danio_ralacion" id="danios_relacion">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-				<label for="auth_1" class="col-sm-4 control-label" style="white-space: nowrap;">Autorización N°1</label>
-				<input type="text" class="form-control" name="" id="auth_1">
+				<label for="auth_1" class="col-sm-4 control-label" style="white-space: nowrap;">Autoriz N°1</label>
+				<input type="text" class="form-control" name="autoriz_1" id="auth_1">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-				<label for="auth_2" class="col-sm-4 control-label" style="white-space: nowrap;">Autorización N°2</label>
-				<input type="text" class="form-control" name="" id="auth_2">
+				<label for="auth_2" class="col-sm-4 control-label" style="white-space: nowrap;">Autoriz N°2</label>
+				<input type="text" class="form-control" name="autoriz_2" id="auth_2">
 			</div>
 			<div class="clearfix"></div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="part_total" class="col-sm-4 control-label" style="white-space: nowrap;">Partes Totales $</label>
-				<input type="text" class="form-control" name="" id="part_total">
+				<input type="text" class="form-control" name="partes_totales" id="part_total">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="m_obra" class="col-sm-4 control-label" style="white-space: nowrap;">Mano Obra Total $</label>
-				<input type="text" class="form-control" name="" id="m_obra">
+				<input type="text" class="form-control" name="mano_obra_total" id="m_obra">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="misc_total" class="col-sm-4 control-label" style="white-space: nowrap;">Misc. Total $</label>
-				<input type="text" class="form-control" name="" id="misc_total">
+				<input type="text" class="form-control" name="misc_total" id="misc_total">
 			</div>
 			<div class="clearfix"></div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="iva_total" class="col-sm-4 control-label" style="white-space: nowrap;">IVA $</label>
-				<input type="text" class="form-control" name="" id="iva_total">
+				<input type="text" class="form-control" name="iva" id="iva_total">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="p_cliente" class="col-sm-4 control-label" style="white-space: nowrap;">Participación Cliente $</label>
-				<input type="text" class="form-control" name="" id="p_cliente">
+				<input type="text" class="form-control" name="participacion_cliente" id="p_cliente">
 			</div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="p_dist" class="col-sm-4 control-label" style="white-space: nowrap;">Participación Distribuidor $</label>
-				<input type="text" class="form-control" name="" id="p_dist">
+				<input type="text" class="form-control" name="participacion_distribuidor" id="p_dist">
 			</div>
 			<div class="clearfix"></div>
 			<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 				<label for="rep_total" class="col-sm-4 control-label" style="white-space: nowrap;">Reparación Total $</label>
-				<input type="text" class="form-control" name="" id="rep_total">
+				<input type="text" class="form-control" name="reparacion_total" id="rep_total">
 			</div>
 			
 		</form>
@@ -85,10 +85,12 @@ echo form_open('',$attributes);
 </div>
 <table style="width:100%">
 <tr>
-<td style="text-align: center;"><b>FIRMA ADMINISTRADOR DE GARANTÍA</b>
-<div class="form-check" id="checkFirmaAdmon" style="text-align: center;">
-	<input class="form-check-input" type="checkbox" id="firmaAdmon" disabled>
-	<label class="form-check-label" for="firmaAdmon"></label>
+<td style="text-align: center;"><b>ADMINISTRADOR DE GARANTÍA</b>
+<div class="form-check" name="firma_linea" id="checkFirmaAdmon" style="text-align: center;">
+	<input class="form-check-input" type="checkbox" name="firma_linea" id="firma_linea">
+	<label class="form-check-label" for="firma_linea">FIRMA</label>
+	<input type="hidden" name="firma_admin" id="firma_admin">
+	<button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_firmaLineas">X</button>
 </div>
 </td>
 </tr>
