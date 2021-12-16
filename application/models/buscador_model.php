@@ -4375,6 +4375,12 @@ class Buscador_Model extends CI_Model{
 			$response['garantia'] = $ordenGarantia;
 			$publica = $this->db->select('*')->from('orden_servicio')->where(['id' => $ordenGarantia['movimiento']])->get()->row_array();
 			$response['publica'] = $ordenGarantia;
+			if ($response['garantia'] && $response['garantia']['oasis']) {
+				$response['garantia']['oasis'] = $response['garantia']['oasis'] == 1 ? 'Si' : 'No';
+			}
+			if ($response['publica'] && $response['publica']['oasis']) {
+				$response['publica']['oasis'] = $response['publica']['oasis'] == 1 ? 'Si' : 'No';
+			}
 
 			$response['lineas'] = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
 

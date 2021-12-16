@@ -2890,7 +2890,7 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_datos_f1863($idOrden);
 		echo json_encode($datos);
 	}
-	public function generar_formato_f1863($idOrden = null){
+	public function generar_formato_f1863($token = null,$idOrden = null){
 		if ($token == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Token no válido.';
@@ -2898,7 +2898,9 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válaida.';
 		}else{
-			$datos    = $this->buscador_model->obtener_datos_f1863($idOrden);
+			$datos = $this->input->post();
+			$f1863    = $this->buscador_model->obtener_datos_f1863($idOrden);
+			$datos = array_merge($datos, $f1863);
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
 		}
 		echo json_encode($response);

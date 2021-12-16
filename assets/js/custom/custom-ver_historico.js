@@ -5229,3 +5229,77 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 			}
 		});
 	});
+
+$(document).off('click','.f1863').on('click', '.f1863', function(event) {
+	event.preventDefault();
+	console.log('Generando f1863');
+	var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		var t_vin = $("#api_vin-"+id_orden).val();
+		//var vin = $("#api_vin-26590").val();
+		var signGrtia = $("#api_signGrtia-"+id_orden).val();
+		//  t_nomCte  -> t_ = this
+		var t_nomCte = $("#api_nomCte-"+id_orden).val();
+		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+		//console.log(t_signAsesor);
+		var tok="";
+		t_vin = t_vin.replace(".", "");
+		t_vin = t_vin.replace(" ", "");
+		$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					url: `${base_url}index.php/servicio/generar_formato_f1863/${tok}/${id_orden}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'F1863',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:t_vin,
+						garantia:signGrtia,
+						nomCte:t_nomCte,
+						signAsesor:t_signAsesor,
+						id_orden:id_orden,
+						//url:'https://isapi.intelisis-solutions.com/reportes/f1863PDF'
+						url:'http://127.0.0.1:8000/reportes/f1863PDF'
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
+					}
+				});
+			}
+		});
+});
