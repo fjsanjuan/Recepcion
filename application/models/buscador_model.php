@@ -3860,10 +3860,10 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function get_archivos_f1863($id_orden = null, $tipo = 7)
+	public function get_archivos_f1863($id_orden = null, $tipo = 7, $f1863 = "")
 	{
 		$this->load->database();
-		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo <= {$tipo} and archivo.eliminado = 0 order by archivo.id desc;");
+		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo <= {$tipo} and archivo.eliminado = 0 {$f1863} order by archivo.id desc;");
 		if($query->num_rows() > 0){
 			return $query->result_array();
 		}else

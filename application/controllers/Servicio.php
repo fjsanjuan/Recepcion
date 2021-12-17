@@ -2660,11 +2660,12 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
 		}else {
+			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo LIKE '%F1863-%'");
 			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
 			if (isset($orden['movimiento'])) {
-				$archivos = $this->buscador_model->get_archivos_f1863($orden['movimiento'], 7);
+				$archivos = array_merge($archivos ,$this->buscador_model->get_archivos_f1863($orden['movimiento'], 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
 			}
-			$archivos = array_merge($archivos,$this->buscador_model->get_archivos_f1863($idOrden, 7));
+			$archivos = array_merge($archivos,$this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
 			$datos["archivos"] = $archivos;
 			$response = $this->buscador_model->obtener_union_pdf($token, $datos);
 		}
