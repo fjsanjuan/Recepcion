@@ -13,7 +13,7 @@ $(window).on('load', function() {
     var id_cliente = $("#cliente").val();
     var vin = $("#vin").val();
 
-    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #enviar_whatsapp #mostrar_modalOasis, #mostrar_modalsonido").hide();
+    $(".vista_completa, .vista_completa_vehiculo, .vista_completa_asesor, .vista_completaOrden, #mostrar_modalemail, #generar_pdf, #levanta_orden, #btn_inicio, #enviar_whatsapp #mostrar_modalOasis, #mostrar_modalsonido").hide();
 
     // funcion que asigna el total de fotos que tiene cada orden 
     set_totalFots();
@@ -1623,6 +1623,7 @@ function obtener_artSeleccionados()
 }
 
 // guardar la orden en intelisis y base del proyecto
+
 var click_guardar = false;
 $(document).on('click','#levanta_orden' ,function(e){
     if(click_guardar === false)
@@ -1673,13 +1674,10 @@ $(document).on('click','#levanta_orden' ,function(e){
             if(data.success == 1)
             {
                 toastr.success('Orden creada correctamente.');
-                $("#mostrar_modalemail, #generar_pdf, #mostrar_modalfirma, #btn_inicio, #mostrar_modalOasis").show();
+                $("#mostrar_modalemail, #generar_pdf, #btn_inicio, #mostrar_modalOasis").show();
                 // $("#mostrar_modalemail").click();
-                $("#send_mail").click();
+                //$("#send_mail").click(); (PARA ENVIAR LA ORDEN POR CORREO AL LEVANTAR ORDEN, SE DEBE DESCOMENTAR ESTA LINEA)
                 $("#loading_spin, #levanta_orden").hide();
-                setTimeout(function(){ 
-                    window.open(base_url+"index.php/servicio/correo_reverso/"+ localStorage.getItem("id_orden_servicio"), "_blank");
-                }, 6000);
                 
             }else 
             {
@@ -1689,9 +1687,10 @@ $(document).on('click','#levanta_orden' ,function(e){
         .fail(function() {
             toast.error("Hubo un error al crear la orden");
         });
-    }
-
-    // click_guardar = true;
+    }else{
+		// click_guardar = true;
+	}
+    
 });
 
 function update_price() {
@@ -2080,6 +2079,9 @@ $(document).on("click", '#mostrar_modalfirma', function (e){
     e.preventDefault();
 
     $("#modalfirma").modal("show");
+	setTimeout(function(){ 
+		window.open(base_url+"index.php/servicio/correo_reverso/"+ localStorage.getItem("id_orden_servicio"), "_blank");
+	}, 3000);
 });
 
 /*Configuración de firma*/
@@ -2231,6 +2233,8 @@ $(document).on("click", '#btn_guardarFirma', function (e){
                 $("#loading_spin").hide();
 
                 $("#modalfirma").modal("hide");
+				$("#levanta_orden").show();
+				$("#mostrar_modalfirma").hide();
             }else
             {
                 toastr.error("Hubo un error al guardar las firmas del Cliente.");
