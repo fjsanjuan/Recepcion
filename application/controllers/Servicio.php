@@ -2903,6 +2903,9 @@ class Servicio extends CI_Controller {
 			$f1863    = $this->buscador_model->obtener_datos_f1863($idOrden);
 			$datos = array_merge($datos, $f1863);
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($idOrden, $response["data"]["ruta_rel"]);
+			}
 		}
 		echo json_encode($response);
 	}
