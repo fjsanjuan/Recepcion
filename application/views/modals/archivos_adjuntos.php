@@ -1,7 +1,10 @@
 <div class="container">
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-2">
             <button class="btn btn-outline btn-success down_f1816" title="Descargar documentación" style="z-index: 9999;"><i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-outline btn-info refreshDoc" title="Recargar documentación" style="z-index: 9999;"><i class="fa fa-refresh"></i></button>
         </div>
     </div>
     <div class="row">

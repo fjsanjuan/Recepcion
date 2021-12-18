@@ -2183,8 +2183,11 @@ class Buscador_Model extends CI_Model{
 									->from("usuarios")
 									->where("id", $this->session->userdata["logged_in"]["id"])
 									->get()->row_array();
-
-							   
+		/*
+			Cambio realizado para un ticket pendite de revisar si solo es para la agencia del ticket
+			$datosAsesor = $intelisis->select('eMail,Telefonos')->from('agente')->where('agente', $datos['cliente']['clave_asesor'])->get()->row_array();
+			$datos['contacto_asesor'] = is_array($datosAsesor) ? $datosAsesor: ['eMail' => 'no asignado', 'Telefonos' => ' no asignado'];
+		*/
 		return $datos;
 	} 
 
@@ -3284,18 +3287,24 @@ class Buscador_Model extends CI_Model{
 	public function cargar_documentacion($ruta_temp, $tipos, $id_orden)
 	{
 		$archivos = $_FILES;
-		$files = [];
-		$columna = 0;
+		$files    = [];
+		$columna  = 0;
+		$pdfs     = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' => $id_orden, 'tipo_archivo' => 7])->count_all_results();
+		$audios   = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' => $id_orden, 'tipo_archivo' => 8])->count_all_results();
 		foreach($archivos as $key => $value) 
 		{
-			$datos["archivo"] = $value;
-			$datos['id'] = $columna;
+			if ( $tipos[$columna] == 'PDF') {
+				$pdfs++;
+			} else {
+				$audios++;
+			}
+			$datos["archivo"]           = $value;
+			$datos['id']                =  $tipos[$columna] == 'PDF' ? $pdfs : $audios;
 			$datos['id_orden_servicio'] = $id_orden;
-			$datos['tipo'] = $tipos[$columna] == 'PDF' ? 7 : 8;
-			$datos['tipo_nombre'] = $tipos[$columna];
-			$archivo_creado = $this->crear_archivo_v2($datos);
-			$files[] = ($archivo_creado) ? true : false;
-			$columna++;
+			$datos['tipo']              = $tipos[$columna] == 'PDF' ? 7 : 8;
+			$datos['tipo_nombre']       = $tipos[$columna];
+			$archivo_creado             = $this->crear_archivo_v2($datos);
+			$files[]                    = ($archivo_creado) ? true : false;
 		}
 
 		return $files;
@@ -3311,13 +3320,13 @@ class Buscador_Model extends CI_Model{
 		move_uploaded_file($archivo["tmp_name"], $ruta);
 		if(file_exists($ruta)) {
 			$archivo = [
-					'id_orden_servicio' => $datos['id_orden_servicio'],
-					'tipo_archivo' => $datos['tipo'],
-					'fecha_creacion' => date("d-m-Y H:i:s"),
+					'id_orden_servicio'   => $datos['id_orden_servicio'],
+					'tipo_archivo'        => $datos['tipo'],
+					'fecha_creacion'      => date("d-m-Y H:i:s"),
 					'fecha_actualizacion' => date("d-m-Y H:i:s"),
-					'eliminado' => 0,
-					'comentario' => '',
-					'ruta_archivo' => $ruta
+					'eliminado'           => 0,
+					'comentario'          => '',
+					'ruta_archivo'        => $ruta
 				];
 				$this->db->trans_start();
 				$this->db->insert("archivo", $archivo);
