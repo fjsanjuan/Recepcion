@@ -1292,6 +1292,7 @@ class Servicio extends CI_Controller {
 		$dato['cajuela_f']            = $this->input->post('cajuela_f[]') !== "" ?  $this->input->post('cajuela_f[]') : [];
 		$dato['cristales']            = $this->input->post('cristales[]') !== "" ?  $this->input->post('cristales[]') : [];
 		$dato['toldo']                = $this->input->post('toldo[]') !== "" ?  $this->input->post('toldo[]') : [];
+		$dato['debajo']                = $this->input->post('debajo[]') !== "" ?  $this->input->post('debajo[]') : [];
 		$dato['carroceria']           = $this->input->post('carroceria[]') !== "" ?  $this->input->post('carroceria[]') : [];
 		$dato['dentro']               = $this->input->post('dentro[]') !== "" ?  $this->input->post('dentro[]') : [];
 		$dato['fuera']                = $this->input->post('fuera[]') !== "" ?  $this->input->post('fuera[]') : [];
@@ -2425,8 +2426,7 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = "orden no válida.";
 		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmasPregarantia($id_orden);
+			$response = $this->buscador_model->obtenerFirmasPregarantia($id_orden);
 		}
 		echo json_encode($response);
 	}

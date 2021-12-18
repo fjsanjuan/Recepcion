@@ -2298,8 +2298,8 @@
                                         <td>Debajo del vehículo</td>
                                         <td>
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="debajo[]" id="falla_debajo_vehiculo0" value="Debajo del vehículo">
-                                                <label class="form-check-label" id="label_debajo_vehiculo0" for="falla_debajo_vehiculo0"></label>
+                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="debajo[]" id="estando_debajo0" value="Debajo del vehículo">
+                                                <label class="form-check-label" id="label_debajo_vehiculo0" for="estando_debajo0"></label>
                                             </div>
                                         </td>
                                     </tr>

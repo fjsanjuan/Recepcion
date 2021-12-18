@@ -1676,7 +1676,7 @@ $(document).on('click','#levanta_orden' ,function(e){
                 toastr.success('Orden creada correctamente.');
                 $("#mostrar_modalemail, #generar_pdf, #btn_inicio, #mostrar_modalOasis").show();
                 // $("#mostrar_modalemail").click();
-                //$("#send_mail").click(); (PARA ENVIAR LA ORDEN POR CORREO AL LEVANTAR ORDEN, SE DEBE DESCOMENTAR ESTA LINEA)
+                //$("#send_mail").click(); PARA ENVIAR LA ORDEN POR CORREO AL LEVANTAR ORDEN SE DEBE DESCOMENTAR ESTA LINEA
                 $("#loading_spin, #levanta_orden").hide();
                 
             }else 
@@ -3395,7 +3395,7 @@ $(document).on("click", ".add_causa_raiz", function(event){
 	 clone.find('#falla_cristales0').prop('id', `falla_cristales${cloneID}`);
 	 clone.find('#falla_toldo0').prop('id', `falla_toldo${cloneID}`);
 	 clone.find('#falla_carroceria0').prop('id', `falla_carroceria${cloneID}`);
-	 clone.find('#falla_debajo_vehiculo0').prop('id', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#estando_debajo0').prop('id', `estando_debajo${cloneID}`);
 	 clone.find('#falla_dentro0').prop('id', `falla_dentro${cloneID}`);
 	 clone.find('#falla_fuera0').prop('id', `falla_fuera${cloneID}`);
 	 clone.find('#falla_frente0').prop('id', `falla_frente${cloneID}`);
@@ -3407,7 +3407,7 @@ $(document).on("click", ".add_causa_raiz", function(event){
 	 clone.find('#label_cristales0').prop('for', `falla_cristales${cloneID}`);
 	 clone.find('#label_toldo0').prop('for', `falla_toldo${cloneID}`);
 	 clone.find('#label_carroceria0').prop('for', `falla_carroceria${cloneID}`);
-	 clone.find('#label_debajo_vehiculo0').prop('for', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#label_debajo_vehiculo0').prop('for', `estando_debajo${cloneID}`);
 	 clone.find('#label_dentro0').prop('for', `falla_dentro${cloneID}`);
 	 clone.find('#label_fuera0').prop('for', `falla_fuera${cloneID}`);
 	 clone.find('#label_frente0').prop('for', `falla_frente${cloneID}`);
@@ -3796,7 +3796,7 @@ function agregar_queja(datos, clone) {
 	 clone.find('#falla_cristales0').prop('id', `falla_cristales${cloneID}`);
 	 clone.find('#falla_toldo0').prop('id', `falla_toldo${cloneID}`);
 	 clone.find('#falla_carroceria0').prop('id', `falla_carroceria${cloneID}`);
-	 clone.find('#falla_debajo_vehiculo0').prop('id', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#estando_debajo0').prop('id', `estando_debajo${cloneID}`);
 	 clone.find('#falla_dentro0').prop('id', `falla_dentro${cloneID}`);
 	 clone.find('#falla_fuera0').prop('id', `falla_fuera${cloneID}`);
 	 clone.find('#falla_frente0').prop('id', `falla_frente${cloneID}`);
@@ -3808,7 +3808,7 @@ function agregar_queja(datos, clone) {
 	 clone.find('#label_cristales0').prop('for', `falla_cristales${cloneID}`);
 	 clone.find('#label_toldo0').prop('for', `falla_toldo${cloneID}`);
 	 clone.find('#label_carroceria0').prop('for', `falla_carroceria${cloneID}`);
-	 clone.find('#label_debajo_vehiculo0').prop('for', `falla_debajo_vehiculo${cloneID}`);
+	 clone.find('#label_debajo_vehiculo0').prop('for', `estando_debajo${cloneID}`);
 	 clone.find('#label_dentro0').prop('for', `falla_dentro${cloneID}`);
 	 clone.find('#label_fuera0').prop('for', `falla_fuera${cloneID}`);
 	 clone.find('#label_frente0').prop('for', `falla_frente${cloneID}`);
@@ -3957,7 +3957,7 @@ function agregar_queja(datos, clone) {
 	clone.find(`input[name="cristales[]"]`).prop('checked', datos['cristales'] == 1 ? true : false);
 	clone.find(`input[name="toldo[]"]`).prop('checked', datos['toldo'] == 1 ? true : false);
 	clone.find(`input[name="carroceria[]"]`).prop('checked', datos['carroceria'] == 1 ? true : false);
-	clone.find(`input[name="debajo[]"]`).prop('checked', datos['estando_debajo'] == 1 ? true : false);
+	clone.find(`input[name="debajo[]"]`).prop('checked', datos['debajo'] == 1 ? true : false);
 	clone.find(`input[name="dentro[]"]`).prop('checked', datos['estando_dentro'] == 1 ? true : false);
 	clone.find(`input[name="fuera[]"]`).prop('checked', datos['estando_fuera'] == 1 ? true : false);
 	clone.find(`input[name="frente[]"]`).prop('checked', datos['estando_frente'] == 1 ? true : false);
