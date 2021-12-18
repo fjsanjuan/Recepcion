@@ -2150,12 +2150,16 @@ class Buscador_Model extends CI_Model{
 									 ->get()->row_array();
 
 		
-		$datos["cliente"] += $intelisis->select("MovID,Pasajeros,ar.Descripcion1")
+		$clientes = $intelisis->select("MovID,Pasajeros,ar.Descripcion1")
 												->from("Venta vta")
 												->join("VIN vn", "vta.servicioSerie = vn.vin")
 												->join("art ar", "ar.Articulo = vta.ServicioArticulo")
 												->where("ID", $datos["cliente"]["id_orden_intelisis"])
 												->get()->row_array(); 
+
+		$datos["cliente"]+= is_array($clientes) ? $clientes:[];
+												/*echo "<pre>"; print_r($clientes);
+												echo "</pre>";*/
 
 		$datos["inspeccion"] = $this->db->select("*")
 										->from("orden_servicio_inspeccion")

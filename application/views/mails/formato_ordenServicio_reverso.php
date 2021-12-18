@@ -108,7 +108,7 @@ body {
 			</div>
 			<div class="col-2">
 				<label>Folio:</label>
-				<input type="text" name="folio" id="folio" class="input_bordeInferior_reverso" value="<?=$cliente['MovID']?>">
+				<input type="text" name="folio" id="folio" class="input_bordeInferior_reverso" value="<?= isset($cliente['MovID']) ? $cliente['MovID'] : '' ?>">
 				<label>Fecha:</label>
 				<?php 
 					$fecha_actual = date("d-m-Y");
