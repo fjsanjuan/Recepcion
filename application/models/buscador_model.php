@@ -3441,7 +3441,8 @@ class Buscador_Model extends CI_Model{
 					$response['mensaje']='La orden no cuenta con verificaciones registradas.';
 				}
 			}
-		}else {
+		}
+		else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No tienes firma registrada.';
 		}
@@ -3449,7 +3450,16 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtenerFirmasPregarantia($id_orden)
 	{
-		return $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+		$pregarantia = $this->db->select('*')->from('orden_servicio')->where("movimiento", $id_orden)->count_all_results();
+		if ($pregarantia > 0){
+			$response['estatus'] = false;
+			$response['mensaje'] =['Ya existe una pregarantia abierta para esta orden.'];
+
+		}else{
+		$response['data'] = $this->db->select("*")->from('firma_electronica')->where('id_orden_servicio', $id_orden)->get()->result_array();
+		$response['estatus'] = sizeof($response['data']) > 0;	
+		}
+		return $response;
 	}
 
 	public function cancelar_firma_pregarantia($id_orden)
