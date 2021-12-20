@@ -217,7 +217,7 @@ $(document).ready(function() {
 				action_refacciones  +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_refacciones	+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				if (val["movimiento"] != null) {
-					action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+" data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
+					action_refacciones 	+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
@@ -228,6 +228,7 @@ $(document).ready(function() {
 				if (val['movimiento'] != null) {
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Tipo Garantía</button>";
 					action_garantias	+= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
+					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
 				action_garantias	+="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
 				action_garantias	+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-upload'></i>&nbsp&nbsp Fotografías</button>";
@@ -4837,7 +4838,7 @@ function obtener_requisiciones(idOrden){
 					var idReq = value.id_requisicion;
 					var row_title = $("<div class='row'></div>");
 					row_title.append($(`<div class='row'>
-						<div class='col-md-4' style='display: ${(value.autorizado ? 'none' : 'inline-block')} '><button class='btn btn-sm btn-primary editarReq' data-id='${idReq}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
+						<div class='col-md-4' style='display: ${((value.autorizado || id_perfil != 5)? 'none' : 'inline-block')} '><button class='btn btn-sm btn-primary editarReq' data-id='${idReq}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
 						<div class='col-md-4'>
 							<label>Num. Requisición: ${(value.id_requisicion ? value.id_requisicion : 'N/D')}</label>
 						</div>
@@ -4858,7 +4859,7 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='check auth_all' value='1' id='"+idReq+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></th><th>Entregado<br><input type='checkbox' class='check auth_all' value='1' id='"+idReq+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"'></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='check auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+(id_perfil == 7 ? '': 'disabled')+"></th><th>Entregado<br><input type='checkbox' class='check auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
 							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
@@ -5415,4 +5416,71 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia) {
 $(document).off('click', '#modaldocumentacion button.refreshDoc').on('click', '#modaldocumentacion button.refreshDoc', function(event) {
 	event.preventDefault();
 	cargar_documentacion(localStorage.getItem('hist_id_orden'), $('#trae_signGrtia').val(), bnt_renunciaGrtia);
-});;
+});
+
+$(document).off('click', '#verReqModal input[ name="auth_req[]"]').on('click', '#verReqModal input[ name="auth_req[]"]', function(event) {
+	let id  = $(this).prop('id');
+	let idOrden = id.split('-')[0];
+	let idReq   = id.split('-')[1];
+	const _this = this;
+	$.ajax({
+		url: `${base_url}index.php/servicio/autorizar_requisicion/${idOrden}/${idReq}`,
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			check : $(this).is(':checked')
+		},
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			toastr.info(resp.mensaje);
+			obtener_requisiciones(idOrden);
+		} else {
+			$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+			toastr.warning(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		console.log('error', error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
+});
+$(document).off('click', '#verReqModal input[ name="entregado_req[]"]').on('click', '#verReqModal input[ name="entregado_req[]"]', function(event) {
+	let id  = $(this).prop('id');
+	let idOrden = id.split('-')[0];
+	let idReq   = id.split('-')[1];
+	console.log('id_auth req admon',idReq);
+	console.log('id_auth ord admon',idOrden);
+	const _this = this;
+	$.ajax({
+		url: `${base_url}index.php/servicio/entrega_requisicion/${idOrden}/${idReq}`,
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			check : $(this).is(':checked')
+		},
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			toastr.info(resp.mensaje);
+			obtener_requisiciones(idOrden);
+		} else {
+			$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+			toastr.warning(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		console.log('error', error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
+});

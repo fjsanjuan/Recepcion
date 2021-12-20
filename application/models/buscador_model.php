@@ -4601,4 +4601,61 @@ class Buscador_Model extends CI_Model{
 			}
 		return $response;
 	}
+	public function autorizar_requisicion($idOrden, $idRequisicion, $datos)
+	{
+		$existe = $this->db->select('*')->from('requisiciones')->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden])->get()->row_array();
+		if (sizeof($existe) > 0) {
+			$data = [
+				'autorizado' => $datos['check']
+			];
+			$this->db->trans_start();
+			$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
+			$this->db->update('requisiciones', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE) {
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar la autorización de la requisición.';
+			}else {
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Autorización de la requisición actualizada.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No se encontró ninguna requisición.';
+		}
+		return $response;
+	}
+	public function entrega_requisicion($idOrden, $idRequisicion, $datos)
+	{
+		$existe = $this->db->select('*')->from('requisiciones')->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden])->get()->row_array();
+		if (sizeof($existe) > 0) {
+			$data = [
+				'entregado' => $datos['check']
+			];
+			if ($existe['autorizado']) {
+				$this->db->trans_start();
+				$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
+				$this->db->update('requisiciones', $data);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No fue posible actualizar el estatus de la requisición.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = 'Estatus de la requisición actualizado.';
+				}
+			} else {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No es posible entregar una requisición que no ha sido autorizada.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No se encontró ninguna requisición.';
+		}
+		return $response;
+	}
 }

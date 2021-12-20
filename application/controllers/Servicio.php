@@ -2990,5 +2990,34 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-
+	public function autorizar_requisicion($idOrden = null, $idRequisicion = null)
+	{
+		$datos = $this->input->post();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}
+		elseif ($idRequisicion == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Requisición no válida.';
+		}else {
+			$response = $this->buscador_model->autorizar_requisicion($idOrden, $idRequisicion, $datos);
+		}
+		echo json_encode($response);
+	}
+	public function entrega_requisicion($idOrden = null, $idRequisicion = null)
+	{
+		$datos = $this->input->post();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}
+		elseif ($idRequisicion == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Requisición no válida.';
+		}else {
+			$response = $this->buscador_model->entrega_requisicion($idOrden, $idRequisicion, $datos);
+		}
+		echo json_encode($response);
+	}
 }
