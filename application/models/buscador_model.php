@@ -3443,6 +3443,9 @@ class Buscador_Model extends CI_Model{
 					if ($perfil == 8){
 						$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => $firma['firma_electronica']]);
 					}
+					if ($perfil == 7){
+						$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => $firma['firma_electronica']]);
+					}
 					$this->db->trans_complete();
 					if ($this->db->trans_status() === FALSE) {
 						$this->db->trans_rollback();
@@ -3466,7 +3469,8 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtenerFirmasPregarantia($id_orden)
 	{
-		$pregarantia = $this->db->select('*')->from('orden_servicio')->where("movimiento", $id_orden)->count_all_results();
+		$pregarantia = $this->db->select('*')
+		->from('orden_servicio')->where("movimiento", $id_orden)->count_all_results();
 		if ($pregarantia > 0){
 			$response['estatus'] = false;
 			$response['mensaje'] =['Ya existe una pregarantia abierta para esta orden.'];
@@ -3493,6 +3497,8 @@ class Buscador_Model extends CI_Model{
 				$this->db->where('id_orden_servicio', $id_orden);
 				if($perfil == 4){$this->db->update('firma_electronica', ['firma_pregarantiaJefe' => null]);}
 				if($perfil == 8){$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => null]);}
+				if($perfil == 7){$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => null]);}
+
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -3564,6 +3570,7 @@ class Buscador_Model extends CI_Model{
 				$this->db->where('id_orden_servicio', $id_orden);
 				if($perfil == 4){$this->db->update('firma_electronica', ['firma_adicionalJefe' => null]);}
 				if($perfil == 8){$this->db->update('firma_electronica', ['firma_adicionalGerente' => null]);}
+				if($perfil == 7){$this->db->update('firma_electronica', ['firma_adicionalAdmon' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -3632,7 +3639,6 @@ class Buscador_Model extends CI_Model{
 				$this->db->trans_start();
 				$this->db->where('id_orden_servicio', $id_orden);
 				if($perfil == 4){$this->db->update('firma_electronica', ['firma_carroParado' => null]);}
-				if($perfil == 8){$this->db->update('firma_electronica', ['firma_carroParado' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();

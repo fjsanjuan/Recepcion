@@ -3246,9 +3246,10 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	$('#cpCheck1').prop('checked', false);
 	$('#pregCheck1').prop('checked', false);
 	$('#addCheck1').prop('checked', false);
+	if(id_perfil == 7 || id_perfil == 8)$('#autor_cp').css('display', 'none');
 	$.ajax({
 		cache: false,
-		url: base_url+ "index.php/servicio/obtenerFirmasPregarantia/"+id_orden,
+		url: base_url+ "index.php/servicio/obtenerFirmaAdd/"+id_orden,
 		contentType: false,
 		processData: false,
 		type: 'GET',
@@ -3263,8 +3264,21 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 					$('#autor_preg').prop('disabled', true);
 					$('#pregCheck1').prop('checked', true);
 					$('#cancelar_preg').css('display', 'inline-block');
+					
+
+				}if(data.data[0].firma_adicionalJefe != null && id_perfil == 4){
+					$('#autor_add').prop('disabled', true);
+					$('#addCheck1').prop('checked', true);
+					$('#cancelar_add').css('display', 'inline-block');
+			
+
+				}if(data.data[0].firma_carroParado != null && id_perfil == 4){
+					$('#autor_cp').prop('disabled', true);
+					$('#cpCheck1').prop('checked', true);
+					$('#cancelar_cp').css('display', 'inline-block');
 
 				}
+
 			}
 		}
 		if (data.estatus) {
@@ -3274,81 +3288,28 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 					$('#pregCheck1').prop('checked', true);
 					$('#cancelar_preg').css('display', 'inline-block');
 
-				}
-			}
-		}else {
-			toastr.warning(data.mensaje);
-		}
-	}).fail(function (error) {
-		toastr.warning("No se pudo obtener información de las firmas");
-	})
-	.always(function() {
-		$("#loading_spin").hide();
-	});
-	$.ajax({
-		cache: false,
-		url: base_url+ "index.php/servicio/obtenerFirmaAdd/"+id_orden,
-		contentType: false,
-		processData: false,
-		type: 'GET',
-		dataType: 'json',
-		beforeSend: function(){
-			$("#loading_spin").show();
-		}
-	}).done(function (data) {
-		if (data.estatus) {
-			if (data.data.length > 0) {
-				if(data.data[0].firma_adicionalJefe != null && id_perfil == 4){
+
+				}if(data.data[0].firma_adicionalGerente != null && id_perfil == 8){
 					$('#autor_add').prop('disabled', true);
 					$('#addCheck1').prop('checked', true);
 					$('#cancelar_add').css('display', 'inline-block');
+
 				}
 			}
-		}
-		if (data.estatus) {
+		}if (data.estatus) {
 			if (data.data.length > 0) {
-				if(data.data[0].firma_adicionalGerente != null && id_perfil == 8){
+				if(data.data[0].firma_pregarantiaAdmon != null && id_perfil == 7){
+					$('#autor_preg').prop('disabled', true);
+					$('#pregCheck1').prop('checked', true);
+					$('#cancelar_preg').css('display', 'inline-block');
+
+
+				}if(data.data[0].firma_adicionalAdmon != null && id_perfil == 7){
 					$('#autor_add').prop('disabled', true);
 					$('#addCheck1').prop('checked', true);
 					$('#cancelar_add').css('display', 'inline-block');
-				}
-			}
-		}else {
-			toastr.warning(data.mensaje);
-		}
-	}).fail(function (error) {
-		toastr.warning("No se pudo obtener información de las firmas");
-	})
-	.always(function() {
-		$("#loading_spin").hide();
-	});
-	// carro parado
-	$.ajax({
-		cache: false,
-		url: base_url+ "index.php/servicio/obtenerFirmaCP/"+id_orden,
-		contentType: false,
-		processData: false,
-		type: 'GET',
-		dataType: 'json',
-		beforeSend: function(){
-			$("#loading_spin").show();
-		}
-	}).done(function (data) {
-		if (data.estatus) {
-			if (data.data.length > 0) {
-				if(data.data[0].firma_carroParado != null && id_perfil == 4){
-					$('#autor_cp').prop('disabled', true);
-					$('#cpCheck1').prop('checked', true);
-					$('#cancelar_cp').css('display', 'inline-block');
-				}
-			}
-		}
-		if (data.estatus) {
-			if (data.data.length > 0) {
-				if(data.data[0].firma_carroParado != null && id_perfil == 8){
-					$('#autor_cp').prop('disabled', true);
-					$('#cpCheck1').prop('checked', true);
-					$('#cancelar_cp').css('display', 'inline-block');
+
+
 				}
 			}
 		}else {
@@ -3432,7 +3393,7 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 	});
 });
 // autorizar Adicional (ADD) por parte jefe taller 
-$(document).on('click', '#autor_add', function(e){
+/*$(document).on('click', '#autor_add', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
 	console.log('id orden', id_orden);
@@ -3480,7 +3441,7 @@ $(document).on('click', '#autor_add', function(e){
 				swal('Cancelado', '', 'error');
 			}
 		});
-});
+});*/
 
 $(document).on('click', '#cancelar_add', function(e){
 	e.preventDefault();
