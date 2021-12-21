@@ -14,6 +14,26 @@
 						</div>
 					</div>
 				</div>
+				<div class="table-responsive">
+				<table class="table table-border text-center">
+					<tbody>
+						<tr>
+							<td><b>Nombre y Firma Resp. Refacc.</b>
+							<div class="form-check" id="checkRefacc" >
+								<input class="form-check-input" type="checkbox" id="refaccCheck1" style="">
+								<label class="form-check-label" for="refaccCheck1" style="">Firma</label>
+							</div>
+							</td>
+							<td><b>Nombre y Firma Técnico</b>
+							<div class="form-check" id="checkTecn" >
+								<input class="form-check-input" type="checkbox" id="reciboCheck1" style="">
+								<label class="form-check-label" for="reciboCheck1" style="">Firma</label>
+							</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 				<!-- <button type="button" class="btn btn-primary guardarReq">Guardar</button> -->

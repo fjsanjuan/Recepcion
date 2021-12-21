@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -222,11 +222,12 @@ $(document).ready(function() {
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
 				btn_garantias	=``;
-				// btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				//btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				action_garantias	= "";
 				if (val['movimiento'] != null) {
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Tipo Garantía</button>";
+					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_tipoG' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_tipoG-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Tipo Garantías</button>";
 					action_garantias	+= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 				}
@@ -239,11 +240,11 @@ $(document).ready(function() {
 				//action_garantias	 +="<button class='btn btn-sm pregarantia' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='pregarantia-"+val["id"]+"'><i class='fa fa-paste'></i>&nbsp&nbsp Validar Pregarantía</button>";
 				//action_garantias	+=`<button type="button" class="btn btn-primary btn-sm refacciones" id='autorizar_refacciones-${val["id"]}'><i class="fa fa-check"></i>&nbsp&nbsp Autorizar Refacciones</button>`;
 				btn_gerente		=``;
-				// btn_gerente		+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				//btn_gerente		+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_gerente 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				action_gerente	="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 				btn_jefe       = ``;
-				// btn_jefe	+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				//btn_jefe	+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_jefe 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				btn_jefe	+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Verificación</button>";
 				action_jefe		=``;
@@ -253,7 +254,7 @@ $(document).ready(function() {
 				
 				}
 				btn_tecnico    = ``;
-				// btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				//btn_tecnico    += "<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
@@ -287,7 +288,7 @@ $(document).ready(function() {
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
 				btn		+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				// btn     += "<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
+				//btn     += "<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				action  = "<button class='btn btn-sm whatsapp' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 				action  +="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
@@ -1784,9 +1785,9 @@ $(document).ready(function() {
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
 							}
 							if(value2.autorizado == 0){
-								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td style='text-align: center;'><input type='checkbox' style='height: 24px; width: 24px;' class='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+idpres+"-"+value2.cve_articulo+"'></label></td></tr>");
 							}else{
-								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked></td></tr>");
+								var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td style='text-align: center;'><input type='checkbox' style='height: 24px; width: 24px;' class='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+idpres+"-"+value2.cve_articulo+"'></label></td></tr>");
 							}
 							table.append(row);
 						});
@@ -3059,7 +3060,7 @@ function guardar_documentacion(form)
         if(data.length > 0)
         {
         	$('#archivos_adjuntos_doc').empty();
-        	$('#modaldocumentacion button.refreshDoc').trigger('click');
+			$('#modaldocumentacion button.refreshDoc').trigger('click');
             toastr.success("Se guardo la documentación.");
 
         }else
@@ -4859,7 +4860,7 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='check auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+(id_perfil == 7 ? '': 'disabled')+"></th><th>Entregado<br><input type='checkbox' class='check auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+(id_perfil == 7 ? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
 							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
@@ -4950,9 +4951,9 @@ function obtener_cotizaciones(id_orden){
 							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
 						}
 						if(value2.autorizado == 0){
-							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='background-color: blue;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"></td></tr>");
+							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='height: 24px; width: 24px;' class='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" disabled><label for='"+idpres+"-"+value2.cve_articulo+"'></label> </td></tr>");
 						}else{
-							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='background-color: blue;' class='check chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' checked></td></tr>");
+							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='height: 24px; width: 24px;' class='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" disabled><label for='"+idpres+"-"+value2.cve_articulo+"'></label> </td></tr>");
 						}
 						table.append(row);
 					});
@@ -5240,6 +5241,94 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 			}
 		});
 	});
+
+	$(document).off('click', '.ver_tipoG').on('click', '.ver_tipoG', function(event) {
+		event.preventDefault();
+		idOrden = $(this).prop('id');
+		idOrden = idOrden.split('-')[1];
+		$('#verLinTrabajo .modal-body').empty();
+		obtener_lineas(idOrden);
+		//requisicionesArray = [];
+		/*$.ajax({
+			url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
+			type: 'GET',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$("#loading_spin").show();
+			}
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			$("#loading_spin").hide();
+		});*/
+		
+	});
+	function obtener_lineas(idOrden){
+		$.ajax({
+			url: `${base_url}index.php/servicio/obtener_lineas/${idOrden}`,
+			type: 'GET',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al buscar');
+			},
+			success: function (data){
+				console.log('resp', data);
+				$("#loading_spin").hide();
+				if(data.estatus == true){
+					lineasArray = data.lineas;
+					console.log('lin', lineasArray);
+					$.each(data.lineas, function(index, value){
+						var idLin = value.id_orden;
+						var row_title = $("<div class='row'></div>");
+						row_title.append($(`<div class='row'>
+							<div class='col-md-4' style='display: ${(value.autorizado ? 'none' : 'inline-block')} '><button class='btn btn-sm btn-primary editarLin' data-id='${idLin}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
+							<div class='col-md-4'>
+								<label>No. Orden: ${(value.id_orden ? value.id_orden : 'N/D')}</label>
+							</div>
+							<div class='col-md-4'>
+								<label>No. Reparacion: ${(value.num_reparacion ? value.num_reparacion : 'N/D')}</label>
+							</div>
+						</div>`));
+						/*if(value.autorizado == 1)
+							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
+						else
+							var check = $("<label for='"+idpres+"' class='no_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1'>Autorizado</label>");
+	
+						row_title.append(check);*/
+	
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><thTipo Garantía</th><th>SubTipo Garantía</th><th>Daño en Relación</th><th>Autoriz 1</th><th>Autoriz 2</th><th>Partes Totales</th><th>Mano de Obra</th><th>Misc. Totales</th><th>IVA</th><th>P. Cliente</th><th>P. Dist</th><th>Rep. Total</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						$.each(value.detalles, function(value2){
+							if(value2.autorizado == 0){
+								var row = $("<tr><td>"+(value2.tipo_garantia ? value2.tipo_garantia : '')+"</td><td>"+(value2.subtipo_garantia ? value2.subtipo_garantia : '')+"</td><td>"+(value2.dannio ? value2.dannio : '')+"</td><td>"+(value2.autoriz_1 ? value2.autoriz_1 : '')+"</td><td>"+(value2.autoriz_2 ? value2.autoriz_2 : '')+"</td><td>"+(value2.partes_totales ? value2.partes_totales : '')+"</td><td>"+(value2.mano_obra_total ? value2.mano_obra_total : '')+"</td><td>"+(value2.misc_total ? value2.misc_total : '')+"</td><td>"+(value2.iva ? value2.iva  : '')+"</td><td>"+(value2.participacion_cliente ? value2.participacion_cliente : '')+"</td><td>"+(value2.participacion_distribuidor ? value2.participacion_distribuidor : '')+"</td><td>"+(value2.reparacion_total ? value2.reparacion_total : '')+"</td><td><td></td></td></tr>");
+							}else{
+								var row = $("<tr><td>"+(value2.tipo_garantia ? value2.tipo_garantia : '')+"</td><td>"+(value2.subtipo_garantia ? value2.subtipo_garantia : '')+"</td><td>"+(value2.dannio ? value2.dannio : '')+"</td><td>"+(value2.autoriz_1 ? value2.autoriz_1 : '')+"</td><td>"+(value2.autoriz_2? value2.autoriz_2 : '')+"</td><td>"+(value2.partes_totales ? value2.partes_totales: '')+"</td><td>"+(value2.mano_obra_total ? value2.mano_obra_total : '')+"</td><td>"+(value2.misc_total ? value2.misc_total : '')+"</td><td>"+(value2.iva  ? value2.iva  : '')+"</td><td>"+(value2.participacion_cliente ? value2.participacion_cliente : '')+"</td><td>"+(value2.participacion_distribuidor ? value2.participacion_distribuidor : '')+"</td><td>"+(value2.reparacion_total ? value2.reparacion_total : '')+"</td><td><td></td></td></tr>");
+							}
+							table.append(row);
+						});
+						//var row_importe = $("<tr><td></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+						//table.append(row_importe);
+						$('#verLinTrabajo .modal-body').append(row_title);
+						$('#verLinTrabajo .modal-body').append(table);
+					});
+					$('#verLinTrabajo').modal('show');
+				}else{
+					toastr.error(data.mensaje);
+				}
+			}
+		});
+	}
 	$(document).on('click', '.anverso', function(e){
 		let id_orden = $(this).prop('id');
     	id_orden = id_orden.split('-')[1];

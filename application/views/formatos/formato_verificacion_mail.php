@@ -14,6 +14,9 @@
 <script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.js"></script>
 <script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.min.js"></script>
 <script src="<?=base_url()?>assets/js/toastr.min.js"></script>
+
+<link href="<?=base_url()?>assets/css/compiled.min.css" rel="stylesheet">
+
 <title>Verificación</title>
 </head>
 <body>
@@ -98,7 +101,7 @@
 										echo "<td>".($value["total_arts"]+$totalIva)."</td>";
 										//echo "<td>$totalIva</td>";
 										//echo "<td>".$value["en_existencia"]."</td>";
-										echo "<td style='text-align: center;'><input type='checkbox' class='check chk_aut2' style='height: 24px; width: 24px;' value='".$value['cve_articulo']."' name='check_aut2[]' ".($value['en_existencia'] == 1? 'checked' : '')." ".($perfil == 6? '': 'disabled')."></td></tr>";
+										echo "<td style='text-align: center;'><input type='checkbox' class='chk_aut2' style='height: 24px; width: 24px;' value='".$value['cve_articulo']."' name='check_aut2[]' ".($value['en_existencia'] == 1? 'checked' : '')." ".($perfil == 6? '': 'disabled')."><label for='".$value['id_presupuesto']."-".$value['cve_articulo']."'></label></td></tr>";
 										
 										$total += ($value["total_arts"]+$totalIva);
 									}

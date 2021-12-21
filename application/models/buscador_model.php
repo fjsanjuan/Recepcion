@@ -2931,7 +2931,10 @@ class Buscador_Model extends CI_Model{
 			$this->db->trans_start();
 			$this->db->where("id_presupuesto", $value["id_presupuesto"]);
 			$this->db->where("cve_articulo", $value["clave_art"]);
-			$this->db->update("detalles_verificacion_refacciones", array("autorizado"=>$value["autorizado"], "quien_autoriza" => $this->session->userdata["logged_in"]["cve_intelisis"], "fecha_autorizacion" => date("d-m-Y H:i:s")));
+			$this->db->update("detalles_verificacion_refacciones", array("en_existencia"=>$value["autorizado"], "quien_autoriza" => $this->session->userdata["logged_in"]["cve_intelisis"], "fecha_autorizacion" => date("d-m-Y H:i:s")));
+			/*echo "<pre>";
+			print_r($this->db->last_query());
+			echo "</pre>";*/
 			$this->db->trans_complete();
 		}
 		

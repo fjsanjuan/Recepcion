@@ -163,10 +163,10 @@
 											//echo "<td>".$value["en_existencia"]."</td>";
 											if($value["autorizado"] == 1)
 											{
-												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' checked disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='height: 24px; width: 24px;' checked disabled></td></tr>";
 											}else 
 											{
-												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='height: 24px; width: 24px;' disabled></td></tr>";
 											}
 											$total += ($value["total_arts"]+$totalIva);
 										}
@@ -193,6 +193,8 @@
 	<link rel="stylesheet" href="<?=base_url()?>assets/librerias/fontawesome-free-5.2.0-web/css/all.css"/>
 	<link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" media="all">
 	<link href="<?=base_url()?>assets/css/style.css" rel="stylesheet">
+
+    <link href="<?=base_url()?>assets/css/compiled.min.css" rel="stylesheet">
 
 	<script src="<?=base_url()?>assets/js/jquery.min.js"></script>
 	<script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
@@ -278,10 +280,10 @@
 											//echo "<td>".$value["en_existencia"]."</td>";
 											if($value["autorizado"] == 1)
 											{
-												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' checked disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' class='chk_aut2'  style='height: 24px; width: 24px;' checked disabled><label for='".$value['id_presupuesto']."-".$value['cve_articulo']."'></label></td></tr>";
 											}else 
 											{
-												echo "<td style='text-align: center;'><input type='checkbox' style='background-color: blue; height: 24px; width: 24px;' disabled></td></tr>";
+												echo "<td style='text-align: center;'><input type='checkbox' style='height: 24px; width: 24px;' disabled><label for='".$value['id_presupuesto']."-".$value['cve_articulo']."'></label></td></tr>";
 											}
 											$total += ($value["total_arts"]+$totalIva);
 										}
