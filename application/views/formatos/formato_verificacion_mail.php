@@ -17,7 +17,7 @@
 
 <link href="<?=base_url()?>assets/css/compiled.min.css" rel="stylesheet">
 
-<title>Verificación</title>
+<title>Cotización</title>
 </head>
 <body>
 	<div class="container borde_general" style="margin-top: 15px;">
@@ -41,7 +41,7 @@
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<h5>FORMATO DE VERIFICACIÓN DE REFACCIONES</h5>
+				<h5>FORMATO DE COTIZACIÓN DE REFACCIONES</h5>
 			</div>
 		</div>
 		<div class="row">
@@ -52,7 +52,7 @@
 						<p>
 						<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
 						<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
-						<b>Fecha Verificación:</b> <?=$datos_tecnico['actualizado']?><br>
+						<b>Fecha Cotización:</b> <?=$datos_tecnico['actualizado']?><br>
 						<!-- <b>refacciones Autorizadas:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 						</p>
 					</div>
@@ -177,7 +177,7 @@ $(document).ready(function() {
 			success: function (data){
 				$("#loading_spin").hide();
 				if(data.estatus == true){
-					toastr.success('Verificación Actualizada');
+					toastr.success('Cotización Actualizada');
 				}else{
 					toastr.console.error();
 				}

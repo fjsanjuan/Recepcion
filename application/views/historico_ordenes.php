@@ -651,7 +651,7 @@ table tr.active {
     <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="titleValidacion">Nueva Verificación de Refacciones</h5>
+                <h5 class="modal-title" id="titleValidacion">Nueva Cotización de Refacciones</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -742,8 +742,8 @@ table tr.active {
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="bnGuardarPres2">Guardar Verificación</button>
-                <button type="button" class="btn btn-success" id="bnActualizarPres2" style="display: none">Actualizar Verificación</button>
+                <button type="button" class="btn btn-success" id="bnGuardarPres2">Guardar Cotización</button>
+                <button type="button" class="btn btn-success" id="bnActualizarPres2" style="display: none">Actualizar Cotización</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -754,7 +754,7 @@ table tr.active {
     <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Verificaciones de la Orden</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Cotizaciones de la Orden</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -774,7 +774,7 @@ table tr.active {
     <div class="modal-dialog modal-lg"  role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Mandar Verificación por Correo</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Mandar Cotización por Correo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

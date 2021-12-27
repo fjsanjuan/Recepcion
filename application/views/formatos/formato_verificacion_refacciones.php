@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="<?=base_url()?>assets/librerias/fontawesome-free-5.2.0-web/css/all.css"/>
 	<!-- <link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet"> -->
 	<link href="<?=base_url()?>assets/css/style.css" rel="stylesheet">
-	<title>Verificación</title>
+	<title>Cotización</title>
 	</head>
 	<style>
 	.container {
@@ -107,7 +107,7 @@
 			</div>
 			<div class="row">
 				<div class="col-12">
-					<h5>FORMATO DE VERIFICACIÓN DE REFACCIONES</h5>
+					<h5>FORMATO DE COTIZACIÓN DE REFACCIONES</h5>
 				</div>
 			</div>
 			<div class="row">
@@ -118,7 +118,7 @@
 							<p>
 							<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
 							<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
-							<b>Fecha Verificación:</b> <?=$datos_tecnico['actualizado']?><br>
+							<b>Fecha Cotización:</b> <?=$datos_tecnico['actualizado']?><br>
 							<!-- <b>Presupuesto Autorizado:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 							</p>
 						</div>
@@ -200,7 +200,7 @@
 	<script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
 	<script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.js"></script>
 	<script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.min.js"></script>
-	<title>Verificación</title>
+	<title>Cotización</title>
 	</head>
 	<body>
 		<div class="container borde_general">
@@ -224,7 +224,7 @@
 			</div>
 			<div class="row">
 				<div class="col-12">
-					<h5>FORMATO DE VERIFICACIÓN DE REFACCIONES</h5>
+					<h5>FORMATO DE COTIZACIÓN DE REFACCIONES</h5>
 				</div>
 			</div>
 			<div class="row">
@@ -235,7 +235,7 @@
 							<p>
 							<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
 							<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
-							<b>Fecha Verificación:</b> <?=$datos_tecnico['actualizado']?><br>
+							<b>Fecha Cotización:</b> <?=$datos_tecnico['actualizado']?><br>
 							<!-- <b>refacciones Autorizadas:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 							</p>
 						</div>
