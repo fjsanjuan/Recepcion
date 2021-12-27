@@ -3465,7 +3465,7 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 	});
 });
 // autorizar Adicional (ADD) por parte jefe taller 
-$(document).on('click', '#autor_add', function(e){
+/*$(document).on('click', '#autor_add', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
 	console.log('id orden', id_orden);
@@ -3513,7 +3513,7 @@ $(document).on('click', '#autor_add', function(e){
 				swal('Cancelado', '', 'error');
 			}
 		});
-});
+});*/
 
 $(document).on('click', '#cancelar_add', function(e){
 	e.preventDefault();
@@ -4669,7 +4669,11 @@ $(document).off('click', '#modaldocumentacion .down_f1816').on('click', '#modald
 						nomCte:t_nomCte,
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
-						url:'https://isapi.intelisis-solutions.com/reportes/getFormatoF1863'
+						url:'https://isapi.intelisis-solutions.com/reportes/getFormatoF1863',
+						formatos: [
+							{url: 'https://isapi.intelisis-solutions.com/reportes/f1863PDF', name: 'F1863'},
+							{url: 'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente', name: 'CRC'},
+						]
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
@@ -4748,8 +4752,8 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 					id_orden:id_orden,
 					type: 'inventario',
 					idsucursal: 110, //sucursal temporal de pruebas
-					//url:'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente'
-					url:'http://127.0.0.1:8000/reportes/imprimir'
+					url:'https://isapi.intelisis-solutions.com/reportes/reportes/imprimir'
+					//url:'http://127.0.0.1:8000/reportes/imprimir'
 				},
 				beforeSend: function(){
 					$("#loading_spin").show();
@@ -4826,11 +4830,30 @@ $(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
 	idOrden = idOrden.split('-')[1];
 	$('#verReqModal .modal-body').empty();
 	obtener_requisiciones(idOrden);
+	//requisicionesArray = [];
+	/*$.ajax({
+		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
+		type: 'GET',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		beforeSend: function () {
+			$("#loading_spin").show();
+		}
+	})
+	.done(function() {
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});*/
 	
 });
 
 function obtener_requisiciones(idOrden){
-	$('#verReqModal .modal-body').empty();
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
 		type: 'GET',
@@ -4874,7 +4897,7 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+(id_perfil == 7 ? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-e' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-e'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil == 7 || value['autorizado'] == 1) ? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
 							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
@@ -5016,8 +5039,6 @@ function generar_formato_req(id) {
 			success: function (data){
 				tok=data.token;
 				$.ajax({
-					//url: "https://isapi.intelisis-solutions.com/auth/",
-					url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
 					url: `${base_url}index.php/servicio/generar_formato_requisicion/${tok}/${id}`,
 					type: "POST",
 					headers: {
@@ -5026,7 +5047,7 @@ function generar_formato_req(id) {
 					//habilitar xhrFields cuando se requiera descargar
 					//xhrFields: {responseType: "blob"},
 					data: {
-						name:'requisicion',
+						name:'requisicion-'+id,
 						dwn:'0',
 						opt:'3',
 						path:'None',
@@ -5508,32 +5529,45 @@ $(document).off('click', '#verReqModal input[ name="auth_req[]"]').on('click', '
 	let idOrden = id.split('-')[0];
 	let idReq   = id.split('-')[1];
 	const _this = this;
-	$.ajax({
-		url: `${base_url}index.php/servicio/autorizar_requisicion/${idOrden}/${idReq}`,
-		type: 'POST',
-		dataType: 'json',
-		data: {
-			check : $(this).is(':checked')
-		},
-		beforeSend: function () {
-			$('#loading_spin').show();
-		}
-	})
-	.done(function(resp) {
-		if (resp.estatus) {
-			toastr.info(resp.mensaje);
-			obtener_requisiciones(idOrden);
-		} else {
-			$(_this).prop('checked', $(_this).is(':checked') ? false : true);
-			toastr.warning(resp.mensaje);
-		}
-	})
-	.fail(function(error) {
-		console.log('error', error);
-	})
-	.always(function() {
-		$('#loading_spin').hide();
-	});
+	swal({
+		title: 'Autorizar Requisición',
+		text: 'Cuando Autorizas la requisición se cerrará y ya no será editable.\n ¿Estas seguro?"',
+		showCancelButton: true,
+		confirmButtonText: 'Autorizar',
+		cancelButtonText: 'Más tarde',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					url: `${base_url}index.php/servicio/autorizar_requisicion/${idOrden}/${idReq}`,
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						check : $(_this).is(':checked')
+					},
+					beforeSend: function () {
+						$('#loading_spin').show();
+					}
+				})
+				.done(function(resp) {
+					if (resp.estatus) {
+						toastr.info(resp.mensaje);
+						$('#verReqModal .modal-body').empty();
+						obtener_requisiciones(idOrden);
+						save_docs_anexo_intelisis(idOrden, `requisicion-${idReq}-${idOrden}.pdf`);
+					} else {
+						$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+						toastr.warning(resp.mensaje);
+					}
+				})
+				.fail(function(error) {
+					console.log('error', error);
+				})
+				.always(function() {
+					$('#loading_spin').hide();
+				});
+			}
+		});
 });
 $(document).off('click', '#verReqModal input[ name="entregado_req[]"]').on('click', '#verReqModal input[ name="entregado_req[]"]', function(event) {
 	let id  = $(this).prop('id');
@@ -5569,3 +5603,31 @@ $(document).off('click', '#verReqModal input[ name="entregado_req[]"]').on('clic
 		$('#loading_spin').hide();
 	});
 });
+
+function save_docs_anexo_intelisis(idOrden, formato) {
+	
+	$.ajax({
+		url: `${base_url}index.php/servicio/save_docs_anexo_mov/${idOrden}`,
+		type: "POST",
+		data: {
+			name:formato,
+		},
+		beforeSend: function(){
+			$("#loading_spin").show();
+			toastr.info("Generando Formato");
+		},
+		error: function(){
+			console.log('error al consumir getPDF de ApiReporter');
+			toastr.error("Error al generar el formato");
+			$("#loading_spin").hide();
+		},
+		success: function (resp){
+			$("#loading_spin").hide();
+			if (resp) {
+				toastr.success(resp.mensaje);
+			}else {
+				toastr.info(resp.mensaje);
+			}
+		}
+	});
+}
