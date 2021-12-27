@@ -65,6 +65,16 @@
 	#modalValidacion td{
         vertical-align: middle;
     }
+    .selected {
+    background-color: #c4c0c0;
+  
+}
+table tr.active {
+    background: #ccc;
+    }
+.table tbody tr.highlight td {
+    background-color: #CFF5FF;
+}
 </style>
 <div class="container">
     <br>
@@ -805,9 +815,11 @@
 		<?php $this->load->view('modals/lineas_trabajo'); ?>
 	</div>
       <div class="modal-footer">
-	  <button type="button" class="btn btn-primary" id="guardar_lineas" >Guardar</button>   
+	  <button type="button" class="btn btn-primary" id="guardar_lineas">Guardar</button>
+      <button type="button" class="btn btn-success" id="bnActualizarLinea" style="display: none">Actualizar Línea</button>   
 	  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
+<?php $this->load->view('modals/ver_lineasTrabajo'); ?>

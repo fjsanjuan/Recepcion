@@ -3570,7 +3570,9 @@ class Buscador_Model extends CI_Model{
 				$this->db->where('id_orden_servicio', $id_orden);
 				if($perfil == 4){$this->db->update('firma_electronica', ['firma_adicionalJefe' => null]);}
 				if($perfil == 8){$this->db->update('firma_electronica', ['firma_adicionalGerente' => null]);}
-				if($perfil == 7){$this->db->update('firma_electronica', ['firma_adicionalAdmon' => null]);}
+				if($perfil == 7){$this->db->update('firma_electronica', ['firma_adicionalAdmon
+
+					' => null]);}
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === TRUE) {
 					$this->db->trans_commit();
@@ -4523,7 +4525,7 @@ class Buscador_Model extends CI_Model{
 			'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
 			'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
 			'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
-			'dannio'            		 => isset($datos['danio_relacion']) ? $datos['danio_relacion'] : null,
+			'dannio'            		 => isset($datos['danio_ralacion']) ? $datos['danio_ralacion'] : null,
 			'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
 			'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
 			'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
@@ -4536,6 +4538,8 @@ class Buscador_Model extends CI_Model{
 			'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
 			'id_orden'                   => $idOrden
 		];
+		/*echo '<prev>'; print_r($data);
+		echo '</prev>';*/
 		$this->db->where(['id' => $datos['id'], 'id_orden' => $idOrden]);
 		$this->db->update('lineas_reparacion', $data);
 		$this->db->trans_complete();
@@ -4552,11 +4556,11 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_lineas($idOrden)
 	{
-		$lineas = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
-		if (sizeof($lineas) > 0) {
-			$response['lineas'] = $lineas;
+		$response['lineas_reparacion'] = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
+	
+		if (sizeof($response['lineas_reparacion']) > 0) {
 			$response['estatus'] = true;
-			$response['mensaje'] = 'Ok.';
+			$response['mensaje'] = "Ok.";
 		} else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No hay líneas cargadas para la garantía.';

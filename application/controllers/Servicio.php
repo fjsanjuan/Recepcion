@@ -2951,7 +2951,7 @@ class Servicio extends CI_Controller {
 		if ($idOrden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
-		}elseif (!isset($datos['id_orden'])) {
+		}elseif (!isset($datos['id'])) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Carga de líneas no válido.';
 		}elseif(!isset($datos) || sizeof($datos) <= 0) {
@@ -2963,7 +2963,7 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	public function obtener_lineas($idOrden = null)
+	public function obtener_lineas($idOrden)
 	{
 		$datos = [];
 		if ($idOrden == null ) {
