@@ -2450,7 +2450,7 @@ class Buscador_Model extends CI_Model{
 		// var_dump($datos);die;
 		return $datos;
 	}
-	public function SaveDocsIntelisis($ruta, $id_orden, $tipo){
+	/*public function SaveDocsIntelisis($ruta, $id_orden, $tipo){
 		//load database
 		$this->db2 = $this->load->database("other", true);
 		// variables
@@ -2477,7 +2477,7 @@ class Buscador_Model extends CI_Model{
 		$this->db2->query("INSERT INTO AnexoMov (Rama, ID, Nombre, Direccion, Icono, Tipo, Sucursal,
 			FechaEmision, CFD) VALUES (?,?,?,?,?,?,?,?,?);", array($rama, $id, $nombre, $ruta, $icono, $tipo, 
 			$sucursal,$fecha,$cfd));
-	}
+	}*/
 
 	public function guardar_bitacora( $msj, $id_){
 		//load database
@@ -3281,7 +3281,7 @@ class Buscador_Model extends CI_Model{
 	public function get_archivos_orden_servicio($id_orden = null, $tipo = 7)
 	{
 		$this->load->database();
-		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 order by archivo.id desc;");
+		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 order by archivo.id ASC;");
 		if($query->num_rows() > 0){
 			return $query->result_array();
 		}else
@@ -4666,5 +4666,37 @@ class Buscador_Model extends CI_Model{
 			$response['mensaje'] = 'No se encontró ninguna requisición.';
 		}
 		return $response;
+	}
+	public function save_docs_anexo_mov($idOrden,$nomArchivo,$rutaArchivo){
+		$this->db2 = $this->load->database("other", true);
+		$xp  = "xpCA_GenerarAnexoMovRa";
+		$modulo = "VTAS";
+		$tipo   = "PDF";
+		$orden_servicio = $this->db->select('id_orden_intelisis, vin')->from('orden_servicio')->where('id', $idOrden)->get()->row();
+		$idIntelisis = $this->db2->select('id')->from('venta')->where('id',$orden_servicio->id_orden_intelisis)->where("estatus <> 'CANCELADO' ")->get()->row();
+
+		if(file_exists(RUTA_FORMATS.$orden_servicio->vin."/".$idOrden."/".$nomArchivo)) {
+			//$sqlXp = "DECLARE @OkRef varchar(250) EXEC ".$nomXp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef",array($modulo,$tipo,$Sucursal,$nomArchivo,$rutaArchivo);
+			$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef", 
+			array($modulo, $idIntelisis->id, $tipo, $nomArchivo, $rutaArchivo));
+			/*echo "<pre>";
+			print_r ($this->db2->last_query());
+			echo "</pre>";*/
+			if ($ok) {
+				$creado["estatus"] = true;
+				$creado["mensaje"] = 'Archivo anexado correctamente.';
+				$creado["rutaFisica"] = realpath(RUTA_FORMATS.$orden_servicio->vin."/".$idOrden."/".$nomArchivo);
+			} else {
+				$creado["estatus"] = false;
+				$creado["mensaje"] = 'No fue posible guardar el regitro del archivo.';
+				$creado["rutaFisica"] = "";
+			}
+		}else
+		{
+			$creado["estatus"] = false;
+			$creado["mensaje"] = 'El archivo especificado no existe.';
+			$creado["rutaFisica"] = "";
+		}
+		return $creado;
 	}
 }

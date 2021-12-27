@@ -2660,8 +2660,26 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
 		}else {
-			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo LIKE '%F1863-%'");
 			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
+			foreach ($datos['formatos'] as $key => $formato) {
+				$data         = $datos;
+				$data['url'] = $formato['url'];
+				$data['name'] = $formato['name'];
+				if ($data['name'] == 'CRC') {
+					$data['id_orden'] = isset($orden['movimiento']) ? $orden['movimiento'] : $idOrden;
+					$data['quejas'] = $this->buscador_model->obtener_datos_quejas($data['id_orden']);
+				}elseif (isset($orden['movimiento']) && $data['name'] == 'F1863') {
+					$data['id_orden'] = $idOrden;
+					$f1863            = $this->buscador_model->obtener_datos_f1863($data['id_orden']);
+					$data             = array_merge($data, $f1863);
+				}
+				$archivo = $this->buscador_model->obtener_pdf_api($token, $data);
+				if ($archivo["estatus"]) {
+					$this->buscador_model->guardar_formato($idOrden, $archivo["data"]["ruta_rel"]);
+				}
+			}
+			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo LIKE '%F1863-%'");
+			#$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
 			if (isset($orden['movimiento'])) {
 				$archivos = array_merge($archivos ,$this->buscador_model->get_archivos_f1863($orden['movimiento'], 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
 			}
@@ -2899,9 +2917,9 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válaida.';
 		}else{
-			$datos = $this->input->post();
+			$datos    = $this->input->post();
 			$f1863    = $this->buscador_model->obtener_datos_f1863($idOrden);
-			$datos = array_merge($datos, $f1863);
+			$datos    = array_merge($datos, $f1863);
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
 			if ($response["estatus"]) {
 				$this->buscador_model->guardar_formato($idOrden, $response["data"]["ruta_rel"]);
@@ -2952,7 +2970,7 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		}else {
-			$response = $this->buscador_model->obtener_lineas($idOrden = null);
+			$response = $this->buscador_model->obtener_lineas($idOrden);
 		}
 		echo json_encode($response);
 	}
@@ -3018,6 +3036,25 @@ class Servicio extends CI_Controller {
 		}else {
 			$response = $this->buscador_model->entrega_requisicion($idOrden, $idRequisicion, $datos);
 		}
+		echo json_encode($response);
+	}
+	public function save_docs_anexo_mov($idOrden = null)
+	{
+		$formato = $this->input->post('name') ? $this->input->post('name'): null;
+		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		} elseif ($formato == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Archivo no valido.';
+		}else {
+			$nomArchivo = $formato;
+			$rutaArchivo = realpath(RUTA_FORMATS.$orden['vin']."/".$idOrden."/".$nomArchivo); // ruta para produccion
+			//$rutaArchivo = '\\\\10.251.0.10\\www\\Demos\\Ford\\demosV2\\Recepcion\\archivos_recepcion\\'.$nomArchivo; // ruta para pruebas
+			$response = $this->buscador_model->save_docs_anexo_mov($idOrden, $nomArchivo, $rutaArchivo);
+		}
+
 		echo json_encode($response);
 	}
 }
