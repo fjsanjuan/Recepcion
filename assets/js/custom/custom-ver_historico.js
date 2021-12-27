@@ -4758,30 +4758,11 @@ $(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
 	idOrden = idOrden.split('-')[1];
 	$('#verReqModal .modal-body').empty();
 	obtener_requisiciones(idOrden);
-	//requisicionesArray = [];
-	/*$.ajax({
-		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
-		type: 'GET',
-		dataType: 'json',
-		contentType: false,
-		processData: false,
-		beforeSend: function () {
-			$("#loading_spin").show();
-		}
-	})
-	.done(function() {
-		console.log("success");
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		$("#loading_spin").hide();
-	});*/
 	
 });
 
 function obtener_requisiciones(idOrden){
+	$('#verReqModal .modal-body').empty();
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
 		type: 'GET',
@@ -5205,34 +5186,22 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 		});
 	});
 
-	$(document).off('click', '.ver_tipoG').on('click', '.ver_tipoG', function(event) {
-		event.preventDefault();
+	$(document).off('click', '.ver_tipoGtia').on('click', '.ver_tipoGtia', function(e) {
+		e.preventDefault();
+		$('#nuev-lin').trigger('click');
 		idOrden = $(this).prop('id');
 		idOrden = idOrden.split('-')[1];
-		$('#verLinTrabajo .modal-body').empty();
+		localStorage.setItem('hist_id_orden', idOrden);
+		$('#lineaTrabajoModal #lineas_cargadas .modal-body').empty();
+		$('#firma_linea').prop('data-orden', idOrden);
+		$('#cancelar_firmaLineas').prop('data-orden', idOrden);
+
+		$('#firma_linea').prop('checked', false);
+		$('#cancelar_firmaLineas').css('display', 'none');
 		obtener_lineas(idOrden);
-		//requisicionesArray = [];
-		/*$.ajax({
-			url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
-			type: 'GET',
-			dataType: 'json',
-			contentType: false,
-			processData: false,
-			beforeSend: function () {
-				$("#loading_spin").show();
-			}
-		})
-		.done(function() {
-			console.log("success");
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-			$("#loading_spin").hide();
-		});*/
 		
 	});
+
 	function obtener_lineas(idOrden){
 		$.ajax({
 			url: `${base_url}index.php/servicio/obtener_lineas/${idOrden}`,
@@ -5244,54 +5213,73 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 				$("#loading_spin").show();
 			},
 			error: function(){
+				$('#lin-carg').prop('disabled', true);
 				console.log('error al buscar');
 			},
 			success: function (data){
 				console.log('resp', data);
 				$("#loading_spin").hide();
 				if(data.estatus == true){
-					lineasArray = data.lineas;
+					$('#lin-carg').prop('disabled', false);
+					lineasArray = data.lineas_reparacion;
 					console.log('lin', lineasArray);
-					$.each(data.lineas, function(index, value){
-						var idLin = value.id_orden;
-						var row_title = $("<div class='row'></div>");
+					var row_title = $("<div class='row'></div>");
 						row_title.append($(`<div class='row'>
-							<div class='col-md-4' style='display: ${(value.autorizado ? 'none' : 'inline-block')} '><button class='btn btn-sm btn-primary editarLin' data-id='${idLin}' data-index='${index}'><i class='fa fa-edit'></i> Editar</button></div>
-							<div class='col-md-4'>
-								<label>No. Orden: ${(value.id_orden ? value.id_orden : 'N/D')}</label>
-							</div>
-							<div class='col-md-4'>
-								<label>No. Reparacion: ${(value.num_reparacion ? value.num_reparacion : 'N/D')}</label>
-							</div>
+						<div class='col-md-4'>
+							<label>No.&nbspOrden:&nbsp${(idOrden ? idOrden : 'N/D')}</label>
+						</div>
+						<div class='col-md-4 offset-md-4'>
+							<button class='btn btn-sm btn-primary editarLin' data-id='${idOrden}'><i class='fa fa-edit'></i> Editar</button>
+						</div>
 						</div>`));
-						/*if(value.autorizado == 1)
-							var check = $("<label for='"+idpres+"' class='pres_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1' checked>Autorizado</label>");
-						else
-							var check = $("<label for='"+idpres+"' class='no_autorizado'><input type='checkbox' class='checkA' id='"+idpres+"' name='check_aut' value='1'>Autorizado</label>");
-	
-						row_title.append(check);*/
-	
-						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><thTipo Garantía</th><th>SubTipo Garantía</th><th>Daño en Relación</th><th>Autoriz 1</th><th>Autoriz 2</th><th>Partes Totales</th><th>Mano de Obra</th><th>Misc. Totales</th><th>IVA</th><th>P. Cliente</th><th>P. Dist</th><th>Rep. Total</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
-						$.each(value.detalles, function(value2){
-							if(value2.autorizado == 0){
-								var row = $("<tr><td>"+(value2.tipo_garantia ? value2.tipo_garantia : '')+"</td><td>"+(value2.subtipo_garantia ? value2.subtipo_garantia : '')+"</td><td>"+(value2.dannio ? value2.dannio : '')+"</td><td>"+(value2.autoriz_1 ? value2.autoriz_1 : '')+"</td><td>"+(value2.autoriz_2 ? value2.autoriz_2 : '')+"</td><td>"+(value2.partes_totales ? value2.partes_totales : '')+"</td><td>"+(value2.mano_obra_total ? value2.mano_obra_total : '')+"</td><td>"+(value2.misc_total ? value2.misc_total : '')+"</td><td>"+(value2.iva ? value2.iva  : '')+"</td><td>"+(value2.participacion_cliente ? value2.participacion_cliente : '')+"</td><td>"+(value2.participacion_distribuidor ? value2.participacion_distribuidor : '')+"</td><td>"+(value2.reparacion_total ? value2.reparacion_total : '')+"</td><td><td></td></td></tr>");
-							}else{
-								var row = $("<tr><td>"+(value2.tipo_garantia ? value2.tipo_garantia : '')+"</td><td>"+(value2.subtipo_garantia ? value2.subtipo_garantia : '')+"</td><td>"+(value2.dannio ? value2.dannio : '')+"</td><td>"+(value2.autoriz_1 ? value2.autoriz_1 : '')+"</td><td>"+(value2.autoriz_2? value2.autoriz_2 : '')+"</td><td>"+(value2.partes_totales ? value2.partes_totales: '')+"</td><td>"+(value2.mano_obra_total ? value2.mano_obra_total : '')+"</td><td>"+(value2.misc_total ? value2.misc_total : '')+"</td><td>"+(value2.iva  ? value2.iva  : '')+"</td><td>"+(value2.participacion_cliente ? value2.participacion_cliente : '')+"</td><td>"+(value2.participacion_distribuidor ? value2.participacion_distribuidor : '')+"</td><td>"+(value2.reparacion_total ? value2.reparacion_total : '')+"</td><td><td></td></td></tr>");
-							}
+
+						var table = $("<table class='table table-bordered fadeIn no-footer tablepres' id=''><thead style='text-align:center;'><tr><th>No. Reparación</th><th>Tipo Garantía</th><th>SubTipo Garantía</th><th>Daño en Relación</th><th>Autoriz 1</th><th>Autoriz 2</th><th>Partes Totales</th><th>Mano de Obra</th><th>Misc. Totales</th><th>IVA</th><th>P. Cliente</th><th>P. Dist</th><th>Rep. Total</th></tr></thead><tbody style='text-align:center;' id='seleccionarTipGtia'></tbody></table>");
+					$.each(data.lineas_reparacion, function(index, value){
+					
+							var row = $("<tr data-index='"+index+"'><td>"+(value.num_reparacion ? value.num_reparacion : '')+"</td><td>"+(value.tipo_garantia ? value.tipo_garantia : '')+"</td><td>"+(value.subtipo_garantia ? value.subtipo_garantia : '')+"</td><td>"+(value.dannio ? value.dannio : '')+"</td><td>"+(value.autoriz_1 ? value.autoriz_1 : '')+"</td><td>"+(value.autoriz_2 ? value.autoriz_2 : '')+"</td><td>"+(value.partes_totales ? value.partes_totales : '')+"</td><td>"+(value.mano_obra_total ? value.mano_obra_total : '')+"</td><td>"+(value.misc_total ? value.misc_total : '')+"</td><td>"+(value.iva ? value.iva  : '')+"</td><td>"+(value.participacion_cliente ? value.participacion_cliente : '')+"</td><td>"+(value.participacion_distribuidor ? value.participacion_distribuidor : '')+"</td><td>"+(value.reparacion_total ? value.reparacion_total : '')+"</td></tr>");
+
 							table.append(row);
-						});
-						//var row_importe = $("<tr><td></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
-						//table.append(row_importe);
-						$('#verLinTrabajo .modal-body').append(row_title);
-						$('#verLinTrabajo .modal-body').append(table);
+		
+					
 					});
-					$('#verLinTrabajo').modal('show');
+					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(row_title);
+					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(table);
+					$('#lineaTrabajoModal').modal('show');
 				}else{
-					toastr.error(data.mensaje);
+					$('#lin-carg').prop('disabled', true);
+					toastr.info(data.mensaje);
 				}
 			}
 		});
 	}
+
+	$(document).off('click','#seleccionarTipGtia tr').on('click', '#seleccionarTipGtia tr', function (e) {
+		e.preventDefault();
+		hasClass = $(this).hasClass('selected');
+		$('#seleccionarTipGtia tr').removeClass('selected');
+		console.log('click tabla', $(this).data('index'));
+		if(!hasClass)
+			$(this).addClass('selected');
+		else
+			$(this).removeClass('selected');
+	})
+	$(document).off('click', '#lin-carg').on('click', '#lin-carg', function(e) {
+			e.preventDefault();
+			$('#guardar_lineas').hide();
+	});
+	$(document).off('click', '#nuev-lin').on('click', '#nuev-lin', function(event) {
+		event.preventDefault();
+		$('#guardar_lineas').show();
+		$('#bnActualizarLinea').hide();
+
+	});
+	$(document).off('click', '.editarLin').on('click', '.editarLin', function(event) {
+		event.preventDefault();
+		$('#guardarLinTrabajo').hide();
+		$('#btnActualizarLinea').show();
+
+	});
+
 	$(document).on('click', '.anverso', function(e){
 		let id_orden = $(this).prop('id');
     	id_orden = id_orden.split('-')[1];
