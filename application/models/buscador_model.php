@@ -4681,8 +4681,7 @@ class Buscador_Model extends CI_Model{
 
 		if(file_exists(RUTA_FORMATS.$orden_servicio->vin."/".$idOrden."/".$nomArchivo)) {
 			//$sqlXp = "DECLARE @OkRef varchar(250) EXEC ".$nomXp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef",array($modulo,$tipo,$Sucursal,$nomArchivo,$rutaArchivo);
-			$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef", 
-			array($modulo, $idIntelisis->id, $tipo, $nomArchivo, $rutaArchivo));
+			$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef", array($modulo, $idIntelisis->id, $tipo, $nomArchivo, $rutaArchivo));
 			/*echo "<pre>";
 			print_r ($this->db2->last_query());
 			echo "</pre>";*/

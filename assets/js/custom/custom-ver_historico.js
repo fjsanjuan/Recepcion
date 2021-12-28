@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -4707,7 +4707,7 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil == 7 || value['autorizado'] == 1) ? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil != 7 || value['autorizado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
 							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
@@ -5340,10 +5340,10 @@ $(document).off('click', '#verReqModal input[ name="auth_req[]"]').on('click', '
 	let idReq   = id.split('-')[1];
 	const _this = this;
 	swal({
-		title: 'Autorizar Requisición',
+		title: $(_this).is(':checked') ? 'Autorizar Requisición' : 'Desautorizar Reequisición',
 		text: 'Cuando Autorizas la requisición se cerrará y ya no será editable.\n ¿Estas seguro?"',
 		showCancelButton: true,
-		confirmButtonText: 'Autorizar',
+		confirmButtonText: $(_this).is(':checked') ? 'Autorizar' : 'Desautorizar',
 		cancelButtonText: 'Más tarde',
 		type: 'info'
 		}).then((result) => {
@@ -5363,8 +5363,10 @@ $(document).off('click', '#verReqModal input[ name="auth_req[]"]').on('click', '
 					if (resp.estatus) {
 						toastr.info(resp.mensaje);
 						$('#verReqModal .modal-body').empty();
+						if ($(_this).is(':checked')) {
+							save_docs_anexo_intelisis(idOrden, idReq, `requisicion-${idReq}-${idOrden}.pdf`);
+						}
 						obtener_requisiciones(idOrden);
-						save_docs_anexo_intelisis(idOrden, `requisicion-${idReq}-${idOrden}.pdf`);
 					} else {
 						$(_this).prop('checked', $(_this).is(':checked') ? false : true);
 						toastr.warning(resp.mensaje);
@@ -5376,6 +5378,8 @@ $(document).off('click', '#verReqModal input[ name="auth_req[]"]').on('click', '
 				.always(function() {
 					$('#loading_spin').hide();
 				});
+			}else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
 			}
 		});
 });
@@ -5414,8 +5418,7 @@ $(document).off('click', '#verReqModal input[ name="entregado_req[]"]').on('clic
 	});
 });
 
-function save_docs_anexo_intelisis(idOrden, formato) {
-	
+function save_docs_anexo_intelisis(idOrden, idReq, formato, generarFormato = true) {
 	$.ajax({
 		url: `${base_url}index.php/servicio/save_docs_anexo_mov/${idOrden}`,
 		type: "POST",
@@ -5424,20 +5427,82 @@ function save_docs_anexo_intelisis(idOrden, formato) {
 		},
 		beforeSend: function(){
 			$("#loading_spin").show();
-			toastr.info("Generando Formato");
+			toastr.info("Guardando");
 		},
 		error: function(){
 			console.log('error al consumir getPDF de ApiReporter');
-			toastr.error("Error al generar el formato");
 			$("#loading_spin").hide();
 		},
 		success: function (resp){
 			$("#loading_spin").hide();
-			if (resp) {
+			if (resp.estatus) {
 				toastr.success(resp.mensaje);
 			}else {
 				toastr.info(resp.mensaje);
+				if (generarFormato) {
+					req_inexistente(idOrden, idReq, formato, generarFormato);
+				}
 			}
 		}
 	});
+}
+
+function req_inexistente(idOrden, idReq, formato, reintentar = false) {
+	console.log('idOrden', idOrden);
+	console.log('idReq', idReq);
+	console.log('formato', formato);
+	var tok = "";
+	$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					url: `${base_url}index.php/servicio/generar_formato_requisicion/${tok}/${idReq}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'requisicion-'+idReq,
+						dwn:'0',
+						opt:'3',
+						path:'None',
+						url:'https://isapi.intelisis-solutions.com/reportes/reqPDF'
+						//url:'http://127.0.0.1:8000/reportes/reqPDF'
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (resp){
+						$("#loading_spin").hide();
+						data = JSON.parse(resp);
+						console.log('data', data);
+						if (data.estatus) {
+							save_docs_anexo_intelisis(idOrden, idReq, formato, false);
+						}
+					}
+				});
+			}
+		})
 }
