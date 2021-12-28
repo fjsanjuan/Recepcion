@@ -3057,6 +3057,17 @@ class Servicio extends CI_Controller {
 
 		echo json_encode($response);
 	}
+	public function firmar_anverso($id_orden)
+	{
+		$id_orden = $this->input->post('id_orden') != '' ? $this->input->post('id_orden') : null;
+		if ($id_orden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->firmar_anverso($id_orden);
+		}
+		echo json_encode($response);
+	}
 	function guardar_mano_obra()
 	{
 		$logged_in = $this->session->userdata("logged_in");

@@ -4701,6 +4701,20 @@ class Buscador_Model extends CI_Model{
 		}
 		return $creado;
 	}
+	public function firmar_anverso($id_orden)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+			$response['estatus'] = true;
+			$response['firma_electronica'] = $firma['firma_electronica'];
+		
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No tienes firma registrada.';
+		}
+		return $response;
+	}
 	function autocomplete_mo_lineas($q){
 
 		$this->db2 = $this->load->database('other',true); 

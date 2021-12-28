@@ -479,10 +479,11 @@ input:focus{
                     </div>
 					<tbody>
 						<div class="row" style="text-align: center; width:90%; margin: 50px;">
-							<div class="form-check" id="checkTecnico1"><b>FIRMA DE TÉCNICO</b><br><br>
-								<input class="form-check-input no_print" name="firma_tecnico" type="checkbox" id="checkTecn1" style='height: 24px; width: 24px;' required>
-								<label for="checkTecn1"></label>
-								<button type="button" class="btn btn-outline-warning btn-sm no_print" id="cancelTecn1" style="display: none">X</button>
+							<div class="form-check" id="FirmaTecnico"><b>FIRMA DE TÉCNICO</b><br><br>
+								<input class="form-check-input no_print" name="firma_tecnico" type="checkbox" id="firmTecn" style='height: 24px; width: 24px;' required>
+								<label class="form-check-label" for="firmTecn"></label>
+                                <input type="hidden" name="firma_techn" id="firma_techn">
+								<button type="button" class="btn btn-outline-warning btn-sm no_print" id="cancelFirmTechn" style="display: none">X</button>
 							</div>
 							<div class="form-check" id="checkeaJefe1" ><b>FIRMA DE JEFE TALLER</b><br><br>
 								<input class="form-check-input no_print" name="firma_jefe_taller" type="checkbox" id="checkJefe1" style="height: 24px; width: 24px;">
@@ -614,8 +615,77 @@ input:focus{
 			swal('Cancelado', '', 'error');
 		}
 	})
+});
+$(document).on('click', '#firmTecn', function(e){
+	e.preventDefault();
+	var id_orden = localStorage.getItem('hist_id_orden');
+	//console.log('id_orden', id_orden);
+	const form = new FormData();
+	form.append('id_orden', id_orden);
+	swal({
+		title: '¿Firmar anverso?',
+		showCancelButton: true,
+		confirmButtonText: 'Firmar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					cache: false,
+					url: base_url+ "index.php/servicio/firmar_anverso/"+id_orden,
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					dataType: 'json',
+					data: form,
+					beforeSend: function(){
+						$("#loading_spin").show();
+					}
+				})
+				.done(function(data) {
+					if (data.estatus) {
+						$('input[name="firma_techn"]').val(data.firma_electronica);
+						$("#firmaTecn").prop("checked", true);
+						$("#cancelFirmTechn").css('display', 'inline-block');
+					}else{
+						toastr.warning(data.mensaje);
+					}
+				})
+				.fail(function() {
+					toastr.warning('Hubo un error al firmar el anverso');
+				})
+				.always(function() {
+					$("#loading_spin").hide();
+				});
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
+});
+
+$(document).on('click', '#cancelFirmTechn', function(e){
+	e.preventDefault();
+	var idOrden = $(this).prop("data-orden");
+	localStorage.setItem("hist_id_orden", idOrden);
+	const form = new FormData();
+	form.append('id_orden', idOrden);
+	swal({
+		title: '¿Desea cancelar firma del anverso?',
+		showCancelButton: true,
+		confirmButtonText: 'Cancelar',
+		cancelButtonText: 'Cerrar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$('input[name="firma_techn"]').val("");
+				$('#firmaTechn').prop('checked', false);
+				$("#cancelFirmTechn").css('display', 'none');
+			} else if (result.dismiss) {
+				swal('Cancelado', '', 'error');
+			}
+		});
 	});
-	var newlinecode = 1;
+var newlinecode = 1;
 $(document).on('click', '.nuevo_codigo', function (e) {
 	e.preventDefault();
 	const code = $(this).closest('div.row').clone();
