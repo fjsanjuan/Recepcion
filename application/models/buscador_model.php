@@ -257,7 +257,7 @@ class Buscador_Model extends CI_Model{
 	function autocomplete_mo($q){
 
 		$this->db2 = $this->load->database('other',true); 
-   //      $query = $this->db2->query("WITH tabla1 AS (
+		//      $query = $this->db2->query("WITH tabla1 AS (
 			// 	SELECT
 			// 		art.Articulo,
 			// 		art.Descripcion1,
@@ -312,10 +312,9 @@ class Buscador_Model extends CI_Model{
 		//Excluido en script anterior
 		 //Inner JOIN OperacionesEreactValidas oert ON oert.Articulo = art.Articulo
 		 //AND art.Estatus = 'ALTA'
-     	
-        // echo $this->db2->last_query();
-       
-     	if($query->num_rows() > 0){
+		
+		 // echo $this->db2->last_query();
+		if($query->num_rows() > 0){
 			return  $query->result_array();
 		}else{
 			return false;
@@ -4702,4 +4701,214 @@ class Buscador_Model extends CI_Model{
 		}
 		return $creado;
 	}
+	function autocomplete_mo_lineas($q){
+
+		$this->db2 = $this->load->database('other',true); 
+		//      $query = $this->db2->query("WITH tabla1 AS (
+			// 	SELECT
+			// 		art.Articulo,
+			// 		art.Descripcion1,
+			// 		art.Unidad,
+			// 		ISNULL(li.Precio, 0) AS Precio,
+			// 		ISNULL(li.Lista, 'Precio Publico') AS Lista
+			// 	FROM
+			// 		Art art
+			// 	LEFT JOIN ListaPreciosD li ON Art.Articulo = li.Articulo
+			// 	Inner JOIN OperacionesEreactValidas oert ON oert.Articulo = art.Articulo
+			// 	WHERE
+			// 		art.Tipo = 'Servicio'
+			// 	AND art.Estatus = 'ALTA'
+			// ) SELECT
+			// 	Articulo,
+			// 	Descripcion1,
+			// 	Unidad,
+			// 	Precio,
+			// 	Lista
+			// FROM
+			// 	tabla1
+			// WHERE
+			// 	Lista = ?", array($q));
+
+		 $query = $this->db2->query("WITH tabla1 AS (
+				SELECT
+					DISTINCT
+					art.Articulo,
+					art.Descripcion1,
+					art.Unidad,
+					ISNULL(li.Precio, 0) AS Precio,
+					ISNULL(li.Lista, 'Precio Publico') AS Lista
+				FROM
+					Art art
+				LEFT JOIN ListaPreciosD li ON Art.Articulo = li.Articulo
+				--habilitar unicamente para las ford
+				Inner JOIN OperacionesEreactValidas oert ON oert.Articulo = art.Articulo
+				WHERE
+					art.Tipo = 'Servicio'
+					AND art.categoria <> 'TOT'
+					AND art.Estatus = 'ALTA'
+			) SELECT
+				Articulo,
+				Descripcion1,
+				Unidad,
+				Precio,
+				Lista
+			FROM
+		 	tabla1
+			WHERE
+				Lista = ?", array($q));
+		//Excluido en script anterior
+		 //Inner JOIN OperacionesEreactValidas oert ON oert.Articulo = art.Articulo
+		 //AND art.Estatus = 'ALTA'
+		
+		 // echo $this->db2->last_query();
+		if($query->num_rows() > 0){
+			$response['data'] = $query->result_array();
+		}else{
+			$response['data'] = [];
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No se encontraron manos de obra.';
+		}
+		return $response;
+	}
+
+	public function guardar_mo_lineas($idOrden, $elementos,$formulario)
+	{
+
+		$existen_articulos = $this->db->select("*")
+			->from("orden_servicio_desglose")
+			->where("id_orden", $idOrden)
+			->count_all_results();
+		$this->db->trans_start(true);
+		//si existian ya articulos en para la orden los elimina
+		if($existen_articulos != 0)
+		{
+			$this->db->where("id_orden", $idOrden);
+			$this->db->delete("orden_servicio_desglose");
+		}
+
+		$orden_servicio["subtotal_orden"] = $this->formatear_numero($formulario["subtotal"]);
+		$orden_servicio["iva_orden"] = $this->formatear_numero($formulario["iva"]);
+		$orden_servicio["total_orden"] = $this->formatear_numero($formulario["totaaal"]);
+		$orden_servicio["fecha_actualizacion"] = date("d-m-Y H:i:s");
+		$this->db->where('id', $idOrden);
+		$this->db->update('orden_servicio', $orden_servicio);
+
+		foreach ($elementos as $key => $value) 
+		{
+			$orden_servicio_desglose["id_orden"] = $idOrden;
+			$orden_servicio_desglose["articulo"] = $value["art"];
+			$orden_servicio_desglose["descripcion"] = $value["descripcion"];
+			$orden_servicio_desglose["cantidad"] = $value["cantidad"];
+			$orden_servicio_desglose["precio_unitario"] = $this->formatear_numero($value["precio_u"]);
+			$orden_servicio_desglose["total"] = $this->formatear_numero($value["total"]);
+			$orden_servicio_desglose["fecha_creacion"] = date("d-m-Y H:i:s");
+			$orden_servicio_desglose["fecha_actualizacion"] = date("d-m-Y H:i:s");
+			$orden_servicio_desglose["eliminado"] = 0;
+
+			$this->db->insert("orden_servicio_desglose", $orden_servicio_desglose);
+		}
+
+		$this->db->trans_complete();
+
+		if($this->db->trans_status() == true)
+		{
+			$response['estatus'] = true;
+		}else
+		{
+			$response['estatus'] = false;
+		}
+
+		return $response;
+	}
+
+	function guardar_mo_lineas_intelisis($idOrden,$datar, $elementos){
+		
+
+		global $trigger_name;
+		$this->db2 = $this->load->database("other", true);
+		$bd = $this->db2->database;
+		// consultar si hay triggers activos
+		$tigger = $this->trigger_exist($bd, "VentaD");
+		//si regresa 0 no hay triggers se pasa hacer el update si no a desactivarlos
+		$no_trigger = sizeof($tigger);
+		if($no_trigger > 0){
+			$i=0;
+			foreach ($tigger as $trig) {
+				$trigger_name[$i] = $trig->Trigger;
+				//mandamos nombre del trigger a deshabilitar y la tabla, en este caso siempre es Cte,
+				//si fuera distinto mofidicar.
+				//$ok= $this->deshabilita_trigger($trigger_name[$i], 'VentaD', $bd);
+
+				$i++;
+			}
+		}
+
+		$sucursal = $this->db->select("empresa, sucursal_int, almacen_servicio")
+							 ->from("sucursal")
+							 ->where("id", $this->session->userdata["logged_in"]["id_sucursal"])
+							 ->get()->row_array();
+
+		// Datos Generales
+		$Empresa               = $sucursal["empresa"];
+		$usuario               = $this->session->userdata('logged_in')['usuario_intelisis'];//
+		$Almacen               = $sucursal["almacen_servicio"];
+		$Sucursal              = $sucursal["sucursal_int"];
+		$timestamp             = date('d-m-Y G:i:s');
+		// Datos Articulos y Mano de Obra
+		$Importe               = $datar['Total'];
+		$Impuestos             = $datar['iva'];
+
+		$ordenServicio = $this->db->select('*')->from('orden_Servicio')->where(['id' => $idOrden])->get()->row_array();
+
+		$idOrdenIntelisis = $ordenServicio['id_orden_intelisis'];
+
+		if (sizeof($ordenServicio) <= 0){
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else{
+			$this->db2->trans_begin(true);
+
+			// Datos Asesor
+			$Agente                = $this->db2->select('*')->from('Venta')->where(['ID' => $idOrdenIntelisis]);
+			
+			$manodeobra = [];
+			$venta = [
+				'Importe' => $Importe,
+				'Impuestos' => $Impuestos
+			];
+			$this->db->where('ID', $idOrdenIntelisis);
+			$this->db->update('Venta', $venta);
+			//separamos elementos y vamos guardando por partes...
+			
+			for ($i = 0; $i < sizeof($elementos); $i++) {
+				//mano de obra
+				if ($elementos[$i]['tipo'] == 'mo') {
+					$manodeobra[$i]['art'] = $elementos[$i]['art'];
+					$manodeobra[$i]['cantidad'] = $elementos[$i]['cantidad'];
+					$manodeobra[$i]['precio_u'] = $elementos[$i]['precio_u'];
+				}
+			}
+
+			// var_dump($idpak);
+			// var_dump($articulos);
+			// var_dump($manodeobra);
+			// die;
+			if(sizeof($manodeobra)> 0){
+				$ok3 = $this->guardar_manoo($manodeobra,$idOrdenIntelisis, $Almacen,$Agente, $Sucursal );
+				$this->db2->trans_complete();
+				if ($this->db2->trans_status() === FALSE || $ok3 === FALSE){
+					$this->db2->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No fue posible cargar las líneas de trabajo en Intelisis.';
+				}else{
+					$this->db2->trans_commit();
+					$response['estatus'] = true;
+				$response['mensaje'] = 'Líneas de trabajo agregadas correctamente.';
+				}
+			}
+		}
+
+		return $response;
+	}
+
 }

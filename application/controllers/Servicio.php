@@ -3057,4 +3057,23 @@ class Servicio extends CI_Controller {
 
 		echo json_encode($response);
 	}
+	function guardar_mano_obra()
+	{
+		$logged_in = $this->session->userdata("logged_in");
+		$formulario = $this->input->post();
+		$elementos = (isset($formulario["elementos"])) ? json_decode($formulario["elementos"], true) : [];
+		$response = $this->buscador_model->guardar_mo_lineas($formulario, $elementos);//guarda datos en bd del proyecto
+		#$articulos_mo = json_decode($this->input->post('artmo'));
+
+		if($datos_guardados){
+			//recopilando los post
+			$datar['Importe'] = $this->input->post('importe_cliente');
+			$datar['Impuestos'] = '';
+			$datar['Total'] = $this->input->post('totaaal');
+			$datar['iva'] = $this->input->post('iva');
+			//mano de obras y datos
+			$response=array_merge($response, $this->buscador_model->guardar_mo_lineas_intelisis($datar, $elementos));
+		}
+		return $response;
+	}
 }

@@ -98,7 +98,7 @@ class Buscador extends CI_Controller {
 			$q  =  $valor;
 			//bucar mano de obra
 			$result= $this->buscador_model->autocomplete_mo($q);
-  			echo json_encode($result);
+			echo json_encode($result);
 		}
 	}
 
@@ -214,5 +214,18 @@ class Buscador extends CI_Controller {
 		$data = $this->input->post();
 		$ret = $this->buscador_model->revisar_tickaje($data);
 		echo json_encode($ret);
+	}
+
+	public function buscar_mo_lineas(){
+		if (isset($_GET['term'])){
+			$valor = ($_GET['term']);
+			$q  =  $valor;
+			//bucar mano de obra
+			$response= $this->buscador_model->autocomplete_mo_lineas($q);
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Lista no válida.';
+		}
+		echo json_encode($response);
 	}
 }
