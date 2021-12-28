@@ -3085,6 +3085,12 @@ class Servicio extends CI_Controller {
 			//mano de obras y datos
 			$response=array_merge($response, $this->buscador_model->guardar_mo_lineas_intelisis($datar, $elementos));
 		}
-		return $response;
+		echo json_encode($response);
+	}
+
+	public function obtener_mecanicos()
+	{
+		$response = $this->buscador_model->obtener_mecanicos();
+		echo json_encode($response);
 	}
 }
