@@ -4907,8 +4907,30 @@ class Buscador_Model extends CI_Model{
 				}
 			}
 		}
-
 		return $response;
 	}
-
+	public function obtener_mecanicos()
+	{
+		$this->db2 = $this->load->database("other", true);
+		$idSucursal          = $this->session->userdata["logged_in"]['id_sucursal'];
+		$sucursal = $this->db->select('*')->from('sucursal')->where(['id' => $idSucursal])->get()->row_array();
+		if (sizeof($sucursal) > 0) {
+			$data = $this->db2->select('*')->from('Agente')->where(['Tipo' => 'Mecanico', 'Estatus' => 'ALTA', 'Categoria' => 'Servicio', 'SucursalEmpresa' => $sucursal['id_intelisis']])->get()->result_array();
+			$total = sizeof($data);
+			if ($total > 0) {
+				$response['data'] = $data;
+				$response['estatus'] = true;
+				$response['mensaje'] = "Se encontraron {$total} resultado(s).";
+			} else {
+				$response['data'] = [];
+				$response['estatus'] = false;
+				$response['mensaje'] = "No se encontraron resultados.";
+			}
+		} else {
+				$response['data'] = [];
+				$response['estatus'] = false;
+				$response['mensaje'] = "Sucursal no válida.";
+		}
+		return $response;
+	}
 }
