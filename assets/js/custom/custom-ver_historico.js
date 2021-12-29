@@ -5622,14 +5622,53 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     //$("#table_paq tbody, #tabla_detalle tbody").empty();
 });
 
+function obtener_articuloSeleccionados()
+{
+    var elementos = [];
+    
+    $("#tabla_invoice tr").each(function(index, value){
+        var cantidad = $(this).find('td:eq(3)').find('input').val();
+        var precio_unidad = $(this).find('td:eq(4)').find('input').val();
+        
+        if(cantidad == undefined)
+        {
+            cantidad = $(this).find('td:eq(3)').text();
+        }
+
+        if(precio_unidad == undefined)
+        {
+            precio_unidad = $(this).find('td:eq(4)').text()
+        }
+        elementos[index] = {
+            "art" : $(this).find('td:eq(1)').text(),
+            "descripcion" :$(this).find('td:eq(2)').text(),
+            "cantidad" : cantidad,
+            "precio_u" : precio_unidad,
+            "total" : $(this).find('td:eq(5)').text(),
+            "tipo" : $(this).find('td:eq(6)').text(),
+            "id" :  $(this).find('td:eq(7)').text()
+        }
+    });
+
+    elementos.shift();  // remueve el header de la tabla
+
+    return elementos;
+}
 
 $(document).off('click', ' #guardar_manObra').on('click', '#guardar_manObra', function(event) {
 	event.preventDefault();
 	const datos = document.getElementById('form_datosManObra');
 	const form = new FormData(datos);
+	var elementos = [];
 	if (!$('#form_datosManObra').valid()) {
 		return;
 	}
+
+	elementos = obtener_articuloSeleccionados();
+
+	elementos = JSON.stringify(elementos);
+	form.append('elementos', elementos);
+
 	$.ajax({
 		cache: false,
 		url: `${base_url}index.php/servicio/guardar_mano_obra/${idOrden}`,
