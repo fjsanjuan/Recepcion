@@ -3076,16 +3076,16 @@ class Servicio extends CI_Controller {
 		if($idOrden == null){
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
-		}elseif(sizeof($elementos) >= 0) {
+		}elseif(sizeof($elementos) > 0) {
 			$response = $this->buscador_model->guardar_mo_lineas($idOrden,$formulario, $elementos);//guarda datos en bd del proyecto
 			#$articulos_mo = json_decode($this->input->post('artmo'));
 			#
 			if($response['estatus']){
 				//recopilando los post
-				$datar['Importe'] = $this->input->post('importe_cliente');
+				$datar['Importe'] = $this->input->post('totales');
 				$datar['Impuestos'] = '';
-				$datar['Total'] = $this->input->post('totaaal');
-				$datar['iva'] = $this->input->post('iva');
+				$datar['Total'] = $this->input->post('totales');
+				$datar['iva'] = $this->input->post('ivaTotal');
 				//mano de obras y datos
 				$response=array_merge($response, $this->buscador_model->guardar_mo_lineas_intelisis($idOrden,$datar, $elementos));
 			}

@@ -1712,7 +1712,6 @@ class Buscador_Model extends CI_Model{
 		// echo 'arts mo';
 		// var_dump($articulos_mo);
 		// die;
-
 		for ($i=0; $i <  sizeof($manodeobra); $i++) { 
 			# code...
 				$query= $this->db2->query("INSERT INTO VentaD (id, Renglon, RenglonID, Cantidad,UT,CCTiempoTab, Almacen, Articulo,
@@ -4785,24 +4784,22 @@ class Buscador_Model extends CI_Model{
 		return $response;
 	}
 
-	public function guardar_mo_lineas($idOrden, $elementos,$formulario)
+	public function guardar_mo_lineas($idOrden,$formulario, $elementos)
 	{
-
 		$existen_articulos = $this->db->select("*")
 			->from("orden_servicio_desglose")
 			->where("id_orden", $idOrden)
 			->count_all_results();
-		$this->db->trans_start(true);
+		$this->db->trans_start();
 		//si existian ya articulos en para la orden los elimina
 		if($existen_articulos != 0)
 		{
 			$this->db->where("id_orden", $idOrden);
 			$this->db->delete("orden_servicio_desglose");
 		}
-
-		$orden_servicio["subtotal_orden"] = $this->formatear_numero($formulario["subtotal"]);
-		$orden_servicio["iva_orden"] = $this->formatear_numero($formulario["iva"]);
-		$orden_servicio["total_orden"] = $this->formatear_numero($formulario["totaaal"]);
+		$orden_servicio["subtotal_orden"] = $this->formatear_numero($formulario["subTotal"]);
+		$orden_servicio["iva_orden"] = $this->formatear_numero($formulario["ivaTotal"]);
+		$orden_servicio["total_orden"] = $this->formatear_numero($formulario["totales"]);
 		$orden_servicio["fecha_actualizacion"] = date("d-m-Y H:i:s");
 		$this->db->where('id', $idOrden);
 		$this->db->update('orden_servicio', $orden_servicio);
@@ -4827,9 +4824,11 @@ class Buscador_Model extends CI_Model{
 		if($this->db->trans_status() == true)
 		{
 			$response['estatus'] = true;
+			$response['mensaje'] = 'Orden de servicio desglose agregado.';
 		}else
 		{
 			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible agregar desglose de la orden de servicio.';
 		}
 
 		return $response;
@@ -4880,18 +4879,19 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		}else{
-			$this->db2->trans_begin(true);
+			$this->db2->trans_begin();
 
 			// Datos Asesor
-			$Agente                = $this->db2->select('*')->from('Venta')->where(['ID' => $idOrdenIntelisis]);
-			
+			$Agente                = $this->db2->select('*')->from('Venta')->where(['ID' => $idOrdenIntelisis])->get()->row_array();
+			$Agente = isset($Agente['Agente']) ? $Agente['Agente'] : '';
+
 			$manodeobra = [];
 			$venta = [
 				'Importe' => $Importe,
 				'Impuestos' => $Impuestos
 			];
-			$this->db->where('ID', $idOrdenIntelisis);
-			$this->db->update('Venta', $venta);
+			$this->db2->where('ID', $idOrdenIntelisis);
+			$this->db2->update('Venta', $venta);
 			//separamos elementos y vamos guardando por partes...
 			
 			for ($i = 0; $i < sizeof($elementos); $i++) {
@@ -4902,11 +4902,6 @@ class Buscador_Model extends CI_Model{
 					$manodeobra[$i]['precio_u'] = $elementos[$i]['precio_u'];
 				}
 			}
-
-			// var_dump($idpak);
-			// var_dump($articulos);
-			// var_dump($manodeobra);
-			// die;
 			if(sizeof($manodeobra)> 0){
 				$ok3 = $this->guardar_manoo($manodeobra,$idOrdenIntelisis, $Almacen,$Agente, $Sucursal );
 				$this->db2->trans_complete();
