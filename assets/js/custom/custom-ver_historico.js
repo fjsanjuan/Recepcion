@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -222,12 +222,10 @@ $(document).ready(function() {
 					action_refacciones	= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				}
 				btn_garantias	=``;
-				//btn_garantias	+="<button class='btn btn-sm archivosadjuntos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='archivosadjuntos-"+val["id"]+"'><i class='fa fa-file-download'></i>&nbsp&nbsp Archivos Adjuntos</button>";
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				btn_garantias	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_garantias	= "";
 				if (val['movimiento'] != null) {
-					//action_garantias	+="<button type='button' class='btn btn-sm btn-primary lineaTrabajo' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='lineaTrabajo-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Tipo Garantía</button>";
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_tipoGtia' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='ver_tipoGtia-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Tipo Garantías</button>";
 					action_garantias	+= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
@@ -296,6 +294,7 @@ $(document).ready(function() {
 					action_tecnico		+= "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Cotizar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				}else {
+					action_tecnico		+="<button class='btn btn-sm btn-primary mano_obra' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#addManObra' id='mano_obra-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Mano de Obra</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
@@ -5505,4 +5504,229 @@ function req_inexistente(idOrden, idReq, formato, reintentar = false) {
 				});
 			}
 		})
+}
+$(document).on("click", ".tabla_hist tbody tr td button.mano_obra", function(e) {
+	$('#tabla_invoice tbody').empty();
+	$('#table_mano tbody').empty();
+	e.preventDefault();
+	idOrden = $(this).prop('id');
+	idOrden = idOrden.split('-')[1];
+	localStorage.setItem('hist_id_orden', idOrden);
+	$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/obtener_iva/${idOrden}`,
+		type: 'POST',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		data:'',
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(data) {
+		if (data.estatus) {
+			toastr.info(data.mensaje);
+			$("#ZonaImpuesto_selected").append('<option value="' + data.Porcentaje['Zona'] + '" data-porc="'+data.Porcentaje['Porcentaje']+'" selected>' + data.Porcentaje['Zona'] + '</option>');
+			
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	})
+	.fail(function() {
+		console.log('error');
+		toastr.warning("Ocurrió un error.");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	
+});
+
+$(document).on('click', '#buscarManObra', function (){
+   //$('#modalManObra').modal('show');
+    //filtro = $("#tipoprecio_cliente").val();
+    //console.log('V: '+filtro);
+    $.ajax({
+        url: site_url+"buscador/buscar_mo_lineas",
+        data:  {term : 'Precio Garantía' },
+        cache:false,
+        dataType: "json",
+        beforeSend: function(){
+            $('#spinner').show();
+        },
+        complete: function(){
+            $('#spinner').hide();                       
+        },
+        success: function(data) {
+            //limpiar tabla para no duplicar registros
+            $('#table_mano > tbody').empty();
+            var obj = data;
+            //console.log(obj);
+            var items =[];
+            var  i=0;
+            $.each(obj.data, function (key, val){ 
+                items.push("<tr id='" + val.Articulo    + "'>");
+                items.push("<td id='mano_art'>"  + val.Articulo + "</td>");
+                items.push("<td id='mano_desc'>"  + val.Descripcion1 + "</td>");
+                items.push("<td id='mano_precio'>" + val.Precio + "</td>");
+                items.push("<td class='item-name'><button class='btn btn-success' id='boton_agregarManObra'><i class='fa fa-plus'></i></button></td>");
+                items.push("</tr>");
+				
+			});
+			//console.log(data);
+       $("<tbody/>",{html: items.join("")}).appendTo("#table_mano");
+            
+        },
+        error : function(xhr, status) {
+            toastr.error('Existió un problema');
+        }
+    });
+});
+
+$(document).on("click", '#boton_agregarManObra', function (e){
+    e.preventDefault();
+    var itmo = new Array();
+    $(this).closest('tr').find('td').each(
+    function (i) {
+      itmo[i] = $(this).text();
+    });
+	console.log(itmo);
+    var art = itmo[1];
+    var cantidad = 1;//$("#input_cantidad").val();
+    var clave_art = itmo[0];
+    var precio = itmo[2];
+    var total  = precio; 
+    var tabla  = "<tr class='item-row arst_add' style='text-align:center;'>";
+
+    tabla += "<td class='item-name'><div class='delete-wpr'><a class='delete'>X</a> </div></td>";
+    tabla += "<td class='artmoo'>"+clave_art+"</td>";
+    tabla += "<td>"+art+"</td>";
+    tabla += "<td><input class='qty md-textarea' id='mo_qty' value='"+cantidad+"' readonly/></td>";
+    tabla += "<td><input class='cost md-textarea' id='mo_cost' value='"+precio+"' readonly/></td>";
+    tabla += "<td class='price'>"+total+"</td>";
+    tabla += "<td style='display:none;' id='articulosmo'>mo</td>";
+    tabla += "<td style='display:none;' id='idpq'>" + 'NA' + "</td>";
+    tabla += "</tr>";
+
+    $("#tabla_invoice tbody").append(tabla);
+	
+
+    // $("#mo_cost").val(precio);
+    biind();
+	
+    actualizar_total();
+    toastr.success("Mano de Obra agregada");
+    //$("#ajax_arts, #input_precio, #input_claveArt").val("");
+    $("#input_cantidad").val(1);
+    //$("#table_paq tbody, #tabla_detalle tbody").empty();
+});
+
+
+$(document).off('click', ' #guardar_manObra').on('click', '#guardar_manObra', function(event) {
+	event.preventDefault();
+	const datos = document.getElementById('form_datosManObra');
+	const form = new FormData(datos);
+	if (!$('#form_datosManObra').valid()) {
+		return;
+	}
+	$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/guardar_mano_obra/${idOrden}`,
+		type: 'POST',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		data: form,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		}
+	})
+	.done(function(data) {
+		if (data.estatus) {
+			toastr.info(data.mensaje);
+			$('#form_datosManObra').trigger('reset');
+			
+		}else {
+			toastr.warning(data.mensaje);
+		}
+	})
+	.fail(function() {
+		console.log('error');
+		toastr.warning("Ocurrió un error al guardar mano de obra.");
+	})
+	.always(function() {
+		$("#loading_spin").hide();
+	});
+	
+});
+
+function actualizar_precio() {
+    $(this).closest('tr').find('.qty').each(
+    function (i) {
+      cuantos = $(this).val();
+      $(this).val(cuantos);
+    });
+    $(this).closest('tr').find('.cost').each(
+    function (i) {
+      cuanto = $(this).val();
+      cuanto1 = parseFloat(cuanto.replace(/,/g, ''));
+      $(this).val(cuanto);
+});
+ 
+  price = cuanto1 * cuantos;
+
+  price = roundNumber(price,2);
+  
+  price = formatear_numero(price);
+
+  $(this).closest('tr').find('.price').each(
+    function(i){
+        $(this).html(price);
+
+    })
+
+  actualizar_total();
+}
+function biind() {
+  $(".cost").blur(actualizar_precio);
+  $(".qty").blur(actualizar_precio);
+
+}
+  
+biind();
+
+function actualizar_total() {
+  var total = 0;
+  var iva = 0;
+  var price = 0;
+  var porc_iva_elegido = ($("#ZonaImpuesto_selected option:selected").attr("data-porc") == "null") ? 16 * 0.01 : parseFloat($("#ZonaImpuesto_selected option:selected").attr("data-porc")) * 0.01;
+  $('.price').each(function(i){
+    price = $(this).html().replace("$","");
+    price = parseFloat(price.replace(/,/g, ''));
+    if (!isNaN(price)) total += Number(price);
+  });
+
+
+  total = roundNumber(total,2);
+  iva = roundNumber((total * porc_iva_elegido),2)
+
+  price = formatear_numero(price);
+  total = formatear_numero(total);
+  iva = formatear_numero(iva);
+
+  $('#subTotal').val(total);
+  $('#ivaTotal').val(iva); 
+  
+  actualizar_balance();
+}
+
+function actualizar_balance() {
+    var due = parseFloat($("#subTotal").val().replace(/,/g, ''));
+    var iva = parseFloat($("#ivaTotal").val().replace(/,/g, ''));
+
+    due = roundNumber((due+iva),2);
+    due = formatear_numero(due);
+
+    $('.due').val(due);
 }

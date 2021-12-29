@@ -4947,4 +4947,29 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function obtener_iva($idOrden){
+		$this->db2 = $this->load->database("other", true);
+		$iva = $this->db->select('*')->from('orden_Servicio')->where(['id' => $idOrden])->get()->row_array();
+		$idOrdenIva = $iva['id_orden_intelisis'];
+		if (sizeof($iva) <= 0){
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else{
+			$ZonaImpuesto = $this->db2->select('*')->from('Venta')->where(['ID' => $idOrdenIva])->get()->row_array();
+			$idOrdenZona = $ZonaImpuesto['ZonaImpuesto'];
+		
+			if (sizeof($ZonaImpuesto) <= 0){
+				$response['estatus'] = false;
+				$response['mensaje'] = 'Orden no válida.';
+			}else{
+				$porcentaje = $this->db2->select('*')->from('ZonaImp')->where(['Zona' => $idOrdenZona])->get()->row_array();
+				$idOrdenZona = $porcentaje['Porcentaje'];
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Porcentaje de zona encontrado.';
+				$response['Porcentaje'] = $porcentaje;
+				
+			}
+		}
+		return $response;
+	}
 }

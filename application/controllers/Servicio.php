@@ -3093,4 +3093,9 @@ class Servicio extends CI_Controller {
 		$response = $this->buscador_model->obtener_mecanicos();
 		echo json_encode($response);
 	}
+	public function obtener_iva($idOrden)
+	{
+		$response = $this->buscador_model->obtener_iva($idOrden);
+		echo json_encode($response);
+	}
 }
