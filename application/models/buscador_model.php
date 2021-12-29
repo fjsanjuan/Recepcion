@@ -4346,8 +4346,11 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Ok.';
 			$response['cotizacion']['detalles'] = $this->db->select('*')->from('detalles_verificacion_refacciones')->where('id_presupuesto', $id)->get()->result_array();
+			$existencias = $this->db->select('*')->from('detalles_verificacion_refacciones')->where(['id_presupuesto' => $id, 'en_existencia !=' => 1])->count_all_results();
+			 $response['existencias'] = $existencias > 0 ? false : true;
 		}else {
 			$response['estatus'] = false;
+			$response['existencias'] = false;
 			$response['mensaje'] = 'No existe la cotización de piezas.';
 		}
 		return $response;
@@ -4357,7 +4360,10 @@ class Buscador_Model extends CI_Model{
 		$existe = $this->obtener_detalles_cotizacion($id);
 		if ($existe['estatus']) {
 			$pregarantia = $this->db->select('id')->from('orden_servicio')->where('movimiento', $existe['cotizacion']['id_orden'])->get()->row_array();
-			if (isset($pregarantia['id'])) {
+			if ($existe['existencias'] === false) {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No puedes convertir la cotización ya que tiene artículos sin existencia.';
+			}elseif (isset($pregarantia['id'])) {
 				$datos = [
 					'total_presupuesto' => $existe['cotizacion']['total_presupuesto'],
 					'detalles'          => $existe['cotizacion']['detalles']
@@ -4924,7 +4930,7 @@ class Buscador_Model extends CI_Model{
 		$idSucursal          = $this->session->userdata["logged_in"]['id_sucursal'];
 		$sucursal = $this->db->select('*')->from('sucursal')->where(['id' => $idSucursal])->get()->row_array();
 		if (sizeof($sucursal) > 0) {
-			$data = $this->db2->select('*')->from('Agente')->where(['Tipo' => 'Mecanico', 'Estatus' => 'ALTA', 'Categoria' => 'Servicio', 'SucursalEmpresa' => $sucursal['id_intelisis']])->get()->result_array();
+			$data = $this->db2->select('*')->from('Agente')->where(['Tipo' => 'Mecanico', 'Estatus' => 'ALTA', 'Categoria' => 'Servicio', 'SucursalEmpresa' => $sucursal['id_intelisis'], 'Jornada IS NOT NULL' => null])->get()->result_array();
 			$total = sizeof($data);
 			if ($total > 0) {
 				$response['data'] = $data;
