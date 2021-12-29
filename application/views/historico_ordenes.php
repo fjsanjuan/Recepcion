@@ -838,7 +838,7 @@ table tr.active {
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-primary" id="guardar_manObra">Guardar</button>
-	            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	            <button type="button" class="btn btn-secondary" id="cerrarManObra" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

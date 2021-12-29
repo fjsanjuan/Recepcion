@@ -66,7 +66,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="height: 300px; overflow-y: scroll;">
 	<div class="card">
 		<div class="card-body">
 			<div class="table-responsive">

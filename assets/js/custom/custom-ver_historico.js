@@ -5619,7 +5619,6 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     toastr.success("Mano de Obra agregada");
     //$("#ajax_arts, #input_precio, #input_claveArt").val("");
     $("#input_cantidad").val(1);
-    //$("#table_paq tbody, #tabla_detalle tbody").empty();
 });
 
 function obtener_articuloSeleccionados()
@@ -5685,6 +5684,7 @@ $(document).off('click', ' #guardar_manObra').on('click', '#guardar_manObra', fu
 		if (data.estatus) {
 			toastr.info(data.mensaje);
 			$('#form_datosManObra').trigger('reset');
+			$('#cerrarManObra').trigger('click');
 			
 		}else {
 			toastr.warning(data.mensaje);
