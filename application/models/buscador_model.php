@@ -3226,12 +3226,14 @@ class Buscador_Model extends CI_Model{
 	}
 	public function guardar_voc($datos = null)
 	{
+		//$vocs = $datos['voc'];
 		$vocs = $_FILES;
 		$files = [];
+		$audios   = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' => $datos["id_orden_servicio"], 'tipo_archivo' => 8])->count_all_results();
 		foreach($vocs as $key => $value) 
 		{
 			$datos["voc"] = $value;
-			$datos['id'] = $key;
+			$datos['id'] = ++$audios;
 			$archivo_creado = $this->crear_archivo($datos);
 			$files[] = ($archivo_creado) ? true : false;
 		}
@@ -3242,13 +3244,15 @@ class Buscador_Model extends CI_Model{
 	{
 		$archivo = $datos["voc"];
 		$datos["vin"] = trim($datos["vin"]);
-		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"].'/'.$datos["id"].'.mp3'; 
+		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"].'/voc-'.$datos['id'].'.mp3'; 
 		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
 			mkdir($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"], 0777, true);
 		}
-		$nombrearchivo = $archivo["name"];
+		//$nombrearchivo = $archivo["name"];
+		$nombrearchivo = 'voc-'.$datos['id'].'.mp3'; 
 		move_uploaded_file($archivo["tmp_name"], $ruta);
 		if(file_exists($ruta)) {
+
 			$archivo = [
 					'id_orden_servicio' => $datos['id_orden_servicio'],
 					'tipo_archivo' => 8,

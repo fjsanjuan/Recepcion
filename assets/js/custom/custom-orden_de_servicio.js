@@ -3296,8 +3296,26 @@ function agregar_audio(blob) {
     reader.onloadend = function() {
         base64data = reader.result;
         $('#audios_grabados').append(`<input type="hidden" name="input_vista_previa_audo[]" class="new_audio" value="${base64data}">`);
-        $('#audios_grabados').append(`<div class="row"><audio class="col-sm-10" controls controlsList="nofullscreen nodownload" name="vista_previa_audio[]" src="${base64data}"></audio><span class="remove-audio col-sm-2" data-id="0" style="max-width:50px;cursor:pointer; background-color:rgba(255,0,0,0.8);padding:15px;"><i class="fa fa-trash" style="color:#fff"></i></span></div>`);
-        $('#audios_grabados').append(`<br>`);
+        const row =  $(`<div class="row">`);
+        var audio = $(`<audio class="col-sm-10" controls controlsList="nofullscreen nodownload" name="vista_previa_audio[]" src="${base64data}">`);
+        row.append(audio);
+        row.append(`<span class="remove-audio col-sm-2" data-id="0" style="max-width:50px;cursor:pointer; background-color:rgba(255,0,0,0.8);padding:15px;"><i class="fa fa-trash" style="color:#fff"></i></span>`);
+        row.append(`<br>`);
+        console.log('cargando audio');
+        $('#audios_grabados').append(row);
+        audio.off('loadedmetadata').on('loadedmetadata', function(e){
+            console.log('onloadedmetadata', this);
+                if (this.duration === Infinity) {
+                this.currentTime = 1e101;
+                this.ontimeupdate = function() {
+                    this.ontimeupdate = () => {
+                    return;
+                }
+                this.currentTime = 0;
+              }
+            }
+        });
+        audio.trigger('loadedmetadata');
     }
 }
 $(document).on("click", '#btn_borrarAudio', function (e){
@@ -3540,6 +3558,7 @@ $(document).on("click", "#audioInput", function(event){
                     grabacion.push(event.data);
                 });
                 media_recorder.addEventListener("stop", () => {
+                	console.log('stop');
                 stream.getTracks().forEach(track => track.stop());
                 detener_conteo();
                 const blobAudio = new Blob(grabacion, {type: "audio/mp3"});
@@ -3553,20 +3572,22 @@ $(document).on("click", "#audioInput", function(event){
       });
   }
 });
-$(document).on("click", '#btn_guardarAudio', function (e){
+$(document).off('click', '#btn_guardarAudio').on("click", '#btn_guardarAudio', function (e){
     e.preventDefault();
     var data = new FormData();
     var cve_cliente = $("#id_cliente").val();
     var vin = $("#vin_cliente").val();
     var id_orden_servicio = localStorage.getItem("id_orden_servicio");
-    var audios = $("input[name='input_vista_previa_audo[]']");
+    //var audios = $("input[name='input_vista_previa_audo[]']");
+    var audios = [];
+    audios = $("audio[name='vista_previa_audio[]']");
      //reemplaza vins que tengan puntos o espacios pero no afecta el campo en la BD
      vin = vin.replace(".", "");
      vin = vin.replace(" ", "");
      
      $.each(audios, function(index, val)
     {
-        var file = base64toFile($(val).val(), "voc-"+(index+1));
+        var file = base64toFile(val, "voc-"+(index+1));
         data.append("voc-"+(index+1), file);
     });
     data.append("cve_cliente", cve_cliente);

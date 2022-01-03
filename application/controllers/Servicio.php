@@ -2319,7 +2319,7 @@ class Servicio extends CI_Controller {
 	public function guardar_voc()
 	{
 		ini_set('memory_limit', '1024M');
-		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+		ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 		$datos = $this->input->post();
 		$response = $this->buscador_model->guardar_voc($datos);
 		echo json_encode($response);
