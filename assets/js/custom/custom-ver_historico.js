@@ -4641,6 +4641,9 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 });*/
 
 $(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
+	if (id_perfil == 6){$('#checkTecn').hide(); $('#firmaAdmon').hide();}
+	if (id_perfil == 7){$('#checkTecn').hide();}
+	if (id_perfil == 5){$('#firmaAdmon').hide();}
 	event.preventDefault();
 	idOrden = $(this).prop('id');
 	idOrden = idOrden.split('-')[1];
@@ -4713,16 +4716,16 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autorizado<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil != 7 || value['autorizado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='auth_all' style='color: violet;' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+(id_perfil == 6? '': 'disabled')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autoriza<br>Garantías<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil != 7 || value['autorizado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='entregar_req' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-entregar' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+((id_perfil != 6 || value['entregado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-entregar'></label></th><th>Recibe<br>Técnico<br><input type='checkbox' class='recibe_req' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-recibido' name='recibe_req[]' value='1' "+(value['firma_de_tecnico'] ? 'checked' : '')+" "+((id_perfil != 5 || value['firma_de_tecnico'] ) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-recibido'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
-							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
+							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td><td></td></td></td></tr>");
 						}else{
-							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td></td></td></tr>");
+							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td><td></td></td></td></tr>");
 						}
 						table.append(row);
 					});
-					var row_importe = $("<tr><td></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+					var row_importe = $("<tr><td></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td><td></td></td></td>");
 					table.append(row_importe);
 					$('#verReqModal .modal-body').append(row_title);
 					$('#verReqModal .modal-body').append(table);
@@ -5166,9 +5169,9 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 		let id_orden = $(this).prop('id');
     	id_orden = id_orden.split('-')[1];
 		e.preventDefault();
-		/*if (id_perfil == 4){$('#checkTecnico1').hide();}
-		if (id_perfil == 5){$('#checkeaJefe1').hide();}
-		console.log('id orden', id_orden);
+		/*if (id_perfil == 4){$('#firmaTecnico').hide();}
+		if (id_perfil == 5){$('#firmJefe').hide();}
+	console.log('id orden', id_orden);
 	$('#checkTecn1').prop('data-orden', id_orden);
 	$('#checkJefe1').prop('data-orden', id_orden);
 	$('#cancelTecn1').prop('data-orden', id_orden);
@@ -5396,33 +5399,104 @@ $(document).off('click', '#verReqModal input[ name="entregado_req[]"]').on('clic
 	console.log('id_auth req admon',idReq);
 	console.log('id_auth ord admon',idOrden);
 	const _this = this;
-	$.ajax({
-		url: `${base_url}index.php/servicio/entrega_requisicion/${idOrden}/${idReq}`,
-		type: 'POST',
-		dataType: 'json',
-		data: {
-			check : $(this).is(':checked')
-		},
-		beforeSend: function () {
-			$('#loading_spin').show();
-		}
-	})
-	.done(function(resp) {
-		if (resp.estatus) {
-			toastr.info(resp.mensaje);
-			obtener_requisiciones(idOrden);
-		} else {
-			$(_this).prop('checked', $(_this).is(':checked') ? false : true);
-			toastr.warning(resp.mensaje);
-		}
-	})
-	.fail(function(error) {
-		console.log('error', error);
-	})
-	.always(function() {
-		$('#loading_spin').hide();
-	});
+		$.ajax({
+			url: `${base_url}index.php/servicio/entrega_requisicion/${idOrden}/${idReq}`,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				check : $(this).is(':checked')
+			},
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
 });
+$(document).off('click', '#verReqModal input[ name="recibe_req[]"]').on('click', '#verReqModal input[ name="recibe_req[]"]', function(event) {
+	let id  = $(this).prop('id');
+	let idOrden = id.split('-')[0];
+	let idReq   = id.split('-')[1];
+	const _this = this;
+		$.ajax({
+			url: `${base_url}index.php/servicio/firmar_reciboRefacciones/${idOrden}/${idReq}`,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				check : $(_this).is(':checked')
+			},
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+		
+});/*
+$(document).on('click', '#reciboCheck1', function(e){
+	let idOrden = localStorage.getItem('hist_id_orden');
+	const ids = $(this).prop('id').split('-');
+	idOrden = ids[0];
+	idRequisicion = ids[1];
+	const form = new FormData();
+	form.append('id_orden', idOrden);
+	form.append('id_requisicion', idRequisicion);
+    if ($(this).is(':checked')){
+        $.ajax({
+            cache: false,
+            url: `${base_url}index.php/servicio/firmar_reciboRefacciones/${idOrden}/${idRequisicion}`,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            dataType: 'json',
+            data: form,
+            beforeSend: function(){
+                $("#loading_spin").show();
+            }
+        })
+        .done(function(data) {
+            if (data.estatus) {
+                $('input[name="firma_de_tecnico"]').val(data.firma_electronica);
+                $("#reciboCheck1").prop("checked", true);
+            }else{
+                toastr.warning(data.mensaje);
+            }
+        })
+        .fail(function() {
+            toastr.warning('Hubo un error al actualizar la requisición.');
+        })
+        .always(function() {
+            $("#loading_spin").hide();
+        });
+    }else {
+        $('input[name="firma_de_tecnico"]').val('');
+    }	
+});*/
 
 function save_docs_anexo_intelisis(idOrden, idReq, formato, generarFormato = true) {
 	$.ajax({

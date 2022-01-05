@@ -97,6 +97,8 @@
 					<input type="hidden" id="numero_articulos3" name="numero_articulos">
 					<input type="hidden" id="id_presupuesto3" name="id_presupuesto">
 					<input type="hidden" id="id_requisicion3" name="id_requisicion">
+					<!--<input type="text" name="firma_de_admon" id="firma_de_admon" style="display: none;">
+					<input type="text" name="firma_de_tecnico" id="firma_de_tecnico" style="display: none;">-->
 					<?php
 					echo form_close();
 					?>

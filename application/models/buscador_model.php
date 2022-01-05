@@ -4631,28 +4631,43 @@ class Buscador_Model extends CI_Model{
 	}
 	public function autorizar_requisicion($idOrden, $idRequisicion, $datos)
 	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+
 		$existe = $this->db->select('*')->from('requisiciones')->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden])->get()->row_array();
 		if (sizeof($existe) > 0) {
 			$data = [
-				'autorizado' => $datos['check']
+				'autorizado' => $datos['check'],
+				'firma_de_admon' => $firma['firma_electronica']
 			];
 			$this->db->trans_start();
 			$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
-			$this->db->update('requisiciones', $data);
-			$this->db->trans_complete();
-			if ($this->db->trans_status() === FALSE) {
-				$this->db->trans_rollback();
-				$response['estatus'] = false;
-				$response['mensaje'] = 'No fue posible actualizar la autorización de la requisición.';
+			if($perfil == 7){
+				$this->db->update('requisiciones', $data);	
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No fue posible actualizar la autorización de la requisición.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = 'Autorización de la requisición actualizada.';
+				}
 			}else {
-				$this->db->trans_commit();
-				$response['estatus'] = true;
-				$response['mensaje'] = 'Autorización de la requisición actualizada.';
-			}
+				$response['estatus'] = false;
+					$response['mensaje'] = 'Tu perfil no es el indicado.';
+			}			
+			
 		} else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No se encontró ninguna requisición.';
 		}
+	}else {
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No tienes firma registrada.';
+	}
 		return $response;
 	}
 	public function entrega_requisicion($idOrden, $idRequisicion, $datos)
@@ -5006,5 +5021,44 @@ class Buscador_Model extends CI_Model{
 			$response['mensaje'] = 'Técnico asignado correctamente.';
 		}
 		return $response;
+	}
+	public function firmar_reciboRefacciones($idOrden, $idRequisicion)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+		$existen = $this->db->select("*")->from('requisiciones')->where(['id_requisicion' => $idRequisicion])->get()->row_array();
+		$data = [
+			'firma_de_tecnico' => $firma['firma_electronica'],
+			'fecha_recepcion' => date('d-m-Y H:i:s.v')
+		];
+		/*echo '<pre>'; print_r($existen);
+		echo '</pre>';*/
+		if ($existen['entregado']) {
+			$this->db->trans_start();
+			$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
+			if($perfil == 5){
+				$this->db->update('requisiciones', $data);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No fue posible actualizar el estatus de la requisición.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = 'Estatus de la requisición actualizado.';
+				}
+			}
+		}else {
+			$response["estatus"] = false;
+			$response["mensaje"] = 'No puede recibir refacciones que no han sido entregadas.';
+		}
+	}else {
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No tienes firma registrada.';
+	}
+		
+	return $response;
 	}
 }

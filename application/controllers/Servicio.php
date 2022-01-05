@@ -3106,6 +3106,16 @@ class Servicio extends CI_Controller {
 		$response = $this->buscador_model->obtener_iva($idOrden);
 		echo json_encode($response);
 	}
+	public function firmar_reciboRefacciones($idOrden = null, $idRequisicion = null)
+	{
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->firmar_reciboRefacciones($idOrden, $idRequisicion);
+		}
+		echo json_encode($response);
+	}
 	function asignar_tecnico_linea($id = null ) {
 		$datos = $this->input->post();
 		if ($id == null) {
