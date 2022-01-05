@@ -3106,4 +3106,17 @@ class Servicio extends CI_Controller {
 		$response = $this->buscador_model->obtener_iva($idOrden);
 		echo json_encode($response);
 	}
+	function asignar_tecnico_linea($id = null ) {
+		$datos = $this->input->post();
+		if ($id == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Linea de reparación no válida.';
+		}elseif(sizeof($datos)<= 0){
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos de asignación no válidos';
+		}else {
+			$response = $this->buscador_model->asignar_tecnico_linea($id, $datos);
+		}
+		echo json_encode($response);
+	}
 }

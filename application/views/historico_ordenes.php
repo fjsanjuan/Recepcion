@@ -500,7 +500,7 @@ table tr.active {
     </div>
 </div>
 <!-- modal para jefe de taller asignar tecnico-->
-<div class="modal fade" id="asignModal" tabindex="-1" aria-labelledby="asignModalLabel" aria-hidden="true">
+<div class="modal fade" id="asignModal" aria-labelledby="asignModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -513,50 +513,63 @@ table tr.active {
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
+                	<tr>
+                        <th>Línea de Reparación</th>
+                        <td>
+                        <div class="form-group col-md-8">
+                            <label for="asigna_linea" class="grey-text">Descripción</label>
+                            <select id="asigna_linea" name="asigna_tecnico" class="browser-default form-control validate[required]" >
+                            <option>seleccione una línea... </option>
+                            </select>
+                        </div>
+                        </td>
+                    </tr>
                     <tr>
                         <th>Técnico</th>
                         <td>
                         <div class="form-group col-md-8">
                             <label for="asigna_tecnico" class="grey-text">Nombre</label>
                             <select id="asigna_tecnico" name="asigna_tecnico" class="browser-default form-control validate[required]" >
-                            <!-- <option>seleccione... </option> -->
+                            <option>seleccione un técnico... </option>
                             </select>
                         </div>
                         </td>
                     </tr>
-                        <tr><th>Fecha Asignación</th>
+                        <!-- <tr><th>Fecha Asignación</th>
                         <td>
                         <div class="col-sm-1 icono_calendario">
                             <i class="fa fa-calendar-alt"></i>
                         </div>
                         <div class="col-sm-4">
-                        <input placeholder="Fecha Inicio" value="<?php echo date("Y-m").'\n';?>" type="text" id="fecha_ini" class="form-control datepicker input_fecha" >
+                        <input placeholder="dd-mm-YYYY" value="<?php echo date("Y-m-d");?>" type="text" id="fecha_ini" name="fecha_ini" class="form-control datepicker input_fecha" >
                         </div>
-                        </td></tr>
-                        <tr><th>Hora Asignación</th>
+                        </td></tr> -->
+                        <tr><th>Fecha Asignación</th>
                         <td>
                         <div class="row">
                         <div class="col-md-4">
-                            <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
-                            <input type="text" id="light-version-examples" class="form-control" placeholder="Select time">
-                            <label for="light-version-examples">Hora inico</label>
+                        	<input placeholder="Fecha Inicio"  type="text" id="inicio" class="form-control timepicker-asign" >
+                            <!-- <div class="md-form md-outline input-with-post-icon timepicker-asign" twelvehour="true">
+                            <input type="text" id="inicio" class="form-control" placeholder="00:00">
+                            <label for="inicio">Hora inico</label>
                             <i class="fas fa-clock input-prefix" style="cursor:pointer;"></i>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-md-4">
-                            <div class="md-form md-outline input-with-post-icon timepicker" twelvehour="true">
-                            <input type="text" id="light-version-examples" class="form-control" placeholder="Select time">
-                            <label for="light-version-examples">Hora termina</label>
+                        	<input placeholder="Fecha Fin"type="text" id="fin" class="form-control timepicker-asign" >
+                           <!--  <div class="md-form md-outline input-with-post-icon timepicker-asign" twelvehour="true">
+                            <input type="text" id="fin" class="form-control" placeholder="00:00">
+                            <label for="fin">Hora termina</label>
                             <i class="fas fa-clock input-prefix1" style="cursor:pointer;"></i>
-                            </div>
+                            </div> -->
                         </div>
-                        </div>
+                        </div><!-- 
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="gridCheck1">
                             <label class="form-check-label" for="gridCheck1">Todo el día</label>
-                        </div>
+                        </div> -->
                         </td></tr>
-                        <tr><th>Trabajo Inicial</th>
+                        <!-- <tr><th>Trabajo Inicial</th>
                         <td>
                         <div class="row">
                         <div class="form-check">
@@ -575,14 +588,14 @@ table tr.active {
                         </div>
                         </td></tr>
                         <tr><th>Detalles o Comentarios</th>
-                        <td><textarea name="textarea" rows="3" cols="60"></textarea></td></tr>
+                        <td><textarea name="textarea" rows="3" cols="60"></textarea></td></tr>-->
                 </thead>
             </table>
         </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Asignar</button>
+        <button type="button" class="btn btn-primary" id="btn_asignarTec">Asignar</button>
       </div>
     </div>
   </div>

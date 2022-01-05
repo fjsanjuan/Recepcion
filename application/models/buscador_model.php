@@ -4564,14 +4564,21 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_lineas($idOrden)
 	{
+		$this->db2 = $this->load->database('other',true);
+		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
 		$response['lineas_reparacion'] = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
-	
-		if (sizeof($response['lineas_reparacion']) > 0) {
-			$response['estatus'] = true;
-			$response['mensaje'] = "Ok.";
+		if (sizeof($orden) > 0 /*&& sizeof($response['lineas_reparacion']) > 0*/) {
+			$response['manos'] = $this->db2->select('*')->from('VentaD')->where(['ID' => $orden['id_orden_intelisis']])->get()->result_array();
+			if (sizeof($response['manos']) > 0) {
+				$response['estatus'] = true;
+				$response['mensaje'] = "Ok.";
+			} else {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+			}
 		} else {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+			$response['mensaje'] = 'No hay líneas cargadas para la garantíassss.';
 		}
 		return $response;
 	}
@@ -4974,6 +4981,29 @@ class Buscador_Model extends CI_Model{
 				$response['Porcentaje'] = $porcentaje;
 				
 			}
+		}
+		return $response;
+	}
+	function asignar_tecnico_linea($id, $datos) {
+		$data = [
+			'CCFechaIni' => $datos['inicio'],
+			'CCFechaFin' => $datos['fin'],
+			'Agente' => $datos['agente'],
+			'CCTiempoTab' => $datos['tiempo']
+		];
+		$this->db2 = $this->load->database('other',true);
+		$this->db2->trans_begin();
+		$this->db->where(['ID' => $id]);
+		$this->db2->update('VentaD', $data);
+		$this->db2->trans_complete(true);
+		if ($this->db2->trans_status() === FALSE ){
+			$this->db2->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue asignar el técnico a la línea.';
+		}else{
+			$this->db2->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Técnico asignado correctamente.';
 		}
 		return $response;
 	}

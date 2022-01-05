@@ -56,6 +56,13 @@ $(document).ready(function() {
 	        });
 	    }
 	});
+	$('.timepicker-asign').flatpickr({
+		enableTime: true,
+		noCalendar: true,
+		dateFormat: 'H:i',
+		time_24hr: true,
+		locale: 'es',
+	});
 	$('[data-toggle="tooltip"]').tooltip();
 
 	var tabla_historico = $(".tabla_hist").dataTable(
@@ -289,7 +296,7 @@ $(document).ready(function() {
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				action_tecnico ='';
-				//action_jefe       += `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#asignModal"><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
+				action_jefe       += `<button type="button" class="btn btn-sm btn-primary asignar_tecnico"  id='asignar_tec-${val["id"]}'><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				if (val["movimiento"] == null) {
 					action_tecnico		+= "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Cotizar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
@@ -5769,3 +5776,76 @@ function actualizar_balance() {
 
     $('.due').val(due);
 }
+
+$(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('click', '.tabla_hist tbody tr td button.asignar_tecnico', function(event) {
+	const idOrden = $(this).prop('id').split('-')[1];
+	$("#btn_asignarTec").prop('data-id', idOrden);
+	localStorage.setItem('hist_id_orden', idOrden);
+	event.preventDefault();
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		let con_movimientos = 0;
+		if (resp.estatus) {
+			$.each(resp.data, function(index, val) {
+				if (val.TieneMovimientos > 0) {
+					con_movimientos++;
+				}else{
+					$('#asigna_tecnico').append($(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`}));
+				}
+			});
+			if (con_movimientos < resp.data.length) {
+				$.ajax({
+					url: `${base_url}index.php/servicio/obtener_lineas/${idOrden}`,
+					type: 'GET',
+					dataType: 'json',
+					beforeSend: function () {
+						$('#loading_spin').show();
+					}
+				})
+				.done(function(respLineas) {
+					let con_movimientos = 0;
+					if (respLineas.estatus) {
+						$.each(respLineas.manos, function(index, val) {
+							$('#asigna_linea').append($(`<option>`,{'value': val.ID, 'text': `${val.DescripcionExtra}`}));
+						});
+						$('#asignModal').modal('toggle');
+					}else {
+						toastr.info(respLineas.mensaje);
+					}
+				})
+				.fail(function(error) {
+					toastr.warning('Ocurrió un error al cargar los técnicos disponibles.');
+					console.log("error", error);
+				})
+				.always(function() {
+					$('#loading_spin').hide();
+				});
+			}else{ 
+				toastr.info('No hay técnicos disponibles.');
+			}
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un error al cargar los técnicos disponibles.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
+});
+
+$(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', function(event) {
+	console.log('id', $(this).prop('data-id'));
+	/*
+	TODO llamar al endpoint de asignación del técnico
+	 */
+});
