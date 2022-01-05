@@ -56,13 +56,6 @@ $(document).ready(function() {
 	        });
 	    }
 	});
-	$('.timepicker-asign').flatpickr({
-		enableTime: true,
-		noCalendar: true,
-		dateFormat: 'H:i',
-		time_24hr: true,
-		locale: 'es',
-	});
 	$('[data-toggle="tooltip"]').tooltip();
 
 	var tabla_historico = $(".tabla_hist").dataTable(
@@ -296,7 +289,6 @@ $(document).ready(function() {
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				action_tecnico ='';
-				action_jefe       += `<button type="button" class="btn btn-sm btn-primary asignar_tecnico"  id='asignar_tec-${val["id"]}'><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				if (val["movimiento"] == null) {
 					action_tecnico		+= "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Cotizar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
@@ -305,6 +297,7 @@ $(document).ready(function() {
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
+					action_jefe       += `<button type="button" class="btn btn-sm btn-primary asignar_tecnico"  id='asignar_tec-${val["id"]}'><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				}
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
@@ -5856,6 +5849,10 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 	$("#btn_asignarTec").prop('data-id', idOrden);
 	localStorage.setItem('hist_id_orden', idOrden);
 	event.preventDefault();
+	$('#asigna_tecnico').empty();
+	$('#asigna_tecnico').append($('<option>', {text: 'seleccione un técnico...'}));
+	$('#asigna_linea').empty();
+	$('#asigna_linea').append($('<option>', {text: 'seleccione una línea...'}));
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
 		type: 'GET',
@@ -5870,10 +5867,14 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 			$.each(resp.data, function(index, val) {
 				if (val.TieneMovimientos > 0) {
 					con_movimientos++;
+					//linea de prueba
+					$('#asigna_tecnico').append($(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`}));
 				}else{
 					$('#asigna_tecnico').append($(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`}));
 				}
 			});
+			//linea de prueba
+			con_movimientos = 0;
 			if (con_movimientos < resp.data.length) {
 				$.ajax({
 					url: `${base_url}index.php/servicio/obtener_lineas/${idOrden}`,
@@ -5918,8 +5919,39 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 });
 
 $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', function(event) {
-	console.log('id', $(this).prop('data-id'));
-	/*
-	TODO llamar al endpoint de asignación del técnico
-	 */
+	let id = $('#asigna_linea').val();
+	const form = new FormData($('#formAsignarTec')[0]);
+	form.append('fin', $('.timepicker-asign-fin').val());
+	if (!$('#formAsignarTec').valid()) {
+		toastr.warning('Revise los datos.');
+		return;
+	}
+	$.ajax({
+		url: `${base_url}index.php/servicio/asignar_tecnico_linea/${id}`,
+		type: 'POST',
+		dataType: 'json',
+		data: form,
+		contentType: false,
+		processData: false,
+		cache: false,
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			$('#asignModal').modal('toggle');
+			toastr.info(resp.mensaje);
+			$('#formAsignarTec')[0].reset();
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un mensaje al intentar asignar el técnico.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
 });

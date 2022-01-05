@@ -5001,16 +5001,13 @@ class Buscador_Model extends CI_Model{
 	}
 	function asignar_tecnico_linea($id, $datos) {
 		$data = [
-			'CCFechaIni' => $datos['inicio'],
-			'CCFechaFin' => $datos['fin'],
-			'Agente' => $datos['agente'],
-			'CCTiempoTab' => $datos['tiempo']
+			'Agente' => $datos['asigna_tecnico']
 		];
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_begin();
-		$this->db->where(['ID' => $id]);
+		$this->db2->where(['ID' => $id]);
 		$this->db2->update('VentaD', $data);
-		$this->db2->trans_complete(true);
+		$this->db2->trans_complete();
 		if ($this->db2->trans_status() === FALSE ){
 			$this->db2->trans_rollback();
 			$response['estatus'] = false;
