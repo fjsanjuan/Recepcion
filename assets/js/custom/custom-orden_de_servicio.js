@@ -1674,7 +1674,7 @@ $(document).on('click','#levanta_orden' ,function(e){
             if(data.success == 1)
             {
                 toastr.success('Orden creada correctamente.');
-                $("#mostrar_modalemail, #generar_pdf, #btn_inicio, #mostrar_modalOasis").show();
+                $("#mostrar_modalemail, #generar_pdf, #btn_inicio, #mostrar_modalOasis, #enviar_whatsapp").show();
                 // $("#mostrar_modalemail").click();
                 //$("#send_mail").click(); PARA ENVIAR LA ORDEN POR CORREO AL LEVANTAR ORDEN SE DEBE DESCOMENTAR ESTA LINEA
                 $("#loading_spin, #levanta_orden").hide();
@@ -2788,7 +2788,7 @@ function enviar_correo( img, img2, img_correo, img_reverso, img3)
             {
                 $('#loading_spin').hide();
                 $("#modalsendmail").modal("hide");
-                $("#enviar_whatsapp").hide();
+                //$("#enviar_whatsapp").hide();
                 toastr.success('El correo electrónico ha sido enviado.', {timeOut: 5000});
             }else 
             {
@@ -3223,6 +3223,7 @@ function optimizar_PDF(e)
       //showing file converted to base64
       $('#input_vista_previa_pdf').val(base64data);
       $('#vista_previa_pdf').prop('src', base64data);
+      $('#oasis-embed').removeClass('hidden');
       $("#loading_spin").hide();
     };
 }
@@ -3247,6 +3248,7 @@ function guardar_oasis(form)
         {
             toastr.success("Se han guardado el formato Oasis.");
             $('#vista_previa_pdf').prop("src", "");
+            $('#oasis-embed').addClass('hidden');
 
         }else
         {
@@ -3655,6 +3657,7 @@ $(document).on("click", '#btn_borrarOasis', function (e){
     $('#vista_previa_pdf').prop("src", "");
     $('#input_vista_previa_pdf').html('');
     $('#oasisInput').val('');
+    $('#oasis-embed').addClass('hidden');
 });
 $(document).on("click", '#btn_borrarFoto', function (e){
     e.preventDefault();

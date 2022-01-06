@@ -1740,9 +1740,15 @@ class Servicio extends CI_Controller {
 
 	public function traer_fotos_inspeccion(){
 		$id = $this->input->post('id');
-		$fotos = $this->buscador_model->traer_fotos($id);
-
-		if($fotos){
+		$fotos = [];
+		$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $id)->get()->row_array();
+		if (isset($orden['movimiento'])) {
+			$archivos = $this->buscador_model->traer_fotos($orden['movimiento']);
+			$fotos = $archivos ? $archivos : [];
+		}
+		$archivos = $this->buscador_model->traer_fotos($id);
+		$fotos = array_merge($fotos,($archivos ? $archivos : []));
+		if(sizeof($fotos) > 0){
 			$data = array('success' =>1, 'data' => ('Mensaje en proceso, se abrirá una nueva ventana.'), 'fotos'=>$fotos);
 		}else{
 			$data = array('success' =>0, 'data' => ('No se encontraron fotos guardadas.'));

@@ -17,7 +17,7 @@
 	<br><br><br>
 	<div class="col-sm-12">
 		<h5 style="text-align: center;"><b>Vista Previa</b></h5>
-		<div class="embed-responsive embed-responsive-16by9">
+		<div class="embed-responsive embed-responsive-16by9 hidden" id="oasis-embed" style="height: 350px; overflow-y: hidden;">
 			<iframe class="embed-responsive-item" src="" frameborder="0" id="vista_previa_pdf" allowfullscreen></iframe>
 		</div>
 	</div>
