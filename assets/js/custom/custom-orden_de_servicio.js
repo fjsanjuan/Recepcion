@@ -3589,7 +3589,7 @@ $(document).off('click', '#btn_guardarAudio').on("click", '#btn_guardarAudio', f
      
      $.each(audios, function(index, val)
     {
-        var file = base64toFile(val, "voc-"+(index+1));
+        var file = base64toFile(val.src, "voc-"+(index+1));
         data.append("voc-"+(index+1), file);
     });
     data.append("cve_cliente", cve_cliente);
