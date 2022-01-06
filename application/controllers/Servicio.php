@@ -2710,7 +2710,7 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	public function guardar_diagnostico($idOrden = null)
+	public function guardar_diagnostico($idOrden)
 	{
 		$datos = [];
 		$datos = $this->input->post();
@@ -2748,10 +2748,15 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	public function editar_diagnostico($idOrden = null)
+	public function editar_diagnostico($idOrden)
 	{
 		$datos = [];
 		$datos = $this->input->post();
+		/*echo "<pre>";
+		print_r ($datos);
+		echo "</pre>";
+		die();*/
+		//print_r($datos);die();
 		if ($idOrden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
@@ -2907,7 +2912,7 @@ class Servicio extends CI_Controller {
 	public function garantia_anverso($idOrden = null){
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
 		$datos['id_orden']= $idOrden;
-		/*echo "<pre>"; print_r($datos);
+		/*echo "<pre>"; print_r($datos['data']);
 		echo "</pre>";*/
 		$this->load->view("anverso", $datos);
 	}
@@ -3063,14 +3068,14 @@ class Servicio extends CI_Controller {
 
 		echo json_encode($response);
 	}
-	public function firmar_anverso($id_orden)
+	public function firmar_anverso($idOrden)
 	{
-		$id_orden = $this->input->post('id_orden') != '' ? $this->input->post('id_orden') : null;
-		if ($id_orden == null) {
+		$idOrden = $this->input->post('id_orden') != '' ? $this->input->post('id_orden') : null;
+		if ($idOrden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'orden no valida';
 		}else {
-			$response = $this->buscador_model->firmar_anverso($id_orden);
+			$response = $this->buscador_model->firmar_anverso($idOrden);
 		}
 		echo json_encode($response);
 	}

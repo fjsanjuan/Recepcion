@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -260,6 +260,7 @@ $(document).ready(function() {
 				btn_jefe	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_jefe		="";
 				if(val['movimiento'] != null){
+					action_jefe		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_jefe		+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-upload'></i>&nbsp&nbsp Fotografías</button>";
 					action_jefe		+="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
 					action_jefe		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
@@ -5583,6 +5584,10 @@ function req_inexistente(idOrden, idReq, formato, reintentar = false) {
 $(document).on("click", ".tabla_hist tbody tr td button.mano_obra", function(e) {
 	$('#tabla_invoice tbody').empty();
 	$('#table_mano tbody').empty();
+	$('#subTotal').val(0);
+	$('#ivaTotal').val(0);
+	$('#totales').val(0);
+
 	e.preventDefault();
 	idOrden = $(this).prop('id');
 	idOrden = idOrden.split('-')[1];
@@ -5601,11 +5606,11 @@ $(document).on("click", ".tabla_hist tbody tr td button.mano_obra", function(e) 
 	})
 	.done(function(data) {
 		if (data.estatus) {
-			toastr.info(data.mensaje);
+			//toastr.info(data.mensaje);
 			$("#ZonaImpuesto_selected").append('<option value="' + data.Porcentaje['Zona'] + '" data-porc="'+data.Porcentaje['Porcentaje']+'" selected>' + data.Porcentaje['Zona'] + '</option>');
 			
 		}else {
-			toastr.warning(data.mensaje);
+			toastr.warning('Zona de impuestos no encontrada.');
 		}
 	})
 	.fail(function() {
@@ -5674,7 +5679,7 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     var total  = precio; 
     var tabla  = "<tr class='item-row arst_add' style='text-align:center;'>";
 
-    tabla += "<td class='item-name'><div class='delete-wpr'><a class='delete'>X</a> </div></td>";
+    tabla += "<td class='item-name'><div class='delete-wpr'><a class='delete' id='del_man'>X</a> </div></td>";
     tabla += "<td class='artmoo'>"+clave_art+"</td>";
     tabla += "<td>"+art+"</td>";
     tabla += "<td><input class='qty md-textarea' id='mo_qty' value='"+cantidad+"' readonly/></td>";
@@ -5688,7 +5693,7 @@ $(document).on("click", '#boton_agregarManObra', function (e){
 	
 
     // $("#mo_cost").val(precio);
-    biind();
+    bind();
 	
     actualizar_total();
     toastr.success("Mano de Obra agregada");
@@ -5802,13 +5807,13 @@ function actualizar_precio() {
 
   actualizar_total();
 }
-function biind() {
+function bind() {
   $(".cost").blur(actualizar_precio);
   $(".qty").blur(actualizar_precio);
 
 }
   
-biind();
+bind();
 
 function actualizar_total() {
   var total = 0;
