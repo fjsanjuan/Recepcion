@@ -19,21 +19,21 @@
 			</div>
 			<div class="panel-body" >
 				<div class="table-responsive" style="width: 100%;">
-					<table class="table table-condensed" id="tabla_invoice" >
-						<thead>
-							<tr>
-								<td></td>
-								<td><strong>Artículo</strong></td>
-								<td class="text-center"><strong>Descripción</strong></td>
-								<td class="text-center"><strong>Cantidad</strong></td>
-								<td class="text-center"><strong>Precio U</strong></td>
-								<td class="text-center"><strong>Total</strong></td>
-							</tr>
-						</thead>
-						<tbody>
+				<table class="table table-condensed" id="tabla_invoice" >
+					<thead>
+						<tr>
+							<td></td>
+							<td><strong>Artículo</strong></td>
+							<td class="text-center"><strong>Descripción</strong></td>
+							<td class="text-center"><strong>Cantidad</strong></td>
+							<td class="text-center"><strong>Precio U</strong></td>
+							<td class="text-center"><strong>Total</strong></td>
+						</tr>
+					</thead>
+					<tbody>
 
 					</tbody>
-					</table>
+				</table>
 				</div>
 				<div class="row" style="text-align: center;">
 					<div class="col">

@@ -4053,16 +4053,15 @@ class Buscador_Model extends CI_Model{
 			'causa_falla'          => isset($datos['causa_falla']) ? $datos['causa_falla'] : null,
 			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
 			'reparacion_efectuada' => isset($datos['reparacion_efectuada']) ? $datos['reparacion_efectuada'] : null,
-			'clave_defecto'        => isset($datos['clave_defecto']) ? $datos['clave_defecto'] : null,
+			'clave_defect'         => isset($datos['clave_defect']) ? $datos['clave_defect'] : null,
 			'retorno_partes'       => isset($datos['retorno_partes']) ? $datos['retorno_partes'] : null,
 			'mecanico_clave'       => isset($datos['mecanico_clave']) ? $datos['mecanico_clave'] : null,
 			'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
-			'tecnico'              => isset($datos['tecnico']) ? $datos['tecnico'] : null,
 			'jefe_de_taller'       => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
-			'firma_tecnico'        => isset($datos['firma_tecnico']) ? $datos['firma_tecnico'] : null,
 			'firma_jefe_taller'    => isset($datos['firma_jefe_taller']) ? $datos['firma_jefe_taller'] : null,
 			'terminado'            => 0
 		];
+		//echo "<pre>"; print_r($diagnostico); echo "</pre>";
 		$this->db->trans_start();
 		$this->db->insert('diagnostico_tecnico', $diagnostico);
 		$id = $this->db->insert_id();
@@ -4138,73 +4137,89 @@ class Buscador_Model extends CI_Model{
 	}
 	public function editar_diagnostico($idOrden, $datos)
 	{
+		$this->db->trans_start();
+		$this->db->where('id_diagnostico', $datos['id_diagnostico']);
+		$this->db->where("id NOT IN(".implode(',',array_column($datos['detalles'], 'id_revision')).")" );
+		$this->db->delete('detalles_diagnostico_tecnico');
+		$this->db->trans_complete();
+
+		$logged_in = $this->session->userdata("logged_in");
 		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'id_diagnostico' => $datos['id_diagnostico']])->get()->row_array();
 		if (!isset($existe['id_diagnostico'])) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Diagnóstico inexistente.';
 			return $response;
 		}
-		$diagnostico = [
-			'id_orden' => $idOrden,
-			'parte_causante'       => isset($datos['parte_causante']) ? $datos['parte_causante'] : null,
-			'causa_falla'          => isset($datos['causa_falla']) ? $datos['causa_falla'] : null,
-			'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
-			'reparacion_efectuada' => isset($datos['reparacion_efectuada']) ? $datos['reparacion_efectuada'] : null,
-			'clave_defecto'        => isset($datos['clave_defecto']) ? $datos['clave_defecto'] : null,
-			'retorno_partes'       => isset($datos['retorno_partes']) ? $datos['retorno_partes'] : null,
-			'mecanico_clave'       => isset($datos['mecanico_clave']) ? $datos['mecanico_clave'] : null,
-			'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
-			'tecnico'              => isset($datos['tecnico']) ? $datos['tecnico'] : null,
-			'jefe_de_taller'       => isset($datos['jefe_de_taller']) ? $datos['jefe_de_taller'] : null,
-			'firma_tecnico'        => isset($datos['firma_tecnico']) ? $datos['firma_tecnico'] : null,
-			'firma_jefe_taller'    => isset($datos['firma_jefe_taller']) ? $datos['firma_jefe_taller'] : null,
-			'terminado'            => isset($datos['terminado']) ? $datos['terminado'] : 0,
-		];
-		$this->db->trans_start();
-		$this->db->where('id_diagnostico', $datos['id_diagnostico']);
-		$this->db->update('diagnostico_tecnico', $diagnostico);
-		$this->db->trans_complete();
-		if($this->db->trans_status() === FALSE)
-		{
-			$this->db->trans_rollback();
-			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue posible guardar el diagnóstico.';
-			return $response;
-		}else
-		{
-			$this->db->trans_commit();
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Diagnóstico guardado.';
-		}
-		$this->db->trans_start();
-		foreach ($datos['detalles'] as $key => $detalle) {
-			$data = [
-				'tren_motriz'    => $detalle['tren_motriz'],
-				'codigos'        => $detalle['codigos'],
-				'luz_de_falla'   => $detalle['luz_de_falla'],
-				'num_reparacion' => $detalle['num_reparacion'],
-				#'id_orden'      => $idOrden,
+		#TODO
+		if (true) {
+			$diagnostico = [
+				'id_orden' => $idOrden,
+				'parte_causante'       => isset($datos['parte_causante']) ? $datos['parte_causante'] : null,
+				'causa_falla'          => isset($datos['causa_falla']) ? $datos['causa_falla'] : null,
+				'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
+				'reparacion_efectuada' => isset($datos['reparacion_efectuada']) ? $datos['reparacion_efectuada'] : null,
+				'clave_defect'         => isset($datos['clave_defect']) ? $datos['clave_defect'] : null,
+				'retorno_partes'       => isset($datos['retorno_partes']) ? ( $datos['retorno_partes']) : null,
+				'mecanico_clave'       => isset($datos['mecanico_clave']) ? $datos['mecanico_clave'] : null,
+				'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
+				
 			];
-			if (isset($detalle['id_revision'])) {
-				$this->db->where(['id_revision' =>	$detalle['id_revision'], 'id_diagnostico' => $datos['id_diagnostico']]);
-				$this->db->update('detalles_diagnostico_tecnico', $data);
-			}else {
-				$data['id_diagnostico'] = $datos['id_diagnostico'];
-				$data['num_reparacion'] = $detalle['num_reparacion'];
-				$this->db->insert('detalles_diagnostico_tecnico', $data);
+			if($logged_in['perfil'] == 4){
+				$jefe = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
+				$diagnostico['jefe_de_taller'] = $jefe['nombre'];
+				$diagnostico['firma_jefe_taller'] = isset($datos['firma_jefe_taller']) ? $datos['firma_jefe_taller'] : null;
+				$diagnostico['terminado'] = isset($datos['terminado']) ? $datos['terminado'] : 1;
+
 			}
-		}
-		$this->db->trans_complete();
-		if($this->db->trans_status() === FALSE)
-		{
-			$this->db->trans_rollback();
+			$this->db->trans_start();
+			$this->db->where('id_diagnostico', $datos['id_diagnostico']);
+			$this->db->update('diagnostico_tecnico', $diagnostico);
+			$this->db->trans_complete();
+			if($this->db->trans_status() === FALSE)
+			{
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el diagnóstico.';
+				return $response;
+			}else
+			{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Diagnóstico actualizado.';
+			}
+			$this->db->trans_start();
+			foreach ($datos['detalles'] as $key => $detalle) {
+				$data = [
+					'tren_motriz'    => $detalle['tren_motriz'],
+					'codigos'        => $detalle['codigos'],
+					'luz_de_falla'   => $detalle['luz_de_falla'],
+					'num_reparacion' => $detalle['num_reparacion'],
+					#'id_orden'      => $idOrden,
+				];
+				if (isset($detalle['id_revision'])) {
+					$this->db->where(['id' =>	$detalle['id_revision'], 'id_diagnostico' => $datos['id_diagnostico']]);
+					$this->db->update('detalles_diagnostico_tecnico', $data);
+				}else {
+					$data['id_diagnostico'] = $datos['id_diagnostico'];
+					$data['num_reparacion'] = $detalle['num_reparacion'];
+					$this->db->insert('detalles_diagnostico_tecnico', $data);
+				}
+			}
+			$this->db->trans_complete();
+			if($this->db->trans_status() === FALSE)
+			{
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar las fallas del diagnóstico.';
+			}else
+			{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Diagnóstico actualizado.';
+			}
+		}else{
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue posible guardar las fallas del diagnóstico.';
-		}else
-		{
-			$this->db->trans_commit();
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Diagnóstico guardado.';
+			$response['mensaje'] = 'No fue posible actualizar el nombre de perfil.';
 		}
 		return $response;
 	}
@@ -4732,7 +4747,7 @@ class Buscador_Model extends CI_Model{
 		}
 		return $creado;
 	}
-	public function firmar_anverso($id_orden)
+	public function firmar_anverso($idOrden)
 	{
 		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
 		$perfil = $this->session->userdata["logged_in"]["perfil"];
@@ -4805,7 +4820,7 @@ class Buscador_Model extends CI_Model{
 		 //Inner JOIN OperacionesEreactValidas oert ON oert.Articulo = art.Articulo
 		 //AND art.Estatus = 'ALTA'
 		
-		 // echo $this->db2->last_query();
+		  //echo $this->db2->last_query();
 		if($query->num_rows() > 0){
 			$response['data'] = $query->result_array();
 		}else{
