@@ -693,7 +693,7 @@ class User_model extends CI_Model {
 	public function total_fotos($data = null)
 	{
 		$this->db->trans_begin();
-		$res = $this->db->select("*")->from("archivo")->where("id_orden_servicio", $data['id_orden_servicio'])->count_all_results();
+		$res = $this->db->select("*")->from("archivo")->where("id_orden_servicio", $data['id_orden_servicio'])->where("tipo_archivo",1)->count_all_results();
 		$this->db->trans_commit();
 						   
 		return $res;	

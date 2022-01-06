@@ -213,7 +213,7 @@ table tr.active {
 </div>
 <!-- modal fotos -->
 <div class="modal fade" id="modalFotos" tabindex="-1" role="dialog" data-backdrop="false">
-    <div class="modal-dialog"  role="document">
+    <div class="modal-dialog modal-lg"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Fotografías de la Orden</h5>

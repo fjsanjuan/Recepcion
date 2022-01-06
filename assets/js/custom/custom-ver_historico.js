@@ -815,7 +815,7 @@ $(document).ready(function() {
 							var str = data.fotos[i]['ruta_archivo'];
 							var str_res = str.replace(dir_fotos, "");
 							ruta = vhost + str_res;
-							$("#links_light").append('<a href="'+ ruta +'" target="_blank"><img class="img_hist" src="'+ruta +"?id="+random+'" style="width:100%"></a>');
+							$("#links_light").append('<a href="'+ ruta +'" target="_blank"><img class="img_hist" src="'+ruta +"?id="+random+'" style="width:900px; height:450px;"></a>');
 						}
 					}
 					else{
@@ -824,7 +824,7 @@ $(document).ready(function() {
 							random = Math.floor((Math.random() * 100) + 1);
 							ruta = base_url + data.fotos[i]['ruta_archivo'];
 							var str = data.fotos[i]['ruta_archivo'];
-							$("#links_light").append('<a href="'+ ruta +'" target="_blank"><img class="img_hist" src="'+ruta +"?id="+random+'" style="width:100%"></a>');
+							$("#links_light").append('<a href="'+ ruta +'" target="_blank"><img class="img_hist" src="'+ruta +"?id="+random+'" style="width:900px; height:450px;"></a>');
 						}
 					}
 
