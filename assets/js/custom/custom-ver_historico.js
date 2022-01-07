@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -5855,9 +5855,9 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 	localStorage.setItem('hist_id_orden', idOrden);
 	event.preventDefault();
 	$('#asigna_tecnico').empty();
-	$('#asigna_tecnico').append($('<option>', {text: 'seleccione un técnico...'}));
+	$('#asigna_tecnico').append($('<option>', {text: 'seleccione un técnico...', value: ''}));
 	$('#asigna_linea').empty();
-	$('#asigna_linea').append($('<option>', {text: 'seleccione una línea...'}));
+	$('#asigna_linea').append($('<option>', {text: 'seleccione una línea...', value: ''}));
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
 		type: 'GET',
@@ -5893,7 +5893,7 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 					let con_movimientos = 0;
 					if (respLineas.estatus) {
 						$.each(respLineas.manos, function(index, val) {
-							$('#asigna_linea').append($(`<option>`,{'value': val.ID, 'text': `${val.DescripcionExtra}`}));
+							$('#asigna_linea').append($(`<option>`,{'value': val.ID, 'text': `${val.DescripcionExtra}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`}));
 						});
 						$('#asignModal').modal('toggle');
 					}else {
@@ -5931,6 +5931,10 @@ $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', funct
 		toastr.warning('Revise los datos.');
 		return;
 	}
+	datos_renglon =  $('#asigna_linea').find('option:selected').data();
+	form.append('Renglon', datos_renglon.renglon);
+	form.append('RenglonID', datos_renglon.renglonid);
+	form.append('RenglonSub', datos_renglon.renglonsub);
 	$.ajax({
 		url: `${base_url}index.php/servicio/asignar_tecnico_linea/${id}`,
 		type: 'POST',

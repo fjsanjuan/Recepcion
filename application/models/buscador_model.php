@@ -5021,7 +5021,7 @@ class Buscador_Model extends CI_Model{
 		];
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_begin();
-		$this->db2->where(['ID' => $id]);
+		$this->db2->where(['ID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
 		$this->db2->update('VentaD', $data);
 		$this->db2->trans_complete();
 		if ($this->db2->trans_status() === FALSE ){

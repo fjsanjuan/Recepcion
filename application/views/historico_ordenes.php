@@ -520,7 +520,7 @@ table tr.active {
 	                        <div class="form-group col-md-8">
 	                            <label for="asigna_linea" class="grey-text">Descripción</label>
 	                            <select id="asigna_linea" name="asigna_tecnico" class="browser-default form-control validate[required]" required>
-	                            <option>seleccione una línea...</option>
+	                            <option value="">seleccione una línea...</option>
 	                            </select>
 	                        </div>
 	                        </td>
@@ -531,7 +531,7 @@ table tr.active {
 	                        <div class="form-group col-md-8">
 	                            <label for="asigna_tecnico" class="grey-text">Nombre</label>
 	                            <select id="asigna_tecnico" name="asigna_tecnico" class="browser-default form-control validate[required]" required>
-	                            <option>seleccione un técnico...</option>
+	                            <option value="">seleccione un técnico...</option>
 	                            </select>
 	                        </div>
 	                        </td>
