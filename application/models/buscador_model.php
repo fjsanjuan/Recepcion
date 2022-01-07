@@ -3995,7 +3995,7 @@ class Buscador_Model extends CI_Model{
 		$datos['total_presupuesto'] = str_ireplace(',', '', $datos['total_presupuesto']);
 		$requisicion = [
 			'no_requisicion'    => null,
-			'fecha_requisicion' => date('d-m-Y H:i:s.v'),
+			'fecha_requisicion' => date('d-m-Y H:i:s'),
 			'fecha_recepcion'   => null,
 			'nom_tecnico'       => isset($tecnico['nombre']) ? $tecnico['nombre'] : null,
 			'id_orden'          => $idOrden,
