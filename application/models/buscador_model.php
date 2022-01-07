@@ -3373,7 +3373,7 @@ class Buscador_Model extends CI_Model{
 		$ordenServicioRecep['fecha_actualizacion'] = date('d-m-Y H:i:s');
 		$ordenServicioRecep['fecha_recepcion'] = date('d-m-Y H:i:s',strtotime($ordenServicioRecep['fecha_recepcion']));
 		$ordenServicioRecep['fecha_entrega'] = date('d-m-Y H:i:s',strtotime($ordenServicioRecep['fecha_entrega']));
-		$ordenServicioRecep['fecha_termCond'] = date('d-m-Y H:i:s.v',strtotime($ordenServicioRecep['fecha_termCond']));
+		$ordenServicioRecep['fecha_termCond'] = date('d-m-Y H:i:s',strtotime($ordenServicioRecep['fecha_termCond']));
 		$ordenServicioRecep['tipo_orden'] = 'Garantia';
 		$ordenServicioRecep['id_orden_intelisis'] = $id;
 		$this->db->trans_complete();
