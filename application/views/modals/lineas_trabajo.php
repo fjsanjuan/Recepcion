@@ -26,7 +26,7 @@ echo form_open('',$attributes);
 					<option value="">Tipo Garantías</option>
 					<option value="Cero Defectos">Cero Defectos</option>
 					<option value="Básica">Básica</option>
-					<option value="Inspección de Previa Extensión de Servicio">Inspección Previa Extensión de Servicios</option>
+					<option value="Inspección de Previa Extensión de Servicio">Inspección Previa de Servicios</option>
 					<option value="Política">Política</option>
 					<option value="Partes de Servicio">Partes de Servicio</option>
 					<option value="Partes Vendidas en Mostrador">Partes Vendidas</option>
@@ -37,11 +37,11 @@ echo form_open('',$attributes);
 					<label for="sub_garantia" class="col-sm-4 control-label" style="white-space: nowrap;">Sub Tipo de Garantía</label>
 					<select id="sub_garantia" name="subtipo_garantia" style="width:auto;" class="browser-default form-control">
 					<option value="">Sub Tipos Garantía</option>
-					<option value="MVC">MVC (Son números de parte de Ford)</option>
+					<option value="MVC">MVC Son números desde Ford</option>
 					<option value="ACC">ACC</option>
 					<option value="ADD">ADD</option>
 					<option value="COMFU">COMFU</option>
-					<option value="ESC, ESQ">ESC, ESQ (introducir el código publicado)</option>
+					<option value="ESC, ESQ">ESC, ESQ </option>
 					<option value="LVP">LVP</option>
 					<option value="MT">MT</option>
 					</select>

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -227,7 +227,7 @@ $(document).ready(function() {
 				action_garantias	= "";
 				if (val['movimiento'] != null) {
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_tipoGtia' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='ver_tipoGtia-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Tipo Garantías</button>";
-					action_garantias	+= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Abrir&nbspF-1863</button>";
+					action_garantias	+= "<button class='btn btn-sm f1863' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='f1863-"+val["id"]+"'><i class='fa fa-file'></i>  &nbsp&nbsp Ver&nbspF-1863</button>";
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Ver Requisiciones</button>";
 					action_garantias	+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-upload'></i>&nbsp&nbsp Fotografías</button>";
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary autorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#modalautorizaciones' id='autorizaciones-"+val["id"]+"'><i class='fa fa-check'></i>&nbsp&nbsp Autorizaciones</button>";
@@ -5698,6 +5698,14 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     toastr.success("Mano de Obra agregada");
     //$("#ajax_arts, #input_precio, #input_claveArt").val("");
     $("#input_cantidad").val(1);
+});
+$(document).on("click", '#del_man', function (e){
+	$(this).parents('.item-row').remove();
+	//var index = $(this).attr('id');
+    actualizar_total();
+    toastr.success("Mano de Obra eliminada.");
+    //$("#ajax_arts, #input_precio, #input_claveArt").val("");
+    //$("#input_cantidad").val(1);
 });
 
 function obtener_articuloSeleccionados()

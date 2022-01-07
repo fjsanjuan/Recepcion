@@ -783,7 +783,7 @@ table tr.active {
 
 <!-- modal carga de lineas de trabajo -->
 <div id="lineaTrabajoModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="lineaTrabajo" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="max-width: 1200px">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 style="color: #4285f4;" class="modal-title" id="lineaTrabajo"><b>AGREGAR TIPO DE GARANTÍA</b></h4>
@@ -805,7 +805,7 @@ table tr.active {
 
 <!-- PARA MANO DE OBRA-->
 <div id="addManObra" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="manObra" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="max-width: 1200px">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h4 class="modal-title w-100 font-weight-bold" id="manObra">Mano de Obra</h4>
