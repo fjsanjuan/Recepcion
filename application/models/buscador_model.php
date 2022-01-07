@@ -5043,7 +5043,7 @@ class Buscador_Model extends CI_Model{
 		$existen = $this->db->select("*")->from('requisiciones')->where(['id_requisicion' => $idRequisicion])->get()->row_array();
 		$data = [
 			'firma_de_tecnico' => $firma['firma_electronica'],
-			'fecha_recepcion' => date('d-m-Y H:i:s.v')
+			'fecha_recepcion' => date('d-m-Y H:i:s')
 		];
 		/*echo '<pre>'; print_r($existen);
 		echo '</pre>';*/
