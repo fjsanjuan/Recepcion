@@ -4019,6 +4019,7 @@ class Buscador_Model extends CI_Model{
 			$response['mensaje'] = 'Requisición guardada.';
 			$response['id']      = $id;
 		}
+		$this->db->trans_start();
 		foreach ($datos['detalles'] as $key => $detalles) {
 			$detalles['precio_unitario'] = str_ireplace(',', '', $detalles['precio_unitario']);
 			$detalles['total_arts'] = str_ireplace(',', '', $detalles['total_arts']);
@@ -4041,7 +4042,7 @@ class Buscador_Model extends CI_Model{
 		{
 			$this->db->trans_commit();
 			$response['estatus'] = true;
-			$response['mensaje'] = 'Requisición guardada.';
+			$response['mensaje'] = 'Requisición y detalles guardada.';
 		}
 		return $response;
 	}
