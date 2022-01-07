@@ -4326,16 +4326,17 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 			let registro = undefined;
 			console.log('daa', data.data);
 			for (index in data.data) {
-				console.log(index);
+				aux = palabras_acentos(index);
+				console.log(aux);
 				registro = $("<tr>");
-				registro.append($("<td>",{"text": index}));
+				registro.append($("<td>",{"text": aux}));
 				var checkbox = $('<div>', {'class': 'form-check'});
-                if (data.data[index]) {
-                	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox','checked': 'checked', 'disabled': 'disabled', 'id': `aut-${index}`}));
-                	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${index}`}));
+                if (data.data[aux]) {
+                	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox','checked': 'checked', 'disabled': 'disabled', 'id': `aut-${aux}`}));
+                	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${aux}`}));
                 }else{
-                	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox', 'disabled': 'disabled', 'id': `aut-${index}`}));
-                	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${index}`}));
+                	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox', 'disabled': 'disabled', 'id': `aut-${aux}`}));
+                	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${aux}`}));
                 }
 				registro.append($("<td>").append(checkbox));
 				registro.append($("<td>"));
@@ -5972,3 +5973,9 @@ $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', funct
 		$('#loading_spin').hide();
 	});
 });
+
+function palabras_acentos(palabra){
+	palabra = palabra.replace('\\u00ed', 'í');
+	palabra = palabra.replace('\\u00cd', 'Í');
+	return palabra;
+}
