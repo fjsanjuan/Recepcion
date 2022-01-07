@@ -795,7 +795,7 @@ table tr.active {
 	        </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="guardar_lineas">Guardar</button>
-                <button type="button" class="btn btn-success" id="bnActualizarLinea" style="display: none">Actualizar Línea</button>   
+                <button type="button" class="btn btn-success" id="bnActualizarLinea" style="display: none">Actualizar</button>   
 	            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>

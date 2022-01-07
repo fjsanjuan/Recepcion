@@ -203,10 +203,10 @@ input:focus{
                                 CÓDIGOS
                             </div>
                             <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt bold">
-							NUEVA LÍNEA
+							NUEVO CÓDIGO
                             </div>
                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt bold">
-							BORRAR LÍNEA
+							BORRAR CÓDIGO
                             </div>
                         </div>
                         <div class="code_lines">

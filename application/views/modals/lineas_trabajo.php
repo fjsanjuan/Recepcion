@@ -1,9 +1,9 @@
 <ul class="nav nav-pills nav-fill" role="tablist">
 	<li class="nav-item" role="presentation">
-		<a class="nav-link active" id="nuev-lin" data-toggle="tab" role="tab" aria-controls="nueva_linea" aria-selected="true" href="#nueva_linea">AGREGAR NUEVA LÍNEA</a>
+		<a class="nav-link active" id="nuev-lin" data-toggle="tab" role="tab" aria-controls="nueva_linea" aria-selected="true" href="#nueva_linea">AGREGAR TIPO DE GARANTÍAS</a>
 	</li>
 	<li class="nav-item" role="presentation">
-		<a class="nav-link"  id="lin-carg" data-toggle="tab" role="tab" aria-controls="lineas_cargadas" aria-selected="true" href="#lineas_cargadas">LÍNEAS AGREGADAS</a>
+		<a class="nav-link"  id="lin-carg" data-toggle="tab" role="tab" aria-controls="lineas_cargadas" aria-selected="true" href="#lineas_cargadas">TIPO DE GARANTÍAS AGREGADAS</a>
 	</li>
 	
 </ul><br>
