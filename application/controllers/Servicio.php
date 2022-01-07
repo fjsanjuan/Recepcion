@@ -3061,8 +3061,8 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Archivo no valido.';
 		}else {
 			$nomArchivo = $formato;
-			//$rutaArchivo = realpath(RUTA_FORMATS.$orden['vin']."/".$idOrden."/".$nomArchivo); // ruta para produccion
-			$rutaArchivo = '\\\\10.251.0.10\\www\\Demos\\Ford\\demosV2\\Recepcion\\archivos_recepcion\\'.$nomArchivo; // ruta para pruebas
+			$rutaArchivo = realpath(RUTA_FORMATS.$orden['vin']."/".$idOrden."/".$nomArchivo); // ruta para produccion
+			//$rutaArchivo = '\\\\10.251.0.10\\www\\Demos\\Ford\\demosV2\\Recepcion\\archivos_recepcion\\'.$nomArchivo; // ruta para pruebas
 			$response = $this->buscador_model->save_docs_anexo_mov($idOrden, $nomArchivo, $rutaArchivo);
 		}
 
