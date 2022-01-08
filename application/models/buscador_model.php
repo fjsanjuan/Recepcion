@@ -3183,8 +3183,13 @@ class Buscador_Model extends CI_Model{
 		/*$f = fopen($ruta."FormatoDeOrdenServicio".$id_orden.".pdf", "wb");
 		// guardamos en el archivo el contenido que hay despues de la coma
 		fwrite($f, base64_decode($data[1]));
- 		fclose($f);*/
-
+		fclose($f);*/
+		$orden = $this->db->select('vin')->from('orden_servicio')->where(['id' => $id_orden])->get()->row_array();
+		$ruta = RUTA_FORMATS.$orden["vin"].'/'.$id_orden;
+		if(!file_exists($ruta)) {
+			mkdir($ruta, 0777, true);
+		}
+		$ruta .= '/';
 		$bin = base64_decode($data[1], true);
 		if ($id_orden !== null) {
 			file_put_contents($ruta."FormatoOasis".$id_orden.".pdf", $bin);
@@ -3244,9 +3249,9 @@ class Buscador_Model extends CI_Model{
 	{
 		$archivo = $datos["voc"];
 		$datos["vin"] = trim($datos["vin"]);
-		$ruta = $this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"].'/voc-'.$datos['id'].'.mp3'; 
-		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
-			mkdir($this->ruta_formts.'archivos_recepcion/'.$datos["vin"].'/'.$datos["id_orden_servicio"], 0777, true);
+		$ruta = RUTA_FORMATS.''.$datos["vin"].'/'.$datos["id_orden_servicio"].'/voc-'.$datos['id'].'.mp3'; 
+		if(!file_exists(RUTA_FORMATS.''.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
+			mkdir(RUTA_FORMATS.''.$datos["vin"].'/'.$datos["id_orden_servicio"], 0777, true);
 		}
 		//$nombrearchivo = $archivo["name"];
 		$nombrearchivo = 'voc-'.$datos['id'].'.mp3'; 
@@ -3296,6 +3301,7 @@ class Buscador_Model extends CI_Model{
 		$columna  = 0;
 		$pdfs     = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' => $id_orden, 'tipo_archivo' => 7])->count_all_results();
 		$audios   = $this->db->select('id')->from('archivo')->where(['id_orden_servicio' => $id_orden, 'tipo_archivo' => 8])->count_all_results();
+		$orden = $this->db->select('vin')->from('orden_servicio')->where(['id' => $id_orden])->get()->row_array();
 		foreach($archivos as $key => $value) 
 		{
 			if ( $tipos[$columna] == 'PDF') {
@@ -3308,6 +3314,7 @@ class Buscador_Model extends CI_Model{
 			$datos['id_orden_servicio'] = $id_orden;
 			$datos['tipo']              = $tipos[$columna] == 'PDF' ? 7 : 8;
 			$datos['tipo_nombre']       = $tipos[$columna];
+			$datos['vin']               = $orden['vin'];
 			$archivo_creado             = $this->crear_archivo_v2($datos);
 			$files[]                    = ($archivo_creado) ? true : false;
 		}
@@ -3317,9 +3324,9 @@ class Buscador_Model extends CI_Model{
 	public function crear_archivo_v2($datos = null)
 	{
 		$archivo = $datos["archivo"];
-		$ruta = $this->ruta_formts.'archivos_recepcion/'.'OrdenServicio'.$datos["id_orden_servicio"].'/'.$datos['tipo_nombre']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
-		if(!file_exists($this->ruta_formts.'archivos_recepcion/'.'OrdenServicio'.$datos["id_orden_servicio"])) {
-			mkdir($this->ruta_formts.'archivos_recepcion/'.'OrdenServicio'.$datos["id_orden_servicio"], 0777, true);
+		$ruta = RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"].'/'.$datos['tipo_nombre']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
+		if(!file_exists(RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"])) {
+			mkdir(RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"], 0777, true);
 		}
 		$nombrearchivo = $archivo["name"];
 		move_uploaded_file($archivo["tmp_name"], $ruta);
@@ -3363,7 +3370,7 @@ class Buscador_Model extends CI_Model{
 		$idIntelisis= $orServicio->id_orden_intelisis;
 
 		$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,?,?,?,?,?,?,?,?,@OkRef OUTPUT,0,0 SELECT @OkRef", 
-		array($modulo, $idIntelisis, $mov, $usuario, '26/11/2021','SINAFECTAR','Pesos', 1 , NULL, 1, 'Servicio', NULL, NULL));
+		array($modulo, $idIntelisis, $mov, $usuario, date('d/m/Y'),'SINAFECTAR','Pesos', 1 , NULL, 1, 'Servicio', NULL, NULL));
 		$id = $this->db2->query("SELECT ident_current('Venta') AS id;")->row_array()['id'];
 		$response['id'] = $id;
 		$ordenServicioRecep = $this->db->select('*')->from('orden_servicio')->where('id', $id_orden_servicio)->get()->row_array();
@@ -3870,7 +3877,7 @@ class Buscador_Model extends CI_Model{
 		} else {
 			curl_close($request);
 			$datos['vin'] = str_replace('.', '', $datos['vin']);
-			$ruta = $this->ruta_formts.$datos['vin']."/".$datos['id_orden'];
+			$ruta = RUTA_FORMATS.$datos['vin']."/".$datos['id_orden'];
 			if(!file_exists($ruta)) 
 			{
 				mkdir($ruta, 0777, true);
@@ -3913,10 +3920,10 @@ class Buscador_Model extends CI_Model{
 		#$pdfs = "";
 		$pdfs = [];
 		$response = [];
-		$ruta = $this->ruta_formts."archivos_recepcion/{$datos['id_orden']}/";
-		if(!file_exists($ruta)) {
+		$ruta = RUTA_FORMATS."{$datos['id_orden']}/";
+		/*if(!file_exists($ruta)) {
 			mkdir($ruta, 0777, true);
-		}
+		}*/
 		foreach ($datos['archivos'] as $key => $archivo) {;
 			if (file_exists($archivo["ruta_archivo"])) {
 				$pdf['data']= chunk_split(base64_encode(file_get_contents($archivo['ruta_archivo'])));

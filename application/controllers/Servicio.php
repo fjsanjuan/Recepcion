@@ -2318,7 +2318,8 @@ class Servicio extends CI_Controller {
 		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
 		$formato_oasis = $this->input->post("oasis");
 		$id_orden = $this->input->post("id_orden");
-		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$ruta_temp = "";
 		$oasis = $this->buscador_model->cargar_oasis($ruta_temp, $formato_oasis, $id_orden);
 		echo json_encode($oasis);
 	}
@@ -2380,7 +2381,8 @@ class Servicio extends CI_Controller {
 		ini_set('max_execution_time', 900); //300 seconds = 5 minutes;
 		$tipo = $this->input->post("tipo");
 		$id_orden = $this->input->post("id_orden_servicio");
-		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$ruta_temp = "";
 		$response = $this->buscador_model->cargar_documentacion($ruta_temp, $tipo, $id_orden);
 		echo json_encode($response);
 	}
