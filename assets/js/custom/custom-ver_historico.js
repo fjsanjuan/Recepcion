@@ -201,7 +201,16 @@
 
 				nombre  = val["nombre_cliente"]+" "+val["ap_cliente"]+" "+val["am_cliente"];
 				folio   = (val["movID"] == null || val["movID"]["MovID"] == null) ? "-" : val["movID"]["MovID"];
-				tipo	= (val["movimiento"] == null) ? "Pública": `Pregarantía (${val["origenID"]["origenID"]})`;
+				//tipo	= (val["movimiento"] == null) ? "Pública": `Pregarantía (${val["origenID"]["origenID"]})` || (val["movID"] != null || val["movimiento"] != null) ? `Garantia (${val["origenID"]["origenID"]})`: "Pregarantia";
+				tipo = "";
+				if (val["movimiento"] != null && (val["movID"] != null && val["movID"]["MovID"] != null)){ 
+					tipo = `Garantía (${val["origenID"]["origenID"]})`;
+				}else if(val["movimiento"] != null){
+					tipo = `Pregarantía (${val["origenID"]["origenID"]})`;
+
+				}else{
+					tipo = "Pública";
+				}
 				btn = "";
 				//btn     =  "<button class='btn btn-sm profeco' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
 				//btn     =  "<button class='btn btn-sm profec' style='background: #152f6d;' id='profeco-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Formato Profeco</button>";
