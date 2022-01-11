@@ -514,7 +514,7 @@ class Servicio extends CI_Controller {
 	function orden_de_servicio($vta, $cliente = 0, $vin = 0){
 		// echo $cliente;die;
 		// si se recibe el vin en base64 es por que viene con punto 
-		if (base64_decode($vin, true)) {
+		if ( base64_encode(base64_decode($vin, true)) === $vin){
 			$decoded64Vin = base64_decode($vin);
 		} else {
 			$decoded64Vin = $vin;
