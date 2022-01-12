@@ -1481,11 +1481,16 @@ class Servicio extends CI_Controller {
 
 	public function profeco_print($id_orden = null){
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
-		// var_dump($datos);die;
+		 /*echo "<pre>";
+		 print_r($datos);
+		 echo "</pre>";*/
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
-		
+		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		if(!file_exists($ruta_temp)) {
+			mkdir($ruta_temp, 0777, true);
+		}
 		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		if (false) {
 			$this->load->view("mails/formato_ordenServicioFame", $datos);
@@ -1586,6 +1591,7 @@ class Servicio extends CI_Controller {
 
 	public function crear_pdf($imagenb64 = null, $id_orden = null, $img_reverso = null)
 	{
+		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		include_once('./application/libraries/MPDF60/mpdf.php');
 
 		$nombre = "FormatoDeOrdenServicio".$id_orden.".pdf";
@@ -1608,12 +1614,16 @@ class Servicio extends CI_Controller {
 		$mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 		$html2 = "";
 		$mpdf->WriteHTML($html2);
-		$mpdf->Output('./archivos_recepcion/'.$nombre, "F");
+		$mpdf->Output($ruta_temp.$nombre, "F");
+		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		if(!file_exists($ruta_temp)) {
+			mkdir($ruta_temp, 0777, true);
+		}
 
-		if(file_exists('./archivos_recepcion/'.$nombre))
+		if(file_exists($ruta_temp.$nombre))
 		{
 			$creado["estatus"] = true;
-			$creado["ruta"] = './archivos_recepcion/'.$nombre;
+			$creado["ruta"] = $ruta_temp.$nombre;
 		}else
 		{
 			$creado["estatus"] = false;
@@ -1625,6 +1635,7 @@ class Servicio extends CI_Controller {
 
 	public function crear_pdfInv($finventario = null, $id_orden = null)
 	{
+		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		include_once('./application/libraries/MPDF60/mpdf.php');
 
 		$nombre = "FormatoDeInventario".$id_orden.".pdf";
@@ -1637,13 +1648,17 @@ class Servicio extends CI_Controller {
 		$mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 		$html = "";
 		$mpdf->WriteHTML($html);
+		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		if(!file_exists($ruta_temp)) {
+			mkdir($ruta_temp, 0777, true);
+		}
 
-		$mpdf->Output('./archivos_recepcion/'.$nombre, "F");
+		$mpdf->Output($ruta_temp.$nombre, "F");
 
-		if(file_exists('./archivos_recepcion/'.$nombre))
+		if(file_exists($ruta_temp.$nombre))
 		{
 			$creado["estatus"] = true;
-			$creado["ruta"] = './archivos_recepcion/'.$nombre;
+			$creado["ruta"] = $ruta_temp.$nombre;
 		}else
 		{
 			$creado["estatus"] = false;
