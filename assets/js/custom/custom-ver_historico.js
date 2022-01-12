@@ -5727,8 +5727,8 @@ function obtener_articuloSeleccionados()
             "cantidad" : cantidad,
             "precio_u" : precio_unidad,
             "total" : $(this).find('td:eq(5)').text(),
-            "tipo" : $(this).find('td:eq(6)').text(),
-            "id" :  $(this).find('td:eq(7)').text()
+            "tipo" : $(this).find('td:eq(7)').text(),
+            "id" :  $(this).find('td:eq(78)').text()
         }
     });
 

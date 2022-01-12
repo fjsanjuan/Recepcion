@@ -4933,7 +4933,8 @@ class Buscador_Model extends CI_Model{
 		$ordenServicio = $this->db->select('*')->from('orden_Servicio')->where(['id' => $idOrden])->get()->row_array();
 
 		$idOrdenIntelisis = $ordenServicio['id_orden_intelisis'];
-
+		$response['estatus'] = false;
+		$response['mensaje'] = 'Orden no válida.';
 		if (sizeof($ordenServicio) <= 0){
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
@@ -4952,7 +4953,6 @@ class Buscador_Model extends CI_Model{
 			$this->db2->where('ID', $idOrdenIntelisis);
 			$this->db2->update('Venta', $venta);
 			//separamos elementos y vamos guardando por partes...
-			
 			for ($i = 0; $i < sizeof($elementos); $i++) {
 				//mano de obra
 				if ($elementos[$i]['tipo'] == 'mo') {
@@ -4971,8 +4971,11 @@ class Buscador_Model extends CI_Model{
 				}else{
 					$this->db2->trans_commit();
 					$response['estatus'] = true;
-				$response['mensaje'] = 'Líneas de trabajo agregadas correctamente.';
+					$response['mensaje'] = 'Líneas de trabajo agregadas correctamente.';
 				}
+			}else {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible cargar las líneas de trabajo en Intelisis.';
 			}
 		}
 		return $response;
