@@ -28,6 +28,7 @@
 							<td class="text-center"><strong>Cantidad</strong></td>
 							<td class="text-center"><strong>Precio U</strong></td>
 							<td class="text-center"><strong>Total</strong></td>
+							<td class="text-center"><strong>Adicional</strong></td>
 						</tr>
 					</thead>
 					<tbody>

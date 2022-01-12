@@ -3442,8 +3442,13 @@ class Buscador_Model extends CI_Model{
 				$response['estatus'] = false;
 				$response['mensaje']=['No tienes firmas registradas.'];
 			}else {
+				$existencia = $this->db->select("verificacion_refacciones.id_presupuesto")->from("verificacion_refacciones")
+				->join("detalles_verificacion_refacciones", "verificacion_refacciones.id_presupuesto = detalles_verificacion_refacciones.id_presupuesto AND detalles_verificacion_refacciones.en_existencia = 1")
+				->where("verificacion_refacciones.id_orden",$id_orden)
+				->count_all_results();
 				$verificaciones = $this->db->select('*')->from('verificacion_refacciones')->where("id_orden", $id_orden)->count_all_results();
-				if ($verificaciones > 0) {
+				
+				if ($verificaciones > 0 && $existencia > 0) {
 					$this->db->trans_start();
 					$this->db->where('id_orden_servicio', $id_orden);
 					if ($perfil == 4){
@@ -3451,9 +3456,6 @@ class Buscador_Model extends CI_Model{
 					}
 					if ($perfil == 8){
 						$this->db->update('firma_electronica', ['firma_pregarantiaGerente' => $firma['firma_electronica']]);
-					}
-					if ($perfil == 7){
-						$this->db->update('firma_electronica', ['firma_pregarantiaAdmon' => $firma['firma_electronica']]);
 					}
 					$this->db->trans_complete();
 					if ($this->db->trans_status() === FALSE) {
@@ -3466,11 +3468,10 @@ class Buscador_Model extends CI_Model{
 					}
 				}else {
 					$response['estatus'] = false;
-					$response['mensaje']='La orden no cuenta con verificaciones registradas.';
+					$response['mensaje']='La orden no cuenta con cotizaciones o existencia de refacciones registradas.';
 				}
 			}
-		}
-		else {
+		}else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No tienes firma registrada.';
 		}

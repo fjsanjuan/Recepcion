@@ -93,6 +93,10 @@ input:focus{
     outline: none;
 }
 
+.print {
+    display: none !important;
+}
+
 /* On screens that are less than 700px wide, make the sidebar into a topbar */
 @media screen and (max-width: 1750px) {
   .sidebar {
@@ -128,6 +132,9 @@ input:focus{
     }
     .requisito{
         background:none;
+    }
+    .print {
+        display: block !important;
     }
 }
 
@@ -529,23 +536,24 @@ input:focus{
                         </div>
                     </div>
 					<tbody>
-						<div class="row" style="text-align: center; width:90%; margin: 50px;">
-							<!--<div class="form-check" name="firmTecn" id="firmaTecnico"><b>FIRMA DE TÉCNICO</b><br><br>
-								<input class="form-check-input no_print" name="firmTecn" type="checkbox" id="firmTecn" style="height: 24px; width: 24px;">
-								<label class="form-check-label" for="firmTecn"></label>
-								
-							</div>-->
+                        <div class="row print" style="text-align:center; margin-left:auto; margin-right:auto; font-size: 16pt;">
+                        <img src="" id="ver_firma" alt="Firma" width="400" height="100"><br>
+                        <input class="row print" type="text" name="jefe_de_taller" id="jefe_de_taller" value="<?=$this->session->userdata["logged_in"]['nombre'];?>" style="text-align:center; margin-left:auto; margin-right:auto; font-size: 16pt;">
+                        </div>
+						<div class="row no_print">
+                        
                             <?php if($estatus == true): ?>
-							<div class="form-check" name="firmaJefe" id="firmJefe" ><b>FIRMA DE JEFE TALLER</b><br><br>
+							<div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
 								<input class="form-check-input no_print" name="firmaJefe" type="checkbox" id="firmaJefe" style="height: 24px; width: 24px;">
 								<label class="form-check-label" for="firmaJefe"></label>
-								<input type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">
+								<input class="form-check-input" type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">
+                                
                             </div>
                             <?php else: ?>
-                            <div class="form-check" name="firmaJefe" id="firmJefe" ><b>FIRMA DE JEFE TALLER</b><br><br>
+                            <div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
                                 <input class="form-check-input no_print" name="firmaJefe" type="checkbox" id="firmaJefe" style="height: 24px; width: 24px;" disabled>
                                 <label class="form-check-label" for="firmaJefe"></label>
-                                <input type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">    
+                                <input class="form-check-input" type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">    
 							</div>
                             <?php endif; ?>
 						</div>
@@ -669,8 +677,8 @@ $(document).on("click", '#save_anverso', function(e){
                 if (data.estatus) {
                     swal('Diagnóstico guardado.', '', 'success');
                     $('#form_anverso').trigger('reset');
-                    //$('#actualizar_anverso').show();
-                   // $('#form_codigos').trigger('reset');
+                    onClick=document.location.reload(true);
+                
                 }else{
                     toastr.warning(data.mensaje);
                 }
@@ -708,6 +716,9 @@ $(document).on('click', '#firmaJefe', function(e){
             if (data.estatus) {
                 $('input[name="firma_jefe_taller"]').val(data.firma_electronica);
                 $("#firmaJefe").prop("checked", true);
+                $('input[name="jefe_de_taller"]').val();
+                $('#ver_firma').prop('src',data.firma_electronica);
+               
             }else{
                 toastr.warning(data.mensaje);
             }
@@ -724,63 +735,6 @@ $(document).on('click', '#firmaJefe', function(e){
     
 		
 });
-/*$(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso', function(e){
-	e.preventDefault();
-	var form = '';
-    console.log('id_orden', idOrden);
-    form=new FormData(document.getElementById("form_codigos"));
-	form.append('id_orden', idOrden);
-    form.append('id_diagnostico', idDiagnostico);
-    let otros = $('#form_anverso').serializeArray();
-    $.each(otros, function(index,value){
-        console.log(index, value);
-        form.append(value.name, value.value);
-    });
-    if (!$('#form_codigos').valid()) {
-        toastr.info('Revisar campos requeridos y firmar antes de Guardar.');
-		return;
-	}
-    swal({
-		title: '¿Actualizar Anverso?',
-		showCancelButton: true,
-		confirmButtonText: 'Actualizar',
-		cancelButtonText: 'Cancelar',
-		type: 'info'
-	})
-    .then((result) => {
-        if (result.value) {
-        $.ajax({
-            cache: false,
-            url: base_url+ "index.php/servicio/editar_diagnostico/"+idOrden,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-            dataType: 'json',
-            data: form,
-            beforeSend: function(){
-                $("#loading_spin").show();
-            }
-        })
-        .done(function(data) {
-            if (data.estatus) {
-                swal('Anverso actualizado correctamente.', '', 'success');
-                $('#form_codigos').trigger('reset');
-
-            }else{
-                toastr.warning(data.mensaje);
-            }
-        })
-        .fail(function() {
-            toastr.warning('Hubo un error al actualizar el Anverso.');
-        })
-        .always(function() {
-            $("#loading_spin").hide();
-        });
-    }else if (result.dismiss) {
-            swal('Cancelado', '', 'error');
-        }
-    });
-});*/
 
 $(document).on("click", '#actualizar_anverso', function(e){
 	e.preventDefault();
@@ -823,6 +777,7 @@ $(document).on("click", '#actualizar_anverso', function(e){
             if (data.estatus) {
                 swal('Anverso actualizado correctamente.', '', 'success');
                 $('#form_codigos').trigger('reset');
+                onClick=document.location.reload(true);
 
             }else{
                 toastr.warning(data.mensaje);
