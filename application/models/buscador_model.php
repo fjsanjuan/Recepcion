@@ -4480,17 +4480,20 @@ class Buscador_Model extends CI_Model{
 											->get()->row_array();
 
 			//modificacion para obtener detalle de orden de servicio desde ventaD intelisis
-			$response["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total")
+			$response["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total, (SELECT TOP 1 FordStar FROM Agente WHERE Agente.Agente = \"VentaD\".\"Agente\") AS FordStar")
 				->from("VentaD")
 				->where("ID", $ordenGarantia["id_orden_intelisis"])
 				->where('ventad.cantidad > isnull(ventad.cantidadcancelada,0)')
-				->group_by('precio, cantidad, impuesto1, articulo,DescripcionExtra')
+				->group_by('precio, cantidad, impuesto1, articulo,DescripcionExtra, Agente')
 				->get()->result_array();
 
 			$response["asesor"] = $this->db->select("firma_electronica, nombre, apellidos")
 										->from("usuarios")
 										->where("cve_intelisis", $ordenGarantia['clave_asesor'])
 										->get()->row_array();
+			$asesor = $intelisis->select('FordStar')->from('Agente')->where(['Agente' => $ordenGarantia['clave_asesor']])->get()->row_array();
+
+			$response['asesor']['FordStar'] = isset($asesor['FordStar']) ? $asesor['FordStar'] : '';
 
 			$response["firma_cliente"] = $this->db->select("firma, firma_formatoInventario")
 										   ->from("firma_electronica")
