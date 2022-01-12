@@ -1009,16 +1009,16 @@ $(window).on('load', function() {
 	}
     
     //Validación de telefono movil
-	$(document)
-    .off("change paste keyup", "#cel_cliente")
-    .on("change paste keyup", "#cel_cliente", function(event) {
-        var contenido = $("#cel_cliente").val();
-        contenido = limpiar_numero(contenido);
-        if (contenido.length > 10) {
-            contenido = contenido.substring(0, 10);
-        }
-        $("#cel_cliente").val(contenido);
-    });
+	// $(document)
+    // .off("change paste keyup", "#cel_cliente")
+    // .on("change paste keyup", "#cel_cliente", function(event) {
+    //     var contenido = $("#cel_cliente").val();
+    //     contenido = limpiar_numero(contenido);
+    //     if (contenido.length > 10) {
+    //         contenido = contenido.substring(0, 10);
+    //     }
+    //     $("#cel_cliente").val(contenido);
+    // });
 
     //Validación de telefono casa
 	$(document)
