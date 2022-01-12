@@ -2089,6 +2089,7 @@ $(document).on("click", '#mostrar_modalOasis', function (e){
     e.preventDefault();
 
     $("#modaloasis").modal("show");
+    $('#modaloasis #oasisInput').trigger('focus');
 });
 
 // firma = Formato profeco
