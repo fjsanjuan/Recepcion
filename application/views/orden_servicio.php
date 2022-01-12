@@ -2380,11 +2380,11 @@
                                   <label class="form-check-label" id="labelTransmisionSeis0" for="cambioTransmisionSeis0">6</label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input check-4x2" name="cambioTipo[]" id="cambioTransmisionSiete0" value="4x2">
+                                    <input type="radio" class="form-check-input check-4x2" name="cambioTipo[]" id="cambioTransmisionSiete0" value="4x2">
                                    <label class="form-check-label" id="labelTransmisionSiete0" for="cambioTransmisionSiete0">4x2</label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input check-4x4" name="cambioTipo[]" id="cambioTransmisionOcho0" value="4x4">
+                                    <input type="radio" class="form-check-input check-4x4" name="cambioTipo[]" id="cambioTransmisionOcho0" value="4x4">
                                    <label class="form-check-label" id="labelTransmisionOcho0" for="cambioTransmisionOcho0">4x4</label>
                                 </div>
                         </div>
