@@ -316,7 +316,7 @@ $(document).ready(function() {
 				btn		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				if (val['movimiento'] != null) {
 					action	="";
-					action  +="<button class='btn btn-sm CP' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='CP-"+val["id"]+"' data-vin='"+val['vin']+"' data-inte='"+val['id_orden_intelisis']+"'><i class='fa fa-car-crash'></i>&nbsp&nbsp Carro Parado</button>";
+					/*action  +="<button class='btn btn-sm CP' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='CP-"+val["id"]+"' data-vin='"+val['vin']+"' data-inte='"+val['id_orden_intelisis']+"'><i class='fa fa-car-crash'></i>&nbsp&nbsp Carro Parado</button>";*/
 					action  +="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-images'></i>&nbsp&nbsp Fotografías</button>";
 					action  +="<button class='btn btn-sm addFirma' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#17A2B8;' id='addFirma-"+val["id"]+"'><i class='fa fa-file-signature'></i>&nbsp&nbsp Agregar Firma</button>";
 				} else {
