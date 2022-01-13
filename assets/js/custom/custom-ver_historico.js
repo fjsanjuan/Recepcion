@@ -5494,6 +5494,7 @@ function save_docs_anexo_intelisis(idOrden, idReq, formato, generarFormato = tru
 		data: {
 			name:formato,
 		},
+		dataType: 'json',
 		beforeSend: function(){
 			$("#loading_spin").show();
 			toastr.info("Guardando");
