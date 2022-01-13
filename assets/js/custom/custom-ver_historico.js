@@ -4325,7 +4325,7 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 				registro = $("<tr>");
 				registro.append($("<td>",{"text": aux}));
 				var checkbox = $('<div>', {'class': 'form-check'});
-                if (data.data[aux]) {
+                if (data.data[index]) {
                 	checkbox.append($('<input>', {'class': 'form-check-input', 'type': 'checkbox','checked': 'checked', 'disabled': 'disabled', 'id': `aut-${aux}`}));
                 	checkbox.append($('<label>', {'class': 'form-check-label', 'for': `aut-${aux}`}));
                 }else{

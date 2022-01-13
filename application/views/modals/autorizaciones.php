@@ -13,7 +13,7 @@
         			</thead>
         			<tbody id="hacer_autorizaciones">
         				<tr>
-                            <td>Pregarantia</td>
+                            <td>Pregarantía</td>
                             <td>
                             <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="pregCheck1" disabled>
