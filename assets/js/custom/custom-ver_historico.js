@@ -5300,12 +5300,12 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia) {
 							archivos += id_perfil == 7 ? '<td></td>' : '';
 						archivos +=`<tr>`;
 					}
-					archivos += `<tr>
+					/*archivos += `<tr>
 							<td>Causa Raíz Componente</td>
 							<td>PDF</td>
 							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver formato causa raíz Componente"><a class="causaraizcomponente" id="causaraizcomponente-${idOrden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
 							archivos += id_perfil == 7 ? '<td></td>' : '';
-						archivos +=`<tr>`;
+						archivos +=`<tr>`;*/
 					if (data.archivos && data.archivos.length >0) {
 						$.each(data.archivos, function(index, archivo){
 							archivos += `<tr>`;
