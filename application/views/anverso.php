@@ -137,7 +137,12 @@ input:focus{
         display: block !important;
     }
 }
-
+.tiempo_inicio{
+word-break: break-word;
+}
+.tiempo_fin{
+word-break: break-word;
+}
         </style>
     </head>
 	<?php
@@ -171,21 +176,22 @@ input:focus{
                         <div id="top-section">
                             <div id="head">
                                 <div id="left" class="header">
-                                    <strong class="header-left-title sfont">(REP)Número de reparación<br/>(NL) Luz indicadora de falla<br/>(DTC) Código de falla</strong>
-                                </div>
-                                <div id="center" class="header">
-                                    
+                                    <strong class="header-left-title sfont">(REP)Número de reparación (NL) Luz indicadora de falla (DTC) Código de falla</strong>
                                 </div>
                                 <div id="right" class="header">
-                                    <div class="row content-center pad-tp pad-bt">
-                                        <strong class="header-right-title">Folio: 34234</strong>
-                                    </div>
+                                    
                                     <div class="row">
-                                        <div class="column cincuenta border-left-light border-right-light border-bottom-light border-top-light pad-tp pad-bt">
-                                            Torre:
+                                    <div class="column cuarenta content-center pad-tp pad-bt">
+                                        <strong class="header-right-title" id="num_orden">Folio: T572843 </strong>
+                                    </div>
+                                        <div class="column veinte pad-tp pad-bt" id="num_torre">
+                                            Torre: 110
                                         </div>
-                                        <div class="column cincuenta border-right-light border-bottom-light border-top-light pad-tp pad-bt">
-                                            Consecutivo:
+                                        <div class="column cuarenta pad-tp pad-bt" id="folio_consecutivo">
+                                        <?php 
+                                            $movID = (isset($usuario["movID"]["MovID"])) ? $usuario["movID"]["MovID"] : "-";
+                                        ?>
+                                           Consecutivo: <?=$movID?>
                                         </div>
                                     </div>
                                 </div>
@@ -301,263 +307,157 @@ input:focus{
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
-                                INCLUYA LA DESCRIPCIÓN DE LA CAUSA DEL PROBLEMA
+                            <div class="column veintitres border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
+                                DESCRIPCIÓN DE LA CAUSA DEL PROBLEMA
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
-                                NÚMERO REP.
+                            <div class="column cinco border-right-light border-bottom-light pad-tp pad-bt bold">
+                                NÚM. REP.
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
-                                CLAVE DE DEFECTO
+                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt bold">
+                                CLAVE DEFECTO
                             </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt bold">
-                                RETORNO DE PARTES: BÁSICO/FECHA
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt bold">
                                 MECÁNICO CLAVE
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
-                                COSTO O TIEMPO UTILIZADO
+                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt bold">
+                                COSTO O TIEMPO
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt bold">
+                                FECHA DE RETORNO DE PARTES
+                            </div>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt bold">
                                 RELOJ CHEC.(INICIO)
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt bold">
                                 RELOJ CHEC.(FIN)
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column veintitres border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
                                 IDENTIFIQUE LA PARTE CAUSANTE
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
+                            <div class="column cinco border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;" value="<?= isset($detalle['num_reparacion']) ? $detalle['num_reparacion'] : "";?>">
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
+                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="clave_defect" id="" style="width: 98%;" value="<?= isset($data['clave_defect']) ? $data['clave_defect'] : "";?>">
                             </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="date" name="retorno_partes" id="" style="width: 98%;" value="<?= isset($data['retorno_partes']) ? $data['retorno_partes'] : "";?>">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
+                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;" value="<?= isset($data['mecanico_clave']) ? $data['mecanico_clave'] : "";?>">
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="costo_tiempo" id="" style="width: 98%;" value="<?= isset($data['costo_tiempo']) ? $data['costo_tiempo'] : "";?>">
+                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito costo_tiempo">
+                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito">
+                                <input class="required write" type="date" name="retorno_partes" id="" style="width: 98%;" value="<?= isset($data['retorno_partes']) ? $data['retorno_partes'] : "";?>">
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                                
+                            </div>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                                
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="parte_causante" id="" style="width: 98%;" value="<?= isset($data['parte_causante']) ? $data['parte_causante'] : "";?>">
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+        
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                               
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                               
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
                                 IDENTIFIQUE LA CAUSA DE LA FALLA
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                              
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                                
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="causa_falla" id="" style="width: 98%;" value="<?= isset($data['causa_falla']) ? $data['causa_falla'] : "";?>">
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                                
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                               
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
                                 IDENTIFIQUE EL EQUIPO DE DIAGNÓSTICO
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                                
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                               
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
                                 <input class="required write" type="text" name="equipo_diagnostico" id="" style="width: 98%;" value="<?= isset($data['equipo_diagnostico']) ? $data['equipo_diagnostico'] : "";?>">
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                          
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                                
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt bold">
                                 EXPLIQUE LA REPARACIÓN EFECTUADA
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
+                                
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
+                              
                             </div>
                         </div>
                         <div class="row">
-                            <div class="column treinta border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <textarea class="required write" type="textarea" name="reparacion_efectuada" id="" style="width: 98%;" rows="10" cols="15" ><?= isset($data['reparacion_efectuada']) ? $data['reparacion_efectuada'] : "";?></textarea>
+                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
+                                <textarea class="required write" type="textarea" name="reparacion_efectuada" id="" style="width: 98%;" rows="5" cols="15" ><?= isset($data['reparacion_efectuada']) ? $data['reparacion_efectuada'] : "";?></textarea>
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito revisar_tiempos">
+                                
                             </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
-                            </div>
-                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-                                <input class="required write" type="text" name="" id="" style="width: 98%;">
+                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito revisar_tiempos">
+                                
                             </div>
                         </div>
                     </div>
-					<tbody>
-                        <div class="row print" style="text-align:center; margin-left:auto; margin-right:auto; font-size: 16pt;">
-                        <img src="" id="ver_firma" alt="Firma" width="400" height="100"><br>
-                        <input class="row print" type="text" name="jefe_de_taller" id="jefe_de_taller" value="<?=$this->session->userdata["logged_in"]['nombre'];?>" style="text-align:center; margin-left:auto; margin-right:auto; font-size: 16pt;">
+                    <div class="row print no_print" id="print_firma" style="text-align:center; margin-left:auto; margin-right:auto; font-size: 16pt;">
+                    <img src="" id="ver_firma" alt="Firma" width="400" height="100"><input class="" type="text" name="jefe_de_taller" id="jefe_de_taller" value="<?=$this->session->userdata["logged_in"]['nombre'];?>">
+                    </div>
+                    <div class="row no_print">
+                    
+                        <?php if($estatus == true): ?>
+                        <div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
+                            <input class="form-check-input no_print" name="firmaJefe" type="checkbox" id="firmaJefe" style="height: 24px; width: 24px;">
+                            <label class="form-check-label" for="firmaJefe"></label>
+                            <input class="form-check-input" type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">
+                            
                         </div>
-						<div class="row no_print">
-                        
-                            <?php if($estatus == true): ?>
-							<div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
-								<input class="form-check-input no_print" name="firmaJefe" type="checkbox" id="firmaJefe" style="height: 24px; width: 24px;">
-								<label class="form-check-label" for="firmaJefe"></label>
-								<input class="form-check-input" type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">
-                                
-                            </div>
-                            <?php else: ?>
-                            <div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
-                                <input class="form-check-input no_print" name="firmaJefe" type="checkbox" id="firmaJefe" style="height: 24px; width: 24px;" disabled>
-                                <label class="form-check-label" for="firmaJefe"></label>
-                                <input class="form-check-input" type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">    
-							</div>
-                            <?php endif; ?>
-						</div>
-					</tbody>
+                        <?php else: ?>
+                        <div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
+                            <input class="form-check-input no_print" name="firmaJefe" type="checkbox" id="firmaJefe" style="height: 24px; width: 24px;" disabled>
+                            <label class="form-check-label" for="firmaJefe"></label>
+                            <input class="form-check-input" type="text" name="firma_jefe_taller" id="firma_jefe_taller" style="display: none;">    
+                        </div>
+                        <?php endif; ?>
+                    </div>
+					
                 </div>
             </div>
         </div>
@@ -603,6 +503,26 @@ input:focus{
 		var base_url = `<?php echo  base_url(); ?>`;
 		var idOrden = `<?php echo $id_orden; ?>`;
         var idDiagnostico = `<?php echo $data['id_diagnostico']; ?>`;
+        let tiempo_inicio = '<?php echo $json_inicio;?>';
+        let tiempo_fin = '<?php echo $json_fin;?>';
+       /* let tiempo_inicio = '<?php echo json_encode($tiempo_inicio, JSON_PARTIAL_OUTPUT_ON_ERROR);?>';
+        let tiempo_fin = '<?php echo json_encode($tiempo_fin, JSON_PARTIAL_OUTPUT_ON_ERROR); ?>';
+        tiempo_inicio = tiempo_inicio.replace('\\n','');
+        tiempo_inicio = tiempo_inicio.replace('\n','');
+        tiempo_inicio = tiempo_inicio.replace(/\n/,'');
+        tiempo_inicio = tiempo_inicio.replace('\\r','');
+        tiempo_inicio = tiempo_inicio.replace('\r','');
+        tiempo_inicio = tiempo_inicio.replace(/\r/,'');
+        tiempo_inicio = tiempo_inicio.replace('\\t','');
+        tiempo_inicio = tiempo_inicio.replace('\t','');
+        tiempo_inicio = tiempo_inicio.replace(/\t/,'');
+        tiempo_fin = tiempo_fin.replace('\\n','');
+        tiempo_fin = 
+        tiempo_fin = tiempo_fin.replace('\\r','');
+        tiempo_fin = tiempo_fin.replace('\\t','');*/
+        tiempo_inicio = JSON.parse(tiempo_inicio);
+        tiempo_fin = JSON.parse(tiempo_fin);
+        
         //alert('id diagnóstico'+ idDiagnostico);
         function myFunction(id) {
             var x = document.getElementById("myDIV");
@@ -641,7 +561,27 @@ input:focus{
 $(document).ready(function(){
     if (id_perfil == 4){$('#firmaTecnico').hide();}
 		if (id_perfil == 5){$('#firmJefe').hide();}
-    
+        const tiempos_inicio =  $('.tiempo_inicio');
+        const tiempos_fin =  $('.tiempo_fin');
+        let costo_tiempo = 0;
+        $.each(tiempo_inicio, function (index, val) {
+            $(tiempos_inicio[index]).text(val.FechaInicio);
+        });
+        $.each(tiempo_fin, function (index, val) {
+            $(tiempos_fin[index]).text(val.FechaInicio);
+            fin = new Date(val.FechaInicio);
+            inicio = new Date(tiempo_inicio[index].FechaInicio);
+            //console.log('fin', fin);
+            //console.log('inicio', inicio);
+            tiempo_actual =(fin - inicio) / (1000*3600)
+            costo_tiempo += isNaN(tiempo_actual) ? 0 : tiempo_actual;
+           // console.log('costo_tiempo', costo_tiempo);
+            costo_tiempo = isNaN(costo_tiempo) ? 0 : costo_tiempo;
+            $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.');
+            
+        });
+        
+  
 });		
 $(document).on("click", '#save_anverso', function(e){
 	e.preventDefault();
@@ -716,7 +656,7 @@ $(document).on('click', '#firmaJefe', function(e){
             if (data.estatus) {
                 $('input[name="firma_jefe_taller"]').val(data.firma_electronica);
                 $("#firmaJefe").prop("checked", true);
-                $('input[name="jefe_de_taller"]').val();
+                $('#print_firma').removeClass('no_print');
                 $('#ver_firma').prop('src',data.firma_electronica);
                
             }else{
@@ -731,6 +671,8 @@ $(document).on('click', '#firmaJefe', function(e){
         });
     }else {
         $('input[name="firma_jefe_taller"]').val('');
+        $('#print_firma').addClass('no_print');
+
     }
     
 		

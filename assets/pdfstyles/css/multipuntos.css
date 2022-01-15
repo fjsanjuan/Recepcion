@@ -27,7 +27,7 @@
 
 #left{
     display: flex;
-    flex-basis: 25%;
+    flex-basis: 50%;
     font-weight: 700;
     flex-flow: column nowrap;
     justify-content: center;
@@ -35,8 +35,8 @@
 
 #right{
     display: flex;
-    flex-basis: 25%;
-    font-weight: 500;
+    flex-basis: 50%;
+    font-weight: 600;
     flex-flow: column nowrap;
 }
 
@@ -82,13 +82,33 @@
     padding:0.4rem;
 }
 
+.row .cinco{
+    flex-basis: 5%;
+    text-align: center;
+}
+.row .ocho{
+    flex-basis: 8%;
+    text-align: center;
+}
 .row .diez{
     flex-basis: 10%;
+    text-align: center;
+}
+.row .quince{
+    flex-basis: 15%;
+    text-align: center;
+}
+.row .diesiseis{
+    flex-basis: 16%;
     text-align: center;
 }
 
 .row .veinte{
     flex-basis: 20%;
+    text-align: center;
+}
+.row .veintitres{
+    flex-basis: 23%;
     text-align: center;
 }
 
@@ -114,6 +134,10 @@
 
 .row .sesenta{
     flex-basis: 60%;
+    text-align: center;
+}
+.row .sesentayocho{
+    flex-basis: 68%;
     text-align: center;
 }
 

@@ -5035,6 +5035,26 @@ class Buscador_Model extends CI_Model{
 		$data = [
 			'Agente' => $datos['asigna_tecnico']
 		];
+		$data_diagnostico = [
+			'VentaID' => $id,
+			'Renglon' => $datos['Renglon'],
+			'RenglonID' => $datos['RenglonID'],
+			'RenglonSub' => $datos['RenglonSub']
+		];
+		$diagnostico = $this->obtener_detalles_diagnostico($datos['id_orden']);
+		$this->db->trans_begin();
+		$this->db->where(['id_diagnostico' => $diagnostico['data']['id_diagnostico']]);
+		$this->db->update('diagnostico_tecnico', $data_diagnostico);
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE ){
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible diagnóstico a la línea.';
+		}else{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Técnico asignado correctamente.';
+		}
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_begin();
 		$this->db2->where(['ID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
@@ -5043,7 +5063,7 @@ class Buscador_Model extends CI_Model{
 		if ($this->db2->trans_status() === FALSE ){
 			$this->db2->trans_rollback();
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue asignar el técnico a la línea.';
+			$response['mensaje'] = 'No fue posible asignar el técnico a la línea.';
 		}else{
 			$this->db2->trans_commit();
 			$response['estatus'] = true;

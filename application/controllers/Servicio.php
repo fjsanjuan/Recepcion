@@ -2927,9 +2927,29 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 	public function garantia_anverso($idOrden = null){
+		$this->db2 = $this->load->database('other',true); 
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
 		$datos['id_orden']= $idOrden;
-		/*echo "<pre>"; print_r($datos['data']);
+		if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
+			$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
+			$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
+			$json_inicio = json_encode($datos['tiempo_inicio'], JSON_PARTIAL_OUTPUT_ON_ERROR);
+			$json_inicio = str_replace('\n', '', $json_inicio);
+			$json_inicio = str_replace('\r', '', $json_inicio);
+			$json_inicio = str_replace('\t', '', $json_inicio);
+			$json_fin = json_encode($datos['tiempo_fin'], JSON_PARTIAL_OUTPUT_ON_ERROR);
+			$json_fin = str_replace('\n', '', $json_fin);
+			$json_fin = str_replace('\r', '', $json_fin);
+			$json_fin = str_replace('\t', '', $json_fin);
+			$datos['json_inicio'] = $json_inicio;
+			$datos['json_fin'] = $json_fin;
+		} else{
+			$datos['tiempo_inicio'] = [];
+			$datos['tiempo_fin'] = [];
+			$datos['json_inicio'] = "";
+			$datos['json_fin'] = "";
+		}
+		/*echo "<pre>"; print_r($datos);
 		echo "</pre>";*/
 		$this->load->view("anverso", $datos);
 	}
