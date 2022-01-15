@@ -426,10 +426,6 @@ word-break: break-word;
 					<div class="row print <?php echo $data['firma_jefe_taller'] ? '' : 'no_print'; ?>" id="print_firma" style="text-align:center; margin-left:auto; margin-right:auto; font-size: 16pt;">
 					<img src="<?php echo $data['firma_jefe_taller']; ?>" id="ver_firma" alt="Firma" width="400" height="100"><input class="" type="text" name="jefe_de_taller" id="jefe_de_taller" value="<?php echo $data['jefe_de_taller'];?>">
 					</div>
-					<div class="row">
-						<div class="form-check" name="firmaJefe" id="firmJefe" style="text-align:center; margin-left:auto; margin-right:auto;"><b>FIRMA DE JEFE TALLER</b><br><br>
-						</div>
-					</div>
 					
 				</div>
 			</div>
