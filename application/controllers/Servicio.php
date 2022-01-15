@@ -2933,11 +2933,11 @@ class Servicio extends CI_Controller {
 		if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
 			$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 			$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
-			$json_inicio = json_encode($datos['tiempo_inicio'], JSON_PARTIAL_OUTPUT_ON_ERROR);
+			$json_inicio = json_encode($datos['tiempo_inicio']);
 			$json_inicio = str_replace('\n', '', $json_inicio);
 			$json_inicio = str_replace('\r', '', $json_inicio);
 			$json_inicio = str_replace('\t', '', $json_inicio);
-			$json_fin = json_encode($datos['tiempo_fin'], JSON_PARTIAL_OUTPUT_ON_ERROR);
+			$json_fin = json_encode($datos['tiempo_fin']);
 			$json_fin = str_replace('\n', '', $json_fin);
 			$json_fin = str_replace('\r', '', $json_fin);
 			$json_fin = str_replace('\t', '', $json_fin);
@@ -2946,8 +2946,8 @@ class Servicio extends CI_Controller {
 		} else{
 			$datos['tiempo_inicio'] = [];
 			$datos['tiempo_fin'] = [];
-			$datos['json_inicio'] = "";
-			$datos['json_fin'] = "";
+			$datos['json_inicio'] = "[]";
+			$datos['json_fin'] = "[]";
 		}
 		/*echo "<pre>"; print_r($datos);
 		echo "</pre>";*/
@@ -3177,4 +3177,51 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+
+	public function adjuntar_anverso($idOrden = null, $idAnverso = null){
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else if ($idAnverso == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Anverso no válido.';
+		}else {
+			$this->db2 = $this->load->database('other',true); 
+			$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
+			$datos['id_orden']= $idOrden;
+			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
+				$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
+				$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
+				$json_inicio = json_encode($datos['tiempo_inicio']);
+				$json_inicio = str_replace('\n', '', $json_inicio);
+				$json_inicio = str_replace('\r', '', $json_inicio);
+				$json_inicio = str_replace('\t', '', $json_inicio);
+				$json_fin = json_encode($datos['tiempo_fin']);
+				$json_fin = str_replace('\n', '', $json_fin);
+				$json_fin = str_replace('\r', '', $json_fin);
+				$json_fin = str_replace('\t', '', $json_fin);
+				$datos['json_inicio'] = $json_inicio;
+				$datos['json_fin'] = $json_fin;
+			} else{
+				$datos['tiempo_inicio'] = [];
+				$datos['tiempo_fin'] = [];
+				$datos['json_inicio'] = "[]";
+				$datos['json_fin'] = "[]";
+			}
+			$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+			$datos = array_merge($datos, $orden);
+			$datos = array_merge($datos, $this->input->post());
+			$datos['id_orden']= $idOrden;
+			$logged_in = $this->session->userdata("logged_in");
+			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
+			$datos['container'] = $this->load->view("anverso_print", $datos, true);
+			$token = "";
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($idOrden, $response["data"]["ruta_rel"]);
+			}
+		}
+		echo json_encode($response);
+	}
+
 }

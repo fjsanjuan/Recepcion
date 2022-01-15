@@ -159,7 +159,7 @@ word-break: break-word;
                 <a class="no_print" name="" id="save_anverso" type="button" href="#home">Guardar</a>
             <?php endif; ?>
 
-            <a class="active no_print" href="#home" onclick="window.print();return false;">Imprimir</a>
+            <a class="active no_print" href="#home" id="imprimir">Imprimir</a>
             <!--<a href="#news">News</a>
             <a href="#contact">Contact</a>
             <a href="#about">About</a>-->
@@ -502,24 +502,10 @@ word-break: break-word;
         var id_perfil = <?php echo $this->session->userdata["logged_in"]["perfil"];?>;
 		var base_url = `<?php echo  base_url(); ?>`;
 		var idOrden = `<?php echo $id_orden; ?>`;
-        var idDiagnostico = `<?php echo $data['id_diagnostico']; ?>`;
+        var idDiagnostico = `<?php echo isset($data['id_diagnostico']) ? $data['id_diagnostico'] : 0; ?>`;
         let tiempo_inicio = '<?php echo $json_inicio;?>';
         let tiempo_fin = '<?php echo $json_fin;?>';
-       /* let tiempo_inicio = '<?php echo json_encode($tiempo_inicio, JSON_PARTIAL_OUTPUT_ON_ERROR);?>';
-        let tiempo_fin = '<?php echo json_encode($tiempo_fin, JSON_PARTIAL_OUTPUT_ON_ERROR); ?>';
-        tiempo_inicio = tiempo_inicio.replace('\\n','');
-        tiempo_inicio = tiempo_inicio.replace('\n','');
-        tiempo_inicio = tiempo_inicio.replace(/\n/,'');
-        tiempo_inicio = tiempo_inicio.replace('\\r','');
-        tiempo_inicio = tiempo_inicio.replace('\r','');
-        tiempo_inicio = tiempo_inicio.replace(/\r/,'');
-        tiempo_inicio = tiempo_inicio.replace('\\t','');
-        tiempo_inicio = tiempo_inicio.replace('\t','');
-        tiempo_inicio = tiempo_inicio.replace(/\t/,'');
-        tiempo_fin = tiempo_fin.replace('\\n','');
-        tiempo_fin = 
-        tiempo_fin = tiempo_fin.replace('\\r','');
-        tiempo_fin = tiempo_fin.replace('\\t','');*/
+       
         tiempo_inicio = JSON.parse(tiempo_inicio);
         tiempo_fin = JSON.parse(tiempo_fin);
         
@@ -559,6 +545,7 @@ word-break: break-word;
             x.style.opacity = "0";
         }
 $(document).ready(function(){
+	//console.log('document',this.documentElement.innerHTML);
     if (id_perfil == 4){$('#firmaTecnico').hide();}
 		if (id_perfil == 5){$('#firmJefe').hide();}
         const tiempos_inicio =  $('.tiempo_inicio');
@@ -580,7 +567,33 @@ $(document).ready(function(){
             $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.');
             
         });
-        
+    $('.sidebar').off().on('click', '#imprimir', function(event) {
+    	if (idDiagnostico <= 0) {
+    		return;
+    		toast.info('No existe un diágnostico guardado.');
+    	}
+    	event.preventDefault();
+    	const form = new FormData();
+    	const idAnverso = 1;
+		//form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
+		form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
+		form.append('name', "Anverso-"+idDiagnostico);
+		$.ajax({
+			cache: false,
+	        url: `${base_url}index.php/servicio/adjuntar_anverso/${idOrden}/${idAnverso}`,
+	        contentType: false,
+	        processData: false,
+	        type: 'POST',
+	        dataType: 'json',
+	        data: form,
+		}).done(function (response) {
+			if (response.estatus) {
+				toastr.info(response.mensaje);
+				const link = $('<a>', {'href':response.data['archivo'], 'download':response['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+			}
+		});
+    });
   
 });		
 $(document).on("click", '#save_anverso', function(e){

@@ -4441,6 +4441,7 @@ class Buscador_Model extends CI_Model{
 	{
 		$ordenGarantia = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
 		if (sizeof($ordenGarantia) > 0) {
+
 			$response['garantia'] = $ordenGarantia;
 			$publica = $this->db->select('*')->from('orden_servicio')->where(['id' => $ordenGarantia['movimiento']])->get()->row_array();
 			$response['publica'] = $ordenGarantia;
@@ -4480,6 +4481,10 @@ class Buscador_Model extends CI_Model{
 											->from("orden_servicio_inspeccion")
 											->where("id_servicio", $ordenGarantia['movimiento'])
 											->get()->row_array();
+
+			$response['garantia']['MovID'] = $intelisis->select('MovID')->from('Venta')->where(['ID' => $ordenGarantia['id_orden_intelisis']])->get()->row_array()['MovID'];
+			$response['publica']['MovID'] = $intelisis->select('MovID')->from('Venta')->where(['ID' => $publica['id_orden_intelisis']])->get()->row_array()['MovID'];
+			$response['crc'] = $this->db->select('definicion_falla AS comentario_cliente, id AS codigo_queja')->from('causa_raiz_componente')->where($publica['id'])->get()->result_array();
 
 			//modificacion para obtener detalle de orden de servicio desde ventaD intelisis
 			$response["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total, (SELECT TOP 1 FordStar FROM Agente WHERE Agente.Agente = \"VentaD\".\"Agente\") AS FordStar")
@@ -5107,7 +5112,6 @@ class Buscador_Model extends CI_Model{
 		$response['estatus'] = false;
 		$response['mensaje'] = 'No tienes firma registrada.';
 	}
-		
 	return $response;
 	}
 }
