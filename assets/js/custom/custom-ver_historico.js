@@ -5227,8 +5227,8 @@ $(document).off('click','.f1863').on('click', '.f1863', function(event) {
 						nomCte:t_nomCte,
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
-						// url:'https://isapi.intelisis-solutions.com/reportes/f1863PDF'
-						url:'http://127.0.0.1:8000/reportes/f1863PDF'
+						url:'https://isapi.intelisis-solutions.com/reportes/f1863PDF'
+						// url:'http://127.0.0.1:8000/reportes/f1863PDF'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
