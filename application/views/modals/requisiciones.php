@@ -9,7 +9,7 @@
 </ul>
 <div class="tab-content" id="reqTabContent">
 	<div class="col-md-12 tab-pane fade show active" id="nuevaReq" role="tabpanel" aria-labelledby="req-tab">
-		<tbody>
+		<!-- <tbody>
 			<tr>
 				<td><b>No. REQUISICIÓN</b><input type="text" class="form-control" name="num_req" id="" readonly></td>
 				<td><b>FECHA REQUISICIÓN</b><input type="text" class="form-control" name="fec_req" id="" readonly></td>
@@ -17,7 +17,7 @@
 				<td><b>No. 1863</b><input type="text" class="form-control" name="folio_1863" id="" readonly></td>
 				<td><b>TÉCNICO</b><input type="text" class="form-control" name="tecnico" id="" readonly></td>
 			</tr>
-		</tbody>
+		</tbody> -->
 		<div class="modal-body">
 			<div class="card">
 				<div class="card-body">
