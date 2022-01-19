@@ -26,7 +26,7 @@ date_default_timezone_set('America/Mexico_City');
 */
 //$config['base_url'] = "http://fordzacatecas.com.mx:8080/Recepcion/";
 //$config['base_url'] = "http://localhost:8080/Recepcion/";
-$root = "http://".$_SERVER['HTTP_HOST'];
+$root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
 $root .= dirname($_SERVER['SCRIPT_NAME']);
 $config['base_url'] = $root;
 
