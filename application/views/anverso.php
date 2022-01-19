@@ -581,7 +581,7 @@ $(document).ready(function(){
             $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.');
             
         });
-    $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
+        $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {
     		return;
     		toast.info('No existe un diágnostico guardado.');
@@ -704,7 +704,7 @@ $(document).on('click', '#firmaJefe', function(e){
 		
 });
 
-$(document).on("click", '#actualizar_anverso', function(e){
+$(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso', function(e){
 	e.preventDefault();
 	var form = '';
     console.log('id_orden', idOrden);
@@ -745,7 +745,7 @@ $(document).on("click", '#actualizar_anverso', function(e){
             if (data.estatus) {
                 swal('Anverso actualizado correctamente.', '', 'success');
                 $('#form_codigos').trigger('reset');
-                onClick=document.location.reload(true);
+                $('#imprimir').trigger('click');
 
             }else{
                 toastr.warning(data.mensaje);
