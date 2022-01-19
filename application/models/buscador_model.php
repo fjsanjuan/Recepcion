@@ -5151,4 +5151,24 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function obtener_manos_obra_orden($idOrden)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+		$response['lineas_reparacion'] = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
+		if (sizeof($orden) > 0 ) {
+			$response['manos'] = $this->db2->select('*')->from('seguimientoTecnicosWeb')->where(['ID' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
+			if (sizeof($response['manos']) > 0) {
+				$response['estatus'] = true;
+				$response['mensaje'] = "Ok.";
+			} else {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No hay líneas cargadas para la garantíassss.';
+		}
+		return $response;
+	}
 }

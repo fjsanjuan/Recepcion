@@ -3233,4 +3233,15 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function obtener_manos_obra_orden($idOrden)
+	{
+		$datos = [];
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_manos_obra_orden($idOrden);
+		}
+		echo json_encode($response);
+	}
 }

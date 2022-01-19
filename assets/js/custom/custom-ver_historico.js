@@ -5887,7 +5887,7 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 			con_movimientos = 0;
 			if (con_movimientos < resp.data.length) {
 				$.ajax({
-					url: `${base_url}index.php/servicio/obtener_lineas/${idOrden}`,
+					url: `${base_url}index.php/servicio/obtener_manos_obra_orden/${idOrden}`,
 					type: 'GET',
 					dataType: 'json',
 					beforeSend: function () {
