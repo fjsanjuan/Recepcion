@@ -3223,5 +3223,14 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-
+	public function autorizar_linea($idDiagnostico = null)
+	{
+		if ($idDiagnostico == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		} else {
+			$response = $this->buscador_model->autorizar_linea($idDiagnostico);
+		}
+		echo json_encode($response);
+	}
 }

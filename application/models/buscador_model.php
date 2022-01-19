@@ -5114,4 +5114,27 @@ class Buscador_Model extends CI_Model{
 	}
 	return $response;
 	}
+	public function autorizar_linea($idDiagnostico)
+	{
+		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->count_all_results();
+		if ($existe > 0) {
+			$this->db->trans_begin();
+			$this->db->where(['id_diagnostico' => $idDiagnostico]);
+			$this->db->update('diagnostico_tecnico', ['autorizado' => 1]);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE ){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible autorizar el anverso.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Autorizado correctamente.';
+			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No es posible autorizar un anverso cerrado.';
+		}
+		return $response;
+	}
 }

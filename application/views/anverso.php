@@ -137,12 +137,24 @@ input:focus{
         display: block !important;
     }
 }
-.tiempo_inicio{
-word-break: break-word;
-}
-.tiempo_fin{
-word-break: break-word;
-}
+	.tiempo_inicio{
+	word-break: break-word;
+	}
+	.tiempo_fin{
+	word-break: break-word;
+	}
+	.cargando{
+	    display: none;
+	    width: 50px;
+	    position: absolute;
+	    padding: 5px 20px 13px 20px;
+	    top: 45%;
+	    left: 45%;
+	    height: 50px;
+	    background:rgba(0,0,0,0.8);
+	    z-index:1100 !important;
+	    border-radius: 5px;
+	}
         </style>
     </head>
 	<?php
@@ -154,11 +166,13 @@ word-break: break-word;
             <?php 
             if($estatus == true): 
             ?>
-            <a class="no_print" name="" id="actualizar_anverso" type="button" href="#home">Actualizar</a>
+            	<a class="no_print" name="" id="actualizar_anverso" type="button" href="#home">Actualizar</a>
             <?php else: ?>
                 <a class="no_print" name="" id="save_anverso" type="button" href="#home">Guardar</a>
             <?php endif; ?>
-
+            <?php if(isset($data['id_diagnostico']) && $this->session->userdata["logged_in"]['perfil'] == 4): ?>
+            	<a class="no_print" name="" id="auth_linea" type="button" href="#">Autorizar</a>
+            <?php endif; ?>
             <a class="active no_print" href="#home" id="imprimir">Imprimir</a>
             <!--<a href="#news">News</a>
             <a href="#contact">Contact</a>
@@ -792,6 +806,52 @@ $(document).on('click', '.erase_line', function (e) {
     }else {
         toastr.warning('Debes matener una linea');
     }
+});
+
+$(document).on("click", '#auth_linea', function(e){
+	e.preventDefault();
+	const form = new FormData();
+	form.append('id_diagnostico', idDiagnostico);
+    swal({
+		title: '¿Autorizar Anverso?',
+		showCancelButton: true,
+		confirmButtonText: 'Autorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+	})
+    .then((result) => {
+        if (result.value) {
+        $.ajax({
+            cache: false,
+            url: base_url+ "index.php/servicio/autorizar_linea/"+idDiagnostico,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            dataType: 'json',
+            data: form,
+            beforeSend: function(){
+                $("#loading_spin").show();
+            }
+        })
+        .done(function(data) {
+            if (data.estatus) {
+                swal('Anverso autorizado correctamente.', '', 'success');
+                //onClick=document.location.reload(true);
+
+            }else{
+                toastr.warning(data.mensaje);
+            }
+        })
+        .fail(function() {
+            toastr.warning('Hubo un error al autorizar el Anverso.');
+        })
+        .always(function() {
+            $("#loading_spin").hide();
+        });	
+    }else if (result.dismiss) {
+            swal('Cancelado', '', 'error');
+        }
+    })
 });
 
     </script>
