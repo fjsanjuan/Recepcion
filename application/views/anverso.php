@@ -581,20 +581,19 @@ $(document).ready(function(){
             $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.');
             
         });
-    $('.sidebar').off().on('click', '#imprimir', function(event) {
+    $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {
     		return;
     		toast.info('No existe un diágnostico guardado.');
     	}
     	event.preventDefault();
     	const form = new FormData();
-    	const idAnverso = 1;
 		//form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
 		form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
 		form.append('name', "Anverso-"+idDiagnostico);
 		$.ajax({
 			cache: false,
-	        url: `${base_url}index.php/servicio/adjuntar_anverso/${idOrden}/${idAnverso}`,
+	        url: `${base_url}index.php/servicio/adjuntar_anverso/${idOrden}/${idDiagnostico}`,
 	        contentType: false,
 	        processData: false,
 	        type: 'POST',

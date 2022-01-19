@@ -5137,4 +5137,18 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+	public function obtener_detalles_diagnostico_pdf($idOrden, $idRevision)
+	{
+		$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'id_diagnostico' => $idRevision])->get()->row_array();
+		if (sizeof($response['data']) > 0) {
+			$response['data']['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $response['data']['id_diagnostico']])->get()->result_array();
+			$response['estatus']          = true;
+			$response['mensaje']          = 'Ok.';
+		} else {
+			$response['estatus'] = false;
+			$response['data']    = [];
+			$response['mensaje'] = 'La orden no cuenta con una línea activa para realizar el llenado de información.';
+		}
+		return $response;
+	}
 }

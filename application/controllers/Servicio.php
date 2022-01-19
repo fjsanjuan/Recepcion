@@ -3187,7 +3187,7 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Anverso no válido.';
 		}else {
 			$this->db2 = $this->load->database('other',true); 
-			$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
+			$datos = $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idAnverso);
 			$datos['id_orden']= $idOrden;
 			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
 				$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
