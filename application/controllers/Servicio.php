@@ -2698,7 +2698,7 @@ class Servicio extends CI_Controller {
 				}
 				$archivo = $this->buscador_model->obtener_pdf_api($token, $data);
 				if ($archivo["estatus"]) {
-					$this->buscador_model->guardar_formato($idOrden, $archivo["data"]["ruta_rel"]);
+					$this->buscador_model->guardar_formato($data['id_orden'], $archivo["data"]["ruta_rel"]);
 				}
 			}
 			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo LIKE '%F1863-%'");
