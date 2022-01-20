@@ -6134,12 +6134,21 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhis
 		type: 'POST',
 		dataType: 'json',
 		data: form,
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
 	}).done(function (response) {
 		if (response.estatus) {
 			toastr.info(response.mensaje);
 			const link = $('<a>', {'href':response.data['archivo'], 'download':response.data['nombre']+'.pdf', 'target':'_blank'});
 						link[0].click();
 		}
+	}).fail(function(error) {
+		toastr.warning('Ocurrió un error al obtener el PDF.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
 	});
 });
 

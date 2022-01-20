@@ -330,10 +330,10 @@ body{padding-right: 0 !important;}
 .cargando{
     display: none;
     width: 50px;
-    position: absolute;
+    position: fixed;
     padding: 5px 20px 13px 20px;
-    top: 45%;
-    left: 45%;
+    top: 40%;
+    left: 40%;
     height: 50px;
     background:rgba(0,0,0,0.8);
     z-index:1100;
