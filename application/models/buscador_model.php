@@ -4175,7 +4175,7 @@ class Buscador_Model extends CI_Model{
 				'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
 				
 			];
-			if($logged_in['perfil'] == 4){
+			if($logged_in['perfil'] == 4 && isset($datos['firma_jefe_taller']) && !empty($datos['firma_jefe_taller'])){
 				$jefe = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
 				$diagnostico['jefe_de_taller'] = $jefe['nombre'];
 				$diagnostico['firma_jefe_taller'] = isset($datos['firma_jefe_taller']) ? $datos['firma_jefe_taller'] : null;
