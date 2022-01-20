@@ -323,7 +323,9 @@ $(document).ready(function() {
 					action  += "<button class='btn btn-sm whatsapp' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 					action  +="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
 					action  +="<button class='btn btn-sm correohist' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
-					action  +="<button class='btn btn-sm addFirma' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#17A2B8;' id='addFirma-"+val["id"]+"'><i class='fa fa-file-signature'></i>&nbsp&nbsp Agregar Firma</button>";
+					if(val['contFirma']['contadorFirma'] == 0){
+						action  +="<button class='btn btn-sm addFirma' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#17A2B8;' id='addFirma-"+val["id"]+"'><i class='fa fa-file-signature'></i>&nbsp&nbsp Agregar Firma</button>";
+					}
 				}
 				//btn  +="<button class='btn btn-sm audiomp3' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#fff200;' id='audiomp3-"+val["id"]+"'><i class='fa fa-file-audio-o'></i>&nbsp&nbsp audios mp3</button>";
 				//console.log( val['contFirma']['contadorFirma']);
