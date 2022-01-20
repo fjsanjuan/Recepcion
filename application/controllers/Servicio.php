@@ -2903,6 +2903,7 @@ class Servicio extends CI_Controller {
 	}
 	public function generar_formato_requisicion($token = null, $id = null)
 	{
+		$this->db2 = $this->load->database('other',true); 
 		$data = [];
 		$datos = $this->input->post();
 		if ($token == null || $id == null) {
@@ -2916,6 +2917,9 @@ class Servicio extends CI_Controller {
 				$datos['id_orden'] = $requisicion['id_orden'];
 				$datos['firmaTec'] = $requisicion['firmaTec'];
 				$datos['firmaRef'] = "";
+				$orden = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where(['id' => $requisicion['id_orden']])->get()->row_array();
+				$movID = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
+				$datos['requisicion']['n1863'] = isset($movID['MovID']) ? $movID['MovID'] : '';
 				$response = $this->buscador_model->obtener_pdf_api($token, $datos);
 				if ($response["estatus"]) {
 					$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);

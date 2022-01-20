@@ -5436,6 +5436,7 @@ $(document).off('click', '#verReqModal input[ name="recibe_req[]"]').on('click',
 		.done(function(resp) {
 			if (resp.estatus) {
 				toastr.info(resp.mensaje);
+				formato_entrega_refacciones(idReq);
 			} else {
 				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
 				toastr.warning(resp.mensaje);
@@ -5998,4 +5999,58 @@ function mySearch() {
       }
     } 
   }
+}
+function formato_entrega_refacciones(id) {
+	var tok = "";
+	$.ajax({
+		url: "https://isapi.intelisis-solutions.com/auth/",
+		type: "POST",
+		dataType: 'json',
+		data: {
+			username:'TEST001',
+			password:'intelisis'
+		},
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			console.log('error al consumir token de ApiReporter');
+			$("#loading_spin").hide();
+		},
+		success: function (data){
+			tok=data.token;
+			$.ajax({
+				url: `${base_url}index.php/servicio/generar_formato_requisicion/${tok}/${id}`,
+				type: "POST",
+				headers: {
+					Authorization: `Token ${tok}`,
+				},
+				//habilitar xhrFields cuando se requiera descargar
+				//xhrFields: {responseType: "blob"},
+				data: {
+					name:'entrega-requisicion-'+id,
+					dwn:'0',
+					opt:'3',
+					path:'None',
+					url:'https://isapi.intelisis-solutions.com/reportes/reqEntregadaPDF'
+					// url:'http://127.0.0.1:8000/reportes/reqEntregadaPDF'
+				},
+				beforeSend: function(){
+					$("#loading_spin").show();
+					toastr.info("Generando Formato");
+				},
+				error: function(){
+					console.log('error al consumir getPDF de ApiReporter');
+					toastr.error("Error al generar el formato");
+					$("#loading_spin").hide();
+				},
+				success: function (blob){
+					$("#loading_spin").hide();
+					data = JSON.parse(blob);
+					const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+					link[0].click();
+				}
+			});
+		}
+	});
 }
