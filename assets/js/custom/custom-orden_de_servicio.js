@@ -2644,6 +2644,18 @@ function guardar_imgInsp()
 }
 
 $(document).on("click", "#btn_guardarInspeccion", function(e){
+	let fallas_crc = $('textarea[name="articulos_personales[]"]');
+	let vacio = 0;
+	$.each(fallas_crc, function(index, val) {
+		if(!$(val).val().trim()){
+			vacio++;
+			return false;
+		}
+	});
+	if(vacio > 0){
+		toastr.warning('Debes llenar todos los campos de "Definición de falla"');
+		return;
+	}
     e.preventDefault();
     var form = "";
 
@@ -3742,8 +3754,9 @@ function generar_causa_raiz_componente(idOrden) {
                     success: function (blob){
                         $("#loading_spin").hide();
                         data = JSON.parse(blob);
-                        const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
-                        link[0].click();
+                        toastr.info(data.mensaje);
+                        /*const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+                        link[0].click();*/
                     }
                 });
             }
