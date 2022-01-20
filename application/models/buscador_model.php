@@ -5161,13 +5161,16 @@ class Buscador_Model extends CI_Model{
 			if (sizeof($response['manos']) > 0) {
 				$response['estatus'] = true;
 				$response['mensaje'] = "Ok.";
+				$response['total_manos'] = sizeof($response['manos']);
 			} else {
 				$response['estatus'] = false;
 				$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+				$response['total_manos'] = 0;
 			}
 		} else {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No hay líneas cargadas para la garantíassss.';
+			$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+			$response['total_manos'] = 0;
 		}
 		return $response;
 	}
