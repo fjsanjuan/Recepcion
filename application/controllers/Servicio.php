@@ -2933,6 +2933,8 @@ class Servicio extends CI_Controller {
 	public function garantia_anverso($idOrden = null){
 		$this->db2 = $this->load->database('other',true); 
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
+		$datos['total_anversos'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 1])->count_all_results();
+		$datos['total_manos'] =  $this->buscador_model->obtener_manos_obra_orden($idOrden)['total_manos'];
 		$datos['id_orden']= $idOrden;
 		if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
 			$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
