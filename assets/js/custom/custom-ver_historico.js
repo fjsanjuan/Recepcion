@@ -6123,8 +6123,8 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhis
 	id = $(this).prop('id').split('-')[1];
 	idOrden = localStorage.getItem('hist_id_orden');
 	const form = new FormData();
-	form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
-	// form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
+	// form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
+	form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
 	form.append('name', "Anverso-"+id);
 	$.ajax({
 		cache: false,
