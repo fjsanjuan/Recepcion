@@ -3229,11 +3229,12 @@ class Servicio extends CI_Controller {
 	}
 	public function autorizar_linea($idDiagnostico = null)
 	{
+		$check = $this->input->post('check');
 		if ($idDiagnostico == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		} else {
-			$response = $this->buscador_model->autorizar_linea($idDiagnostico);
+			$response = $this->buscador_model->autorizar_linea($idDiagnostico, $check);
 		}
 		echo json_encode($response);
 	}
@@ -3247,5 +3248,61 @@ class Servicio extends CI_Controller {
 			$response = $this->buscador_model->obtener_manos_obra_orden($idOrden);
 		}
 		echo json_encode($response);
+	}
+	public function obtener_historial_anversos($idOrden)
+	{
+		$datos = [];
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_historial_anversos($idOrden);
+		}
+		echo json_encode($response);
+	}
+	public function garantia_anverso_historico($idOrden = null, $idAnverso = null){
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+			$response['heading'] = 'Orden no válida.';
+			$response['message'] = 'Orden no válida.';
+			$this->load->view("errors/html/error_404", $response);
+		}else if ($idAnverso == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Anverso no válido.';
+			$response['heading'] = 'Anverso no válido.';
+			$response['message'] = 'Anverso no válido.';
+			$this->load->view("errors/html/error_404", $response);
+		}else {
+			$this->db2 = $this->load->database('other',true); 
+			$datos = $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idAnverso);
+			$datos['id_orden']= $idOrden;
+			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
+				$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
+				$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
+				$json_inicio = json_encode($datos['tiempo_inicio']);
+				$json_inicio = str_replace('\n', '', $json_inicio);
+				$json_inicio = str_replace('\r', '', $json_inicio);
+				$json_inicio = str_replace('\t', '', $json_inicio);
+				$json_fin = json_encode($datos['tiempo_fin']);
+				$json_fin = str_replace('\n', '', $json_fin);
+				$json_fin = str_replace('\r', '', $json_fin);
+				$json_fin = str_replace('\t', '', $json_fin);
+				$datos['json_inicio'] = $json_inicio;
+				$datos['json_fin'] = $json_fin;
+			} else{
+				$datos['tiempo_inicio'] = [];
+				$datos['tiempo_fin'] = [];
+				$datos['json_inicio'] = "[]";
+				$datos['json_fin'] = "[]";
+			}
+			$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+			$datos = array_merge($datos, $orden);
+			$datos = array_merge($datos, $this->input->post());
+			$datos['id_orden']= $idOrden;
+			$logged_in = $this->session->userdata("logged_in");
+			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
+			$this->load->view("anverso_print", $datos);
+		}
 	}
 }

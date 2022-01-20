@@ -602,7 +602,7 @@ $(document).ready(function(){
 		}).done(function (response) {
 			if (response.estatus) {
 				toastr.info(response.mensaje);
-				const link = $('<a>', {'href':response.data['archivo'], 'download':response['nombre']+'.pdf', 'target':'_blank'});
+				const link = $('<a>', {'href':response.data['archivo'], 'download':response.data['nombre']+'.pdf', 'target':'_blank'});
 							link[0].click();
 			}
 		});
@@ -850,7 +850,7 @@ $(document).on("click", '#auth_linea', function(e){
     }else if (result.dismiss) {
             swal('Cancelado', '', 'error');
         }
-    })
+    });
 });
 
     </script>

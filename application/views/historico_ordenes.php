@@ -822,3 +822,5 @@ table tr.active {
         </div>
     </div>
 </div>
+<!--modal para ver diagnósticos técnico-->
+<?php $this->load->view("modals/historial_diagnosticos");?>

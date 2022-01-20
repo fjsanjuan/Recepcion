@@ -271,6 +271,7 @@ $(document).ready(function() {
 				if(val['movimiento'] != null){
 					action_jefe		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_jefe		+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
+					action_jefe		+="<button type='button' class='btn btn-sm btn-primary historial_anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='historialAnverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbspVer Manos Obra</button>";
 					
 					action_jefe		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
 					
@@ -308,6 +309,7 @@ $(document).ready(function() {
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
+					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary historial_anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='historialAnverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbspVer Manos Obra</button>";
 					action_jefe       += `<button type="button" class="btn btn-sm btn-primary asignar_tecnico"  id='asignar_tec-${val["id"]}'><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				}
 				// se usara para ver a que cliente se envia en presupuesto
@@ -6054,3 +6056,143 @@ function formato_entrega_refacciones(id) {
 		}
 	});
 }
+
+$(document).off('click', '.historial_anverso').on('click', '.historial_anverso', function(event) {
+	event.preventDefault();
+	let id = $(this).prop('id').split('-')[1];
+	localStorage.setItem('hist_id_orden', id);
+	obtener_historial_anversos(id);
+});
+
+function obtener_historial_anversos(id) {
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_historial_anversos/${id}`,
+		type: 'POST',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		cache: false,
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			$('#historialDiagnosticoModal').modal('toggle');
+			construir_tabla_historial_anversos(resp.manos);
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un error al obtener el historial de anversos.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
+}
+
+function construir_tabla_historial_anversos(data) {
+	$('#tabla_diagnosticos').empty();
+	tr = $('<tr>');
+	tr.append($('<th>',{'text': 'Mano de Obra'}));
+	tr.append($('<th>',{'text': 'Técnico'}));
+	tr.append($('<th>',{'text': 'Autorizar'}));
+	tr.append($('<th>',{'text': 'Terminada'}));
+	tr.append($('<th>',{'text': 'PDF'}));
+	tr.append($('<th>',{'text': 'Detalles'}));
+	$('#tabla_diagnosticos').append(tr);
+	$.each(data, function(index, val) {
+		tr = $('<tr>');
+		pdf =val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
+		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
+		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario asignar un técnico a la mano de obra desde recepción';
+		tr.append($('<td>',{'text': val.Descripcion1}));
+		tr.append($('<td>',{'text': val.Nombre}));
+		tr.append($('<td>').append(autorizar));
+		tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
+		tr.append($('<td>').append(pdf));
+		tr.append($('<td>').append(detalles));
+		$('#tabla_diagnosticos').append(tr);
+	});
+}
+
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhistorialanverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhistorialanverso', function(event) {
+	event.preventDefault();
+	id = $(this).prop('id').split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	const form = new FormData();
+	form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
+	// form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
+	form.append('name', "Anverso-"+id);
+	$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/adjuntar_anverso/${idOrden}/${id}`,
+		contentType: false,
+		processData: false,
+		type: 'POST',
+		dataType: 'json',
+		data: form,
+	}).done(function (response) {
+		if (response.estatus) {
+			toastr.info(response.mensaje);
+			const link = $('<a>', {'href':response.data['archivo'], 'download':response.data['nombre']+'.pdf', 'target':'_blank'});
+						link[0].click();
+		}
+	});
+});
+
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .detalleshistorialanverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .detalleshistorialanverso', function(event) {
+	event.preventDefault();
+	id = $(this).prop('id').split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	var win = window.open(base_url+ "index.php/servicio/garantia_anverso_historico/"+idOrden+"/"+id, '_blank');
+	win.focus();
+});
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso', function(event) {
+	id = $(this).prop('id').split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	const form = new FormData();
+	form.append('id_diagnostico', id);
+	form.append('check', $(this).is(':checked'));
+    swal({
+		title: $(this).is(':checked') ? '¿Autorizar Anverso?' : '¿Desautorizar Anverso?',
+		showCancelButton: true,
+		confirmButtonText: $(this).is(':checked') ? 'Autorizar' : 'Desautorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+	})
+    .then((result) => {
+        if (result.value) {
+	        $.ajax({
+	            cache: false,
+	            url: base_url+ "index.php/servicio/autorizar_linea/"+id,
+	            contentType: false,
+	            processData: false,
+	            type: 'POST',
+	            dataType: 'json',
+	            data: form,
+	            beforeSend: function(){
+	                $("#loading_spin").show();
+	            }
+	        })
+	        .done(function(data) {
+	            if (data.estatus) {
+	                swal(data.mensaje, '', 'success');
+	            }else{
+	                $(this).prop('checked', !$(this).is(':checked'));
+	            }
+	        })
+	        .fail(function() {
+	            toastr.warning('Hubo un error al autorizar el Anverso.');
+	        })
+	        .always(function() {
+	            $("#loading_spin").hide();
+	        });
+	    }else if (result.dismiss) {
+	    	$(this).prop('checked', !$(this).is(':checked'));
+	        swal('Cancelado', '', 'error');
+	    }
+    });
+});

@@ -5114,26 +5114,26 @@ class Buscador_Model extends CI_Model{
 	}
 	return $response;
 	}
-	public function autorizar_linea($idDiagnostico)
+	public function autorizar_linea($idDiagnostico, $check)
 	{
 		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->count_all_results();
 		if ($existe > 0) {
 			$this->db->trans_begin();
 			$this->db->where(['id_diagnostico' => $idDiagnostico]);
-			$this->db->update('diagnostico_tecnico', ['autorizado' => 1]);
+			$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
 			$this->db->trans_complete();
 			if ($this->db->trans_status() === FALSE ){
 				$this->db->trans_rollback();
 				$response['estatus'] = false;
-				$response['mensaje'] = 'No fue posible autorizar el anverso.';
+				$response['mensaje'] = $check == 'true' ? 'No fue posible autorizar el anverso.' : 'No fue posible desautorizar el anverso.';
 			}else{
 				$this->db->trans_commit();
 				$response['estatus'] = true;
-				$response['mensaje'] = 'Autorizado correctamente.';
+				$response['mensaje'] = $check == 'true' ? 'Anverso autorizado correctamente.' : 'Anverso desautorizado correctamente.';
 			}
 		}else {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No es posible autorizar un anverso cerrado.';
+			$response['mensaje'] = $check == 'true' ? 'No es posible autorizar un anverso cerrado.' : 'No es posible desautorizar un anverso cerrado.';
 		}
 		return $response;
 	}
@@ -5161,6 +5161,28 @@ class Buscador_Model extends CI_Model{
 			if (sizeof($response['manos']) > 0) {
 				$response['estatus'] = true;
 				$response['mensaje'] = "Ok.";
+			} else {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No hay líneas cargadas para la garantíassss.';
+		}
+		return $response;
+	}
+	public function obtener_historial_anversos($idOrden)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+		if (sizeof($orden) > 0 ) {
+			$response['manos'] = $this->db2->select('*')->from('seguimientoTecnicosWeb')->where(['ID' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
+			if (sizeof($response['manos']) > 0) {
+				$response['estatus'] = true;
+				$response['mensaje'] = "Ok.";
+				foreach ($response['manos'] as $key => $mano) {
+					$response['manos'][$key]['diagnostico'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['VentaID' => $mano['ID'], 'RenglonID' => $mano['RenglonID'], 'Renglon' => $mano['Renglon']])->get()->row_array();
+				}
 			} else {
 				$response['estatus'] = false;
 				$response['mensaje'] = 'No hay líneas cargadas para la garantía.';
