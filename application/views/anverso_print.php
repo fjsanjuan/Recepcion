@@ -234,10 +234,10 @@ word-break: break-word;
 								<input class="required write" type="text" name="detalles[0][codigos]" id="" style="width: 98%;" required>
 							</div>
 							<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-							<i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
+							<!-- <i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i> -->
 							</div>
 							<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-							<i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i>
+							<!-- <i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i> -->
 							</div>
 							<!--<input type="text" name="firma_tecnico" id="firma_tecnico" style="display: none;">-->
 						</div>
@@ -267,10 +267,10 @@ word-break: break-word;
 								<input class="required write" type="text" name="detalles[<?=$key;?>][codigos]" id="" style="width: 98%;" value="<?=$detalle['codigos'];?>" required>
 							</div>
 							<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-							<i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
+							<!-- <i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i> -->
 							</div>
 							<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-							<i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i>
+							<!-- <i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i> -->
 							</div>
 							<!--<input type="text" name="firma_tecnico" id="firma_tecnico" style="display: none;">-->
 						</div>
@@ -466,9 +466,9 @@ word-break: break-word;
 
 	<?php
 		$costo_tiempo = 0;
-		foreach ($tiempo_fin as $key => $fin) {
-			$aux_fin = new DateTime($fin['FechaInicio']);
-			$aux_inicio = new DateTime($tiempo_inicio[$key]['FechaInicio']);
+		foreach ($tiempo_inicio as $key => $inicio) {
+			$aux_fin = new DateTime($inicio['FechafIN']);
+			$aux_inicio = new DateTime($inicio['FechaInicio']);
 			//$aux = $aux_fin->diff($aux_inicio);
 			$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
 			$costo_tiempo += is_nan($aux) ? 0 : $aux;
@@ -483,6 +483,10 @@ word-break: break-word;
 		let tiempo_fin = '<?php echo $json_fin;?>';
 		tiempo_inicio = JSON.parse(tiempo_inicio);
 		tiempo_fin = JSON.parse(tiempo_fin);
+		$('input').prop('readonly', true);
+		$('textarea').prop('readonly', true);
+		$('select').prop('disabled', true);
+		$('select').css({'color': 'black', 'opacity': 1});
 		function myFunction(id) {
 			var x = document.getElementById("myDIV");
 			//x.innerHTML=id;
@@ -521,21 +525,9 @@ $(document).ready(function(){
 		const tiempos_inicio =  $('.tiempo_inicio');
 		const tiempos_fin =  $('.tiempo_fin');
 		let costo_tiempo = "<?php echo number_format($costo_tiempo, 2); ?>";
-		
 		$.each(tiempo_inicio, function (index, val) {
 			$(tiempos_inicio[index]).text(val.FechaInicio);
-		});
-		$.each(tiempo_fin, function (index, val) {
-			$(tiempos_fin[index]).text(val.FechaInicio);
-			/*fin = new Date(Date.parse(val.FechaInicio));
-			inicio = new Date(Date.parse(tiempo_inicio[index].FechaInicio));
-			//console.log('fin', fin);
-			//console.log('inicio', inicio);
-			tiempo_actual =(fin - inicio) / (1000*3600)
-			costo_tiempo += isNaN(tiempo_actual) ? 0 : tiempo_actual;
-		   // console.log('costo_tiempo', costo_tiempo);
-			costo_tiempo = isNaN(costo_tiempo) ? 0 : costo_tiempo;
-			$('.costo_tiempo').text(costo_tiempo+' Hrs.');*/
+			$(tiempos_fin[index]).text(val.FechafIN);
 		});
 		$('.costo_tiempo').text(costo_tiempo+' Hrs.');
 	});

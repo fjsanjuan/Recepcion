@@ -573,19 +573,13 @@ $(document).ready(function(){
         let costo_tiempo = 0;
         $.each(tiempo_inicio, function (index, val) {
             $(tiempos_inicio[index]).text(val.FechaInicio);
-        });
-        $.each(tiempo_fin, function (index, val) {
-            $(tiempos_fin[index]).text(val.FechaInicio);
-            fin = new Date(val.FechaInicio);
-            inicio = new Date(tiempo_inicio[index].FechaInicio);
-            //console.log('fin', fin);
-            //console.log('inicio', inicio);
+            $(tiempos_fin[index]).text(val.FechafIN);
+            inicio = new Date(val.FechaInicio);
+            fin = new Date(val.FechafIN);
             tiempo_actual =(fin - inicio) / (1000*3600)
             costo_tiempo += isNaN(tiempo_actual) ? 0 : tiempo_actual;
-           // console.log('costo_tiempo', costo_tiempo);
             costo_tiempo = isNaN(costo_tiempo) ? 0 : costo_tiempo;
-            $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.');
-            
+            $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.')
         });
         $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {
