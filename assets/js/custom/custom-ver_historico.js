@@ -5110,18 +5110,22 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 							<button class='btn btn-sm btn-primary editarLin' data-id='${idOrden}'><i class='fa fa-edit'></i> Editar</button>
 						</div>
 						</div>`));
-
-						var table = $("<table class='table table-bordered fadeIn no-footer tablepres' id=''><thead style='text-align:center;'><tr><th>No. Reparación</th><th>Tipo Garantía</th><th>SubTipo Garantía</th><th>Daño en Relación</th><th>Autoriz 1</th><th>Autoriz 2</th><th>Partes Totales</th><th>Mano de Obra</th><th>Misc. Totales</th><th>IVA</th><th>P. Cliente</th><th>P. Dist</th><th>Rep. Total</th></tr></thead><tbody style='text-align:center;' id='seleccionarTipGtia'></tbody></table>");
+						var row_body = $('<div>',{'class': 'row'});
+						var col_sm_12 = $('<div>',{'class': 'col-sm-12'});
+						var responsive = $('<div>',{'class': 'table-responsive'});
+						var table = $('<table>', {'class': "table table-bordered fadeIn no-footer tablepres"});
+						table.append("<thead style='text-align:center;'><tr><th>No. Reparación</th><th>Tipo Garantía</th><th>SubTipo Garantía</th><th>Daño en Relación</th><th>Autoriz 1</th><th>Autoriz 2</th><th>Partes Totales</th><th>Mano de Obra</th><th>Misc. Totales</th><th>IVA</th><th>P. Cliente</th><th>P. Dist</th><th>Rep. Total</th></tr></thead>");
+						var table_body = $("<tbody >",{'style':'text-align:center', 'id':'seleccionarTipGtia'});
 					$.each(data.lineas_reparacion, function(index, value){
-					
 							var row = $("<tr data-index='"+index+"'><td>"+(value.num_reparacion ? value.num_reparacion : '')+"</td><td>"+(value.tipo_garantia ? value.tipo_garantia : '')+"</td><td>"+(value.subtipo_garantia ? value.subtipo_garantia : '')+"</td><td>"+(value.dannio ? value.dannio : '')+"</td><td>"+(value.autoriz_1 ? value.autoriz_1 : '')+"</td><td>"+(value.autoriz_2 ? value.autoriz_2 : '')+"</td><td>"+(value.partes_totales ? value.partes_totales : '')+"</td><td>"+(value.mano_obra_total ? value.mano_obra_total : '')+"</td><td>"+(value.misc_total ? value.misc_total : '')+"</td><td>"+(value.iva ? value.iva  : '')+"</td><td>"+(value.participacion_cliente ? value.participacion_cliente : '')+"</td><td>"+(value.participacion_distribuidor ? value.participacion_distribuidor : '')+"</td><td>"+(value.reparacion_total ? value.reparacion_total : '')+"</td></tr>");
-
-							table.append(row);
-		
-					
+							table_body.append(row);
 					});
+					table.append(table_body);
+					responsive.append(table);
+					col_sm_12.append(responsive);
+					row_body.append(col_sm_12);
 					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(row_title);
-					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(table);
+					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(row_body);
 					$('#lineaTrabajoModal').modal('show');
 				}else{
 					$('#lin-carg').prop('disabled', true);
