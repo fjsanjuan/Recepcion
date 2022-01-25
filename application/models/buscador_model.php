@@ -4498,7 +4498,7 @@ class Buscador_Model extends CI_Model{
 			if (is_array($response['desglose'])) {
 				foreach ($response['desglose'] as $key => $valor) {
 					$costo_tiempo = null;
-					if ($valor['tipo'] === 'Servicios') {
+					if ($valor['tipo'] === 'Servicio') {
 						$costo_tiempo = 0;
 						$tiempos = $intelisis->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $response['desglose'][$key]['id'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 						foreach (is_array($tiempos) ? $tiempos : [] as $key2 => $inicio) {
