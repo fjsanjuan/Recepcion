@@ -5653,7 +5653,7 @@ $(document).on('click', '#buscarManObra', function (){
                 items.push("<tr id='" + val.Articulo    + "'>");
                 items.push("<td id='mano_art'>"  + val.Articulo + "</td>");
                 items.push("<td id='mano_desc'>"  + val.Descripcion1 + "</td>");
-                items.push("<td id='mano_precio'>" + val.Precio + "</td>");
+                items.push("<td id='mano_precio' class='d-none'>" + val.Precio + "</td>");
                 items.push("<td class='item-name'><button class='btn btn-success' id='boton_agregarManObra'><i class='fa fa-plus'></i></button></td>");
                 items.push("</tr>");
 				
@@ -5687,8 +5687,8 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     tabla += "<td class='artmoo'>"+clave_art+"</td>";
     tabla += "<td>"+art+"</td>";
     tabla += "<td><input class='qty md-textarea' id='mo_qty' value='"+cantidad+"' readonly/></td>";
-    tabla += "<td><input class='cost md-textarea' id='mo_cost' value='"+precio+"' readonly/></td>";
-    tabla += "<td class='price'>"+total+"</td>";
+    tabla += "<td class='d-none'><input class='cost md-textarea' id='mo_cost' value='"+precio+"' readonly/></td>";
+    tabla += "<td class='price d-none'>"+total+"</td>";
 	tabla += "<td><input type='checkbox' style='height: 24px; width: 24px;' value='1' class='add_adicional' id='add'><label for='add'></label></td>";
     tabla += "<td style='display:none;' id='articulosmo'>mo</td>";
     tabla += "<td style='display:none;' id='idpq'>" + 'NA' + "</td>";

@@ -26,8 +26,8 @@
 							<td><strong>Artículo</strong></td>
 							<td class="text-center"><strong>Descripción</strong></td>
 							<td class="text-center"><strong>Cantidad</strong></td>
-							<td class="text-center"><strong>Precio U</strong></td>
-							<td class="text-center"><strong>Total</strong></td>
+							<td class="text-center d-none"><strong>Precio U</strong></td>
+							<td class="text-center d-none"><strong>Total</strong></td>
 							<td class="text-center"><strong>Adicional</strong></td>
 						</tr>
 					</thead>
@@ -36,7 +36,7 @@
 					</tbody>
 				</table>
 				</div>
-				<div class="row" style="text-align: center;">
+				<div class="row d-none" style="text-align: center;">
 					<div class="col">
 						<div class="md-form" style="padding: 25px; font-size: 45px;">
 							<i class="fa fa-dollar" aria-hidden="true"></i>
@@ -77,7 +77,7 @@
 						<tr>
 							<th>Articulo</th>
 							<th>Descripcion</th>
-							<th>Precio</th>
+							<th class="d-none">Precio</th>
 						</tr>
 					</thead>
 				</table>
