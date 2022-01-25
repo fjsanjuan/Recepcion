@@ -4487,12 +4487,32 @@ class Buscador_Model extends CI_Model{
 			$response['crc'] = $this->db->select('definicion_falla AS comentario_cliente, id AS codigo_queja')->from('causa_raiz_componente')->where('id_orden_servicio',$publica['id'])->get()->result_array();
 
 			//modificacion para obtener detalle de orden de servicio desde ventaD intelisis
-			$response["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * Impuesto1 ) / 100) as iva_total, Articulo as articulo, DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as total, (SELECT TOP 1 FordStar FROM Agente WHERE Agente.Agente = \"VentaD\".\"Agente\") AS FordStar")
+			$response["desglose"] = $intelisis->select("(Precio*Cantidad)+((SUM((Precio*Cantidad)) * VentaD.Impuesto1 ) / 100) as iva_total, VentaD.Articulo as articulo, VentaD.DescripcionExtra as descripcion, Cantidad as cantidad, Precio as precio_unitario, (Precio*Cantidad) as importe, (SELECT TOP 1 FordStar FROM Agente WHERE Agente.Agente = \"VentaD\".\"Agente\") AS FordStar, MAX(Art.Tipo) AS 'tipo', MAX(RenglonID) AS RenglonID, MAX(Renglon) AS Renglon, MAX(ID) AS id")
 				->from("VentaD")
+				->join('Art', 'VentaD.Articulo = Art.Articulo')
 				->where("ID", $ordenGarantia["id_orden_intelisis"])
 				->where('ventad.cantidad > isnull(ventad.cantidadcancelada,0)')
-				->group_by('precio, cantidad, impuesto1, articulo,DescripcionExtra, Agente')
+				->group_by('precio, cantidad, VentaD.impuesto1, VentaD.articulo,VentaD.DescripcionExtra, Agente')
 				->get()->result_array();
+
+			if (is_array($response['desglose'])) {
+				foreach ($response['desglose'] as $key => $valor) {
+					$costo_tiempo = null;
+					if ($valor['tipo'] === 'Servicios') {
+						$costo_tiempo = 0;
+						$tiempos = $intelisis->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $response['desglose'][$key]['id'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
+						foreach (is_array($tiempos) ? $tiempos : [] as $key2 => $inicio) {
+							$aux_fin = new DateTime($inicio['FechafIN']);
+							$aux_inicio = new DateTime($inicio['FechaInicio']);
+							//$aux = $aux_fin->diff($aux_inicio);
+							$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
+							$costo_tiempo += is_nan($aux) ? 0 : $aux;
+						}
+						$costo_tiempo = number_format($costo_tiempo, 2);
+					}
+					$response['desglose'][$key]['tiempo'] = $costo_tiempo;
+				}
+			}
 
 			$response["asesor"] = $this->db->select("firma_electronica, nombre, apellidos")
 										->from("usuarios")
