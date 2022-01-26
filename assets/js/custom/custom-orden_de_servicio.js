@@ -2643,16 +2643,17 @@ function guardar_imgInsp()
     });
 }
 
-$(document).on("click", "#btn_guardarInspeccion", function(e){
+$(document).off("click", "#btn_guardarInspeccion").on("click", "#btn_guardarInspeccion", function(e){
 	let fallas_crc = $('textarea[name="articulos_personales[]"]');
 	let vacio = 0;
+	let auth_voz = $('#autorizacion_voz').is(':checked');
 	$.each(fallas_crc, function(index, val) {
 		if(!$(val).val().trim()){
 			vacio++;
 			return false;
 		}
 	});
-	if(vacio > 0){
+	if(vacio > 0 && auth_voz == false ){
 		toastr.warning('Debes llenar todos los campos de "Definición de falla"');
 		return;
 	}
@@ -2683,23 +2684,28 @@ $(document).on("click", "#btn_guardarInspeccion", function(e){
             }
         })
         .done(function(data) {
-            if(data)
+            if(data.success == 1)
             {
                 toastr.success("Se ha guardado la inspección.");
                 $("#loading_spin").hide();
-                generar_causa_raiz_componente(id_orden);
+                if (vacio == 0){
+                	generar_causa_raiz_componente(id_orden);
+                }
                 $("#ok_nextwo").show();
             }else
             {
-                toastr.error("Hubo un error al guardar la información.");
+            	$("#loading_spin").hide();
+                toastr.error(data.data ? data.data :"Hubo un error al guardar la información.");
             }
         })
         .fail(function() {
+        	$("#loading_spin").hide();
             toastr.error("Hubo un error, vuelva a intentarlo.");
         });
 
     })
     .fail(function() {
+    	$("#loading_spin").hide();
         toastr.error("Hubo un error al guardar la inspección");
     });  
 });

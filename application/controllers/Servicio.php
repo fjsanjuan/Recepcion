@@ -1311,14 +1311,29 @@ class Servicio extends CI_Controller {
 		$dato['valor_firma']          = $this->input->post('valor_firma[]') !== "" ?  $this->input->post('valor_firma[]') : [];
 		$dato['id']          = $this->input->post('idCRC[]') !== "" ?  $this->input->post('idCRC[]') : [];
 
-		// var_dump($dato);die;
-		$create = $this->buscador_model->guardar_inspeccion($dato);
-		
-		if($create){
-			$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
-		}else{
-			$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
+
+
+		if ($dato['autorizacion_voz'] == 1) {
+			$data = array('success' =>0, 'data' => ('Cuando se autoriza la grabación de voz no puedes guardar la inspección sin audios.'));
+			$voc = $this->db->select('*')->from('archivo')->where(['id_orden_servicio'=> $id_orden, 'tipo_archivo' => 8])->count_all_results();
+			if ($voc > 0) {
+				$create = $this->buscador_model->guardar_inspeccion($dato);
+				if($create){
+					$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
+				}else{
+					$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
+				}
+			}
+		}else {
+			$create = $this->buscador_model->guardar_inspeccion($dato);
+			if($create){
+				$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
+			}else{
+				$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
+			}
 		}
+
+		// var_dump($dato);die;
 
 		$data = json_encode($data);
 		$data=array('response'=>$data);
@@ -2649,11 +2664,14 @@ class Servicio extends CI_Controller {
 		if ($token == null || $id_orden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = "Orden no válida.";
-		} else {
+		} else if(sizeof($data) > 0) {
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
 			if ($response["estatus"]) {
 				$this->buscador_model->guardar_formato($id_orden, $response["data"]["ruta_rel"]);
 			}
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'La orden no tiene registros de cuasa raíz componente.';
 		}
     	/*$html = $this->load->view('formatos/causa_raiz_componente', $data, TRUE);
 		$dompdf = new DOMPDF();

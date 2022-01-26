@@ -1978,56 +1978,60 @@ class Buscador_Model extends CI_Model{
 		}
 
 		if($existe_orden > 0) {
-			foreach ($data['articulos_personales'] as $key => $articulos_personale) {
-				$causa_raiz['id_orden_servicio']       = $orden_servicio;
-				$causa_raiz['autorizacion_grabar_voz'] = $data['autorizacion_voz'];
-				$causa_raiz['definicion_falla']        = isset($data['articulos_personales'][$key]) ?  $data['articulos_personales'][$key] : null;
-				$causa_raiz['arranca_vehiculo']        = isset($data['arranca'][$key]) ? 1 : 0;
-				$causa_raiz['inicia_movimiento']      = isset($data['inicia'][$key]) ? 1 : 0;
-				$causa_raiz['disminuye_vel']           = isset($data['disminuye'][$key]) ? 1 : 0;
-				$causa_raiz['da_vuelta_izq']           = isset($data['vuelta_izq'][$key]) ? 1 : 0;
-				$causa_raiz['da_vuelta_der']           = isset($data['vuelta_der'][$key]) ? 1 : 0;
-				$causa_raiz['pasa_tope']               = isset($data['tope'][$key]) ? 1 : 0;
-				$causa_raiz['pasa_bache']              = isset($data['bache'][$key]) ? 1 : 0;
-				$causa_raiz['cambia_vel']              = isset($data['cambia'][$key]) ? 1 : 0;
-				$causa_raiz['esta_sin_movimiento']     = isset($data['movimiento'][$key]) ? 1 : 0;
-				$causa_raiz['constantemente']          = isset($data['constantemente'][$key]) ? 1 : 0;
-				$causa_raiz['esperodicamente']         = isset($data['esporadicamente'][$key]) ? 1 : 0;
-				$causa_raiz['asiento']                 = isset($data['asiento'][$key]) ? 1 : 0;
-				$causa_raiz['volante']                 = isset($data['volante'][$key]) ? 1 : 0;
-				$causa_raiz['cristales']               = isset($data['cristales'][$key]) ? 1 : 0;
-				$causa_raiz['carroceria']              = isset($data['carroceria'][$key]) ? 1 : 0;
-				$causa_raiz['cofre']                   = isset($data['cofre'][$key]) ? 1 : 0;
-				$causa_raiz['cajuela']                 = isset($data['cajuela_f'][$key]) ? 1 : 0;
-				$causa_raiz['toldo']                   = isset($data['toldo'][$key]) ? 1 : 0;
-				$causa_raiz['debajo']                   = isset($data['debajo'][$key]) ? 1 : 0;
-				$causa_raiz['estando_dentro']          = isset($data['dentro'][$key]) ? 1 : 0;
-				$causa_raiz['estando_fuera']           = isset($data['fuera'][$key]) ? 1 : 0;
-				$causa_raiz['estando_frente']          = isset($data['frente'][$key]) ? 1 : 0;
-				$causa_raiz['estando_detras']          = isset($data['detras'][$key]) ? 1 : 0;
-				$causa_raiz['temp_ambiente']           = isset($data['temperatura'][$key]) ?  $data['temperatura'][$key] : null;
-				$causa_raiz['humedad']                 = isset($data['humedad'][$key]) ? $data['humedad'][$key] : null;
-				$causa_raiz['viento']                  = isset($data['viento'][$key]) ? $data['viento'][$key] : null;
-				$causa_raiz['vel_km_hr']               = isset($data['velocidad'][$key]) ? $data['velocidad'][$key] : null;
-				$causa_raiz['cambio_transmision']      = isset($data['cambioTransmision'][$key]) ? $data['cambioTransmision'][$key] : null;
-				$causa_raiz['rpmx1000']                = isset($data['rpm'][$key]) ? $data['rpm'][$key] : null;
-				$causa_raiz['carga']                   = isset($data['carga'][$key]) ? $data['carga'][$key] : null;
-				$causa_raiz['pasajeros']               = isset($data['pasajeros'][$key]) ? $data['pasajeros'][$key] : null;
-				$causa_raiz['cajuela_cond_operativa']   = isset($data['cajuela'][$key]) ? $data['cajuela'][$key] : null;
-				$causa_raiz['estructura']              = isset($data['estructura'][$key]) ? $data['estructura'][$key] : null;
-				$causa_raiz['camino']                  = isset($data['camino'][$key]) ? $data['camino'][$key] : null;
-				$causa_raiz['pendiente']               = isset($data['pendiente'][$key]) ? $data['pendiente'][$key] : null;
-				$causa_raiz['firma_cliente']           = isset($data['valor_firma'][$key]) ?  $data['valor_firma'][$key] : null;
-				$causa_raiz['cambio_tipo']             = isset($data['cambioTipo'][$key]) ? $data['cambioTipo'][$key] : null;
-				if (isset($data['id'][$key]) && $data['id'][$key] != '') {
-					$id_causa_raiz[] = $data['id'][$key];
-					$this->db->where('id', $data['id'][$key]);
-					$this->db->update('causa_raiz_componente', $causa_raiz);
-				} else {
-					$id_causa_raiz[] = $this->db->insert('causa_raiz_componente', $causa_raiz);
+			foreach ($data['articulos_personales'] as $key => $articulos_personales) {
+				if ($articulos_personales != '') {
+					$causa_raiz['id_orden_servicio']       = $orden_servicio;
+					$causa_raiz['autorizacion_grabar_voz'] = $data['autorizacion_voz'];
+					$causa_raiz['definicion_falla']        = isset($data['articulos_personales'][$key]) ?  $data['articulos_personales'][$key] : null;
+					$causa_raiz['arranca_vehiculo']        = isset($data['arranca'][$key]) ? 1 : 0;
+					$causa_raiz['inicia_movimiento']       = isset($data['inicia'][$key]) ? 1 : 0;
+					$causa_raiz['disminuye_vel']           = isset($data['disminuye'][$key]) ? 1 : 0;
+					$causa_raiz['da_vuelta_izq']           = isset($data['vuelta_izq'][$key]) ? 1 : 0;
+					$causa_raiz['da_vuelta_der']           = isset($data['vuelta_der'][$key]) ? 1 : 0;
+					$causa_raiz['pasa_tope']               = isset($data['tope'][$key]) ? 1 : 0;
+					$causa_raiz['pasa_bache']              = isset($data['bache'][$key]) ? 1 : 0;
+					$causa_raiz['cambia_vel']              = isset($data['cambia'][$key]) ? 1 : 0;
+					$causa_raiz['esta_sin_movimiento']     = isset($data['movimiento'][$key]) ? 1 : 0;
+					$causa_raiz['constantemente']          = isset($data['constantemente'][$key]) ? 1 : 0;
+					$causa_raiz['esperodicamente']         = isset($data['esporadicamente'][$key]) ? 1 : 0;
+					$causa_raiz['asiento']                 = isset($data['asiento'][$key]) ? 1 : 0;
+					$causa_raiz['volante']                 = isset($data['volante'][$key]) ? 1 : 0;
+					$causa_raiz['cristales']               = isset($data['cristales'][$key]) ? 1 : 0;
+					$causa_raiz['carroceria']              = isset($data['carroceria'][$key]) ? 1 : 0;
+					$causa_raiz['cofre']                   = isset($data['cofre'][$key]) ? 1 : 0;
+					$causa_raiz['cajuela']                 = isset($data['cajuela_f'][$key]) ? 1 : 0;
+					$causa_raiz['toldo']                   = isset($data['toldo'][$key]) ? 1 : 0;
+					$causa_raiz['debajo']                  = isset($data['debajo'][$key]) ? 1 : 0;
+					$causa_raiz['estando_dentro']          = isset($data['dentro'][$key]) ? 1 : 0;
+					$causa_raiz['estando_fuera']           = isset($data['fuera'][$key]) ? 1 : 0;
+					$causa_raiz['estando_frente']          = isset($data['frente'][$key]) ? 1 : 0;
+					$causa_raiz['estando_detras']          = isset($data['detras'][$key]) ? 1 : 0;
+					$causa_raiz['temp_ambiente']           = isset($data['temperatura'][$key]) ?  $data['temperatura'][$key] : null;
+					$causa_raiz['humedad']                 = isset($data['humedad'][$key]) ? $data['humedad'][$key] : null;
+					$causa_raiz['viento']                  = isset($data['viento'][$key]) ? $data['viento'][$key] : null;
+					$causa_raiz['vel_km_hr']               = isset($data['velocidad'][$key]) ? $data['velocidad'][$key] : null;
+					$causa_raiz['cambio_transmision']      = isset($data['cambioTransmision'][$key]) ? $data['cambioTransmision'][$key] : null;
+					$causa_raiz['rpmx1000']                = isset($data['rpm'][$key]) ? $data['rpm'][$key] : null;
+					$causa_raiz['carga']                   = isset($data['carga'][$key]) ? $data['carga'][$key] : null;
+					$causa_raiz['pasajeros']               = isset($data['pasajeros'][$key]) ? $data['pasajeros'][$key] : null;
+					$causa_raiz['cajuela_cond_operativa']   = isset($data['cajuela'][$key]) ? $data['cajuela'][$key] : null;
+					$causa_raiz['estructura']              = isset($data['estructura'][$key]) ? $data['estructura'][$key] : null;
+					$causa_raiz['camino']                  = isset($data['camino'][$key]) ? $data['camino'][$key] : null;
+					$causa_raiz['pendiente']               = isset($data['pendiente'][$key]) ? $data['pendiente'][$key] : null;
+					$causa_raiz['firma_cliente']           = isset($data['valor_firma'][$key]) ?  $data['valor_firma'][$key] : null;
+					$causa_raiz['cambio_tipo']             = isset($data['cambioTipo'][$key]) ? $data['cambioTipo'][$key] : null;
+					if (isset($data['id'][$key]) && $data['id'][$key] != '') {
+						$id_causa_raiz[] = $data['id'][$key];
+						$this->db->where('id', $data['id'][$key]);
+						$this->db->update('causa_raiz_componente', $causa_raiz);
+					} else {
+						$id_causa_raiz[] = $this->db->insert('causa_raiz_componente', $causa_raiz);
+					}
 				}
 			}
 		}
+
+		$this->db->trans_complete();
 		
 		if ($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
@@ -2035,7 +2039,7 @@ class Buscador_Model extends CI_Model{
 		}else{
 			$this->db->trans_commit();
 			return $id;
-		}	
+		}
 	}
 
 	function trigger_exist($bd, $tabla){
