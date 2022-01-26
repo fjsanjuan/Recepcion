@@ -2237,7 +2237,7 @@ $(document).on("click", '#btn_guardarFirma', function (e){
 
                 $("#modalfirma").modal("hide");
 				$("#levanta_orden").show();
-				$("#mostrar_modalfirma").hide();
+				//$("#mostrar_modalfirma").hide();
             }else
             {
                 toastr.error("Hubo un error al guardar las firmas del Cliente.");
