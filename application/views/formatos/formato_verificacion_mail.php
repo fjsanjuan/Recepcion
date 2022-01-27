@@ -105,7 +105,7 @@
 										
 										$total += ($value["total_arts"]+$totalIva);
 									}
-									echo "<tr><td colspan = '5' ></td><td>".$total."</td></tr>";
+									echo "<tr><td colspan = '5' ><b>Comentario: ".$comentario_existencia."</b></td><td>".$total."</td></tr>";
 								?>
 							</tbody>
 						</table>
@@ -116,6 +116,8 @@
 						 
                         <!--<button type="button" class="btn btn-primary" data-dismiss="modal" id="ver_fotos"><i class="fas fa-image"></i> Ver fotos</button>-->
 						<?php if($perfil == 6): ?>
+							<label for="comentarioCot">Esciba su Comentario</label>
+							<textarea class="form-control" id="comentarioCot"></textarea>
 						<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_update_mail2"><i class="fas fa-save"></i> Enviar Verificación</button>
 						<?php endif; ?>
 					</div>
@@ -167,7 +169,7 @@ $(document).ready(function() {
 			url: base_url+ "index.php/Servicio/verificacion_mail_refacciones",
 			type: 'POST',
 			dataType: 'json',
-			data: {datos:$("#form_presupuesto2").serializeArray(),id_presupuesto: $("#id_presupuesto").val()},
+			data: {datos:$("#form_presupuesto2").serializeArray(),id_presupuesto: $("#id_presupuesto").val(), comentario_existencia: $("#comentarioCot").val()},
 			beforeSend: function(){
 				$("#loading_spin").show();
 			},

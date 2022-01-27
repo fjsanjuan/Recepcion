@@ -116,9 +116,9 @@
 						<div class="card-body">
 							<h6>TECNICO</h6>
 							<p>
-							<b>Nombre Técnico:</b> <?=$datos_tecnico['nombre']?> <?=$datos_tecnico['apellidos']?><br>
-							<b>Email: </b> <?=$datos_tecnico['correo_tecnico']?><br>
-							<b>Fecha Cotización:</b> <?=$datos_tecnico['actualizado']?><br>
+							<b>Nombre Técnico:</b> <?=isset($datos_tecnico['nombre']) ? $datos_tecnico['nombre'] : '-'?> <?=isset($datos_tecnico['apellidos']) ? $datos_tecnico['apellidos'] : '-'?><br>
+							<b>Email: </b> <?=isset($datos_tecnico['correo_tecnico']) ? $datos_tecnico['correo_tecnico'] : '-'?><br>
+							<b>Fecha Cotización:</b> <?=isset($datos_tecnico['actualizado']) ? $datos_tecnico['actualizado'] : '-'?><br>
 							<!-- <b>Presupuesto Autorizado:</b> <?=($datos_tecnico['autorizado'] == 1)?"SI":"NO"?> -->
 							</p>
 						</div>

@@ -2626,6 +2626,7 @@ class Buscador_Model extends CI_Model{
 		$insertP["total_presupuesto"] = $arr['precioTotal'];
 		$insertP["autorizado"] = 0;
 		$insertP["vista_email"] = 0;
+		$insertP['id_tecnico'] = $data['id_tecnico'];
 
 		$this->db->trans_start();
 		$this->db->insert('verificacion_refacciones',$insertP);
@@ -2776,12 +2777,12 @@ class Buscador_Model extends CI_Model{
 						print_r($this->db->last_query());
 						echo "</pre>";*/
 		$ret['user'] = $this->db->select("usuarios.nombre, usuarios.apellidos, usuarios.email as correo_refacciones")->from("usuarios")
-						->where("usuarios.perfil", 6, "verificacion_refacciones.id_presupuesto", $data['id'])
+						->where("usuarios.perfil", 6)
 						->get()->row_array();
 		$ret['userTecnico'] = $this->db->select("usuarios.nombre, usuarios.apellidos, usuarios.actualizado, usuarios.email as correo_tecnico")->from("usuarios")
-						->where("usuarios.perfil", 5, "verificacion_refacciones.id_presupuesto", $data['id'])
+						->where("usuarios.perfil", 5)
+						->where("usuarios.id", $ret['usuario']['id_tecnico'])
 						->get()->row_array();
-		
 		$ret['detalle'] = $this->db->select("*")->from("detalles_verificacion_refacciones")->where("id_presupuesto", $data['id'])->get()->result_array();
 		/*echo "<pre>";
 		print_r($ret['detalle']);
@@ -2878,6 +2879,8 @@ class Buscador_Model extends CI_Model{
 		return $cliente;
 	}
 	public function EditarVerificacion($datos){
+		$logged_in =  $this->session->userdata("logged_in");
+		$perfil    =  $logged_in["perfil"];
 		$datos["detalles"] = parse_str($datos["detalles"],$arr);
 		$existen = $this->db->select("*")->from("detalles_verificacion_refacciones")->where("id_presupuesto", $arr["id_presupuesto"])->get()->result_array();
 		$new = $datos["articulos"];
@@ -2892,7 +2895,9 @@ class Buscador_Model extends CI_Model{
 			$this->db->insert("detalles_verificacion_refacciones", $value);
 		}
 		$this->db->where("id_presupuesto", $arr["id_presupuesto"]);
-		$this->db->update("verificacion_refacciones", array("total_presupuesto"=>$arr["precioTotal2"]));
+		if ($perfil == 5){
+		$this->db->update("verificacion_refacciones", array("total_presupuesto"=>$arr["precioTotal2"], "id_tecnico"=>$datos['id_tecnico']));
+		}
 		$this->db->trans_complete();
 		if($this->db->trans_status() == true)
 		{

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -1808,7 +1808,7 @@ $(document).ready(function() {
 	
 						row_title.append(check);*/
 	
-						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+						var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En&nbspExistencia</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 						$.each(value.detalle, function(index2, value2){
 							if (value2.comentario != "" && value2.comentario != null){
 								var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
@@ -1822,7 +1822,7 @@ $(document).ready(function() {
 							}
 							table.append(row);
 						});
-						var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailP2' id='"+index+"'><i class='fas fa-envelope'></i>Enviar Email</button><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+						var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailP2' data-index='"+index+"' data-idpres='"+value.id_presupuesto+"'><i class='fas fa-envelope'></i>Enviar Email</button></td><td><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b></td></tr>");
 						table.append(row_importe);
 						$('#modalValidacion .modal-body').append(row_title);
 						$('#modalValidacion .modal-body').append(table);
@@ -2039,19 +2039,65 @@ $(document).ready(function() {
 		var idIndex =  $(this).attr('data-index');
 		var datos = verificaciones_array[idIndex];
 		var id_press = datos.id_presupuesto;
+		console.log(id_presupuesto);
 		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 	});
 	$(document).on("click", "button.btn-mailP2", function(e){
+		$("#comentarioCot").val('');
+		$("#email_enviar").val('');
+		console.log('datos mailp2', $(this).data());
+		id_presupuesto = $(this).data('idpres');
+		var idIndex =  $(this).attr('data-index');
+		$.ajax({
+			cache: false,
+			type: 'get',
+			url: base_url+ "index.php/Servicio/obtener_correo/"+id_presupuesto,
+			dataType: "json",
+			data:"",
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			success: function(data)
+			{
+				$("#loading_spin").hide();
+				
+				if(data.estatus)
+				{
+					$("#email_enviar").val(data.correo);
+					$("#email_enviar").prop('readonly', true);
+					$("#sendmailcotizaciones").modal("toggle");
+					$("#send_mailCot").data("idpres", id_presupuesto);
+					$("#send_mailCot").data("index", idIndex);
+				}else 
+				{
+					toastr.error("Error al adquirir el correo");
+					$("#loading_spin").hide();
+				}
+			},
+		});
+		
+	});
+	$(document).on("click", "#send_mailCot", function(e){
+		if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($('#email_enviar').val()) === false){
+			toastr.error("La dirección de email es incorrecta!.");
+			$("#loading_spin").hide();
+			return;
+		}
+
 		const _this = this;
-		var idIndex =  $(this).attr('id');
+		var idIndex =  $(this).data('index');
 		var datos = verificaciones_array[idIndex];
+		console.log(idIndex);
 		console.log('datos email', datos);
 		const form = new FormData();
-		form.append('id', datos.id_presupuesto)
+		form.append('id', $(this).data('idpres'));
+		form.append('comentario_existencia', $("#comentarioCot").val());
 		$.ajax({
 			cache: false,
 			type: 'post',
-			url: base_url+ "index.php/Servicio/envia_verificacion_mail",
+			url: base_url+ (id_perfil == 5 ? "index.php/Servicio/envia_verificacion_mail" : "index.php/Servicio/enviar_notificacion_tecnico"),
 			dataType: "json",
 			data:form,
 			contentType: false,
@@ -2066,8 +2112,11 @@ $(document).ready(function() {
 				if(data)
 				{
 					toastr.success("Se ha enviado el correo");
-					$(_this).closest('table').prev().find('.editarPres2').hide();
-					
+					$("#comentarioCot").val('');
+					$("#email_enviar").val('');
+					$("#sendmailcotizaciones").modal("hide");
+					//$(_this).closest('table').prev().find('.editarPres2').hide();
+					$('#modalValidacion').find(`.tablepres:eq(${idIndex})`).prev().find('.editarPres2').hide();
 				}else 
 				{
 					toastr.error("Error al enviar Email");

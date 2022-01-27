@@ -75,6 +75,9 @@ table tr.active {
 .table tbody tr.highlight td {
     background-color: #CFF5FF;
 }
+.modal {
+    overflow-y: auto !important;
+}
 </style>
 <div class="container">
     <br>
@@ -617,7 +620,7 @@ table tr.active {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Guardar</button>
+        <!--<button type="button" class="btn btn-primary">Guardar</button>-->
       </div>
     </div>
   </div>
@@ -824,3 +827,23 @@ table tr.active {
 </div>
 <!--modal para ver diagnósticos técnico-->
 <?php $this->load->view("modals/historial_diagnosticos");?>
+<!--modal para enviar correo cotizaciones-->
+<div class="modal fade" id="sendmailcotizaciones" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog modal-md"  role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enviar Respuesta Por Correo</h5>
+                </div>
+                <div class="modal-body">
+                    <p><i>Ingrese el correo.</i></p>
+                    <input type="email" class="form-control" id="email_enviar"><br>
+                    <textarea class="form-control" id="comentarioCot" rows="4"></textarea>
+                </div>
+               
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <a  class="btn btn-primary" id="send_mailCot">Enviar</a>
+                </div>
+            </div>
+    </div>
+</div>
