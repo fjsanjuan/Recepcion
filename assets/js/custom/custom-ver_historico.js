@@ -4481,6 +4481,7 @@ $(document).off('click', '#modaldocumentacion .down_f1816').on('click', '#modald
 						url:'https://isapi.intelisis-solutions.com/reportes/getFormatoF1863',
 						formatos: [
 							{url: 'https://isapi.intelisis-solutions.com/reportes/f1863PDF', name: 'F1863'},
+							// {url: 'http://127.0.0.1:8000/reportes/getPDFCausaRaizComponente', name: 'CRC'},
 							{url: 'https://isapi.intelisis-solutions.com/reportes/getPDFCausaRaizComponente', name: 'CRC'},
 						]
 					},
@@ -6169,6 +6170,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 	const form = new FormData();
 	form.append('id_diagnostico', id);
 	form.append('check', $(this).is(':checked'));
+	_this = this;
     swal({
 		title: $(this).is(':checked') ? '¿Autorizar Anverso?' : '¿Desautorizar Anverso?',
 		showCancelButton: true,
@@ -6194,7 +6196,8 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 	            if (data.estatus) {
 	                swal(data.mensaje, '', 'success');
 	            }else{
-	                $(this).prop('checked', !$(this).is(':checked'));
+	            	toastr.warning(data.mensaje);
+	                $(_this).prop('checked', !$(_this).is(':checked'));
 	            }
 	        })
 	        .fail(function() {

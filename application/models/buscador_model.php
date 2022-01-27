@@ -5141,20 +5141,29 @@ class Buscador_Model extends CI_Model{
 	}
 	public function autorizar_linea($idDiagnostico, $check)
 	{
+		$intelisis = $this->load->database('other',true);
 		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->count_all_results();
 		if ($existe > 0) {
-			$this->db->trans_begin();
-			$this->db->where(['id_diagnostico' => $idDiagnostico]);
-			$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
-			$this->db->trans_complete();
-			if ($this->db->trans_status() === FALSE ){
-				$this->db->trans_rollback();
+			$diagnostico = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->get()->row_array();
+			$orden = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where(['id' => $diagnostico['id_orden']])->get()->row_array();
+			$venta = $intelisis->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
+			if (isset($venta['MovID'])) {
+				$this->db->trans_begin();
+				$this->db->where(['id_diagnostico' => $idDiagnostico]);
+				$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE ){
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = $check == 'true' ? 'No fue posible autorizar el anverso.' : 'No fue posible desautorizar el anverso.';
+				}else{
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = $check == 'true' ? 'Anverso autorizado correctamente.' : 'Anverso desautorizado correctamente.';
+				}
+			} else {
 				$response['estatus'] = false;
-				$response['mensaje'] = $check == 'true' ? 'No fue posible autorizar el anverso.' : 'No fue posible desautorizar el anverso.';
-			}else{
-				$this->db->trans_commit();
-				$response['estatus'] = true;
-				$response['mensaje'] = $check == 'true' ? 'Anverso autorizado correctamente.' : 'Anverso desautorizado correctamente.';
+				$response['mensaje'] = $check == 'true' ? 'Necesitas afectar la orden en intelisis antes de autorizar.' : 'Necesitas afectar la orden en intelisis antes de desautorizar.';
 			}
 		}else {
 			$response['estatus'] = false;
