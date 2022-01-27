@@ -439,6 +439,20 @@
 			alert("Hubo un error al mostrar los datos");
 		});	
 	});
+	$("#table_invoice2 tbody").off("click", "tr td button.coment_presupuesto2").on("click", "tr td button.coment_presupuesto2", function(e){
+		e.preventDefault();
+		var id = $(this).attr("id");
+		id = id.split("_");
+		var value = $("#coment_"+id[1]).val();
+		toastr.info(value, "Comentario", {
+            "timeOut": "0",
+            "extendedTImeout": "0",
+            "tapToDismiss": true,
+    		"onclick": false,
+    		"closeOnHover": false,
+            "positionClass": "toast-top-right",
+        });
+	});
 	$("#table_invoice tbody").on("click", "tr td button.coment_presupuesto", function(e){
 		e.preventDefault();
 		var id = $(this).attr("id");
@@ -1924,7 +1938,7 @@
 			table += "<td>"+value.descripcion+"<input type='hidden' name='descrip_"+numArt+"' id='descrip2_"+numArt+"' value='"+value.descripcion+"'/> </td>";
 			table += "<td><input class='qty md-textarea' name='art_qty_"+numArt+"' id='art_qty2_"+numArt+"' value='"+value.cantidad+"'/></td>";
 			table += "<td><input class='cost md-textarea' name='art_cost_"+numArt+"' id='art_cost2_"+numArt+"' value='"+value.precio_unitario+"'/></td>";
-			table +="<td><button class='btn btn-sm btn-info coment_presupuesto' id='comen_"+numArt+"'> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment2_"+numArt+"' value='"+value.comentario+"'/></td>";
+			table +="<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+numArt+"'> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment2_"+numArt+"' value='"+value.comentario+"'/></td>";
 			table += "<td><label class='price'>"+value.total_arts+"</label><input type='hidden' class='atotal' name='atotal_"+numArt+"' id='atotal2_"+numArt+"' value='"+value.total_arts+"'/></td>";
 			table +="<td style='display:none;' name='articulosad_"+numArt+"' id='articulosad2_"+numArt+"'>single</td>";
 			table += "<td style='display:none;' name='idpq_"+numArt+"' id='idpq2_"+numArt+"'>" + 'NA' + "</td>";
@@ -2196,9 +2210,9 @@
 		var table = "<tr class='item-row arst_add2' style='text-align:center;'>";
 		var comentarios  = $("#comentario_art2").val();
 		if(comentarios == null || comentarios == ""){
-			var coment = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+numArt+"' disabled> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment2_"+numArt+"' value='"+comentarios+"'/></td>";
+			var coment = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+numArt+"' disabled> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment_"+numArt+"' value='"+comentarios+"'/></td>";
 		}else{
-			var coment = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+numArt+"'> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment2_"+numArt+"' value='"+comentarios+"'/></td>";
+			var coment = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+numArt+"'> <i class='fa fa-comment' ></i></button><input type='hidden' name='coment_"+numArt+"' id='coment_"+numArt+"' value='"+comentarios+"'/></td>";
 		}
 		if(art == "" || precio == "")
 		{
