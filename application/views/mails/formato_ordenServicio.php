@@ -440,7 +440,7 @@ $( document ).ready(function() {
 				<p class="etiquetas_encabezado"><b>Hora Entrega</b></p>
 			</div>
 			<div class="col-1">
-				<input type="text" name="input_fentrega" id="input_fentrega" class="input_sinBorde_fechas" value="<?=$cliente['hora_entrega']?>">
+				<input type="text" name="input_fentrega" id="input_fentrega" class="input_sinBorde_fechas" value="<?=$cliente['hRequerida']?>"> <!--Se cambio  hora_entrega a hRequerida-->
 			</div>
 		</div>
 		<div class="row row_cuatro">

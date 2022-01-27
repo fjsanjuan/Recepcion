@@ -2088,9 +2088,9 @@ class Buscador_Model extends CI_Model{
 									 ->where("id", $id_orden)
 									 ->where("eliminado", 0)
 									 ->get()->row_array();
-
 		
-		$datos["cliente"] += $intelisis->select("MovID,Pasajeros,ar.Descripcion1")
+		//$datos["cliente"] += $intelisis->select("MovID,Pasajeros,ar.Descripcion1")
+		$datos["cliente"] += $intelisis->select("MovID,Pasajeros,ar.Descripcion1,HoraRequerida as hRequerida") //Se renombro horaRequerida
 												->from("Venta vta")
 												->join("VIN vn", "vta.servicioSerie = vn.vin")
 												->join("art ar", "ar.Articulo = vta.ServicioArticulo")
