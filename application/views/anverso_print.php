@@ -169,16 +169,19 @@ word-break: break-word;
 									
 									<div class="row">
 									<div class="column cuarenta content-center pad-tp pad-bt">
-										<strong class="header-right-title" id="num_orden">Folio: T572843 </strong>
+									<?php 
+										$Mov = (isset($Mov["MovID"])) ? $Mov["MovID"] : "-";
+									?>
+	                                    <strong class="header-right-title" id="num_orden">Folio: <?php echo $Mov?> </strong>
 									</div>
 										<div class="column veinte pad-tp pad-bt" id="num_torre">
 											Torre: 110
 										</div>
 										<div class="column cuarenta pad-tp pad-bt" id="folio_consecutivo">
 										<?php 
-											$movID = (isset($usuario["movID"]["MovID"])) ? $usuario["movID"]["MovID"] : "-";
+											$movID = (isset($movID["MovID"])) ? $movID["MovID"] : "-";
 										?>
-										   Consecutivo: <?=$movID?>
+										   Consecutivo: <?php echo $movID?>
 										</div>
 									</div>
 								</div>
