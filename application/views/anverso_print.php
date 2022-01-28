@@ -472,7 +472,10 @@ word-break: break-word;
 			//$aux = $aux_fin->diff($aux_inicio);
 			$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
 			$costo_tiempo += is_nan($aux) ? 0 : $aux;
+			$tiempo_inicio[$key]['FechaInicio'] = $aux_inicio->format('d/m/Y H:i:s');
+			$tiempo_inicio[$key]['FechafIN'] = $aux_fin->format('d/m/Y H:i:s');
 		}
+		$json_inicio = json_encode($tiempo_inicio);
 	?>
 
 	<script>
@@ -528,8 +531,8 @@ $(document).ready(function(){
 		$.each(tiempo_inicio, function (index, val) {
 			inicio = new Date(val.FechaInicio);
 			fin = new Date(val.FechafIN ? val.FechafIN : val.FechaInicio);
-			$(tiempos_inicio[index]).text(inicio.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(',', ''));
-			$(tiempos_fin[index]).text(fin.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(',', ''));
+			$(tiempos_inicio[index]).text(val.FechaInicio);
+			$(tiempos_fin[index]).text(val.FechafIN);
 		});
 		$('.costo_tiempo').text(costo_tiempo+' Hrs.');
 	});
