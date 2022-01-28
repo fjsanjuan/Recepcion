@@ -467,7 +467,7 @@ word-break: break-word;
 	<?php
 		$costo_tiempo = 0;
 		foreach ($tiempo_inicio as $key => $inicio) {
-			$aux_fin = new DateTime($inicio['FechafIN']);
+			$aux_fin = new DateTime($inicio['FechafIN'] ? $inicio['FechafIN'] : $inicio['FechaInicio']);
 			$aux_inicio = new DateTime($inicio['FechaInicio']);
 			//$aux = $aux_fin->diff($aux_inicio);
 			$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
@@ -526,8 +526,10 @@ $(document).ready(function(){
 		const tiempos_fin =  $('.tiempo_fin');
 		let costo_tiempo = "<?php echo number_format($costo_tiempo, 2); ?>";
 		$.each(tiempo_inicio, function (index, val) {
-			$(tiempos_inicio[index]).text(val.FechaInicio);
-			$(tiempos_fin[index]).text(val.FechafIN);
+			inicio = new Date(val.FechaInicio);
+			fin = new Date(val.FechafIN ? val.FechafIN : val.FechaInicio);
+			$(tiempos_inicio[index]).text(inicio.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(',', ''));
+			$(tiempos_fin[index]).text(fin.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(',', ''));
 		});
 		$('.costo_tiempo').text(costo_tiempo+' Hrs.');
 	});

@@ -572,14 +572,14 @@ $(document).ready(function(){
         const tiempos_fin =  $('.tiempo_fin');
         let costo_tiempo = 0;
         $.each(tiempo_inicio, function (index, val) {
-            $(tiempos_inicio[index]).text(val.FechaInicio);
-            $(tiempos_fin[index]).text(val.FechafIN);
             inicio = new Date(val.FechaInicio);
-            fin = new Date(val.FechafIN);
+            fin = new Date(val.FechafIN ? val.FechafIN : val.FechaInicio);
             tiempo_actual =(fin - inicio) / (1000*3600)
             costo_tiempo += isNaN(tiempo_actual) ? 0 : tiempo_actual;
             costo_tiempo = isNaN(costo_tiempo) ? 0 : costo_tiempo;
             $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.')
+            $(tiempos_inicio[index]).text(inicio.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(',', ''));
+            $(tiempos_fin[index]).text(fin.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(',', ''));
         });
         $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {
