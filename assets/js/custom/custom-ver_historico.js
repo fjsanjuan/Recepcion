@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -305,7 +305,7 @@ $(document).ready(function() {
 					action_tecnico		+= "<button class='btn btn-sm new_budget2' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' data-toggle='modal' data-target='#modalBuscArt' id='"+val["id"]+"'><i class='fas fa-file-invoice-dollar'></i>  &nbsp&nbsp Cotizar Refacciones</button>";
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				}else {
-					action_tecnico		+="<button class='btn btn-sm btn-primary mano_obra' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#addManObra' id='mano_obra-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Mano de Obra</button>";
+					action_tecnico		+="<button class='btn btn-sm btn-primary mano_obra' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='manoObra-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Mano de Obra</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
@@ -5649,7 +5649,7 @@ function req_inexistente(idOrden, idReq, formato, reintentar = false) {
 			}
 		})
 }
-$(document).on("click", ".tabla_hist tbody tr td button.mano_obra", function(e) {
+$(document).off('click', '.mano_obra').on('click', '.mano_obra', function(e) {
 	$('#tabla_invoice tbody').empty();
 	$('#table_mano tbody').empty();
 	$('#subTotal').val(0);
@@ -5676,7 +5676,7 @@ $(document).on("click", ".tabla_hist tbody tr td button.mano_obra", function(e) 
 		if (data.estatus) {
 			//toastr.info(data.mensaje);
 			$("#ZonaImpuesto_selected").append('<option value="' + data.Porcentaje['Zona'] + '" data-porc="'+data.Porcentaje['Porcentaje']+'" selected>' + data.Porcentaje['Zona'] + '</option>');
-			
+			$('#addManObra').modal('toggle');
 		}else {
 			$('#addManObra').modal('hide');
 			toastr.warning(data.mensaje);
@@ -6038,7 +6038,7 @@ $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', funct
 		}
 	})
 	.fail(function(error) {
-		toastr.warning('Ocurrió un mensaje al intentar asignar el técnico.');
+		toastr.warning('Ocurrió un error al intentar asignar el técnico.');
 		console.log("error", error);
 	})
 	.always(function() {

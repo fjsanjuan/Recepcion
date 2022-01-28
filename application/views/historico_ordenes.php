@@ -807,12 +807,12 @@ table tr.active {
 <?php $this->load->view('modals/ver_lineasTrabajo'); ?>
 
 <!-- PARA MANO DE OBRA-->
-<div id="addManObra" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="manObra" aria-hidden="true">
+<div class="modal fade" id="addManObra" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="false">
     <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold" id="manObra">Mano de Obra</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <h4 class="modal-title w-100 font-weight-bold" id="TitlemanObra">Mano de Obra</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body" style="text-align:center;">
