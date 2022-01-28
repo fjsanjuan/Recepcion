@@ -5239,7 +5239,26 @@ class Buscador_Model extends CI_Model{
 			}
 		} else {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No hay líneas cargadas para la garantíassss.';
+			$response['mensaje'] = 'No hay líneas cargadas para la garantías.';
+		}
+		return $response;
+	}
+	public function validar_estatus_orden_mano($idOrden)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+		if (sizeof($orden) > 0 ) {
+			$venta = $this->db2->select('Estatus')->from('Venta')->where(['id' => $orden['id_orden_intelisis']])->get()->row_array();
+			if ($venta['Estatus'] != 'SINAFECTAR') {
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No puedes añadir manos de obra a una orden afectada.';
+			}else {
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Estatus sin afectar.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
 		}
 		return $response;
 	}

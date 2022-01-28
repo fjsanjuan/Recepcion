@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -5678,10 +5678,12 @@ $(document).on("click", ".tabla_hist tbody tr td button.mano_obra", function(e) 
 			$("#ZonaImpuesto_selected").append('<option value="' + data.Porcentaje['Zona'] + '" data-porc="'+data.Porcentaje['Porcentaje']+'" selected>' + data.Porcentaje['Zona'] + '</option>');
 			
 		}else {
-			toastr.warning('Zona de impuestos no encontrada.');
+			$('#addManObra').modal('hide');
+			toastr.warning(data.mensaje);
 		}
 	})
 	.fail(function() {
+		$('#addManObra').modal('hide');
 		console.log('error');
 		toastr.warning("Ocurrió un error.");
 	})

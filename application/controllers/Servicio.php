@@ -3207,7 +3207,10 @@ class Servicio extends CI_Controller {
 	}
 	public function obtener_iva($idOrden)
 	{
-		$response = $this->buscador_model->obtener_iva($idOrden);
+		$response = $this->buscador_model->validar_estatus_orden_mano($idOrden);
+		if ($response['estatus'] == true) {
+			$response = $this->buscador_model->obtener_iva($idOrden);
+		}
 		echo json_encode($response);
 	}
 	public function firmar_reciboRefacciones($idOrden = null, $idRequisicion = null)
