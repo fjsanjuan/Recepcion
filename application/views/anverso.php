@@ -749,6 +749,7 @@ $(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso
                 swal('Anverso actualizado correctamente.', '', 'success');
                 $('#form_codigos').trigger('reset');
                 $('#imprimir').trigger('click');
+				onClick=document.location.reload(true);
 
             }else{
                 toastr.warning(data.mensaje);
