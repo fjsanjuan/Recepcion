@@ -2386,8 +2386,13 @@ class Buscador_Model extends CI_Model{
 												->get()->row_array();
 		}
 
+		$ordenes_validas = [];
 		foreach ($ordenes as $key => $value) 
 		{
+			$venta = $intelisis->select("Estatus")
+												->from("Venta")
+												->where("ID", $value["id_orden_intelisis"])
+												->get()->row_array(); 
 			$ordenes[$key]["movID"] = $intelisis->select("MovID")
 												->from("Venta")
 												->where("ID", $value["id_orden_intelisis"])
@@ -2396,19 +2401,22 @@ class Buscador_Model extends CI_Model{
 												->from("Venta")
 												->where("ID", $value["id_orden_intelisis"])
 												->get()->row_array(); 
+			if (isset($venta['Estatus']) && $venta['Estatus'] != 'CANCELADO') {
+				$ordenes_validas[] = $ordenes[$key];
+			}
 		}
 
-		foreach ($ordenes as $key => $value) 
+		foreach ($ordenes_validas as $key => $value) 
 		{
 			$firma = $this->db->select("firma_electronica as signAsesor")
 							->from("usuarios")
 							->where("cve_intelisis",$value['clave_asesor'])
 							->get()->row_array();
 							
-			$ordenes[$key] += is_array($firma) ? $firma : ['signAsesor' => null];
+			$ordenes_validas[$key] += is_array($firma) ? $firma : ['signAsesor' => null];
 		}
 
-		return $ordenes;					
+		return $ordenes_validas;					
 	}
 
 	public function ver_datosHojaMult($id_orden = null)
