@@ -607,6 +607,7 @@ $(document).ready(function(){
 				toastr.info(response.mensaje);
 				const link = $('<a>', {'href':response.data['archivo'], 'download':response.data['nombre']+'.pdf', 'target':'_blank'});
 							link[0].click();
+							onClick=document.location.reload(true);
 			}
 		});
     });
@@ -749,7 +750,6 @@ $(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso
                 swal('Anverso actualizado correctamente.', '', 'success');
                 $('#form_codigos').trigger('reset');
                 $('#imprimir').trigger('click');
-				onClick=document.location.reload(true);
 
             }else{
                 toastr.warning(data.mensaje);
