@@ -4151,7 +4151,11 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_detalles_diagnostico($idOrden, $idRevision = null)
 	{
-		$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 0])->get()->row_array();
+		if ($idRevision == null) {
+			$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 0])->get()->row_array();
+		}else {
+			$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'id_diagnostico' => $idRevision, 'terminado' => 0])->get()->row_array();
+		}
 		if (sizeof($response['data']) > 0) {
 			$response['data']['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $response['data']['id_diagnostico']])->get()->result_array();
 			$response['estatus']          = true;

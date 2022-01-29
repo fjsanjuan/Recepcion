@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -269,7 +269,7 @@
 				btn_jefe	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_jefe		="";
 				if(val['movimiento'] != null){
-					action_jefe		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
+					//action_jefe		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_jefe		+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
 					action_jefe		+="<button type='button' class='btn btn-sm btn-primary historial_anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='historialAnverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbspVer Manos Obra</button>";
 					
@@ -306,7 +306,7 @@
 					action_tecnico		 += "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				}else {
 					action_tecnico		+="<button class='btn btn-sm btn-primary mano_obra' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='manoObra-"+val["id"]+"'><i class='fas fa-search'></i>&nbsp&nbsp Mano de Obra</button>";
-					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
+					//action_tecnico		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary historial_anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='historialAnverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbspVer Manos Obra</button>";
@@ -6148,7 +6148,11 @@ function obtener_historial_anversos(id) {
 	})
 	.done(function(resp) {
 		if (resp.estatus) {
-			$('#historialDiagnosticoModal').modal('toggle');
+			if (!localStorage.getItem('abrirmodal')) {
+				$('#historialDiagnosticoModal').modal('toggle');
+			}else {
+				localStorage.removeItem('abrirmodal');
+			}
 			construir_tabla_historial_anversos(resp.manos);
 		}else {
 			toastr.info(resp.mensaje);
@@ -6168,20 +6172,25 @@ function construir_tabla_historial_anversos(data) {
 	tr = $('<tr>');
 	tr.append($('<th>',{'text': 'Mano de Obra'}));
 	tr.append($('<th>',{'text': 'Técnico'}));
-	tr.append($('<th>',{'text': 'Autorizar'}));
+	tr.append($('<th>',{'text': 'Autorización'}));
 	tr.append($('<th>',{'text': 'Terminada'}));
+	tr.append($('<th>',{'text': 'Anverso'}));
 	tr.append($('<th>',{'text': 'PDF'}));
 	tr.append($('<th>',{'text': 'Detalles'}));
 	$('#tabla_diagnosticos').append(tr);
 	$.each(data, function(index, val) {
 		tr = $('<tr>');
-		pdf =val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
+		anverso = $('<button>', {'class': 'btn btn-sm btn-primary abriranverso', 'id': `abriranverso-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-edit'}));
+		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
 		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario asignar un técnico a la mano de obra desde recepción';
+		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID});
+		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true: false) : false)
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
 		tr.append($('<td>').append(autorizar));
 		tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
+		tr.append($('<td>').append(anverso));
 		tr.append($('<td>').append(pdf));
 		tr.append($('<td>').append(detalles));
 		$('#tabla_diagnosticos').append(tr);
@@ -6276,4 +6285,48 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 	        swal('Cancelado', '', 'error');
 	    }
     });
+});
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abriranverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .abriranverso', function(event) {
+	event.preventDefault();
+	idOrden = localStorage.getItem('hist_id_orden');
+	id = $(this).prop('id').split('-')[1];
+	if (id.length > 1) {
+		id = id[1];
+		var win = window.open(base_url+ "index.php/servicio/garantia_anverso/"+idOrden+"/"+id, '_blank');
+		win.focus();
+	} else {
+		data = $(this).data();
+		const form = new FormData();
+		form.append('renglon', data.renglon);
+		form.append('renglonId', data.renglonId);
+		form.append('renglonSub', data.renglonSub);
+		// form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
+		$.ajax({
+			cache: false,
+			url: `${base_url}index.php/servicio/generar_anverso/${idOrden}/${data.idVenta}`,
+			contentType: false,
+			processData: false,
+			type: 'POST',
+			dataType: 'json',
+			data: form,
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		}).done(function (response) {
+			if (response.estatus) {
+				localStorage.setItem('abrirmodal', 1);
+				toastr.info(response.mensaje);
+				obtener_historial_anversos(idOrden);
+				id = response.id_diagnostico;
+				var win = window.open(base_url+ "index.php/servicio/garantia_anverso/"+idOrden+"/"+id, '_blank');
+				win.focus();
+			}
+		}).fail(function(error) {
+			toastr.warning('Ocurrió un error al obtener el PDF.');
+			console.log("error", error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+	}
 });

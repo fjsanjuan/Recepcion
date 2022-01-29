@@ -2811,7 +2811,7 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		}else {
-			$response = $this->buscador_model->obtener_detalles_diagnostico($idOrden = null, $idDiagnostico = null);
+			$response = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
 		}
 		echo json_encode($response);
 	}
@@ -2980,12 +2980,12 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	public function garantia_anverso($idOrden = null){
+	public function garantia_anverso($idOrden = null, $idDiagnostico = null){
 		$this->db2 = $this->load->database('other',true); 
 		$orden = $this->db->select("id_orden_intelisis")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
 		$Mov = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
 		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
-		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden);
+		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
 		$datos['total_anversos'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 1])->count_all_results();
 		$datos['total_manos'] =  $this->buscador_model->obtener_manos_obra_orden($idOrden)['total_manos'];
 		$datos['id_orden']= $idOrden;
@@ -3397,5 +3397,39 @@ class Servicio extends CI_Controller {
 		echo json_encode( $response);
 		
 	}
-	
+	public function generar_anverso($idOrden = null, $idVenta = null)
+	{
+		$renglon = $this->input->post('renglon') !== '' ? $this->input->post('renglon') : null;
+		$renglonId = $this->input->post('renglonId') !== '' ? $this->input->post('renglonId') : null;
+		$renglonSub = $this->input->post('renglonSub') !== '' ? $this->input->post('renglonSub') : null;
+		$claveTecnico = $this->input->post('claveTecnico') !== '' ? $this->input->post('claveTecnico') : null;
+		if ($idOrden == null || $idVenta == null || $renglon == null || $renglonId == null || $renglonSub == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$this->db2 = $this->load->database('other',true);
+			$venta = $this->db2->select('FordStar')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
+			$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No hay ninguna mano de obra programada con la información proporcionada.';
+			if (sizeof($venta) > 0) {
+				$diagnostico['mecanico_clave'] = $venta['FordStar'];
+				$diagnostico['VentaID'] = $idVenta;
+				$diagnostico['Renglon'] = $renglon;
+				$diagnostico['RenglonSub'] = $renglonSub;
+				$diagnostico['RenglonID'] = $renglonId;
+				$diagnostico['id_tecnico'] =isset($tecnico['id']) ? $tecnico['id'] : null;
+				$diagnostico['detalles'] = [];
+				$response = $this->buscador_model->guardar_diagnostico($idOrden, $diagnostico);
+				if ($response['estatus'] == true) {
+					$this->db->trans_begin();
+					unset($diagnostico['detalles']);
+					$this->db->where(['id_diagnostico' => $response['id_diagnostico']]);
+					$this->db->update('diagnostico_tecnico', $diagnostico);
+					$this->db->trans_complete();
+				}
+			}
+		}
+		echo json_encode($response);
+	}
 }
