@@ -2981,11 +2981,19 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 	public function garantia_anverso($idOrden = null, $idDiagnostico = null){
+		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'id_orden' => $idOrden, 'terminado' => 0])->count_all_results();
+		if ($idOrden == null || $idDiagnostico == null || $existe == 0) {
+			$response['estatus'] = false;
+			$response['heading'] = 'Anverso no válido.';
+			$response['message'] = 'No se encontró ningún anverso pendiente con la información proporcionada.';
+			$this->load->view("errors/html/error_404", $response);
+			return;
+		}
 		$this->db2 = $this->load->database('other',true); 
+		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
 		$orden = $this->db->select("id_orden_intelisis")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
 		$Mov = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
 		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
-		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
 		$datos['total_anversos'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 1])->count_all_results();
 		$datos['total_manos'] =  $this->buscador_model->obtener_manos_obra_orden($idOrden)['total_manos'];
 		$datos['id_orden']= $idOrden;
@@ -3403,13 +3411,23 @@ class Servicio extends CI_Controller {
 		$renglonId = $this->input->post('renglonId') !== '' ? $this->input->post('renglonId') : null;
 		$renglonSub = $this->input->post('renglonSub') !== '' ? $this->input->post('renglonSub') : null;
 		$claveTecnico = $this->input->post('claveTecnico') !== '' ? $this->input->post('claveTecnico') : null;
+		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'VentaID' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, 'renglonSub' => $renglonSub])->count_all_results();
+		$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
+		$orden_pendiente = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_tecnico' => isset($tecnico['id']) ? $tecnico['id'] : null, 'terminado' => 0])->get()->row_array();
 		if ($idOrden == null || $idVenta == null || $renglon == null || $renglonId == null || $renglonSub == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
-		}else {
+		}else if($existe > 0) {
+			$response['mensaje'] = 'Ya existe un anverso abierto para está mano de obra, recarga la página si no puedes visualizarlo.';
+			$response['estatus'] = false;
+		}else if(sizeof($orden_pendiente) > 0){
+			$response['estatus'] = false;
+			$this->db2 = $this->load->database('other',true);
+			$venta = $this->db2->select('descripcion')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
+			$response['mensaje'] = 'El técnico tiene una mano de obra pendiente.('.(isset($venta['descripcion']) ? $venta['descripcion'] : '').')';
+		} else {
 			$this->db2 = $this->load->database('other',true);
 			$venta = $this->db2->select('FordStar')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
-			$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
 			$response['estatus'] = false;
 			$response['mensaje'] = 'No hay ninguna mano de obra programada con la información proporcionada.';
 			if (sizeof($venta) > 0) {

@@ -6320,6 +6320,8 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abrira
 				id = response.id_diagnostico;
 				var win = window.open(base_url+ "index.php/servicio/garantia_anverso/"+idOrden+"/"+id, '_blank');
 				win.focus();
+			}else {
+				toastr.info(response.mensaje);
 			}
 		}).fail(function(error) {
 			toastr.warning('Ocurrió un error al obtener el PDF.');
