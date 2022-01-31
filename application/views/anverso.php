@@ -273,39 +273,72 @@ input:focus{
 	                            <!--<input type="text" name="firma_tecnico" id="firma_tecnico" style="display: none;">-->
 	                        </div>
 	                        <?php else: ?>
-	                        <?php foreach(isset($data['detalles']) ? $data['detalles'] : [] as $key => $detalle): ?>
-	                        <div class="row">
-	                        <input class="" value="<?=$detalle['id'];?>" name="detalles[<?=$key;?>][id_revision]" style="display: none;">
-	                            <div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="text" name="detalles[<?=$key;?>][num_reparacion]" id="" style="width: 98%" value="<?=$detalle['num_reparacion'];?>" required>
-	                            </div>
-	                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="text" name="detalles[<?=$key;?>][luz_de_falla]" id="" style="width: 98%;" value="<?=$detalle['luz_de_falla'];?>" required>
-	                            </div>
-	                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito" style='text-decoration: none;'>
-	                            <select id="select_codigo" name="detalles[<?=$key;?>][tren_motriz]" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;" required>
-	                                <option value="">Tipo códigos</option>
-	                                <option value="KOEO" <?php echo ($detalle['tren_motriz'] == 'KOEO' ? 'selected' : '');?>>KOEO</option>
-	                                <option value="KOEC" <?php echo ($detalle['tren_motriz'] == 'KOEC' ? 'selected' : '');?>>KOEC</option>
-	                                <option value="KOER" <?php echo ($detalle['tren_motriz'] == 'KOER' ? 'selected' : '');?>>KOER</option>
-	                                <option value="CARROCERIA" <?php echo ($detalle['tren_motriz'] == 'CARROCERIA' ? 'selected' : '');?>>CARROCERIA</option>
-	                                <option value="CHASIS" <?php echo ($detalle['tren_motriz'] == 'CHASIS' ? 'selected' : '');?>>CHASIS</option>
-	                                <option value="INDEFINIDO" <?php echo ($detalle['tren_motriz'] == 'INDEFINIDO' ? 'selected' : '');?>>INDEFINIDO</option>
-	                                <option value="OTRO" <?php echo ($detalle['tren_motriz'] == 'OTRO' ? 'selected' : '');?>>OTRO</option>
-	                            </select>
-	                            </div>
-	                            <div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="text" name="detalles[<?=$key;?>][codigos]" id="" style="width: 98%;" value="<?=$detalle['codigos'];?>" required>
-	                            </div>
-	                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-								<i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
-	                            </div>
-	                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
-								<i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i>
-	                            </div>
-	                            <!--<input type="text" name="firma_tecnico" id="firma_tecnico" style="display: none;">-->
-	                        </div>
-	                        <?php endforeach;?>
+								<?php if(sizeof($data['detalles']) == 0): ?>
+									<div class="row">
+										<div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
+											<input class="required write" type="text" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
+											<input class="required write" type="text" name="detalles[0][luz_de_falla]" id="" style="width: 98%;" required>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito" style='text-decoration: none;'>
+										<select name="detalles[0][tren_motriz]" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;" required>
+											<option value="">Tipo códigos</option>
+											<option value="KOEO">KOEO</option>
+											<option value="KOEC">KOEC</option>
+											<option value="KOER">KOER</option>
+											<option value="CARROCERIA">CARROCERIA</option>
+											<option value="CHASIS">CHASIS</option>
+											<option value="INDEFINIDO">INDEFINIDO</option>
+											<option value="OTRO">OTRO</option>
+										</select>
+										</div>
+										<div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
+											<input class="required write" type="text" name="detalles[0][codigos]" id="" style="width: 98%;" required>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
+										<i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
+										<i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i>
+										</div>
+										<!--<input type="text" name="firma_tecnico" id="firma_tecnico" style="display: none;">-->
+									</div>
+								<?php else: ?>
+									<?php foreach(isset($data['detalles']) ? $data['detalles'] : [] as $key => $detalle): ?>
+									<div class="row">
+									<input class="" value="<?=$detalle['id'];?>" name="detalles[<?=$key;?>][id_revision]" style="display: none;">
+										<div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
+											<input class="required write" type="text" name="detalles[<?=$key;?>][num_reparacion]" id="" style="width: 98%" value="<?=$detalle['num_reparacion'];?>" required>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
+											<input class="required write" type="text" name="detalles[<?=$key;?>][luz_de_falla]" id="" style="width: 98%;" value="<?=$detalle['luz_de_falla'];?>" required>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito" style='text-decoration: none;'>
+										<select id="select_codigo" name="detalles[<?=$key;?>][tren_motriz]" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;" required>
+											<option value="">Tipo códigos</option>
+											<option value="KOEO" <?php echo ($detalle['tren_motriz'] == 'KOEO' ? 'selected' : '');?>>KOEO</option>
+											<option value="KOEC" <?php echo ($detalle['tren_motriz'] == 'KOEC' ? 'selected' : '');?>>KOEC</option>
+											<option value="KOER" <?php echo ($detalle['tren_motriz'] == 'KOER' ? 'selected' : '');?>>KOER</option>
+											<option value="CARROCERIA" <?php echo ($detalle['tren_motriz'] == 'CARROCERIA' ? 'selected' : '');?>>CARROCERIA</option>
+											<option value="CHASIS" <?php echo ($detalle['tren_motriz'] == 'CHASIS' ? 'selected' : '');?>>CHASIS</option>
+											<option value="INDEFINIDO" <?php echo ($detalle['tren_motriz'] == 'INDEFINIDO' ? 'selected' : '');?>>INDEFINIDO</option>
+											<option value="OTRO" <?php echo ($detalle['tren_motriz'] == 'OTRO' ? 'selected' : '');?>>OTRO</option>
+										</select>
+										</div>
+										<div class="column diez border-right-light border-bottom-light pad-tp pad-bt requisito">
+											<input class="required write" type="text" name="detalles[<?=$key;?>][codigos]" id="" style="width: 98%;" value="<?=$detalle['codigos'];?>" required>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
+										<i class="fa fa-plus fa-2x nuevo_codigo no_print" style="color:grey; cursor:pointer;" aria-hidden="true"></i>
+										</div>
+										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
+										<i class="fa fa-times fa-2x erase_line no_print" style="color:grey; cursor:pointer;"></i>
+										</div>
+										<!--<input type="text" name="firma_tecnico" id="firma_tecnico" style="display: none;">-->
+									</div>
+									<?php endforeach;?>
+								<?php endif; ?>
 	                        <?php endif; ?>
 							</div>
 	                        <?php
@@ -748,7 +781,7 @@ $(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso
         .done(function(data) {
             if (data.estatus) {
                 swal('Anverso actualizado correctamente.', '', 'success');
-                $('#form_codigos').trigger('reset');
+                //$('#form_codigos').trigger('reset');
 				if (id_perfil == 4){
                 $('#imprimir').trigger('click');
 				}

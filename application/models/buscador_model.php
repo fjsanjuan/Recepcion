@@ -4169,11 +4169,14 @@ class Buscador_Model extends CI_Model{
 	}
 	public function editar_diagnostico($idOrden, $datos)
 	{
-		$this->db->trans_start();
-		$this->db->where('id_diagnostico', $datos['id_diagnostico']);
-		$this->db->where("id NOT IN(".implode(',',array_column($datos['detalles'], 'id_revision')).")" );
-		$this->db->delete('detalles_diagnostico_tecnico');
-		$this->db->trans_complete();
+		
+		if(sizeof(array_column($datos['detalles'], 'id_revision')) > 0){
+			$this->db->trans_start();
+			$this->db->where('id_diagnostico', $datos['id_diagnostico']);
+			$this->db->where("id NOT IN(".implode(',',array_column($datos['detalles'], 'id_revision')).")" );
+			$this->db->delete('detalles_diagnostico_tecnico');
+			$this->db->trans_complete();
+		}
 
 		$logged_in = $this->session->userdata("logged_in");
 		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'id_diagnostico' => $datos['id_diagnostico']])->get()->row_array();
@@ -4191,7 +4194,7 @@ class Buscador_Model extends CI_Model{
 				'equipo_diagnostico'   => isset($datos['equipo_diagnostico']) ? $datos['equipo_diagnostico'] : null,
 				'reparacion_efectuada' => isset($datos['reparacion_efectuada']) ? $datos['reparacion_efectuada'] : null,
 				'clave_defect'         => isset($datos['clave_defect']) ? $datos['clave_defect'] : null,
-				'retorno_partes'       => isset($datos['retorno_partes']) ? ( $datos['retorno_partes']) : null,
+				'retorno_partes'       => isset($datos['retorno_partes']) ?( $datos['retorno_partes'] != '' ? $datos['retorno_partes'] : null ): null,
 				'mecanico_clave'       => isset($datos['mecanico_clave']) ? $datos['mecanico_clave'] : null,
 				'costo_tiempo'         => isset($datos['costo_tiempo']) ? $datos['costo_tiempo'] : 0,
 				
