@@ -5210,6 +5210,9 @@ class Buscador_Model extends CI_Model{
 		if (sizeof($orden) > 0 ) {
 			$response['manos'] = $this->db2->select('*')->from('seguimientoTecnicosWeb')->where(['ID' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
 			if (sizeof($response['manos']) > 0) {
+				foreach ($response['manos'] as $key => $mano) {
+					$response['manos'][$key]['autorizado'] = $this->db->select('autorizado')->from('diagnostico_tecnico')->where(['VentaID' => $mano['ID'], 'Renglon' => $mano['Renglon'], 'RenglonID' => $mano['RenglonID'],'RenglonSub' => $mano['RenglonSub'], 'autorizado' => 1])->count_all_results();
+				}
 				$response['estatus'] = true;
 				$response['mensaje'] = "Ok.";
 				$response['total_manos'] = sizeof($response['manos']);

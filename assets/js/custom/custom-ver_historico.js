@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -5973,6 +5973,7 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 					let con_movimientos = 0;
 					if (respLineas.estatus) {
 						$.each(respLineas.manos, function(index, val) {
+							if(val.autorizado == 0)
 							$('#asigna_linea').append($(`<option>`,{'value': val.ID, 'text': `${val.DescripcionExtra}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`}));
 						});
 						$('#asignModal').modal('toggle');
@@ -6291,7 +6292,6 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abrira
 	idOrden = localStorage.getItem('hist_id_orden');
 	id = $(this).prop('id').split('-')[1];
 	if (id.length > 1) {
-		id = id[1];
 		var win = window.open(base_url+ "index.php/servicio/garantia_anverso/"+idOrden+"/"+id, '_blank');
 		win.focus();
 	} else {
