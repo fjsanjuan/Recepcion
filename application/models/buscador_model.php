@@ -5085,7 +5085,7 @@ class Buscador_Model extends CI_Model{
 		$data = [
 			'Agente' => $datos['asigna_tecnico']
 		];
-		$data_diagnostico = [
+		/*$data_diagnostico = [
 			'VentaID' => $id,
 			'Renglon' => $datos['Renglon'],
 			'RenglonID' => $datos['RenglonID'],
@@ -5104,7 +5104,7 @@ class Buscador_Model extends CI_Model{
 			$this->db->trans_commit();
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Técnico asignado correctamente.';
-		}
+		}*/
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_begin();
 		$this->db2->where(['ID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
