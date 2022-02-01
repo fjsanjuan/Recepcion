@@ -3413,7 +3413,7 @@ class Servicio extends CI_Controller {
 		$claveTecnico = $this->input->post('claveTecnico') !== '' ? $this->input->post('claveTecnico') : null;
 		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'VentaID' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, 'renglonSub' => $renglonSub])->count_all_results();
 		$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
-		$orden_pendiente = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_tecnico' => isset($tecnico['id']) ? $tecnico['id'] : null, 'terminado' => 0])->get()->row_array();
+		$orden_pendiente = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_tecnico' => isset($tecnico['id']) ? $tecnico['id'] : null, 'terminado' => 0])->get()->row_array();
 		if ($idOrden == null || $idVenta == null || $renglon == null || $renglonId == null || $renglonSub == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
@@ -3423,8 +3423,9 @@ class Servicio extends CI_Controller {
 		}else if(sizeof($orden_pendiente) > 0){
 			$response['estatus'] = false;
 			$this->db2 = $this->load->database('other',true);
-			$venta = $this->db2->select('descripcion')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
-			$response['mensaje'] = 'El técnico tiene una mano de obra pendiente.('.(isset($venta['descripcion']) ? $venta['descripcion'] : '').')';
+			$venta = $this->db2->select('descripcion')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $orden_pendiente['VentaID'], 'Renglon' => $orden_pendiente['Renglon'], 'RenglonID' => $orden_pendiente['RenglonID'], /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
+			$movID = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden_pendiente['VentaID']])->get()->row_array();
+			$response['mensaje'] = 'El técnico tiene una mano de obra pendiente.('.(isset($venta['descripcion']) ? $venta['descripcion'] : '').') Para la orden: '.(isset($movID['MovID']) ? $movID['MovID'] : 'Sin Afectar');
 		} else {
 			$this->db2 = $this->load->database('other',true);
 			$venta = $this->db2->select('FordStar')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();

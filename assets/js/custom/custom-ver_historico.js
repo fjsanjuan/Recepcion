@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -6325,7 +6325,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abrira
 				toastr.info(response.mensaje);
 			}
 		}).fail(function(error) {
-			toastr.warning('Ocurrió un error al obtener el PDF.');
+			toastr.warning('Ocurrió un error al generar el anverso.');
 			console.log("error", error);
 		})
 		.always(function() {
