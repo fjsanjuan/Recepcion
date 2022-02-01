@@ -6185,7 +6185,7 @@ function construir_tabla_historial_anversos(data) {
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
 		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario asignar un técnico a la mano de obra desde recepción';
-		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID});
+		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true: false) : false)
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
@@ -6300,6 +6300,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abrira
 		form.append('renglon', data.renglon);
 		form.append('renglonId', data.renglonId);
 		form.append('renglonSub', data.renglonSub);
+		form.append('claveTecnico', data.Agente);
 		// form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
 		$.ajax({
 			cache: false,
