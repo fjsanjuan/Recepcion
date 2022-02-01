@@ -175,6 +175,7 @@ input:focus{
 	            	<!-- <a class="no_print" name="" id="auth_linea" type="button" href="#">Autorizar</a> -->
 	            <?php endif; ?>
 	            <a class="active no_print" href="#home" id="imprimir">Imprimir</a>
+				<a class="no_print" type="button" id="clearForm">Limpiar</a>
 	            <!--<a href="#news">News</a>
 	            <a href="#contact">Contact</a>
 	            <a href="#about">About</a>-->
@@ -601,6 +602,11 @@ input:focus{
             x.style.opacity = "0";
         }
 $(document).ready(function(){
+	$(document).on('click','#clearForm', function (event) {
+		event.preventDefault();
+		$('.tiempo_inicio, .tiempo_fin, .costo_tiempo').text('');
+		$('input, select, textarea').val('');
+	})
 	//console.log('document',this.documentElement.innerHTML);
     if (id_perfil == 4){$('#firmaTecnico').hide();}
 		if (id_perfil == 5){$('#firmJefe').hide();}
@@ -644,8 +650,7 @@ $(document).ready(function(){
 			}
 		});
     });
-  
-});		
+});	
 $(document).on("click", '#save_anverso', function(e){
 	e.preventDefault();
     console.log('id_orden', idOrden);
