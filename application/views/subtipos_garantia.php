@@ -85,14 +85,14 @@ table tr.active {
         </div>
     </div>
     <br>
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-sm-12">
             <h6><b>Seleccione, por favor, un rango de fechas:</b></h6>
         </div>
-    </div>
+    </div> -->
     <br>
     <div class="row">
-        <div class="col-sm-1 icono_calendario">
+        <!-- <div class="col-sm-1 icono_calendario">
             <i class="fa fa-calendar-alt"></i>
         </div>
         <div class="col-sm-4">
@@ -103,9 +103,9 @@ table tr.active {
         </div>
         <div class="col-sm-4">
         <input placeholder="Fecha Fin" value="<?php echo date("Y-m-t", strtotime(date("Y-m-d")));?>" type="text" id="fecha_final" class="form-control datepicker input_fecha">
-        </div>
+        </div> -->
         <div class="col-sm-2">
-            <button type="button" id="btn_mostrarSub" class="btn btn-success btn-sm float-right">Ver Subtipos</button>
+            <button type="button" id="btn_mostrarSub" class="btn btn-success btn-sm float-right">Actualizar</button>
         </div>
         <div class="col-sm-2">
             <button type="button" id="btn_nuevoSubtipo" class="btn btn-info btn-sm float-right">Añadir Subtipo</button>

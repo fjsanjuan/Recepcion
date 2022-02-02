@@ -45,6 +45,7 @@ $(document).ready(function() {
 				"sSortDescending": ": Activar para ordenar la columna de manera descendente"
 			}
 		},
+		"aLengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 		"bSort": true,
 		"bDestroy": true,
 		"sPaginationType": "full_numbers",
@@ -275,4 +276,5 @@ $(document).ready(function() {
 			$('#loading_spin').hide();
 		});
 	});
+	$('#btn_mostrarSub').trigger('click');
 });
