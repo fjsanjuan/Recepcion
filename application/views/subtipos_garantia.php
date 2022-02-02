@@ -2,11 +2,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/librerias/datatablescrm/media/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.tosrus.all.css">
 <script src="<?=base_url();?>assets/librerias/datatablescrm/media/js/jquery.dataTables.min.js"></script>
-<!-- html2canvas -->
-<script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.min.js"></script>
 <script src="<?=base_url()?>assets/js/jquery.tosrus.all.min.js"></script>
-<!-- jspdf -->
-<script src="<?=base_url()?>assets/librerias/jspdf/jspdf.debug.js"></script>
 <style>
     .checkA, .check{
         left: 0 !important;
@@ -109,7 +105,10 @@ table tr.active {
         <input placeholder="Fecha Fin" value="<?php echo date("Y-m-t", strtotime(date("Y-m-d")));?>" type="text" id="fecha_final" class="form-control datepicker input_fecha">
         </div>
         <div class="col-sm-2">
-            <button type="button" id="btn_mostrarSub" class="btn btn-success btn-sm float-right">Ver SubTipos</button>
+            <button type="button" id="btn_mostrarSub" class="btn btn-success btn-sm float-right">Ver Subtipos</button>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" id="btn_nuevoSubtipo" class="btn btn-info btn-sm float-right">Añadir Subtipo</button>
         </div>
     </div>
     <br>
@@ -118,16 +117,16 @@ table tr.active {
         <div class="col-sm-12 table-responsive">
             <table class="table table-bordered table-striped table-hover animated fadeIn tabla_hist" id="tabla_subtipoGtia">
                 <thead class="mdb-color primary-color">
-                    <tr>
+                    <tr class="text-white">
                         <th>ID</th>
-                        <th>Usuario</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Fecha Creación</th> 
                         <th>Fecha Actualización</th>
-                        <th>Acciones</th>
-                        <th>Eliminado</th>
+                        <th>Estatus</th>
                         <th>Fecha Eliminación</th>
+                        <th>Usuario Última Modificación</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,3 +136,4 @@ table tr.active {
     </div>
     <br>
 </div>
+<?php $this->load->view('modals/subtipo_garantia'); ?>
