@@ -4524,12 +4524,16 @@ class Buscador_Model extends CI_Model{
 				foreach ($response['desglose'] as $key => $valor) {
 					$costo_tiempo = null;
 					if ($valor['tipo'] === 'Servicio') {
+						$response['desglose'][$key]['cantidad'] = null;
+						$response['desglose'][$key]['precio_unitario'] = null;
+						$response['desglose'][$key]['importe'] = null;
+						$response['desglose'][$key]['prefijo'] = null;
+						$response['desglose'][$key]['sufijo'] = null;
 						$costo_tiempo = 0;
-						$tiempos = $intelisis->select('*')->from('SeguimientoOperaciones')->where(['ID' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
+						$tiempos = $intelisis->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 						foreach (is_array($tiempos) ? $tiempos : [] as $key2 => $inicio) {
-							$aux_fin = new DateTime($inicio['FechafIN']);
+							$aux_fin = new DateTime($inicio['FechafIN'] ? $inicio['FechafIN'] : $inicio['FechaInicio']);
 							$aux_inicio = new DateTime($inicio['FechaInicio']);
-							//$aux = $aux_fin->diff($aux_inicio);
 							$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
 							$costo_tiempo += is_nan($aux) ? 0 : $aux;
 						}
@@ -5269,6 +5273,288 @@ class Buscador_Model extends CI_Model{
 		} else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
+		}
+		return $response;
+	}
+	public function obtener_tipos_garantia($idSucursal)
+	{
+		$response['tipos'] = $this->db->select('*')->from('tipos_garantia')->get()->result_array();
+		if (sizeof($response['tipos']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = sizeof($response['tipos'])." tipos de garantía encontrados.";
+		} else {
+			$response['estatus'] = false;
+			$response['tipos'] = [];
+			$response['mensaje'] = "No se encontraron tipos de garantía.";
+		}
+		return $response;
+	}
+	public function obtener_tipos_garantia_activos($idSucursal)
+	{
+		$response['tipos'] = $this->db->select('*')->from('tipos_garantia')->where(['eliminado' => 0])->get()->result_array();
+		if (sizeof($response['tipos']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = sizeof($response['tipos'])." tipos de garantía encontrados.";
+		} else {
+			$response['estatus'] = false;
+			$response['tipos'] = [];
+			$response['mensaje'] = "No se encontraron tipos de garantía.";
+		}
+		return $response;
+	}
+	public function guardar_tipos_garantia($idSucursal, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$data = [
+			'nombre'         => isset($datos['nombre']) ? $datos['nombre'] : null,
+			'descripcion'    => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'fecha_creacion' => date("d-m-Y H:i:s"),
+			'eliminado'      => 0,
+			'usuario'        => $usuario['nombre']
+		];
+		if($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$id = $this->db->insert('tipos_garantia', $data);
+			$id = $this->db->insert_id();
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['id'] = null;
+				$response['mensaje'] = 'No fue posible crear el tipo de garantía.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['id'] = $id;
+				$response['mensaje'] = 'Tipo de garantía agregado correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['id'] = null;
+			$response['mensaje'] = "Solo los administradores de garantías pueden crear tipos de garantías.";
+		}
+		return $response;
+	}
+	public function editar_tipos_garantia($idSucursal,$idTipo, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$data = [
+			'nombre'              => isset($datos['nombre']) ? $datos['nombre'] : null,
+			'descripcion'         => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'fecha_actualizacion' => date("d-m-Y H:i:s"),
+			'usuario'             => $usuario['nombre']
+		];
+		$existe = $this->db->select('*')->from('tipos_garantia')->where(['id' => $idTipo])->get()->row_array();
+		if ($existe == 0 ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "El tipo de garantía seleccionado no existe.";
+		}elseif($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$this->db->where('id', $idTipo);
+			$this->db->update('tipos_garantia', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el tipo de garantía.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Tipo de garantía actualizado correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Solo los administradores de garantías pueden actualizar tipos de garantías.";
+		}
+		return $response;
+	}
+	public function estatus_tipos_garantia($idSucursal,$idTipo, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$existe = $this->db->select('id')->from('tipos_garantia')->where(['id' => $idTipo])->count_all_results();
+		$data = [
+			'eliminado'           => $datos['eliminado'],
+			'fecha_eliminacion'   => $datos['eliminado'] == 1 ?  date("d-m-Y H:i:s") : null,
+			'fecha_actualizacion' => date("d-m-Y H:i:s"),
+			'usuario'             => $usuario['nombre']
+		];
+		if ($existe == 0 ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "El tipo de garantía seleccionado no existe.";
+		}elseif($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$this->db->where('id', $idTipo);
+			$this->db->update('tipos_garantia', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el estatus del tipo de garantía.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Estatus del tipo de garantía actualizado correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Solo los administradores de garantías pueden actualizar el estatus de los tipos de garantías.";
+		}
+		return $response;
+	}
+
+	public function obtener_tipo_garantia($idSucursal,$idTipo)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$existe = $this->db->select('*')->from('tipos_garantia')->where(['id' => $idTipo])->get()->row_array();
+		if (sizeof($existe) > 0 ) {
+			$response['estatus'] = true;
+			$response['tipo']    = $existe;
+			$response['mensaje'] = "Tipo de garantía encontrado.";
+		} else {
+			$response['estatus'] = false;
+			$response['tipo']    = [];
+			$response['mensaje'] = "El tipo de garantía no existe.";
+		}
+		return $response;
+	}
+	public function obtener_subtipos_garantia($idSucursal)
+	{
+		$response['subtipos'] = $this->db->select('*')->from('subtipos_garantia')->get()->result_array();
+		if (sizeof($response['subtipos']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = sizeof($response['subtipos'])." subtipos de garantía encontrados.";
+		} else {
+			$response['estatus'] = false;
+			$response['subtipos'] = [];
+			$response['mensaje'] = "No se encontraron subtipos de garantía.";
+		}
+		return $response;
+	}
+	public function obtener_subtipos_garantia_activos($idSucursal)
+	{
+		$response['subtipos'] = $this->db->select('*')->from('subtipos_garantia')->where(['eliminado' => 0])->get()->result_array();
+		if (sizeof($response['subtipos']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = sizeof($response['subtipos'])." subtipos de garantía encontrados.";
+		} else {
+			$response['estatus'] = false;
+			$response['subtipos'] = [];
+			$response['mensaje'] = "No se encontraron subtipos de garantía.";
+		}
+		return $response;
+	}
+	public function guardar_subtipos_garantia($idSucursal, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$data = [
+			'nombre'         => isset($datos['nombre']) ? $datos['nombre'] : null,
+			'descripcion'    => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'fecha_creacion' => date("d-m-Y H:i:s"),
+			'eliminado'      => 0,
+			'usuario'        => $usuario['nombre']
+		];
+		if($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$id = $this->db->insert('subtipos_garantia', $data);
+			$id = $this->db->insert_id();
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['id'] = null;
+				$response['mensaje'] = 'No fue posible crear el subtipo de garantía.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['id'] = $id;
+				$response['mensaje'] = 'Tipo de garantía agregado correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['id'] = null;
+			$response['mensaje'] = "Solo los administradores de garantías pueden crear subtipos de garantías.";
+		}
+		return $response;
+	}
+	public function editar_subtipos_garantia($idSucursal,$idSubtipo, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$data = [
+			'nombre'              => isset($datos['nombre']) ? $datos['nombre'] : null,
+			'descripcion'         => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'fecha_actualizacion' => date("d-m-Y H:i:s"),
+			'usuario'             => $usuario['nombre']
+		];
+		$existe = $this->db->select('*')->from('subtipos_garantia')->where(['id' => $idSubtipo])->get()->row_array();
+		if ($existe == 0 ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "El tipo de garantía seleccionado no existe.";
+		}elseif($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$this->db->where('id', $idSubtipo);
+			$this->db->update('subtipos_garantia', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el subtipo de garantía.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Tipo de garantía actualizado correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Solo los administradores de garantías pueden actualizar subtipos de garantías.";
+		}
+		return $response;
+	}
+	public function estatus_subtipos_garantia($idSucursal,$idSubtipo, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$existe = $this->db->select('id')->from('subtipos_garantia')->where(['id' => $idSubtipo])->count_all_results();
+		$data = [
+			'eliminado'           => $datos['eliminado'],
+			'fecha_eliminacion'   => $datos['eliminado'] == 1 ?  date("d-m-Y H:i:s") : null,
+			'fecha_actualizacion' => date("d-m-Y H:i:s"),
+			'usuario'             => $usuario['nombre']
+		];
+		if ($existe == 0 ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "El subtipo de garantía seleccionado no existe.";
+		}elseif($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$this->db->where('id', $idSubtipo);
+			$this->db->update('subtipos_garantia', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el estatus del subtipo de garantía.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Estatus del subtipo de garantía actualizado correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Solo los administradores de garantías pueden actualizar el estatus de los subtipos de garantías.";
+		}
+		return $response;
+	}
+
+	public function obtener_subtipo_garantia($idSucursal,$idSubtipo)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$existe = $this->db->select('*')->from('subtipos_garantia')->where(['id' => $idSubtipo])->get()->row_array();
+		if (sizeof($existe) > 0 ) {
+			$response['estatus'] = true;
+			$response['subtipo']    = $existe;
+			$response['mensaje'] = "Subtipo de garantía encontrado.";
+		} else {
+			$response['estatus'] = false;
+			$response['subtipo']    = [];
+			$response['mensaje'] = "El subtipo de garantía no existe.";
 		}
 		return $response;
 	}

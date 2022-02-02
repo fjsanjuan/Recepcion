@@ -3451,4 +3451,166 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function obtener_tipos_garantia($idSucursal = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else {
+			$response = $this->buscador_model->obtener_tipos_garantia($idSucursal);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_tipos_garantia_activos($idSucursal = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else {
+			$response = $this->buscador_model->obtener_tipos_garantia_activos($idSucursal);
+		}
+		echo json_encode($response);
+	}
+	public function guardar_tipos_garantia($idSucursal = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->guardar_tipos_garantia($idSucursal, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function editar_tipos_garantia($idSucursal = null, $idTipo = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idTipo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Tipo de garantía no válido.';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->editar_tipos_garantia($idSucursal, $idTipo, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function estatus_tipos_garantia($idSucursal = null, $idTipo = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idTipo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Tipo de garantía no válido.';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->estatus_tipos_garantia($idSucursal, $idTipo, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function obtener_tipo_garantia($idSucursal = null, $idTipo = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idTipo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Tipo de garantía no válido.';
+		} else {
+			$response = $this->buscador_model->obtener_tipo_garantia($idSucursal, $idTipo);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_subtipos_garantia($idSucursal = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else {
+			$response = $this->buscador_model->obtener_subtipos_garantia($idSucursal);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_subtipos_garantia_activos($idSucursal = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else {
+			$response = $this->buscador_model->obtener_subtipos_garantia_activos($idSucursal);
+		}
+		echo json_encode($response);
+	}
+	public function guardar_subtipos_garantia($idSucursal = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->guardar_subtipos_garantia($idSucursal, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function editar_subtipos_garantia($idSucursal = null, $idSubtipo = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idSubtipo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Subtipo de garantía no válido.';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->editar_subtipos_garantia($idSucursal, $idSubtipo, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function estatus_subtipos_garantia($idSucursal = null, $idSubtipo = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idSubtipo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Subipo de garantía no válido.';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->estatus_subtipos_garantia($idSucursal, $idSubtipo, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function obtener_subtipo_garantia($idSucursal = null, $idSubtipo = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idSubtipo == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Subtipo de garantía no válido.';
+		} else {
+			$response = $this->buscador_model->obtener_subtipo_garantia($idSucursal, $idSubtipo);
+		}
+		echo json_encode($response);
+	}
 }
