@@ -19,11 +19,17 @@
         </ul>
     </div>
 </nav>
-<!-- Menú lateral -->
+<!-- Menú lateral --> 
 <div id="menu_sidebar" class="sidenav animated">
   <a href="javascript:void(0)" class="closebtn">&times;</a>
   <br>
   <a href="<?=base_url();?>"><span class="span-sidebar"><i class="fa fa-home"></i> Página Principal</span></a>
   <a href="<?=site_url('user/configurar_perfil')?>"><span class="span-sidebar"><i class="fa fa-cogs"></i> Configuración Perfil</span></a>
   <a href="<?=site_url('buscador/ver_historico')?>"><span class="span-sidebar"><i class="fa fa-calendar-alt"></i> Histórico</span></a>
+  <?php if($this->session->userdata["logged_in"]["perfil"] == 7):?>
+    <a href="<?=site_url('buscador/administrar_tipos')?>"><span class="span-sidebar"><i class="fa fa-calendar-alt"></i>
+    Tipos Garantías</span></a>
+    <a href="<?=site_url('buscador/administrar_subtipos')?>"><span class="span-sidebar"><i class="fa fa-calendar-alt"></i>
+    SubTipos Garantías</span></a>
+  <?php endif;?>
 </div>

@@ -228,4 +228,37 @@ class Buscador extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function administrar_tipos()
+	{
+		$logged_in = $this->session->userdata("logged_in");
+		if(empty($logged_in) == false && $logged_in['perfil'] == 7)
+		{
+			$data["scripts"] = $this->load->view("scripts", "", true);	
+			$data["navbar"] = $this->load->view("navbar", "", true);	
+			$data["contenido"] = $this->load->view("tipos_garantia", "", true);
+			$this->load->view("base", $data);
+		}else
+		{
+			$response['heading'] = 'Permiso denegado.';
+			$response['message'] = 'Solo los administradores pueden visualizar la página de tipos de garantía.';
+			$this->load->view("errors/html/error_404", $response);
+		}	
+	}
+	
+	public function administrar_subtipos()
+	{
+		$logged_in = $this->session->userdata("logged_in");
+		if(empty($logged_in) == false && $logged_in['perfil'] == 7)
+		{
+			$data["scripts"] = $this->load->view("scripts", "", true);	
+			$data["navbar"] = $this->load->view("navbar", "", true);	
+			$data["contenido"] = $this->load->view("subtipos_garantia", "", true);
+			$this->load->view("base", $data);
+		}else
+		{
+			$response['heading'] = 'Permiso denegado.';
+			$response['message'] = 'Solo los administradores pueden visualizar la página de subtipos de garantía.';
+			$this->load->view("errors/html/error_404", $response);
+		}	
+	}
 }
