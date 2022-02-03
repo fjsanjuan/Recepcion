@@ -29,6 +29,7 @@
 							<td class="text-center d-none"><strong>Precio U</strong></td>
 							<td class="text-center d-none"><strong>Total</strong></td>
 							<td class="text-center"><strong>Adicional</strong></td>
+							<td class="text-center">Técnico</td>
 						</tr>
 					</thead>
 					<tbody>

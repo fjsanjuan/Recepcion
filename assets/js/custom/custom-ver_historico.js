@@ -310,7 +310,7 @@ $(document).ready(function() {
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
 					action_tecnico		+="<button type='button' class='btn btn-sm btn-primary historial_anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='historialAnverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbspVer Manos Obra</button>";
-					action_jefe       += `<button type="button" class="btn btn-sm btn-primary asignar_tecnico"  id='asignar_tec-${val["id"]}'><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
+					// action_jefe       += `<button type="button" class="btn btn-sm btn-primary asignar_tecnico"  id='asignar_tec-${val["id"]}'><i class="fas fa-bars"></i>&nbsp&nbsp Asignar Técnico</button>`;
 				}
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
@@ -1912,9 +1912,6 @@ $(document).ready(function() {
 	$(document).on("click", "button.editarPres2", function(){
 		var idIndex =  $(this).attr('data-index');
 		var datos = verificaciones_array[idIndex];
-		console.log('index,', idIndex);
-		console.log('ars', verificaciones_array);
-		console.log('datos verificacion', datos);
 		var id_presupuesto = datos["id_presupuesto"];
 		$("#id_presupuesto2").val(id_presupuesto);
 		$("#table_invoice2 tbody").empty();
@@ -1963,11 +1960,7 @@ $(document).ready(function() {
 		$("#modalValidacion").modal("hide");
 	});
 	$("#bnActualizarPres2").on("click", function(){
-		console.log('articulos',arrayArticulos);
-		console.log('articulos',arrayArticulos.length);
 		countArticulos2();
-		console.log('articulos',arrayArticulos);
-		console.log('articulos',arrayArticulos.length);
 		if(arrayArticulos.length > 0){
 			var presupuestoDato = arrayArticulos;
 			$.ajax({
@@ -2049,17 +2042,14 @@ $(document).ready(function() {
 		$("#enviar_presupuesto2").click();
 	});*/
 	$(document).on("click", "button.btnPdf2", function(e){
-		console.log('pres', verificaciones_array);
 		var idIndex =  $(this).attr('data-index');
 		var datos = verificaciones_array[idIndex];
 		var id_press = datos.id_presupuesto;
-		console.log(id_presupuesto);
 		window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 	});
 	$(document).on("click", "button.btn-mailP2", function(e){
 		$("#comentarioCot").val('');
 		$("#email_enviar").val('');
-		console.log('datos mailp2', $(this).data());
 		id_presupuesto = $(this).data('idpres');
 		var idIndex =  $(this).attr('data-index');
 		$.ajax({
@@ -2103,8 +2093,6 @@ $(document).ready(function() {
 		const _this = this;
 		var idIndex =  $(this).data('index');
 		var datos = verificaciones_array[idIndex];
-		console.log(idIndex);
-		console.log('datos email', datos);
 		const form = new FormData();
 		form.append('id', $(this).data('idpres'));
 		form.append('comentario_existencia', $("#comentarioCot").val());
@@ -2509,10 +2497,7 @@ $(document).ready(function() {
 	$(document).off('click', "button.editarReq").on("click", "button.editarReq", function(){
 		var idIndex =  $(this).attr('data-index');
 		var datos = globalThis.requisicionesArray[idIndex];
-		console.log('index,', idIndex);
-		console.log('datos rq', datos);
 		var id_requisicion = datos["id_requisicion"];
-		console.log('datos rq', id_requisicion);
 		$("#id_requisicion3").val(id_requisicion);
 		$("#table_invoice3 tbody").empty();
 		/*var table_body_default = "<td></td>";
@@ -2568,11 +2553,7 @@ $(document).ready(function() {
 	});
 	$("#bnActualizarRequi").off('click').on("click", function(event){
 
-		console.log('articulos',arrayArticulos);
-		console.log('articulos',arrayArticulos.length);
 		countArticulos2();
-		console.log('articulos',arrayArticulos);
-		console.log('articulos',arrayArticulos.length);
 		event.preventDefault();
 		const detalles = document.getElementById('form_requisicion');
 		const form = new FormData(detalles);
@@ -2808,7 +2789,6 @@ $(document).ready(function() {
 		update_total3();
 	}
 	$("#guardarReq").on("click", function(){
-		console.log("click guardarReq");
 		event.preventDefault();
 		const detalles = document.getElementById('form_requisicion');
 		const form = new FormData(detalles);
@@ -2873,9 +2853,7 @@ $(document).ready(function() {
 			return;
 		}
 		var datos = globalThis.lineasArray[idIndex];
-		console.log('index,', idIndex);
 		var lineas_reparacion = datos;
-		console.log('datos lr', lineas_reparacion);
 		$('#bnActualizarLinea').data('id', lineas_reparacion.id);
 		/*TODO
 			asignar los valores datos a los campos del formulario de nuev-lin
@@ -2910,7 +2888,6 @@ $(document).ready(function() {
 		form.append('firma_admin', $('input[name="firma_admin"]').val());
 		form.append('id', $(this).data('id'));
 		idOrden = localStorage.getItem('hist_id_orden');
-		console.log('id_orden', idOrden);
 		if (!$('#form_lineasTrabajo').valid()) {
 			return;
 		}
@@ -3132,7 +3109,6 @@ function countArticulos(){
 	    valueTopush["comentario"] = comentarios;
 	    valueTopush["total_arts"] = total;
 	    arrayArticulos.push(valueTopush);
-	    console.log(valueTopush);
 	})
 }
 function countArticulos2(){
@@ -3153,7 +3129,6 @@ function countArticulos2(){
 	    valueTopush["comentario"] = comentarios;
 	    valueTopush["total_arts"] = total;
 	    arrayArticulos.push(valueTopush);
-	    console.log(valueTopush);
 	})
 }
 function stringToFloat(num){
@@ -3357,7 +3332,6 @@ $(document).on('click', '#btn_borrar_doc', function (e) {
 $(document).on('click', '#autor_preg', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
-	console.log('id orden', id_orden);
 	localStorage.setItem("hist_id_orden", id_orden);
 	const form = new FormData();
 	form.append('id_orden_servicio', id_orden);
@@ -3408,7 +3382,6 @@ $(document).off('click', '.autorizaciones').on('click', '.autorizaciones', funct
 	let id_orden = $(this).prop('id');
     id_orden = id_orden.split('-')[1];
 	e.preventDefault();
-	console.log('id', id_orden);
 	$('#autor_cp').prop('data-orden', id_orden);
 	$('#autor_preg').prop('data-orden', id_orden);
 	$('#autor_add').prop('data-orden', id_orden);
@@ -3559,7 +3532,6 @@ $(document).on("click", ".tabla_hist tbody tr td button.autorizarefacc", functio
 $(document).on('click', '#autor_add', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
-	console.log('id orden', id_orden);
 	localStorage.setItem("hist_id_orden", id_orden);
 	const form = new FormData();
 	form.append('id_orden_servicio', id_orden);
@@ -3657,7 +3629,6 @@ $(document).on('click', '#cancelar_add', function(e){
 	$(document).on('click', '#autor_cp', function(e){
 		e.preventDefault();
 		var id_orden = $(this).prop("data-orden");
-		console.log('id orden', id_orden);
 		localStorage.setItem("hist_id_orden", id_orden);
 		const form = new FormData();
 		form.append('id_orden_servicio', id_orden);
@@ -3894,8 +3865,7 @@ $(document).on('click', '.nueva_linea', function (e) {
 	const clone =$(this).closest('tr').clone();
 	clone.find('input[type="text"]').val("");
 	$.each(clone.find('input'), function(index, element){
-		$(element).prop('name', $(element).prop('name').replace(/\[\d\]/, `[${index_nueva_linea}]`))
-		console.log($(element).prop('name'));
+		$(element).prop('name', $(element).prop('name').replace(/\[\d\]/, `[${index_nueva_linea}]`));
 	});
 	clone.insertAfter($(this).closest('tr'));
 	index_nueva_linea++;
@@ -3917,7 +3887,6 @@ $(document).on('click', '.borra_linea', function (e) {
 $(document).on('click', '#refaccCheck1', function(e){
 	e.preventDefault();
 	var id_orden = $(this).prop("data-orden");
-	console.log('id orden', id_orden);
 	localStorage.setItem("hist_id_orden", id_orden);
 	const form = new FormData();
 	form.append('id_orden_servicio', id_orden);
@@ -3991,7 +3960,6 @@ $(document).off('click', '.requisiciones').on('click', '.requisiciones', functio
 	let id_orden_publica = $(this).data('mov');
 	id_orden = id_orden.split('-')[1];
 	e.preventDefault();
-	console.log('id', id_orden);
 	localStorage.setItem('hist_id_orden',id_orden);
 	if (id_perfil == 6){$('#checkTecn').hide();}
 	if (id_perfil == 5){$('#checkRefacc').hide();}
@@ -4398,10 +4366,8 @@ $(document).on('click', '.tabla_hist tbody tr td button.verautorizaciones', func
 	.done(function(data) {
 		if (data.estatus) {
 			let registro = undefined;
-			console.log('daa', data.data);
 			for (index in data.data) {
 				aux = palabras_acentos(index);
-				console.log(aux);
 				registro = $("<tr>");
 				registro.append($("<td>",{"text": aux}));
 				var checkbox = $('<div>', {'class': 'form-check'});
@@ -4756,11 +4722,9 @@ function obtener_requisiciones(idOrden){
 			console.log('error al buscar');
 		},
 		success: function (data){
-			console.log('resp', data);
 			$("#loading_spin").hide();
 			if(data.estatus == true){
 				requisicionesArray = data.requisiciones;
-				console.log('req', requisicionesArray);
 				$.each(data.requisiciones, function(index, value){
 					var idReq = value.id_requisicion;
 					var row_title = $("<div class='row'></div>");
@@ -4811,7 +4775,6 @@ function obtener_requisiciones(idOrden){
 $(document).off('click', '#requisModal #cotizaciones .convertirReq').on('click', '#requisModal #cotizaciones .convertirReq', function(event) {
 	event.preventDefault();
 	let id = $(this).data('id_presupuesto');
-	console.log('id presupuesto', id);
 	$.ajax({
 		url: `${base_url}index.php/servicio/convertir_cotizacion/${id}`,
 		type: 'POST',
@@ -4857,9 +4820,7 @@ function obtener_cotizaciones(id_orden){
 			$("#loading_spin").hide();
 			if(data.estatus == true){
 				presupuestos_array = data.pres;
-				console.log('carg',presupuestos_array);
 				$.each(data.pres, function(index, value){
-					console.log('value', value);
 					var idpres = value.id_presupuesto;
 					var row_title = $("<div class='row'><div class='col-md-6'><label>#Verificacion Interna: <b>"+idpres+"</b></label></div><div class='col-md-6' style='display:"+(value.autorizado ? 'inline-block' : 'none')+";'><button class='btn btn-sm btn-primary convertirReq' data-id_presupuesto='"+idpres+"'><i class='fa fa-exchange-alt'></i> Convertir en Requisición</button></div></div>");
 					/*if(value.autorizado == 1)
@@ -4884,9 +4845,7 @@ function obtener_cotizaciones(id_orden){
 						table.append(row);
 					});
 					var row_importe = $("<tr><td><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"' data-idpres='"+idpres+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
-					console.log(row_importe);
 					table.append(row_importe);
-					console.log(table);
 					$('#requisModal #cotizaciones .contentCot').append(row_title);
 					$('#requisModal #cotizaciones .contentCot').append(table);
 				});
@@ -4899,12 +4858,10 @@ function obtener_cotizaciones(id_orden){
 $(document).off('click', '#requisModal #cotizaciones .actualizarCot').on('click', '#requisModal #cotizaciones .actualizarCot', function(event) {
 	event.preventDefault();
 	$('#requisModal #cotizaciones .contentCot').empty();
-	console.log($(this).data('id_orden_publica'));
 	obtener_cotizaciones($(this).data('id_orden_publica'));
 });
 $(document).off("click", "#requisModal #cotizaciones button.btnPdf2").on("click", "#requisModal #cotizaciones button.btnPdf2", function(e){
 	var id_press = $(this).data('idpres');
-	console.log('data',$(this).data('idpres'));
 	window.open(base_url+"index.php/Servicio/ver_verificacionPdF/"+ id_press, "_blank");
 });
 
@@ -5011,13 +4968,11 @@ function notificar_verificacion(id) {
 
 //Para cargar Lineas de Trabajo
 $(document).off('click', '#lineaTrabajoModal #guardar_lineas').on('click', '#lineaTrabajoModal #guardar_lineas', function(event) {
-	console.log("click #guardar_lineas");
 	event.preventDefault();
 	const datos = document.getElementById('form_lineasTrabajo');
 	const form = new FormData(datos);
 	form.append('firma_admin', $('input[name="firma_admin"]').val());
 	idOrden = localStorage.getItem('hist_id_orden');
-	console.log('id_orden', idOrden);
 	if (!$('#form_lineasTrabajo').valid()) {
 		return;
 	}
@@ -5188,12 +5143,10 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 				console.log('error al buscar');
 			},
 			success: function (data){
-				console.log('resp', data);
 				$("#loading_spin").hide();
 				if(data.estatus == true){
 					$('#lin-carg').prop('disabled', false);
 					lineasArray = data.lineas_reparacion;
-					console.log('lin', lineasArray);
 					var row_title = $("<div class='row'></div>");
 						row_title.append($(`<div class='row'>
 						<div class='col-md-4'>
@@ -5308,7 +5261,6 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 		e.preventDefault();
 		hasClass = $(this).hasClass('selected');
 		$('#seleccionarTipGtia tr').removeClass('selected');
-		console.log('click tabla', $(this).data('index'));
 		if(!hasClass)
 			$(this).addClass('selected');
 		else
@@ -5355,7 +5307,6 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 
 $(document).off('click','.f1863').on('click', '.f1863', function(event) {
 	event.preventDefault();
-	console.log('Generando f1863');
 	var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
@@ -5562,8 +5513,6 @@ $(document).off('click', '#verReqModal input[ name="entregado_req[]"]').on('clic
 	let id  = $(this).prop('id');
 	let idOrden = id.split('-')[0];
 	let idReq   = id.split('-')[1];
-	console.log('id_auth req admon',idReq);
-	console.log('id_auth ord admon',idOrden);
 	const _this = this;
 		$.ajax({
 			url: `${base_url}index.php/servicio/entrega_requisicion/${idOrden}/${idReq}`,
@@ -5696,9 +5645,6 @@ function save_docs_anexo_intelisis(idOrden, idReq, formato, generarFormato = tru
 }
 
 function req_inexistente(idOrden, idReq, formato, reintentar = false) {
-	console.log('idOrden', idOrden);
-	console.log('idReq', idReq);
-	console.log('formato', formato);
 	var tok = "";
 	$.ajax({
 			url: "https://isapi.intelisis-solutions.com/auth/",
@@ -5754,6 +5700,7 @@ function req_inexistente(idOrden, idReq, formato, reintentar = false) {
 			}
 		})
 }
+let select_tec_mo = null;
 $(document).off('click', '.mano_obra').on('click', '.mano_obra', function(e) {
 	$('#tabla_invoice tbody').empty();
 	$('#table_mano tbody').empty();
@@ -5795,7 +5742,50 @@ $(document).off('click', '.mano_obra').on('click', '.mano_obra', function(e) {
 	.always(function() {
 		$("#loading_spin").hide();
 	});
-	
+	select_tec_mo = $('#asigna_tecnico').clone();
+	$(select_tec_mo).prop('id','select_tec_mo');
+	$(select_tec_mo).empty();
+	$(select_tec_mo).append($('<option>', {text: 'Técnico', value: ''}));
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		let con_movimientos = 0;
+		if (resp.estatus) {
+			option = [];
+			$.each(resp.data, function(index, val) {
+				opt = $(`<option>`,{'value': val.Agente, 'text': val.Agente});
+				if (val.TieneMovimientos > 0) {
+					con_movimientos++;
+					//linea de prueba
+					$(select_tec_mo).append(opt);
+				}else{
+					$(select_tec_mo).append(opt);
+				}
+			});
+			//linea de prueba
+			con_movimientos = 0;
+			if (con_movimientos < resp.data.length) {
+				
+			}else{ 
+				toastr.info('No hay técnicos disponibles.');
+			}
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un error al cargar los técnicos disponibles.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
 });
 
 $(document).on('click', '#buscarManObra', function (){
@@ -5846,7 +5836,6 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     function (i) {
       itmo[i] = $(this).text();
     });
-	console.log(itmo);
     var art = itmo[1];
     var cantidad = 1;//$("#input_cantidad").val();
     var clave_art = itmo[0];
@@ -5863,6 +5852,7 @@ $(document).on("click", '#boton_agregarManObra', function (e){
 	tabla += "<td><input type='checkbox' style='height: 24px; width: 24px;' value='1' class='add_adicional' id='add'><label for='add'></label></td>";
     tabla += "<td style='display:none;' id='articulosmo'>mo</td>";
     tabla += "<td style='display:none;' id='idpq'>" + 'NA' + "</td>";
+    tabla += "<td><select name='Agente' class='form-control' style='display: block !important;'>"+select_tec_mo.html()+"</select></td>";
     tabla += "</tr>";
 
     $("#tabla_invoice tbody").append(tabla);
@@ -5909,7 +5899,8 @@ function obtener_articuloSeleccionados()
             "precio_u" : precio_unidad,
             "total" : $(this).find('td:eq(5)').text(),
             "tipo" : $(this).find('td:eq(7)').text(),
-            "id" :  $(this).find('td:eq(78)').text()
+            "id" :  $(this).find('td:eq(8)').text(),
+            "Agente": $(this).find('td:eq(9)').find('select').val()
         }
     });
 
@@ -6034,15 +6025,19 @@ function actualizar_balance() {
     $('.due').val(due);
 }
 
-$(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('click', '.tabla_hist tbody tr td button.asignar_tecnico', function(event) {
+$(document).off('click', 'button.asignar_tecnico').on('click', 'button.asignar_tecnico', function(event) {
 	const idOrden = $(this).prop('id').split('-')[1];
 	$("#btn_asignarTec").prop('data-id', idOrden);
-	localStorage.setItem('hist_id_orden', idOrden);
+	data = $(this).data();
+	data.idDiagnostico = idOrden;
+	$("#btn_asignarTec").data(data);
+	//localStorage.setItem('hist_id_orden', idOrden);
 	event.preventDefault();
 	$('#asigna_tecnico').empty();
 	$('#asigna_tecnico').append($('<option>', {text: 'seleccione un técnico...', value: ''}));
 	$('#asigna_linea').empty();
 	$('#asigna_linea').append($('<option>', {text: 'seleccione una línea...', value: ''}));
+
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
 		type: 'GET',
@@ -6063,10 +6058,12 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 					$('#asigna_tecnico').append($(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`}));
 				}
 			});
+			$('#asigna_tecnico').val(data.Agente);
 			//linea de prueba
 			con_movimientos = 0;
 			if (con_movimientos < resp.data.length) {
-				$.ajax({
+				$('#asignModal').modal('toggle');
+				/*$.ajax({
 					url: `${base_url}index.php/servicio/obtener_manos_obra_orden/${idOrden}`,
 					type: 'GET',
 					dataType: 'json',
@@ -6092,7 +6089,7 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 				})
 				.always(function() {
 					$('#loading_spin').hide();
-				});
+				});*/
 			}else{ 
 				toastr.info('No hay técnicos disponibles.');
 			}
@@ -6111,6 +6108,7 @@ $(document).off('click', '.tabla_hist tbody tr td button.asignar_tecnico').on('c
 
 $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', function(event) {
 	let id = $('#asigna_linea').val();
+	data = $(this).data();
 	const form = new FormData($('#formAsignarTec')[0]);
 	form.append('fin', $('.timepicker-asign-fin').val());
 	form.append('id_orden', localStorage.getItem('hist_id_orden'));
@@ -6118,12 +6116,14 @@ $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', funct
 		toastr.warning('Revise los datos.');
 		return;
 	}
-	datos_renglon =  $('#asigna_linea').find('option:selected').data();
-	form.append('Renglon', datos_renglon.renglon);
-	form.append('RenglonID', datos_renglon.renglonid);
-	form.append('RenglonSub', datos_renglon.renglonsub);
+	//datos_renglon =  $('#asigna_linea').find('option:selected').data();
+	form.append('ID', data.idVenta);
+	form.append('Renglon', data.renglon);
+	form.append('RenglonID', data.renglonId);
+	form.append('RenglonSub', data.renglonSub);
+	form.append('id_diagnostico', data.idDiagnostico);
 	$.ajax({
-		url: `${base_url}index.php/servicio/asignar_tecnico_linea/${id}`,
+		url: `${base_url}index.php/servicio/asignar_tecnico_linea/${data.idVenta}`,
 		type: 'POST',
 		dataType: 'json',
 		data: form,
@@ -6139,6 +6139,8 @@ $(document).off('click', '#btn_asignarTec').on('click', '#btn_asignarTec', funct
 			$('#asignModal').modal('toggle');
 			toastr.info(resp.mensaje);
 			$('#formAsignarTec')[0].reset();
+			localStorage.setItem('abrirmodal', 1);
+			obtener_historial_anversos(localStorage.getItem('hist_id_orden'));
 		}else {
 			toastr.info(resp.mensaje);
 		}
@@ -6281,22 +6283,30 @@ function construir_tabla_historial_anversos(data) {
 	tr.append($('<th>',{'text': 'Autorización'}));
 	tr.append($('<th>',{'text': 'Terminada'}));
 	tr.append($('<th>',{'text': 'Anverso'}));
+	tr.append($('<th>',{'text': 'Asignar Técnico'}));
 	tr.append($('<th>',{'text': 'PDF'}));
 	tr.append($('<th>',{'text': 'Detalles'}));
 	$('#tabla_diagnosticos').append(tr);
 	$.each(data, function(index, val) {
 		tr = $('<tr>');
 		anverso = $('<button>', {'class': 'btn btn-sm btn-primary abriranverso', 'id': `abriranverso-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-edit'}));
+		tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
-		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario asignar un técnico a la mano de obra desde recepción';
+		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
 		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true: false) : false)
+		$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		if (val.diagnostico) {
+			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		}
+		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
+		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
 		tr.append($('<td>').append(autorizar));
 		tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
 		tr.append($('<td>').append(anverso));
+		tr.append($('<td>').append(tecnico));
 		tr.append($('<td>').append(pdf));
 		tr.append($('<td>').append(detalles));
 		$('#tabla_diagnosticos').append(tr);
@@ -6347,50 +6357,117 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .detall
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso', function(event) {
 	id = $(this).prop('id').split('-')[1];
 	idOrden = localStorage.getItem('hist_id_orden');
-	const form = new FormData();
+	form = new FormData();
 	form.append('id_diagnostico', id);
 	form.append('check', $(this).is(':checked'));
 	_this = this;
-    swal({
-		title: $(this).is(':checked') ? '¿Autorizar Anverso?' : '¿Desautorizar Anverso?',
-		showCancelButton: true,
-		confirmButtonText: $(this).is(':checked') ? 'Autorizar' : 'Desautorizar',
-		cancelButtonText: 'Cancelar',
-		type: 'info'
+	select = $('#asigna_tecnico').clone();
+	$(select).prop('id','cve_intelisis');
+	$(select).empty();
+	$(select).append($('<option>', {text: 'seleccione un técnico...', value: ''}));
+	_data = $(this).data();
+	inputOptions = [];
+	form.append('Renglon', _data.renglon);
+	form.append('RenglonID', _data.renglonId);
+	form.append('RenglonSub', _data.renglonSub);
+	form.append('asigna_tecnico', _data.Agente);
+	form.append('idVenta', _data.idVenta);
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
 	})
-    .then((result) => {
-        if (result.value) {
-	        $.ajax({
-	            cache: false,
-	            url: base_url+ "index.php/servicio/autorizar_linea/"+id,
-	            contentType: false,
-	            processData: false,
-	            type: 'POST',
-	            dataType: 'json',
-	            data: form,
-	            beforeSend: function(){
-	                $("#loading_spin").show();
-	            }
-	        })
-	        .done(function(data) {
-	            if (data.estatus) {
-	                swal(data.mensaje, '', 'success');
-	            }else{
-	            	toastr.warning(data.mensaje);
-	                $(_this).prop('checked', !$(_this).is(':checked'));
-	            }
-	        })
-	        .fail(function() {
-	            toastr.warning('Hubo un error al autorizar el Anverso.');
-	        })
-	        .always(function() {
-	            $("#loading_spin").hide();
-	        });
-	    }else if (result.dismiss) {
-	    	$(this).prop('checked', !$(this).is(':checked'));
-	        swal('Cancelado', '', 'error');
-	    }
-    });
+	.done(function(resp) {
+		let con_movimientos = 0;
+		if (resp.estatus) {
+			option = [];
+			$.each(resp.data, function(index, val) {
+				opt = $(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`});
+				$(opt).prop('selected', val.Agente == _data.Agente);
+				value = val.Agente;
+				option[val.Agente] = `${val.Nombre}(${val.Agente})`;
+				const obj = {...option};
+				inputOptions = obj;
+				if (val.TieneMovimientos > 0) {
+					con_movimientos++;
+					//linea de prueba
+					$(select).append(opt);
+				}else{
+					$(select).append(opt);
+				}
+			});
+			//linea de prueba
+			con_movimientos = 0;
+			if (con_movimientos < resp.data.length) {
+				swal({
+					title: $(_this).is(':checked') ? '¿Autorizar Anverso?' : '¿Desautorizar Anverso?',
+					showCancelButton: true,
+					confirmButtonText: $(_this).is(':checked') ? 'Autorizar' : 'Desautorizar',
+					cancelButtonText: 'Cancelar',
+					type: 'info',
+					input: 'select',
+					inputOptions: inputOptions,
+					inputPlaceholder: 'Confirma el técnico.',
+					onOpen: function () {
+						$(select).val(_data.Agente);
+						setTimeout(function(){
+							$('.swal2-select').val(_data.Agente);
+							$('.swal2-select').prop('disabled', $(_this).is(':checked') ? false : true);
+						},500);
+					}
+				})
+			    .then((result) => {
+			        if (result.value) {
+			        	form.append('asigna_tecnico', result.value);
+				        $.ajax({
+				            cache: false,
+				            url: base_url+ "index.php/servicio/autorizar_linea/"+id,
+				            contentType: false,
+				            processData: false,
+				            type: 'POST',
+				            dataType: 'json',
+				            data: form,
+				            beforeSend: function(){
+				                $("#loading_spin").show();
+				            }
+				        })
+				        .done(function(data) {
+				            if (data.estatus) {
+				                toastr.info(data.mensaje);
+				                localStorage.setItem('abrirmodal', 1);
+				                obtener_historial_anversos(localStorage.getItem('hist_id_orden'));
+				            }else{
+				            	toastr.warning(data.mensaje);
+				                $(_this).prop('checked', !$(_this).is(':checked'));
+				            }
+				        })
+				        .fail(function() {
+				            toastr.warning('Hubo un error al autorizar el Anverso.');
+				        })
+				        .always(function() {
+				            $("#loading_spin").hide();
+				        });
+				    }else if (result.dismiss) {
+				    	$(_this).prop('checked', !$(_this).is(':checked'));
+				    }
+			    });
+			}else{ 
+				toastr.info('No hay técnicos disponibles.');
+			}
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un error al cargar los técnicos disponibles.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
 });
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abriranverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .abriranverso', function(event) {
 	event.preventDefault();

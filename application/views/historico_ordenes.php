@@ -78,6 +78,10 @@ table tr.active {
 .modal {
     overflow-y: auto !important;
 }
+.swal2-select {
+	display: flex !important;
+	font-size: 0.7em !important;
+}
 </style>
 <div class="container">
     <br>
@@ -502,73 +506,6 @@ table tr.active {
             </div>
     </div>
 </div>
-<!-- modal para jefe de taller asignar tecnico-->
-<div class="modal fade" id="asignModal" aria-labelledby="asignModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 style="color: #4285f4;" class="modal-title" id="asignModalLabel">ASIGNAR TÉCNICO</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="col-md-12">
-      	<form id="formAsignarTec">
-	        <div class="table-responsive">
-	            <table class="table table-bordered">
-	                <thead>
-	                	<tr>
-	                        <th>Línea de Reparación</th>
-	                        <td>
-	                        <div class="form-group col-md-8">
-	                            <label for="asigna_linea" class="grey-text">Descripción</label>
-	                            <select id="asigna_linea" name="asigna_tecnico" class="browser-default form-control validate[required]" required>
-	                            <option value="">seleccione una línea...</option>
-	                            </select>
-	                        </div>
-	                        </td>
-	                    </tr>
-	                    <tr>
-	                        <th>Técnico</th>
-	                        <td>
-	                        <div class="form-group col-md-8">
-	                            <label for="asigna_tecnico" class="grey-text">Nombre</label>
-	                            <select id="asigna_tecnico" name="asigna_tecnico" class="browser-default form-control validate[required]" required>
-	                            <option value="">seleccione un técnico...</option>
-	                            </select>
-	                        </div>
-	                        </td>
-	                    </tr>
-	                    <!-- <tr><th>Tiempo tabulado</th>
-	                        <td>
-	                        <div class="col-sm-4">
-	                        <input type="number" min="1" required name="tiempoTab" class="form-control" value="1">
-	                        </div>
-	                        </td></tr>
-	                        <tr><th>Fecha Asignación</th>
-	                        <td>
-	                        <div class="row">
-	                        <div class="col-md-6">
-	                        	<input placeholder="Fecha Inicio" name="inicio" type="text" id="inicio" class="form-control timepicker-asign-inicio" required>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6">
-	                        	<input placeholder="Fecha Fin" type="text" id="fin" name="fin" class="form-control timepicker-asign-fin" readonly required disabled>
-	                        </div>
-	                        </div>
-	                        </td></tr> -->
-	                </thead>
-	            </table>
-	        </div>
-	    </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" id="btn_asignarTec">Asignar</button>
-      </div>
-    </div>
-  </div>
-</div>
 <!-- modal para requisiciones-->
 <div class="modal fade" id="requisModal" tabindex="-1" aria-labelledby="requisModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px">
@@ -805,7 +742,6 @@ table tr.active {
     </div>
 </div>
 <?php $this->load->view('modals/ver_lineasTrabajo'); ?>
-
 <!-- PARA MANO DE OBRA-->
 <div class="modal fade" id="addManObra" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="false">
     <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px">
@@ -827,6 +763,73 @@ table tr.active {
 </div>
 <!--modal para ver diagnósticos técnico-->
 <?php $this->load->view("modals/historial_diagnosticos");?>
+<!-- modal para jefe de taller asignar tecnico-->
+<div class="modal fade" id="asignModal" aria-labelledby="asignModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: #4285f4;" class="modal-title" id="asignModalLabel">ASIGNAR TÉCNICO</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="col-md-12">
+      	<form id="formAsignarTec">
+	        <div class="table-responsive">
+	            <table class="table table-bordered">
+	                <thead>
+	                	<!-- <tr>
+	                        <th>Línea de Reparación</th>
+	                        <td>
+	                        <div class="form-group col-md-8">
+	                            <label for="asigna_linea" class="grey-text">Descripción</label>
+	                            <select id="asigna_linea" name="asigna_tecnico" class="browser-default form-control validate[required]" required>
+	                            <option value="">seleccione una línea...</option>
+	                            </select>
+	                        </div>
+	                        </td>
+	                    </tr> -->
+	                    <tr>
+	                        <th>Técnico</th>
+	                        <td>
+	                        <div class="form-group col-md-8">
+	                            <label for="asigna_tecnico" class="grey-text">Nombre</label>
+	                            <select id="asigna_tecnico" name="asigna_tecnico" class="browser-default form-control validate[required]" required>
+	                            <option value="">seleccione un técnico...</option>
+	                            </select>
+	                        </div>
+	                        </td>
+	                    </tr>
+	                    <!-- <tr><th>Tiempo tabulado</th>
+	                        <td>
+	                        <div class="col-sm-4">
+	                        <input type="number" min="1" required name="tiempoTab" class="form-control" value="1">
+	                        </div>
+	                        </td></tr>
+	                        <tr><th>Fecha Asignación</th>
+	                        <td>
+	                        <div class="row">
+	                        <div class="col-md-6">
+	                        	<input placeholder="Fecha Inicio" name="inicio" type="text" id="inicio" class="form-control timepicker-asign-inicio" required>
+	                            </div>
+	                        </div>
+	                        <div class="col-md-6">
+	                        	<input placeholder="Fecha Fin" type="text" id="fin" name="fin" class="form-control timepicker-asign-fin" readonly required disabled>
+	                        </div>
+	                        </div>
+	                        </td></tr> -->
+	                </thead>
+	            </table>
+	        </div>
+	    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btn_asignarTec">Asignar</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!--modal para enviar correo cotizaciones-->
 <div class="modal fade" id="sendmailcotizaciones" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog modal-md"  role="document">

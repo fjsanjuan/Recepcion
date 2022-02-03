@@ -3305,12 +3305,23 @@ class Servicio extends CI_Controller {
 	}
 	public function autorizar_linea($idDiagnostico = null)
 	{
-		$check = $this->input->post('check');
+		$datos = $this->input->post();
 		if ($idDiagnostico == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		} else {
-			$response = $this->buscador_model->autorizar_linea($idDiagnostico, $check);
+			$tecnico = $this->db->select('cve_intelisis')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'cve_intelisis' => $datos['asigna_tecnico']])->count_all_results();
+			$datos['id_diagnostico'] = $idDiagnostico;
+			$response['estatus'] = true;
+			if ($tecnico == 0) {
+				$asignacion = $this->buscador_model->asignar_tecnico_linea($datos['idVenta'], $datos);
+				if ($asignacion['estatus'] != true) {
+					$response = $asignacion;
+				}
+			}
+			if ($response['estatus'] == true) {
+				$response = $this->buscador_model->autorizar_linea($idDiagnostico, $datos['check'], $datos['asigna_tecnico']);
+			}
 		}
 		echo json_encode($response);
 	}
@@ -3412,8 +3423,8 @@ class Servicio extends CI_Controller {
 		$renglonSub = $this->input->post('renglonSub') !== '' ? $this->input->post('renglonSub') : null;
 		$claveTecnico = $this->input->post('claveTecnico') !== '' ? $this->input->post('claveTecnico') : null;
 		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'VentaID' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, 'renglonSub' => $renglonSub])->count_all_results();
-		$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
-		$orden_pendiente = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_tecnico' => isset($tecnico['id']) ? $tecnico['id'] : null, 'terminado' => 0])->get()->row_array();
+		//$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
+		$orden_pendiente = $this->db->select('*')->from('diagnostico_tecnico')->where(['cve_intelisis' => isset($claveTecnico) ? $claveTecnico : null, 'terminado' => 0])->get()->row_array();
 		if ($idOrden == null || $idVenta == null || $renglon == null || $renglonId == null || $renglonSub == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
@@ -3437,7 +3448,7 @@ class Servicio extends CI_Controller {
 				$diagnostico['Renglon'] = $renglon;
 				$diagnostico['RenglonSub'] = $renglonSub;
 				$diagnostico['RenglonID'] = $renglonId;
-				$diagnostico['id_tecnico'] =isset($tecnico['id']) ? $tecnico['id'] : null;
+				$diagnostico['cve_intelisis'] =isset($claveTecnico) ? $claveTecnico : null;
 				$diagnostico['detalles'] = [];
 				$response = $this->buscador_model->guardar_diagnostico($idOrden, $diagnostico);
 				if ($response['estatus'] == true) {

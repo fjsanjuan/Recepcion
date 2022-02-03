@@ -1732,7 +1732,7 @@ class Buscador_Model extends CI_Model{
 						$articulos_mo[$i][0]['Descripcion1'],
 						$articulos_mo[$i][0]['Unidad'],
 						$Factor,
-						$Agente,
+						isset($manodeobra[$i]['Agente']) ? $manodeobra[$i]['Agente'] : $Agente,
 						$Sucursal
 					 )
 				);
@@ -4963,8 +4963,6 @@ class Buscador_Model extends CI_Model{
 	}
 
 	function guardar_mo_lineas_intelisis($idOrden,$datar, $elementos){
-		
-
 		global $trigger_name;
 		$this->db2 = $this->load->database("other", true);
 		$bd = $this->db2->database;
@@ -5028,6 +5026,7 @@ class Buscador_Model extends CI_Model{
 					$manodeobra[$i]['art'] = $elementos[$i]['art'];
 					$manodeobra[$i]['cantidad'] = $elementos[$i]['cantidad'];
 					$manodeobra[$i]['precio_u'] = $elementos[$i]['precio_u'];
+					$manodeobra[$i]['Agente'] = isset($elementos[$i]['Agente']) ? $elementos[$i]['Agente'] : '';
 				}
 			}
 			if(sizeof($manodeobra)> 0){
@@ -5136,6 +5135,28 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Técnico asignado correctamente.';
 		}
+		if ($datos['id_diagnostico']) {
+			$data_diagnostico = [
+				'VentaID'       => $id,
+				'Renglon'       => $datos['Renglon'],
+				'RenglonID'     => $datos['RenglonID'],
+				'RenglonSub'    => $datos['RenglonSub'],
+				'cve_intelisis' => $datos['asigna_tecnico']
+			];
+			$this->db->trans_begin();
+			$this->db->where(['id_diagnostico' => $datos['id_diagnostico']]);
+			$this->db->update('diagnostico_tecnico', $data_diagnostico);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE ){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el anverso con el nuevo técnico.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Técnico asignado correctamente.';
+			}
+		}
 		return $response;
 	}
 	public function firmar_reciboRefacciones($idOrden, $idRequisicion)
@@ -5176,15 +5197,19 @@ class Buscador_Model extends CI_Model{
 	}
 	return $response;
 	}
-	public function autorizar_linea($idDiagnostico, $check)
+	public function autorizar_linea($idDiagnostico, $check, $cve_intelisis)
 	{
 		$intelisis = $this->load->database('other',true);
 		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->count_all_results();
 		if ($existe > 0) {
 			$diagnostico = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->get()->row_array();
+			$pendientes = $this->db->select('*')->from('diagnostico_tecnico')->where(['cve_intelisis' => $cve_intelisis, 'terminado !=' => 1])->count_all_results();
 			$orden = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where(['id' => $diagnostico['id_orden']])->get()->row_array();
 			$venta = $intelisis->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
-			if (isset($venta['MovID'])) {
+			if ($check == 'true' && $pendientes > 1) {
+				$response['estatus'] = false;
+				$response['mensaje'] = "El técnico con clave {$cve_intelisis} ya tiene un anverso trabajando. Es necesario terminar el anverso o asigne otro técnico.";
+			}elseif (isset($venta['MovID'])) {
 				$this->db->trans_begin();
 				$this->db->where(['id_diagnostico' => $idDiagnostico]);
 				$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
