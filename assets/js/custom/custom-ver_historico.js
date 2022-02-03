@@ -2880,6 +2880,8 @@ $(document).ready(function() {
 		/*TODO
 			asignar los valores datos a los campos del formulario de nuev-lin
 		 */
+		//$('#linea_tipo').val(lineas_reparacion.ventaID);
+		$(`#linea_tipo option[value='${lineas_reparacion.VentaID}'][data-renglon='${lineas_reparacion.Renglon}'][data-renglonsub='${lineas_reparacion.RenglonSub}'][data-renglonid='${lineas_reparacion.RenglonID}']`).prop('selected', true);
 		$('input[name="num_reparacion"]').val(lineas_reparacion.num_reparacion);
 		$('select[name="tipo_garantia"]').val(lineas_reparacion.tipo_garantia);
 		$('select[name="subtipo_garantia"]').val(lineas_reparacion.subtipo_garantia);
@@ -2912,6 +2914,15 @@ $(document).ready(function() {
 		if (!$('#form_lineasTrabajo').valid()) {
 			return;
 		}
+		data_linea = $('#linea_tipo').find('option:selected').data();
+		if (!data_linea.hasOwnProperty('renglonid')) {
+			toastr.warning('Debes seleccionar una línea.');
+			return;
+		}
+		form.append('ventaId', $('#linea_tipo').val());
+		form.append('renglonId', data_linea.renglonid);
+		form.append('renglon', data_linea.renglon);
+		form.append('renglonSub', data_linea.renglonsub);
 		$.ajax({
 			url: base_url+ "index.php/Servicio/editar_linea/"+idOrden,
 			type: "POST",
@@ -2923,9 +2934,11 @@ $(document).ready(function() {
 				$("#loading_spin").show();
 			},
 			error: function(){
+				$("#loading_spin").hide();
 				toastr.error("error");
 			},
 			success: function (data){
+				$("#loading_spin").hide();
 				if (data.estatus) {
 					toastr.success(data.mensaje);
 					$('#form_lineasTrabajo').trigger('reset');
@@ -5008,6 +5021,15 @@ $(document).off('click', '#lineaTrabajoModal #guardar_lineas').on('click', '#lin
 	if (!$('#form_lineasTrabajo').valid()) {
 		return;
 	}
+	data_linea = $('#linea_tipo').find('option:selected').data();
+	if (!data_linea.hasOwnProperty('renglonid')) {
+		toastr.warning('Debes seleccionar una línea.');
+		return;
+	}
+	form.append('ventaId', $('#linea_tipo').val());
+	form.append('renglonId', data_linea.renglonid);
+	form.append('renglon', data_linea.renglon);
+	form.append('renglonSub', data_linea.renglonsub);
 	$.ajax({
 		cache: false,
 		url: `${base_url}index.php/servicio/guardar_linea/${idOrden}`,
@@ -5145,6 +5167,13 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 	});
 
 	function obtener_lineas(idOrden){
+		idSucursal = 0;
+		$('#tipo_garantia').empty();
+		$('#sub_garantia').empty();
+		$('#linea_tipo').empty();
+		$('#tipo_garantia').append($('<option>', {'text': 'Tipos Garantía'}));
+		$('#sub_garantia').append($('<option>', {'text': 'Subtipos Garantía'}));
+		$('#linea_tipo').append($('<option>', {'text': 'Seleccione una mano de obra'}));
 		$.ajax({
 			url: `${base_url}index.php/servicio/obtener_lineas/${idOrden}`,
 			type: 'GET',
@@ -5190,12 +5219,88 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 					row_body.append(col_sm_12);
 					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(row_title);
 					$('#lineaTrabajoModal #lineas_cargadas .modal-body').append(row_body);
-					$('#lineaTrabajoModal').modal('show');
 				}else{
 					$('#lin-carg').prop('disabled', true);
 					toastr.info(data.mensaje);
 				}
 			}
+		});
+		$.ajax({
+			url: `${base_url}index.php/servicio/obtener_subtipos_garantia_activos/${idSucursal}`,
+			type: 'GET',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(error){
+				$("#loading_spin").hide();
+				toastr.warning('Ocurrió un error al obtener los subtipos de garantía.');
+				console.log('error', error);
+			},
+			success: function (data){
+				$("#loading_spin").hide();
+				if(data.estatus == true){
+					$.each(data.subtipos, function(index, val) {
+						$('#sub_garantia').append($('<option>', {'value': val.nombre, 'text':val.nombre}));
+					});
+				}else{
+					toastr.info(data.mensaje);
+				}
+			}
+		});
+		$.ajax({
+			url: `${base_url}index.php/servicio/obtener_tipos_garantia_activos/${idSucursal}`,
+			type: 'GET',
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(error){
+				$("#loading_spin").hide();
+				toastr.warning('Ocurrió un error al obtener los tipos de garantía.');
+				console.log('error', error);
+			},
+			success: function (data){
+				
+				$("#loading_spin").hide();
+				if(data.estatus == true){
+					$.each(data.tipos, function(index, val) {
+						$('#tipo_garantia').append($('<option>', {'value': val.nombre, 'text':val.nombre}));
+					});
+				}else{
+					toastr.info(data.mensaje);
+				}
+			}
+		});
+		$.ajax({
+			url: `${base_url}index.php/servicio/obtener_manos_obra_orden/${idOrden}`,
+			type: 'GET',
+			dataType: 'json',
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(respLineas) {
+			let con_movimientos = 0;
+			if (respLineas.estatus) {
+				$.each(respLineas.manos, function(index, val) {
+					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.DescripcionExtra}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`}));
+				});
+				$('#lineaTrabajoModal').modal('show');
+			}else {
+				toastr.info(respLineas.mensaje);
+			}
+		})
+		.fail(function(error) {
+			toastr.warning('Ocurrió un error al cargar los técnicos disponibles.');
+			console.log("error", error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
 		});
 	}
 

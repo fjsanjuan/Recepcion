@@ -16,13 +16,19 @@ echo form_open('',$attributes);
 	<div class="container">
 		<div class="row" >
 			<form role="form">
+				<div class="form-group col-md-8">
+					<label for="linea_tipo" class="grey-text">Linea de trabajo</label>
+					<select id="linea_tipo" name="linea_tipo" class="browser-default form-control validate[required]" required>
+					<option value="">seleccione una línea...</option>
+					</select>
+				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-					<label for="num_rep" class="col-sm-4 control-label" style="white-space: nowrap;">No. Reparación</label>
+					<label for="num_rep" class="control-label" style="white-space: nowrap;">No. Reparación</label>
 					<input type="text" class="form-control" name="num_reparacion" id="num_rep">
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-					<label for="tipo_garantia" class="col-sm-4 control-label" style="white-space: nowrap;">Tipo de Garantía</label>
-					<select id="tipo_garantia" name="tipo_garantia" style="width:auto;" class="browser-default form-control">
+					<label for="tipo_garantia" class="control-label" style="white-space: nowrap;">Tipo de Garantía</label>
+					<select id="tipo_garantia" name="tipo_garantia" class="browser-default form-control">
 					<option value="">Tipo Garantías</option>
 					<option value="Cero Defectos">Cero Defectos</option>
 					<option value="Básica">Básica</option>
@@ -34,8 +40,8 @@ echo form_open('',$attributes);
 					</select>
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-					<label for="sub_garantia" class="col-sm-4 control-label" style="white-space: nowrap;">Sub Tipo de Garantía</label>
-					<select id="sub_garantia" name="subtipo_garantia" style="width:auto;" class="browser-default form-control">
+					<label for="sub_garantia" class="control-label" style="white-space: nowrap;">Sub Tipo de Garantía</label>
+					<select id="sub_garantia" name="subtipo_garantia" class="browser-default form-control">
 					<option value="">Sub Tipos Garantía</option>
 					<option value="MVC">MVC Son números desde Ford</option>
 					<option value="ACC">ACC</option>

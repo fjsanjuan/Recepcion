@@ -4530,6 +4530,9 @@ class Buscador_Model extends CI_Model{
 						$response['desglose'][$key]['prefijo'] = null;
 						$response['desglose'][$key]['sufijo'] = null;
 						$costo_tiempo = 0;
+						$linea = $this->db->select('*')->from('lineas_reparacion')->where(['VentaID' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID']])->get()->row_array();
+						$response['desglose'][$key]['num_rem'] = isset($linea['num_reparacion']) ? $linea['num_reparacion'] : null;
+						$response['desglose'][$key]['importe_mano'] = isset($linea['mano_obra_total']) ? $linea['mano_obra_total'] : 0;
 						$tiempos = $intelisis->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 						foreach (is_array($tiempos) ? $tiempos : [] as $key2 => $inicio) {
 							$aux_fin = new DateTime($inicio['FechafIN'] ? $inicio['FechafIN'] : $inicio['FechaInicio']);
@@ -4538,6 +4541,8 @@ class Buscador_Model extends CI_Model{
 							$costo_tiempo += is_nan($aux) ? 0 : $aux;
 						}
 						$costo_tiempo = number_format($costo_tiempo, 2);
+						$mano_obra_total = $response['desglose'][$key]['importe_mano'] * $costo_tiempo;
+						$response['desglose'][$key]['importe_mano'] = number_format($mano_obra_total, 2);
 					}
 					$response['desglose'][$key]['tiempo'] = $costo_tiempo;
 				}
@@ -4577,7 +4582,7 @@ class Buscador_Model extends CI_Model{
 				'num_reparacion'             => isset($datos['num_reparacion']) ? $datos['num_reparacion'] : null,
 				'tipo_garantia'              => isset($datos['tipo_garantia']) ? $datos['tipo_garantia'] : null,
 				'subtipo_garantia'           => isset($datos['subtipo_garantia']) ? $datos['subtipo_garantia'] : null,
-				'dannio'            		 => isset($datos['danio_ralacion']) ? $datos['danio_ralacion'] : null,
+				'dannio'                     => isset($datos['danio_ralacion']) ? $datos['danio_ralacion'] : null,
 				'autoriz_1'                  => isset($datos['autoriz_1']) ? $datos['autoriz_1'] : null,
 				'autoriz_2'                  => isset($datos['autoriz_2']) ? $datos['autoriz_2'] : null,
 				'partes_totales'             => isset($datos['partes_totales']) ? $datos['partes_totales'] : null,
@@ -4588,7 +4593,11 @@ class Buscador_Model extends CI_Model{
 				'participacion_distribuidor' => isset($datos['participacion_distribuidor']) ? $datos['participacion_distribuidor'] : null,
 				'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
 				'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
-				'id_orden'                   => $idOrden
+				'id_orden'                   => $idOrden,
+				'VentaID'                    => isset($datos['ventaId']) ? $datos['ventaId'] : null,
+				'Renglon'                    => isset($datos['renglon']) ? $datos['renglon'] : null,
+				'RenglonID'                  => isset($datos['renglonId']) ? $datos['renglonId'] : null,
+				'RenglonSub'                 => isset($datos['renglonSub']) ? $datos['renglonSub'] : null,
 			]; 
 			$this->db->insert('lineas_reparacion', $data);
 			$id = $this->db->insert_id();
@@ -4627,7 +4636,11 @@ class Buscador_Model extends CI_Model{
 			'participacion_distribuidor' => isset($datos['participacion_distribuidor']) ? $datos['participacion_distribuidor'] : null,
 			'reparacion_total'           => isset($datos['reparacion_total']) ? $datos['reparacion_total'] : null,
 			'firma_admin'                => isset($datos['firma_admin']) ? $datos['firma_admin'] : null,
-			'id_orden'                   => $idOrden
+			'id_orden'                   => $idOrden,
+			'VentaID'                    => isset($datos['ventaId']) ? $datos['ventaId'] : null,
+			'Renglon'                    => isset($datos['renglon']) ? $datos['renglon'] : null,
+			'RenglonID'                  => isset($datos['renglonId']) ? $datos['renglonId'] : null,
+			'RenglonSub'                 => isset($datos['renglonSub']) ? $datos['renglonSub'] : null,
 		];
 		/*echo '<prev>'; print_r($data);
 		echo '</prev>';*/
