@@ -2334,11 +2334,10 @@ class Buscador_Model extends CI_Model{
 
 		foreach ($ordenes_validas as $key => $value) 
 		{
-			$ordenes[$key] += $this->db->select("firma_electronica as signAsesor")
+			$firma = $this->db->select("firma_electronica as signAsesor")
 							->from("usuarios")
-							->where("cve_intelisis",$value["clave_asesor"])
+							->where("cve_intelisis",$value['clave_asesor'])
 							->get()->row_array();
-							
 			$ordenes_validas[$key] += is_array($firma) ? $firma : ['signAsesor' => null];
 		}
 
