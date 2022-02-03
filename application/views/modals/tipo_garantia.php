@@ -15,12 +15,12 @@
 				?>
 					<div class="form-group">
 						<label for="nombreTipo">Nombre</label>
-						<input type="text" class="form-control" id="nombreTipo" name="nombre" aria-describedby="nombreHelp" placeholder="Nombre tipo de garantía">
+						<input type="text" class="required write form-control" id="nombreTipo" name="nombre" aria-describedby="nombreHelpTipo" placeholder="Nombre tipo de garantía" required />
 						<small id="nombreHelpTipo" class="form-text text-muted">Ingresa el nombre del tipo de garantía.</small>
 					</div>
 					<div class="form-group">
 						<label for="descripcionTipo">Descripción</label>
-						<textarea type="text" class="form-control" id="descripcionTipo" name="descripcion" aria-describedby="descripcionHelpTipo" placeholder="Descripción tipo de garantía">
+						<textarea type="text" class="required write form-control" id="descripcionTipo" name="descripcion" aria-describedby="descripcionHelpTipo" placeholder="Descripción tipo de garantía" required />
 						</textarea>
 						<small id="descripcionHelpTipo" class="form-text text-muted">Describa el subtipo de garantía.</small>
 					</div>
