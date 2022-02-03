@@ -1315,6 +1315,9 @@ select[name='tabla_historico_length'] {
 select[name='tabla_subtipoGtia_length'] {
   display: inline !important;
 }
+select[name='tabla_tipoGtia_length'] {
+  display: inline !important;
+}
 
 /*Formato de Inventario*/
 .formato-inv img.logo-distribuidor {
