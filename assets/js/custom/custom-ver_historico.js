@@ -6359,6 +6359,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .detall
 });
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso', function(event) {
 	id = $(this).prop('id').split('-')[1];
+	$('.swal2-select').addClass('swal2-select-active');
 	idOrden = localStorage.getItem('hist_id_orden');
 	form = new FormData();
 	form.append('id_diagnostico', id);
@@ -6416,6 +6417,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 					inputPlaceholder: 'Confirma el técnico.',
 					onOpen: function () {
 						$(select).val(_data.Agente);
+						$('.swal2-select').addClass('swal2-select-active');
 						setTimeout(function(){
 							$('.swal2-select').val(_data.Agente);
 							$('.swal2-select').prop('disabled', $(_this).is(':checked') ? false : true);
@@ -6423,6 +6425,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 					}
 				})
 			    .then((result) => {
+			    	$('.swal2-select').removeClass('swal2-select-active');
 			        if (result.value) {
 			        	form.append('asigna_tecnico', result.value);
 				        $.ajax({

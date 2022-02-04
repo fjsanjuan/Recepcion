@@ -2736,7 +2736,7 @@ class Servicio extends CI_Controller {
 			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
 			foreach ($datos['formatos'] as $key => $formato) {
 				$data         = $datos;
-				$data['url'] = $formato['url'];
+				$data['url']  = $formato['url'];
 				$data['name'] = $formato['name'];
 				if ($data['name'] == 'CRC') {
 					$data['id_orden'] = isset($orden['movimiento']) ? $orden['movimiento'] : $idOrden;

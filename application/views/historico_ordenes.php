@@ -78,7 +78,7 @@ table tr.active {
 .modal {
     overflow-y: auto !important;
 }
-.swal2-select {
+.swal2-select-active {
 	display: flex !important;
 	font-size: 0.7em !important;
 }
