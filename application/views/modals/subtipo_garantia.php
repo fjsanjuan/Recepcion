@@ -15,12 +15,12 @@
 				?>
 					<div class="form-group">
 						<label for="nombreSubtipo">Nombre</label>
-						<input type="text" class="form-control" id="nombreSubtipo" name="nombre" aria-describedby="nombreHelp" placeholder="Nombre tipo de garantía">
+						<input type="text" class="form-control" id="nombreSubtipo" name="nombre" aria-describedby="nombreHelp" placeholder="Nombre tipo de garantía" required>
 						<small id="nombreHelp" class="form-text text-muted">Ingresa el nombre del subtipo de garantía.</small>
 					</div>
 					<div class="form-group">
 						<label for="descripcionSubtipo">Descripción</label>
-						<textarea type="text" class="form-control" id="descripcionSubtipo" name="descripcion" aria-describedby="descripcionHelp" placeholder="Descripción tipo de garantía">
+						<textarea type="text" class="form-control" id="descripcionSubtipo" name="descripcion" aria-describedby="descripcionHelp" placeholder="Descripción tipo de garantía" required>
 						</textarea>
 						<small id="descripcionHelp" class="form-text text-muted">Describa el subtipo de garantía.</small>
 					</div>
@@ -29,8 +29,8 @@
 				?>
 			</div>
 			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="btn_crearSubtipo">Crear</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-				<button type="button" class="btn btn-primary" id="btn_crearSubtipo">Crear</button> 
 				<button type="button" class="btn btn-primary" id="btn_actualizarSubtipo">Actualizar</button> 
 			</div>
 		</div>

@@ -213,6 +213,10 @@ $(document).ready(function() {
 		});
 	});
 	$(document).off('click', '#btn_crearSubtipo').on('click', '#btn_crearSubtipo', function(event) {
+		if ($('input, textarea').val('')){
+			toastr.info('Debe agregar un subtipo y descripción de la Garantía.');
+			return false;
+		}
 		event.preventDefault();
 		const form = new FormData($('#form_subtipo')[0]);
 		$('#loading_spin').show();
