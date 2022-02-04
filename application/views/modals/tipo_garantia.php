@@ -20,7 +20,7 @@
 					</div>
 					<div class="form-group">
 						<label for="descripcionTipo">Descripción</label>
-						<textarea type="text" class="required write form-control" id="descripcionTipo" name="descripcion" aria-describedby="descripcionHelpTipo" placeholder="Descripción tipo de garantía" required />
+						<textarea type="text" class="required writeform-control" id="descripcionTipo" name="descripcion" aria-describedby="descripcionHelpTipo" placeholder="Descripción tipo de garantía" required />
 						</textarea>
 						<small id="descripcionHelpTipo" class="form-text text-muted">Describa el subtipo de garantía.</small>
 					</div>
@@ -29,8 +29,8 @@
 				?>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 				<button type="button" class="btn btn-primary" id="btn_crearTipo">Crear</button> 
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 				<button type="button" class="btn btn-primary" id="btn_actualizarTipo">Actualizar</button> 
 			</div>
 		</div>

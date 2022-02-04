@@ -4017,6 +4017,9 @@ class Buscador_Model extends CI_Model{
 	}
 	public function guardar_requisiciones($idOrden, $datos)
 	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 		$logged_in = $this->session->userdata("logged_in");
 		$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
 		$datos['total_presupuesto'] = str_ireplace(',', '', $datos['total_presupuesto']);
@@ -4027,8 +4030,10 @@ class Buscador_Model extends CI_Model{
 			'nom_tecnico'       => isset($tecnico['nombre']) ? $tecnico['nombre'] : null,
 			'id_orden'          => $idOrden,
 			'total_presupuesto' => $datos['total_presupuesto'],
-			'id_usuario'        => $logged_in['id']
+			'id_usuario'        => $logged_in['id'],
+			'firma_de_tecnico'	=> $firma['firma_electronica']
 		];
+	}
 		$this->db->trans_start();
 		$this->db->insert('requisiciones', $requisicion);
 		$id = $this->db->insert_id();
@@ -5166,7 +5171,6 @@ class Buscador_Model extends CI_Model{
 		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 		$existen = $this->db->select("*")->from('requisiciones')->where(['id_requisicion' => $idRequisicion])->get()->row_array();
 		$data = [
-			'firma_de_tecnico' => $firma['firma_electronica'],
 			'fecha_recepcion' => date('d-m-Y H:i:s')
 		];
 		/*echo '<pre>'; print_r($existen);
@@ -5174,7 +5178,7 @@ class Buscador_Model extends CI_Model{
 		if ($existen['entregado']) {
 			$this->db->trans_start();
 			$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
-			if($perfil == 5){
+			if($perfil == 7){
 				$this->db->update('requisiciones', $data);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE) {
@@ -5189,7 +5193,7 @@ class Buscador_Model extends CI_Model{
 			}
 		}else {
 			$response["estatus"] = false;
-			$response["mensaje"] = 'No puede recibir refacciones que no han sido entregadas.';
+			$response["mensaje"] = 'No existen piezas para recibir, verificar con el técnico si realizó el retorno piezas.';
 		}
 	}else {
 		$response['estatus'] = false;

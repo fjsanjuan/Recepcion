@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -4678,8 +4678,8 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 
 $(document).off('click', '.ver_req').on('click', '.ver_req', function(event) {
 	if (id_perfil == 6){$('#checkTecn').hide(); $('#firmaAdmon').hide();}
-	if (id_perfil == 7){$('#checkTecn').hide();}
-	if (id_perfil == 5){$('#firmaAdmon').hide();}
+	//if (id_perfil == 7){$('#checkTecn').hide();}
+	if (id_perfil == 5){$('#firmaAdmon').hide(); $('#checkTecn').hide();}
 	event.preventDefault();
 	idOrden = $(this).prop('id');
 	idOrden = idOrden.split('-')[1];
@@ -4750,7 +4750,7 @@ function obtener_requisiciones(idOrden){
 
 					row_title.append(check);*/
 
-					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autoriza<br>Garantías<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil != 7 || value['autorizado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='entregar_req' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-entregar' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+((id_perfil != 6 || value['entregado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-entregar'></label></th><th>Recibe<br>Técnico<br><input type='checkbox' class='recibe_req' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-recibido' name='recibe_req[]' value='1' "+(value['firma_de_tecnico'] ? 'checked' : '')+" "+((id_perfil != 5 || value['firma_de_tecnico'] ) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-recibido'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Autoriza<br>Garantías<br><input type='checkbox' class='auth_all' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"' name='auth_req[]' value='1' "+(value['autorizado'] == 1? 'checked' : '')+" "+((id_perfil != 7 || value['autorizado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"'></label></th><th>Entregado<br><input type='checkbox' class='entregar_req' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-entregar' name='entregado_req[]' value='1' "+(value['entregado'] == 1? 'checked' : '')+" "+((id_perfil != 6 || value['entregado'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-entregar'></label></th><th>Garantías<br>Recibe<br><input type='checkbox' class='recibe_req' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-recibido' name='recibe_req[]' value='1' "+(value['recibi_piezas'] ? 'checked' : '')+" "+((id_perfil != 7 || value['recibi_piezas'] ) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-recibido'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalles, function(index2, value2){
 						if(value2.autorizado == 0){
 							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.precio_unitario ? value2.precio_unitario : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td>"+(value2.total_arts ? value2.total_arts : '')+"</td><td><td><td></td></td></td></tr>");
