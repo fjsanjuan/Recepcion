@@ -5241,7 +5241,7 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 			let con_movimientos = 0;
 			if (respLineas.estatus) {
 				$.each(respLineas.manos, function(index, val) {
-					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.DescripcionExtra}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`}));
+					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`}));
 				});
 				$('#lineaTrabajoModal').modal('show');
 			}else {
@@ -6283,7 +6283,7 @@ function construir_tabla_historial_anversos(data) {
 	tr.append($('<th>',{'text': 'Autorización'}));
 	tr.append($('<th>',{'text': 'Terminada'}));
 	tr.append($('<th>',{'text': 'Anverso'}));
-	tr.append($('<th>',{'text': 'Asignar Técnico'}));
+	tr.append($('<th>',{'text': 'Cambiar Técnico'}));
 	tr.append($('<th>',{'text': 'PDF'}));
 	tr.append($('<th>',{'text': 'Detalles'}));
 	$('#tabla_diagnosticos').append(tr);
@@ -6301,6 +6301,9 @@ function construir_tabla_historial_anversos(data) {
 		}
 		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
 		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
+		if (id_perfil != 4) {
+			$(tecnico).prop('disabled', true);
+		}
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
 		tr.append($('<td>').append(autorizar));

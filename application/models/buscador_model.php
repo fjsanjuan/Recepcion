@@ -5253,7 +5253,7 @@ class Buscador_Model extends CI_Model{
 		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
 		$response['lineas_reparacion'] = $this->db->select('*')->from('lineas_reparacion')->where(['id_orden' => $idOrden])->get()->result_array();
 		if (sizeof($orden) > 0 ) {
-			$response['manos'] = $this->db2->select('*')->from('seguimientoTecnicosWeb')->where(['ID' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
+			$response['manos'] = $this->db2->select('*, IdVenta AS ID, descripcion AS Descripcion1')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
 			if (sizeof($response['manos']) > 0) {
 				foreach ($response['manos'] as $key => $mano) {
 					$response['manos'][$key]['autorizado'] = $this->db->select('autorizado')->from('diagnostico_tecnico')->where(['VentaID' => $mano['ID'], 'Renglon' => $mano['Renglon'], 'RenglonID' => $mano['RenglonID'],'RenglonSub' => $mano['RenglonSub'], 'autorizado' => 1])->count_all_results();
@@ -5278,12 +5278,12 @@ class Buscador_Model extends CI_Model{
 		$this->db2 = $this->load->database('other',true);
 		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
 		if (sizeof($orden) > 0 ) {
-			$response['manos'] = $this->db2->select('*')->from('seguimientoTecnicosWeb')->where(['ID' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
+			$response['manos'] = $this->db2->select('*, IdVenta AS ID, descripcion AS Descripcion1')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $orden['id_orden_intelisis'], 'Tipo' => 'Servicio'])->get()->result_array();
 			if (sizeof($response['manos']) > 0) {
 				$response['estatus'] = true;
 				$response['mensaje'] = "Ok.";
 				foreach ($response['manos'] as $key => $mano) {
-					$response['manos'][$key]['diagnostico'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['VentaID' => $mano['ID'], 'RenglonID' => $mano['RenglonID'], 'Renglon' => $mano['Renglon']])->get()->row_array();
+					$response['manos'][$key]['diagnostico'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['VentaID' => $mano['IdVenta'], 'RenglonID' => $mano['RenglonID'], 'Renglon' => $mano['Renglon']])->get()->row_array();
 				}
 			} else {
 				$response['estatus'] = false;
