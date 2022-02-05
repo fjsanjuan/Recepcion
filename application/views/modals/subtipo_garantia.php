@@ -9,10 +9,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<?php
-					$attributes = array('id' => 'form_subtipo');
-					echo form_open('',$attributes);
-				?>
+				<form action="!#" id="form_subtipo">
 					<div class="form-group">
 						<label for="nombreSubtipo">Nombre</label>
 						<input type="text" class="form-control" id="nombreSubtipo" name="nombre" aria-describedby="nombreHelp" placeholder="Nombre tipo de garantía" required>
@@ -20,13 +17,10 @@
 					</div>
 					<div class="form-group">
 						<label for="descripcionSubtipo">Descripción</label>
-						<textarea type="text" class="form-control" id="descripcionSubtipo" name="descripcion" aria-describedby="descripcionHelp" placeholder="Descripción tipo de garantía" required>
-						</textarea>
+						<textarea type="text" class="form-control" id="descripcionSubtipo" name="descripcion" aria-describedby="descripcionHelp" placeholder="Descripción tipo de garantía" required></textarea>
 						<small id="descripcionHelp" class="form-text text-muted">Describa el subtipo de garantía.</small>
 					</div>
-				<?php
-					echo form_close();
-				?>
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" id="btn_crearSubtipo">Crear</button>

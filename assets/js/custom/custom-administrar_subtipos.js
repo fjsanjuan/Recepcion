@@ -123,7 +123,7 @@ $(document).ready(function() {
 			}
 		})
 		.fail(function(error) {
-			toastr.error('Ocurrió un erro al obtener los subtipos de garantía.');
+			toastr.error('Ocurrió un error al obtener los subtipos de garantía.');
 			console.log("error", error);
 		})
 		.always(function() {
@@ -134,8 +134,6 @@ $(document).ready(function() {
 		event.preventDefault();
 		id = $(this).prop('id').split('-')[1];
 		estatus = $(this).data('estatus');
-		console.log('id', id);
-		console.log('estatus', estatus);
 		swal({
 			title: `¿${estatus == 0 ? 'Desactivar' : 'Activar'}?`,
 			showCancelButton: true,
@@ -160,7 +158,7 @@ $(document).ready(function() {
 						}
 					})
 					.fail(function(error) {
-						toastr.error('Ocurrió un erro al obtener los subtipos de garantía.');
+						toastr.error('Ocurrió un error al obtener los subtipos de garantía.');
 						console.log("error", error);
 					})
 					.always(function() {
@@ -173,8 +171,8 @@ $(document).ready(function() {
 	});
 
 	$(document).off('click', '#btn_nuevoSubtipo').on('click', '#btn_nuevoSubtipo', function(event) {
-		$('#nombreSubtipo').val();
-		$('#descripcionSubtipo').text();
+		$('#nombreSubtipo').val('');
+		$('#descripcionSubtipo').val('');
 		$('#btn_actualizarSubtipo').hide();
 		$('#btn_crearSubtipo').show();
 		$('#subtipoModalLabel').text('Añadir Subtipo de Garantía');
@@ -194,7 +192,7 @@ $(document).ready(function() {
 		.done(function(resp) {
 			if (resp.estatus) {
 				$('#nombreSubtipo').val(resp.subtipo.nombre);
-				$('#descripcionSubtipo').text(resp.subtipo.descripcion);
+				$('#descripcionSubtipo').val(resp.subtipo.descripcion);
 				$('#btn_actualizarSubtipo').show();
 				$('#btn_crearSubtipo').hide();
 				$('#btn_actualizarSubtipo').data('id', id);
@@ -205,7 +203,7 @@ $(document).ready(function() {
 			}
 		})
 		.fail(function(error) {
-			toastr.error('Ocurrió un erro al obtener el subtipo de garantía.');
+			toastr.error('Ocurrió un error al obtener el subtipo de garantía.');
 			console.log("error", error);
 		})
 		.always(function() {
@@ -213,11 +211,13 @@ $(document).ready(function() {
 		});
 	});
 	$(document).off('click', '#btn_crearSubtipo').on('click', '#btn_crearSubtipo', function(event) {
-		if ($('input, textarea').val('')){
-			toastr.info('Debe agregar un subtipo y descripción de la Garantía.');
-			return false;
-		}
 		event.preventDefault();
+		$('#nombreSubtipo').val($('#nombreSubtipo').val().trim());
+		$('#descripcionSubtipo').val($('#descripcionSubtipo').val().trim());
+		if (!$('#form_subtipo').is(':valid')){
+			toastr.info('Debe agregar un subtipo y descripción de la Garantía.');
+			return;
+		}
 		const form = new FormData($('#form_subtipo')[0]);
 		$('#loading_spin').show();
 		$.ajax({
@@ -249,6 +249,12 @@ $(document).ready(function() {
 	});
 	$(document).off('click', '#btn_actualizarSubtipo').on('click', '#btn_actualizarSubtipo', function(event) {
 		event.preventDefault();
+		$('#nombreSubtipo').val($('#nombreSubtipo').val().trim());
+		$('#descripcionSubtipo').val($('#descripcionSubtipo').val().trim());
+		if (!$('#form_subtipo').is(':valid')){
+			toastr.info('Debe agregar un subtipo y descripción de la Garantía.');
+			return;
+		}
 		id = $(this).data('id');
 		$('#loading_spin').show();
 		console.log('id', id);

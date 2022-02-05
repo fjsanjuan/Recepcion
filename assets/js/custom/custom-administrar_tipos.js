@@ -173,8 +173,8 @@ $(document).ready(function() {
 	});
 
 	$(document).off('click', '#btn_nuevoTipo').on('click', '#btn_nuevoTipo', function(event) {
-		$('#nombreTipo').val();
-		$('#descripcionTipo').text();
+		$('#nombreTipo').val('');
+		$('#descripcionTipo').val('');
 		$('#btn_actualizarTipo').hide();
 		$('#btn_crearTipo').show();
 		$('#tipoModalLabel').text('Añadir Tipo de Garantía');
@@ -194,7 +194,7 @@ $(document).ready(function() {
 		.done(function(resp) {
 			if (resp.estatus) {
 				$('#nombreTipo').val(resp.tipo.nombre);
-				$('#descripcionTipo').text(resp.tipo.descripcion);
+				$('#descripcionTipo').val(resp.tipo.descripcion);
 				$('#btn_actualizarTipo').show();
 				$('#btn_crearTipo').hide();
 				$('#btn_actualizarTipo').data('id', id);
@@ -213,11 +213,13 @@ $(document).ready(function() {
 		});
 	});
 	$(document).off('click', '#btn_crearTipo').on('click', '#btn_crearTipo', function(event) {
-		if ($('input, textarea').val('')){
-			toastr.info('Debe agregar un tipo y descripción de la Garantía.');
-			return false;
-		}
 		event.preventDefault();
+		$('#nombreTipo').val($('#nombreTipo').val().trim());
+		$('#descripcionTipo').val($('#descripcionTipo').val().trim());
+		if (!$('#form_tipo').is(':valid')){
+			toastr.info('Debe agregar un tipo y descripción de la Garantía.');
+			return;
+		}
 		const form = new FormData($('#form_tipo')[0]);
 		$('#loading_spin').show();
 		$.ajax({
@@ -249,6 +251,12 @@ $(document).ready(function() {
 	});
 	$(document).off('click', '#btn_actualizarTipo').on('click', '#btn_actualizarTipo', function(event) {
 		event.preventDefault();
+		$('#nombreTipo').val($('#nombreTipo').val().trim());
+		$('#descripcionTipo').val($('#descripcionTipo').val().trim());
+		if (!$('#form_tipo').is(':valid')){
+			toastr.info('Debe agregar un tipo y descripción de la Garantía.');
+			return;
+		}
 		id = $(this).data('id');
 		$('#loading_spin').show();
 		console.log('id', id);

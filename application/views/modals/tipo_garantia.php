@@ -9,10 +9,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<?php
-					$attributes = array('id' => 'form_tipo');
-					echo form_open('',$attributes);
-				?>
+				<form action="!#" id='form_tipo'>
 					<div class="form-group">
 						<label for="nombreTipo">Nombre</label>
 						<input type="text" class="required write form-control" id="nombreTipo" name="nombre" aria-describedby="nombreHelpTipo" placeholder="Nombre tipo de garantía" required />
@@ -24,9 +21,7 @@
 						</textarea>
 						<small id="descripcionHelpTipo" class="form-text text-muted">Describa el subtipo de garantía.</small>
 					</div>
-				<?php
-					echo form_close();
-				?>
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" id="btn_crearTipo">Crear</button> 
