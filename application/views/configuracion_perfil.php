@@ -184,12 +184,36 @@ $(document).ready(function(){
         var valido = validar_password(pass);
     });
 
+    //Ford Star validación
+    function validar_fordStar(fordStar)
+    {
+        var validar;
+        if(fordStar.length <= 8 || fordStar.length >= 10)
+        {
+            toastr.error("El Ford Star, debe contener 9 caracteres")
+            validar = false;
+        }
+        else if(fordStar.length === 9)
+            {
+                toastr.info("Ford Star es correcto");
+                validar = true;
+            }
+        return validar;
+    }
+
+    //Ford Star
+    $("#cve_fordStar").on("focusout" , function(){
+        var star = $(this).val();
+        var validar = validar_fordStar(star);
+    })
+
     /*Guardar cambios*/
     $("#btn_guardarConfUsu").on("click", function(e){
         e.preventDefault();
         var form = "";
         var password = $("#pass_usu").val();
         var firma_ok = validar_firma(firma.jqSignature("getDataURL"));
+        var fordStar = $("#cve_fordStar").val();
         
         if(password != "")
         {
@@ -204,6 +228,16 @@ $(document).ready(function(){
         if(firma_ok == false)
         {
             return;
+        }
+        //Ford Star
+        if(fordStar != "")
+        {
+            var validar = validar_fordStar(fordStar);
+
+            if(validar == false)
+            {
+                return;
+            }
         }
 
         $("#firma_usu").val(firma.jqSignature("getDataURL"));
@@ -222,6 +256,7 @@ $(document).ready(function(){
                 $("#pass_usu").val("");
                 $("#firma_cliente").attr("src","");
                 $("#firma_cliente").attr("src",firma.jqSignature("getDataURL"));
+                $("#cve_fordStar").val("");
 
                 toastr.success("Se han actualizado los datos");
             }else 
@@ -276,7 +311,7 @@ $(document).ready(function(){
                     <label for="email_usu">Contraseña:</label>
                 </div>
                 <div class="col-sm-10">
-                    <input type="text" name="pass_usu" id="pass_usu" class="form-control input-usuario">
+                    <input type="text" name="pass_usu" id="pass_usu" class="form-control input-usuario" placeholder="******">
                 </div>
             </div>
             <input type="hidden" name="firma_usu" id="firma_usu">
@@ -311,6 +346,16 @@ $(document).ready(function(){
                 </div>
                 <div class="col-sm-10">
                     <input type="text" name="cve_usu" id="cve_usu" class="form-control input-usuario" readonly value="<?=$cve_intelisis?>">
+                </div>
+            </div>
+            <div class="row" id="fordStar">                       
+                <div class="col-sm-2">
+                    <i class="fa fa-key iconos-usuario"></i>
+                    &nbsp;
+                    <label for="cve_fordstar">Ford Star:</label>
+                </div>
+                <div class="col-sm-10">
+                    <input type="text" name="cve_fordStar" id="cve_fordStar" class="form-control input-usuario" value="<?=""?>" placeholder="Ford Star del Técnico">
                 </div>
             </div>
             <br>

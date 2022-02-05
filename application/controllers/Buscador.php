@@ -261,4 +261,21 @@ class Buscador extends CI_Controller {
 			$this->load->view("errors/html/error_404", $response);
 		}	
 	}
+
+	// public function administrar_tecnicos()
+	// {
+	// 	$logged_in = $this->session->userdata("logged_in");
+	// 	if(empty($logged_in) == false && $logged_in['perfil'] == 5)
+	// 	{
+	// 		$data["scripts"] = $this->load->view("scripts", "", true);	
+	// 		$data["navbar"] = $this->load->view("navbar", "", false);	
+	// 		$data["contenido"] = $this->load->view("configuracion_perfil", "", true);
+	// 		$this->load->view("base", $data);
+	// 	}else
+	// 	{
+	// 		$response['heading'] = 'Permiso denegado.';
+	// 		$response['message'] = 'Solo los técnicos, realizan este proceso.';
+	// 		$this->load->view("errors/html/error_404", $response);
+	// 	}	
+	// }
 }

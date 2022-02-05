@@ -85,7 +85,8 @@ class User extends CI_Controller {
 					'cve_intelisis' => $user->cve_intelisis,
 					'almacen_servicio' => $user->almacen_servicio,
 					'almacen_refac'=> $user->almacen_refacciones,
-					'sucursal_int' => $user->sucursal_int
+					'sucursal_int' => $user->sucursal_int,
+					'fordSatar' => $user->fordStar
 				);
 				$this->session->set_userdata('logged_in', $sess_array);
 				
@@ -294,4 +295,23 @@ class User extends CI_Controller {
 		$total = $this->user_model->total_fotos($data);
 		echo json_encode($total);
 	}
+
+	public function administrar_tecnicos()
+	{
+		$logged_in = $this->session->userdata("logged_in");
+		if(empty($logged_in) == false && $logged_in['perfil'] == 5)
+		{
+			$data["scripts"] = $this->load->view("scripts", "", true);	
+			$data["navbar"] = $this->load->view("navbar", "", false);	
+			$data["contenido"] = $this->load->view("configuracion_perfil", "", true);
+			$this->load->view("base", $data);
+		}else
+		{
+			// $response['heading'] = 'Permiso denegado.';
+			// $response['message'] = 'Solo los técnicos, realizan este proceso.';
+			// $this->load->view("errors/html/error_404", $response);
+			show_404();
+		}	
+	}
+
 }

@@ -23,7 +23,7 @@ class User_model extends CI_Model {
 	function login( $data ){
 		//var_dump($data);
 		$email=$data['usr_email'];
-		$query = $this->db->query("SELECT u.id, u.usuario, u.nombre, u.email, u.password, u.salt, u.perfil, u.id_sucursal, s.id_agencia, s.almacen_servicio, s.almacen_refacciones, s.sucursal_int, u.cve_intelisis FROM usuarios u INNER JOIN sucursal s ON u.id_sucursal = s.id WHERE email=? AND u.eliminado= 0",array($email));
+		$query = $this->db->query("SELECT u.id, u.usuario, u.nombre, u.email, u.password, u.salt, u.perfil, u.id_sucursal, s.id_agencia, s.almacen_servicio, s.almacen_refacciones, s.sucursal_int, u.cve_intelisis, u.fordStar FROM usuarios u INNER JOIN sucursal s ON u.id_sucursal = s.id WHERE email=? AND u.eliminado= 0",array($email));
 		if ($query->num_rows() > 0){
 			$user=$query->row();
 			//var_dump($user);
@@ -662,6 +662,14 @@ class User_model extends CI_Model {
 			$usuarios["salt"] = $salt;
 			$usuarios["password"] = $password;
 		}
+		//Ford star   --------------->>>>>
+		$fordStar =  $datos["cve_fordStar"];
+		if( $fordStar != "")
+		{
+			//$usuarios["fordStar"] = $datos["cve_fordStar"];
+			$usuarios["fordStar"] = $fordStar;
+		}
+		//--------------->>>>>>>>>
 		$usuarios["actualizado"] = date("d-m-Y H:i:s");
 
 		$this->db->trans_start();
