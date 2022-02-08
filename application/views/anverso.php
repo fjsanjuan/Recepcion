@@ -557,6 +557,10 @@ input:focus{
 
     <script>
         var id_perfil = <?php echo $this->session->userdata["logged_in"]["perfil"];?>;
+		var fordStar = "<?=isset($this->session->userdata['logged_in']['fordStar']) ? $this->session->userdata['logged_in']['fordStar'] : null?>";             //importante!!!  
+    	if (id_perfil == 5 && !fordStar) {
+    	window.location.href = "<?=site_url('user/configurar_perfil')?>";
+    	}
 		var base_url = `<?php echo  base_url(); ?>`;
 		var idOrden = `<?php echo $id_orden; ?>`;
         var idDiagnostico = `<?php echo isset($data['id_diagnostico']) ? $data['id_diagnostico'] : 0; ?>`;
