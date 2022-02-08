@@ -5164,13 +5164,15 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function firmar_reciboRefacciones($idOrden, $idRequisicion)
+	public function firmar_reciboRefacciones($idOrden, $idRequisicion, $datos)
 	{
 		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
 		$perfil = $this->session->userdata["logged_in"]["perfil"];
 		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 		$existen = $this->db->select("*")->from('requisiciones')->where(['id_requisicion' => $idRequisicion])->get()->row_array();
+		if (sizeof($existen) > 0){
 		$data = [
+			'recibi_piezas' => $datos['check'],
 			'fecha_recepcion' => date('d-m-Y H:i:s')
 		];
 		/*echo '<pre>'; print_r($existen);
@@ -5190,11 +5192,18 @@ class Buscador_Model extends CI_Model{
 					$response['estatus'] = true;
 					$response['mensaje'] = 'Estatus de la requisición actualizado.';
 				}
+			}else{
+				$response["estatus"] = false;
+				$response["mensaje"] = 'Su perfil no es el indicado para recibir piezas.';
 			}
 		}else {
 			$response["estatus"] = false;
 			$response["mensaje"] = 'No existen piezas para recibir, verificar con el técnico si realizó el retorno piezas.';
 		}
+	}else{
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No se encontró ninguna requisición.';
+	}
 	}else {
 		$response['estatus'] = false;
 		$response['mensaje'] = 'No tienes firma registrada.';

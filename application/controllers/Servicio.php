@@ -3231,11 +3231,12 @@ class Servicio extends CI_Controller {
 	}
 	public function firmar_reciboRefacciones($idOrden = null, $idRequisicion = null)
 	{
+		$datos = $this->input->post();
 		if ($idOrden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'orden no valida';
 		}else {
-			$response = $this->buscador_model->firmar_reciboRefacciones($idOrden, $idRequisicion);
+			$response = $this->buscador_model->firmar_reciboRefacciones($idOrden, $idRequisicion, $datos);
 		}
 		echo json_encode($response);
 	}
