@@ -5059,7 +5059,7 @@ class Buscador_Model extends CI_Model{
 		$idSucursal          = $this->session->userdata["logged_in"]['id_sucursal'];
 		$sucursal = $this->db->select('*')->from('sucursal')->where(['id' => $idSucursal])->get()->row_array();
 		if (sizeof($sucursal) > 0) {
-			$data = $this->db2->select('*')->from('Agente')->where(['Tipo' => 'Mecanico', 'Estatus' => 'ALTA', 'Categoria' => 'Servicio', 'SucursalEmpresa' => $sucursal['id_intelisis'], 'Jornada IS NOT NULL' => null])->get()->result_array();
+			$data = $this->db2->select('*')->from('vwCA_GarantiasTecnicosDisponibles')->where(['SucursalEmpresa' => $sucursal['id_intelisis']])->get()->result_array();
 			$total = sizeof($data);
 			if ($total > 0) {
 				$response['data'] = $data;

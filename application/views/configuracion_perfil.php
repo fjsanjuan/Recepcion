@@ -256,7 +256,6 @@ $(document).ready(function(){
                 $("#pass_usu").val("");
                 $("#firma_cliente").attr("src","");
                 $("#firma_cliente").attr("src",firma.jqSignature("getDataURL"));
-                $("#cve_fordStar").val("");
 
                 toastr.success("Se han actualizado los datos");
             }else 
@@ -356,7 +355,7 @@ $(document).ready(function(){
                     <label for="cve_fordstar">Ford Star:</label>
                 </div>
                 <div class="col-sm-10">
-                    <input type="text" name="cve_fordStar" id="cve_fordStar" class="form-control input-usuario" value="<?=""?>" placeholder="Ford Star del Técnico">
+                    <input type="text" name="cve_fordStar" id="cve_fordStar" class="form-control input-usuario" value="<?=$fordStar;?>" placeholder="Ford Star del Técnico">
                 </div>
             </div>
             <?php endif;?>

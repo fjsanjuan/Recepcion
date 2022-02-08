@@ -638,7 +638,7 @@ class User_model extends CI_Model {
 	public function ver_datosUsuario($id_usuario = null)
 
 	{
-		$datos = $this->db->select("usuario, nombre, apellidos, email, cve_intelisis, firma_electronica, perfil.perfil")
+		$datos = $this->db->select("usuario, nombre, apellidos, email, cve_intelisis, firma_electronica, perfil.perfil, fordStar")
 						  ->join("perfil", "usuarios.perfil = perfil.id")
 						  ->from("usuarios")
 						  ->where("usuarios.id", $id_usuario)
@@ -682,6 +682,9 @@ class User_model extends CI_Model {
 		if($this->db->trans_status() == true)
 		{
 			$estatus = true;
+			$logged_in = $this->session->userdata["logged_in"];
+			$logged_in['fordStar'] = $fordStar;
+			$this->session->set_userdata('logged_in', $logged_in);
 		}else 
 		{
 			$estatus = false;

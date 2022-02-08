@@ -86,7 +86,7 @@ class User extends CI_Controller {
 					'almacen_servicio' => $user->almacen_servicio,
 					'almacen_refac'=> $user->almacen_refacciones,
 					'sucursal_int' => $user->sucursal_int,
-					'fordSatar' => $user->fordStar
+					'fordStar' => $user->fordStar
 				);
 				$this->session->set_userdata('logged_in', $sess_array);
 				
@@ -311,7 +311,57 @@ class User extends CI_Controller {
 			// $response['message'] = 'Solo los técnicos, realizan este proceso.';
 			// $this->load->view("errors/html/error_404", $response);
 			show_404();
-		}	
+		}
 	}
 
+	public function tecnicos_activos($idSucursal = null)
+	{
+		$logged_in = $this->session->userdata("logged_in");
+		if (empty($logged_in)) {
+			show_404();
+		}
+		$ids = [];
+		$this->db2 = $this->load->database('other',true);
+		$tecnicos = $this->db2->select('*')->from('vwCA_GarantiasTecnicosDisponibles')->get()->result_array();
+		$this->db->trans_start();
+		foreach (is_array($tecnicos) ? $tecnicos : [] as $key => $tecnico) {
+			$nombre = isset($tecnico['PersonalNombres']) ? $tecnico['PersonalNombres'] : $tecnico['FordStar'];
+			$sucursal = $this->db->select('id')->from('sucursal')->where(['id_intelisis' => $tecnico['SucursalEmpresa']])->get()->row_array();
+			$usuario = [
+				'usuario' => str_replace(' ', '_', $nombre),
+				'nombre' => $tecnico['PersonalNombres'],
+				'apellidos' => $tecnico['PersonalApellidoPaterno'].($tecnico['PersonalApellidoPaterno'] ? ' '.$tecnico['PersonalApellidoPaterno'] : ''),
+				'email' => $tecnico['eMail'] ? $tecnico['eMail'] : $tecnico['Agente'].'@demo.com',
+				'salt' => '7db5fsPGzuNlcDwISEHyxAQ6',
+				'password' => 'db9ddccc9a72cd4a384a9786883ed9df0c8d0111258580cede639753f82d4e3f',
+				'perfil' => 5,
+				'creado' => date('d-m-Y H:i:s'),
+				'eliminado' => 0,
+				'id_sucursal' => isset($sucursal['id']) ? $sucursal['id'] : 0,
+				'cve_intelisis' => $tecnico['Agente'],
+				'firma_electronica' => null,
+				'actualizado' => null,
+				'fordStar' => $tecnico['FordStar']
+			];
+			$existe =$this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $tecnico['Agente'], 'cve_intelisis IS NOT NULL' => null])->count_all_results();
+			if ($existe == 0) {
+				$ids[] =$this->db->insert('usuarios', $usuario);
+			}
+		}
+		$this->db->trans_complete();
+		if( $this->db->trans_status() === FALSE)
+		{
+			$response["estatus"] = false;
+			$response["update"]  = $ids;
+			$response['mensaje'] = 'No fue posible generar los técnicos disponibles en Recepción.';
+			$this->db->trans_rollback();
+		}else
+		{
+			$this->db->trans_commit();
+			$response["estatus"] = true;
+			$response["update"]  = $ids;
+			$response['mensaje'] = 'Técnicos creados correctamente en recepción.';
+		}
+		echo json_encode($response);
+	}
 }

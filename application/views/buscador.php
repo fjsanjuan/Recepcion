@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="<?=base_url();?>assets/librerias/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="<?=base_url();?>assets/librerias/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
 
 <script src="<?=base_url();?>assets/librerias/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
 <script src="<?=base_url();?>assets/librerias/moment.js/moment.min.js"></script>
