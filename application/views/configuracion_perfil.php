@@ -348,6 +348,7 @@ $(document).ready(function(){
                     <input type="text" name="cve_usu" id="cve_usu" class="form-control input-usuario" readonly value="<?=$cve_intelisis?>">
                 </div>
             </div>
+            <?php if($this->session->userdata["logged_in"]["perfil"] == 5):?>
             <div class="row" id="fordStar">                       
                 <div class="col-sm-2">
                     <i class="fa fa-key iconos-usuario"></i>
@@ -358,6 +359,7 @@ $(document).ready(function(){
                     <input type="text" name="cve_fordStar" id="cve_fordStar" class="form-control input-usuario" value="<?=""?>" placeholder="Ford Star del Técnico">
                 </div>
             </div>
+            <?php endif;?>
             <br>
             <div class="row">
                 <div class="col-sm-2">
