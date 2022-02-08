@@ -202,6 +202,15 @@
 	<script src="<?=base_url()?>assets/librerias/html2canvas/html2canvas.min.js"></script>
 	<title>Cotización</title>
 	</head>
+	<script>
+    site_url = "<?=site_url()?>";
+    base_url = "<?=base_url()?>";
+    var id_perfil = "<?=isset($this->session->userdata['logged_in']['perfil']) ? $this->session->userdata['logged_in']['perfil'] : 0?>";             //importante!!!  
+    var fordStar = "<?=isset($this->session->userdata['logged_in']['fordStar']) ? $this->session->userdata['logged_in']['fordStar'] : null?>";             //importante!!!  
+    if (id_perfil == 5 && !fordStar) {
+    	window.location.href = "<?=site_url('user/configurar_perfil')?>";
+    }
+</script>
 	<body>
 		<div class="container borde_general">
 			<div class="row">
