@@ -195,16 +195,16 @@ input:focus{
 	                                    <strong class="header-left-title sfont">(REP)Número de reparación (NL) Luz indicadora de falla (DTC) Código de falla</strong>
 	                                </div>
 	                                <div id="right" class="header">
-	                                    
 	                                    <div class="row">
 	                                    <div class="column cuarenta content-center pad-tp pad-bt">
 											<?php 
+											$torre =  isset($Mov['ServicioNumero']) ? $Mov['ServicioNumero'] : '-';
 											$Mov = (isset($Mov["MovID"])) ? $Mov["MovID"] : "-";
 											?>
 	                                        <strong class="header-right-title" id="num_orden">Folio: <?php echo $Mov?> </strong>
 	                                    </div>
 	                                        <div class="column veinte pad-tp pad-bt" id="num_torre">
-	                                            Torre: 110
+	                                            Torre: <?php echo $torre;?>
 	                                        </div>
 	                                        <div class="column cuarenta pad-tp pad-bt" id="folio_consecutivo">
 	                                        <?php 

@@ -2991,17 +2991,18 @@ class Servicio extends CI_Controller {
 		}
 		$this->db2 = $this->load->database('other',true); 
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
-		$orden = $this->db->select("id_orden_intelisis")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
-		$Mov = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
+		$orden = $this->db->select("id_orden_intelisis, torrenumero")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
+		$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
 		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
 		$datos['total_anversos'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 1])->count_all_results();
 		$datos['total_manos'] =  $this->buscador_model->obtener_manos_obra_orden($idOrden)['total_manos'];
 		$datos['id_orden']= $idOrden;
+		$datos['id_orden']= $idOrden;
 		$datos['Mov'] = $Mov;
 		$datos['movID'] = $movID;
-		/*echo "<pre>";
-		print_r($datos);
-		echo "</pre>";*/
+		echo "<pre>";
+		print_r ($datos);
+		echo "</pre>";
 		if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
 			$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 			$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
@@ -3263,13 +3264,7 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Anverso no válido.';
 		}else {
 			$this->db2 = $this->load->database('other',true);
-		$orden = $this->db->select("id_orden_intelisis")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
-		$Mov = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
-		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
 			$datos = $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idAnverso);
-			$datos['id_orden']= $idOrden;
-			$datos['Mov'] = $Mov;
-			$datos['movID'] = $movID;
 			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
 				$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 				$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
@@ -3290,9 +3285,13 @@ class Servicio extends CI_Controller {
 				$datos['json_fin'] = "[]";
 			}
 			$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+			$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
+			$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
 			$datos = array_merge($datos, $orden);
 			$datos = array_merge($datos, $this->input->post());
 			$datos['id_orden']= $idOrden;
+			$datos['Mov'] = $Mov;
+			$datos['movID'] = $movID;
 			$logged_in = $this->session->userdata("logged_in");
 			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
 			$datos['container'] = $this->load->view("anverso_print", $datos, true);
@@ -3388,6 +3387,10 @@ class Servicio extends CI_Controller {
 			$datos = array_merge($datos, $orden);
 			$datos = array_merge($datos, $this->input->post());
 			$datos['id_orden']= $idOrden;
+			$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
+			$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
+			$datos['Mov'] = $Mov;
+			$datos['movID'] = $movID;
 			$logged_in = $this->session->userdata("logged_in");
 			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
 			$this->load->view("anverso_print", $datos);
