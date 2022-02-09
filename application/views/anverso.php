@@ -206,11 +206,8 @@ input:focus{
 	                                        <div class="column veinte pad-tp pad-bt" id="num_torre">
 	                                            Torre: <?php echo $torre;?>
 	                                        </div>
-	                                        <div class="column cuarenta pad-tp pad-bt" id="folio_consecutivo">
-	                                        <?php 
-	                                        	$movID = (isset($movID["MovID"])) ? $movID["MovID"] : "-";
-	                                        ?>
-	                                           Consecutivo: <?php echo $movID?>
+	                                        <div class="column cuarenta pad-tp pad-bt" id="folio_consecutivo">Consecutivo<br>
+	                                        <input class="border-left-light border-right-light border-bottom-light border-top-light" type="text"> 
 	                                        </div>
 	                                    </div>
 	                                </div>
