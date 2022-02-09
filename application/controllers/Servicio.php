@@ -3000,9 +3000,9 @@ class Servicio extends CI_Controller {
 		$datos['id_orden']= $idOrden;
 		$datos['Mov'] = $Mov;
 		$datos['movID'] = $movID;
-		echo "<pre>";
+		/*echo "<pre>";
 		print_r ($datos);
-		echo "</pre>";
+		echo "</pre>";*/
 		if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
 			$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 			$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
