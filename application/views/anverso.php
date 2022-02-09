@@ -395,7 +395,7 @@ input:focus{
 	                                <input class="required write" type="text" name="clave_defect" id="" style="width: 98%;" value="<?= isset($data['clave_defect']) ? $data['clave_defect'] : "";?>">
 	                            </div>
 	                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;" value="<?= isset($data['mecanico_clave']) ? $data['mecanico_clave'] : "";?>">
+	                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;" value="<?= isset($data['mecanico_clave']) ? $data['mecanico_clave'] : "";?>" readonly>
 	                            </div>
 	                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito costo_tiempo">
 	                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
@@ -842,6 +842,16 @@ $(document).on('click', '.nuevo_codigo', function (e) {
 	code.insertAfter($(this).closest('div.row'));
 	
 })
+$(document).on('click', '.nuevo_codigo', function (e) {
+	e.preventDefault();
+	if ($('.code_lines div.row').length < 7) {
+		$(this).closest('.code_lines div.row').add();
+    }else {
+		toastr.warning('No puedes ingresar más de siete lineas de códigos.');
+		$('.nuevo_codigo').prop('disabled', true);
+		return;
+	}
+});
 $(document).on('click', '.erase_line', function (e) {
 	e.preventDefault();
 	if ($(this).closest('.code_lines div.row').find('div.row').length > 0) {
