@@ -80,7 +80,7 @@ echo form_open('',$attributes);
 				</div>
 				<div class="clearfix"></div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-					<label for="iva_total" class="col-sm-4 control-label" style="white-space: nowrap;">IVA $</label>
+					<label for="iva_total" class="col-sm-4 control-label" style="white-space: nowrap;">IVA %</label>
 					<input type="text" class="form-control" name="iva" id="iva_total">
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >

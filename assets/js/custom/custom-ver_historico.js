@@ -226,7 +226,7 @@
 					action_refacciones	="";
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
 					action_refacciones  +="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
-					action_refacciones	+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
+					//action_refacciones	+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				} else {
 					action_refacciones	= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				}
@@ -5041,7 +5041,7 @@ $(document).on('click', '#firma_linea', function(e){
 	const form = new FormData();
 	form.append('id_orden', id_orden);
 	swal({
-		title: '¿Firmar línea de trabajo?',
+		title: '¿Firmar tipo de garantía agregada?',
 		showCancelButton: true,
 		confirmButtonText: 'Firmar',
 		cancelButtonText: 'Cancelar',
@@ -5070,13 +5070,13 @@ $(document).on('click', '#firma_linea', function(e){
 					}
 				})
 				.fail(function() {
-					toastr.warning('Hubo un error al firmar lineas');
+					toastr.warning('Hubo un error al firmar tipo de garantía');
 				})
 				.always(function() {
 					$("#loading_spin").hide();
 				});
 			} else if (result.dismiss) {
-				swal('Cancelado', '', 'error');
+				//swal('Cancelado', '', 'error');
 			}
 		});
 });
@@ -5088,7 +5088,7 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 	const form = new FormData();
 	form.append('id_orden', idOrden);
 	swal({
-		title: '¿Desea cancelar firma de linea de trabajo?',
+		title: '¿Desea cancelar firma del tipo de garantía agregada?',
 		showCancelButton: true,
 		confirmButtonText: 'Cancelar',
 		cancelButtonText: 'Cerrar',
@@ -5099,7 +5099,7 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 				$('#firma_linea').prop('checked', false);
 				$("#cancelar_firmaLineas").css('display', 'none');
 			} else if (result.dismiss) {
-				swal('Cancelado', '', 'error');
+				//swal('Cancelado', '', 'error');
 			}
 		});
 	});
