@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -298,6 +298,18 @@
 					btn     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
 					btn     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
 					btn     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_tecnico     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_tecnico     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_tecnico     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_jefe     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_jefe     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_jefe     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_garantias     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_garantias     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_garantias     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_gerente     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_gerente     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_gerente     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				action_tecnico ='';
@@ -911,7 +923,7 @@
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
-		$('#cargardoc-tab').trigger('click');
+		$('#adjuntosdoc-tab').trigger('click');
 		localStorage.setItem("hist_id_orden", id_orden);
 		$('#modaldocumentacion .down_f1816').prop('id', `f-${id_orden}`);
 		trae_signGrtia = $(this).data('trae_signgrtia');
@@ -6324,7 +6336,72 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhis
 	// form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
 	form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
 	form.append('name', "Anverso-"+id);
-	$.ajax({
+
+	// const form = new FormData();
+		form.append('url', "http://127.0.0.1:8000/api/reportes/getPDFAnverso");
+		// form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
+		form.append('name', "Anverso-"+id);		var tok=""
+		$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+					url: `${base_url}index.php/servicio/adjuntar_anverso/${tok}/${idOrden}/${id}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'Anverso',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						//vin:vin,
+						id:idOrden,
+						id_orden:idOrden,
+						url:'https://isapi.intelisis-solutions.com/reportes/getPDFAnverso'
+						// url:`http://127.0.0.1:8000/reportes/getPDFAnverso`
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						if(data.estatus) {
+							const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+						} else {
+							toastr.info(data.mensaje);
+						}
+					}
+				});
+			}
+		});
+
+	/*$.ajax({
 		cache: false,
 		url: `${base_url}index.php/servicio/adjuntar_anverso/${idOrden}/${id}`,
 		contentType: false,
@@ -6347,7 +6424,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhis
 	})
 	.always(function() {
 		$('#loading_spin').hide();
-	});
+	});*/
 });
 
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .detalleshistorialanverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .detalleshistorialanverso', function(event) {

@@ -1,15 +1,15 @@
 <input type="hidden" name="trae_signGrtia" id="trae_signGrtia">
 <ul class="nav nav-pills nav-fill" role="tablist">
 	<li class="nav-item" role="presentation">
-		<a class="nav-link active" id="cargardoc-tab" data-toggle="tab" role="tab" aria-controls="cargarDoc" aria-selected="true" href="#cargarDoc">Cargar Documentación</a>
+		<a class="nav-link active"  id="adjuntosdoc-tab" data-toggle="tab" role="tab" aria-controls="adjuntosDoc" aria-selected="true" href="#adjuntosDoc">Archivos Adjuntos</a>
 	</li>
 	<li class="nav-item" role="presentation">
-		<a class="nav-link"  id="adjuntosdoc-tab" data-toggle="tab" role="tab" aria-controls="adjuntosDoc" aria-selected="true" href="#adjuntosDoc">Archivos Adjuntos</a>
+		<a class="nav-link" id="cargardoc-tab" data-toggle="tab" role="tab" aria-controls="cargarDoc" aria-selected="true" href="#cargarDoc">Cargar Documentación</a>
 	</li>
 	
 </ul>
 <div class="tab-content" id="cargardocContent">
-	<div class="col-md-12 tab-pane fade show active" id="cargarDoc" role="tabpanel" aria-labelledby="cargardoc-tab">
+	<div class="col-md-12 tab-pane fade" id="cargarDoc" role="tabpanel" aria-labelledby="cargardoc-tab">
 		<div class="col-sm-12 col-lg-6">
 			<input type="radio" id="PDF" name="tipo_archivo" value="PDF"checked>
 			<label for="PDF">PDF</label>
@@ -58,7 +58,7 @@
 			<button class="btn btn-success float-right" id="btn_guardar_doc"><i class="fa fa-file-upload"></i> Guardar</button>
 		</div>
 	</div>
-	<div class="col-md-12 tab-pane fade show" id="adjuntosDoc" role="tabpanel" aria-labelledby="adjuntosdoc-tab">
+	<div class="col-md-12 tab-pane fade show active" id="adjuntosDoc" role="tabpanel" aria-labelledby="adjuntosdoc-tab">
 		<?php $this->load->view('modals/archivos_adjuntos'); ?>
 	</div>
 </div>

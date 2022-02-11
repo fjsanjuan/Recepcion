@@ -2681,6 +2681,9 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = "Token no válido.";
 		} else {
 			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
+			}
 		}
 		echo json_encode($response);
 	}
@@ -2992,7 +2995,7 @@ class Servicio extends CI_Controller {
 		$this->db2 = $this->load->database('other',true); 
 		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
 		$orden = $this->db->select("id_orden_intelisis, torrenumero")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
-		$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
+		$Mov = $this->db2->select('MovID, ServicioNumero,ServicioSerie AS vin')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
 		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
 		$datos['total_anversos'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 1])->count_all_results();
 		$datos['total_manos'] =  $this->buscador_model->obtener_manos_obra_orden($idOrden)['total_manos'];
@@ -3255,7 +3258,7 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	public function adjuntar_anverso($idOrden = null, $idAnverso = null){
+	public function adjuntar_anverso($token,$idOrden = null, $idAnverso = null){
 		if ($idOrden == null) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
@@ -3263,6 +3266,7 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Anverso no válido.';
 		}else {
+			$data = $this->input->post();
 			$this->db2 = $this->load->database('other',true);
 			$datos = $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idAnverso);
 			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
@@ -3278,11 +3282,23 @@ class Servicio extends CI_Controller {
 				$json_fin = str_replace('\t', '', $json_fin);
 				$datos['json_inicio'] = $json_inicio;
 				$datos['json_fin'] = $json_fin;
+				$costo_tiempo = 0;
+				foreach ($datos['tiempo_inicio'] as $key => $inicio) {
+					$aux_fin = new DateTime($inicio['FechafIN'] ? $inicio['FechafIN'] : $inicio['FechaInicio']);
+					$aux_inicio = new DateTime($inicio['FechaInicio']);
+					//$aux = $aux_fin->diff($aux_inicio);
+					$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
+					$costo_tiempo += is_nan($aux) ? 0 : $aux;
+					$datos['tiempo_inicio'][$key]['FechaInicio'] = $aux_inicio->format('d/m/Y H:i:s');
+					$datos['tiempo_inicio'][$key]['FechafIN'] = $aux_fin->format('d/m/Y H:i:s');
+				}
+				$datos['costo_tiempo'] = number_format($costo_tiempo, 2).' hrs.';
 			} else{
 				$datos['tiempo_inicio'] = [];
 				$datos['tiempo_fin'] = [];
 				$datos['json_inicio'] = "[]";
 				$datos['json_fin'] = "[]";
+				$datos['costo_tiempo'] = '0 hrs.';
 			}
 			$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
 			$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
@@ -3294,9 +3310,18 @@ class Servicio extends CI_Controller {
 			$datos['movID'] = $movID;
 			$logged_in = $this->session->userdata("logged_in");
 			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
-			$datos['container'] = $this->load->view("anverso_print", $datos, true);
-			$token = "";
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			// $datos['container'] = $this->load->view("anverso_print", $datos, true);
+			//$token = "";
+			if (!isset($datos['vin'])) {
+				$datos['vin'] = $orden['vin'];
+			}
+			$datos['vin'] = str_replace('.', '', $datos['vin']);
+			$datos['vin'] = str_replace(' ', '', $datos['vin']);
+			$data['data'] = $datos;
+			if (!isset($data['vin'])) {
+				$data['vin'] = $orden['vin'];
+			}
+			$response = $this->buscador_model->obtener_pdf_api($token, $data);
 			if ($response["estatus"]) {
 				$this->buscador_model->guardar_formato($idOrden, $response["data"]["ruta_rel"]);
 			}

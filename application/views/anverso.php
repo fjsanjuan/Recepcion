@@ -158,6 +158,7 @@ input:focus{
         </style>
     </head>
 	<?php
+	$vin = isset($Mov['vin']) ? $Mov['vin'] : '';
 	$attributes = array('id' => 'form_codigos');
 	echo form_open('',$attributes);
    ?>
@@ -401,7 +402,7 @@ input:focus{
 	                                <input class="required write" type="date" name="retorno_partes" id="" style="width: 98%;" value="<?= isset($data['retorno_partes']) ? $data['retorno_partes'] : "";?>">
 	                            </div>
 	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
-	                                
+	                               
 	                            </div>
 	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
 	                                
@@ -561,6 +562,9 @@ input:focus{
 		var base_url = `<?php echo  base_url(); ?>`;
 		var idOrden = `<?php echo $id_orden; ?>`;
         var idDiagnostico = `<?php echo isset($data['id_diagnostico']) ? $data['id_diagnostico'] : 0; ?>`;
+        var vin = `<?php echo $vin; ?>`;
+        vin = vin.replace(".", "");
+		vin = vin.replace(" ", "");
         let tiempo_inicio = '<?php echo $json_inicio;?>';
         let tiempo_fin = '<?php echo $json_fin;?>';
        
@@ -627,14 +631,78 @@ $(document).ready(function(){
         $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {
     		return;
-    		toast.info('No existe un diágnostico guardado.');
+    		toastr.info('No existe un diágnostico guardado.');
+    	}
+    	console.log('vin', vin);
+    	if (vin.length < 1) {
+    		toastr.info('No se encontro un vin relacionado.');
+    		return;
     	}
     	event.preventDefault();
     	const form = new FormData();
-		//form.append('url', "http://127.0.0.1:8000/api/HTMLtoPDF/");
-		form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
-		form.append('name', "Anverso-"+idDiagnostico);
+		form.append('url', "http://127.0.0.1:8000/api/reportes/getPDFAnverso");
+		// form.append('url', "https://isapi.intelisis-solutions.com/api/HTMLtoPDF/");
+		form.append('name', "Anverso-"+idDiagnostico);		var tok=""
 		$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+					url: `${base_url}index.php/servicio/adjuntar_anverso/${tok}/${idOrden}/${idDiagnostico}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'Anverso',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:vin,
+						id:idOrden,
+						id_orden:idOrden,
+						url:'https://isapi.intelisis-solutions.com/reportes/getPDFAnverso'
+						// url:`http://127.0.0.1:8000/reportes/getPDFAnverso`
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						if(data.estatus) {
+							const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+						} else {
+							toastr.info(data.mensaje);
+						}
+					}
+				});
+			}
+		});
+		/*$.ajax({
 			cache: false,
 	        url: `${base_url}index.php/servicio/adjuntar_anverso/${idOrden}/${idDiagnostico}`,
 	        contentType: false,
@@ -649,7 +717,7 @@ $(document).ready(function(){
 							link[0].click();
 							onClick=document.location.reload(true);
 			}
-		});
+		});*/
     });
 });	
 $(document).on("click", '#save_anverso', function(e){
