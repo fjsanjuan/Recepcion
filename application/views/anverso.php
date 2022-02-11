@@ -670,7 +670,7 @@ $(document).ready(function(){
 					//habilitar xhrFields cuando se requiera descargar
 					//xhrFields: {responseType: "blob"},
 					data: {
-						name:'Anverso',
+						name:'Anverso-'+idDiagnostico,
 						dwn:'0',
 						opt:'1',
 						path:'None',

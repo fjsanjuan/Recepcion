@@ -6368,7 +6368,7 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .pdfhis
 					//habilitar xhrFields cuando se requiera descargar
 					//xhrFields: {responseType: "blob"},
 					data: {
-						name:'Anverso',
+						name:'Anverso-'+id,
 						dwn:'0',
 						opt:'1',
 						path:'None',
