@@ -3653,6 +3653,17 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+
+	public function recepcion_partes(){
+		$datos = $this->input->post();
+		/*echo "<pre>";
+		print_r ($datos);
+		echo "</pre>";
+		die();*/
+		// print_r($datos);die();
+		$presupuesto = $this->buscador_model->recepcion_partes($datos);
+		echo json_encode($presupuesto);
+	}
 	public function obtener_formato_orden_servicio($token = null, $id = null)
 	{
 		$datos = $this->input->post();
