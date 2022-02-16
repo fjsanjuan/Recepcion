@@ -588,6 +588,83 @@ $(document).ready(function() {
 	if(formt_serv_pdf == "ford"){
 		$("#archivos_documentacion").on("click", "tr td a.profec", function(e){
 			// para crear formato ford
+			var id_orden = $(this).prop("id");
+			id_orden = id_orden.split("-");
+			id_orden = id_orden[1];
+			var t_vin = $("#api_vin-"+id_orden).val();
+			//var vin = $("#api_vin-26590").val();
+			var signGrtia = $("#api_signGrtia-"+id_orden).val();
+			//  t_nomCte  -> t_ = this
+			var t_nomCte = $("#api_nomCte-"+id_orden).val();
+			var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+			t_vin = t_vin.replace(".", "");
+			t_vin = t_vin.replace(" ", "");
+			//console.log(t_signAsesor);
+			var tok=""
+			/*$.ajax({
+				url: "https://isapi.intelisis-solutions.com/auth/",
+				type: "POST",
+				dataType: 'json',
+				data: {
+					username:'TEST001',
+					password:'intelisis'
+				},
+				beforeSend: function(){
+					$("#loading_spin").show();
+				},
+				error: function(){
+					console.log('error al consumir token de ApiReporter');
+					$("#loading_spin").hide();
+				},
+				success: function (data){
+					tok=data.token;
+					$.ajax({
+						// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+						url: `${base_url}index.php/servicio/obtener_pdf_api/${tok}/${id_orden}`,
+						type: "POST",
+						headers: {
+							Authorization: `Token ${tok}`,
+						},
+						//habilitar xhrFields cuando se requiera descargar
+						//xhrFields: {responseType: "blob"},
+						data: {
+							name:'OrdenServicio',
+							dwn:'0',
+							opt:'1',
+							path:'None',
+							vin:t_vin,
+							garantia:signGrtia,
+							nomCte:t_nomCte,
+							signAsesor:t_signAsesor,
+							id:id_orden,
+							id_orden:id_orden,
+							type: 'orden_servicio',
+							idsucursal: 110, //sucursal temporal de pruebas
+							// url:'https://isapi.intelisis-solutions.com/reportes/reportes/imprimir'
+							url:`http://127.0.0.1:8000/reportes/imprimir?type=orden_servicio&id=${id_orden}&idsucursal=110`
+						},
+						beforeSend: function(){
+							$("#loading_spin").show();
+							toastr.info("Generando Formato");
+						},
+						error: function(){
+							console.log('error al consumir getPDF de ApiReporter');
+							toastr.error("Error al generar el formato");
+							$("#loading_spin").hide();
+						},
+						success: function (blob){
+							$("#loading_spin").hide();
+							data = JSON.parse(blob);
+							if(data.estatus) {
+								const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+								link[0].click();
+							} else {
+								toastr.info(data.mensaje);
+							}
+						}
+					});
+				}
+			});*/
 			if(b_profeco == false)
 			{
 				b_profeco = true;
@@ -622,8 +699,85 @@ $(document).ready(function() {
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
 		localStorage.setItem("hist_id_orden", id_orden);
-
-		window.open(base_url+"index.php/servicio/ver_hojaMultipuntos/"+ id_orden, "_blank");
+		var id_orden = $(this).prop("id");
+		id_orden = id_orden.split("-");
+		id_orden = id_orden[1];
+		var t_vin = $("#api_vin-"+id_orden).val();
+		//var vin = $("#api_vin-26590").val();
+		var signGrtia = $("#api_signGrtia-"+id_orden).val();
+		//  t_nomCte  -> t_ = this
+		var t_nomCte = $("#api_nomCte-"+id_orden).val();
+		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+		t_vin = t_vin.replace(".", "");
+		t_vin = t_vin.replace(" ", "");
+		//console.log(t_signAsesor);
+		var tok=""
+		$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+					url: `${base_url}index.php/servicio/obtener_pdf_api/${tok}/${id_orden}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'Multipuntos',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:t_vin,
+						garantia:signGrtia,
+						nomCte:t_nomCte,
+						signAsesor:t_signAsesor,
+						id:id_orden,
+						id_orden:id_orden,
+						type: 'multipuntos',
+						idsucursal: 110, //sucursal temporal de pruebas
+						// url:'https://isapi.intelisis-solutions.com/reportes/reportes/imprimir'
+						// url:`http://127.0.0.1:8000/reportes/imprimir?type=multipuntos&id=${id_orden}&idsucursal=110`
+						url:`https://isapi.intelisis-solutions.com/reportes/imprimir?type=multipuntos&id=${id_orden}&idsucursal=110`
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						if(data.estatus) {
+							const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+						} else {
+							toastr.info(data.mensaje);
+						}
+					}
+				});
+			}
+		});
+		//window.open(base_url+"index.php/servicio/ver_hojaMultipuntos/"+ id_orden, "_blank");
 	});
 	
 	//formato de Inventario
@@ -646,7 +800,7 @@ $(document).ready(function() {
 		//  t_nomCte  -> t_ = this
 		var t_nomCte = $("#api_nomCte-"+id_orden).val();
 		var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
-		//console.log(t_signAsesor);
+		console.log('garantia',t_signAsesor);
 		var tok="";
 		t_vin = t_vin.replace(".", "");
 		t_vin = t_vin.replace(" ", "");
@@ -688,6 +842,7 @@ $(document).ready(function() {
 						signAsesor:t_signAsesor,
 						id_orden:id_orden,
 						url:'https://isapi.intelisis-solutions.com/reportes/getPDF'
+						// url:'http://127.0.0.1:8000/reportes/getPDF'
 					},
 					beforeSend: function(){
 						$("#loading_spin").show();
@@ -1696,7 +1851,7 @@ $(document).ready(function() {
 	/*Pdf formato orden servicio*/
 	function generar_pdf( img_formato, img_reverso, id_orden)
 	{
-	    var fecha_actual = new Date();
+	    /*var fecha_actual = new Date();
 	    var doc = new jsPDF("p", "mm", "letter", true);
 	    var width = 0;
 	    var height = 0;
@@ -1707,7 +1862,86 @@ $(document).ready(function() {
 	    doc.addImage(img_formato, 'PNG', 0, 0, width, height, undefined, 'FAST');
 	    doc.addPage();
 	    doc.addImage(img_reverso, 'PNG', 0, 0, width, height, undefined, 'FAST');
-	    doc.save('OrdenServicio'+id_orden+'.pdf', { returnPromise: true });
+	    doc.save('OrdenServicio'+id_orden+'.pdf', { returnPromise: true });*/
+	    
+	    var t_vin = $("#api_vin-"+id_orden).val();
+			//var vin = $("#api_vin-26590").val();
+			var signGrtia = $("#api_signGrtia-"+id_orden).val();
+			//  t_nomCte  -> t_ = this
+			var t_nomCte = $("#api_nomCte-"+id_orden).val();
+			var t_signAsesor = $("#api_signAsesor-"+id_orden).val();
+			t_vin = t_vin.replace(".", "");
+			t_vin = t_vin.replace(" ", "");
+			//console.log(t_signAsesor);
+			var tok=""
+			$.ajax({
+				url: "https://isapi.intelisis-solutions.com/auth/",
+				type: "POST",
+				dataType: 'json',
+				data: {
+					username:'TEST001',
+					password:'intelisis'
+				},
+				beforeSend: function(){
+					$("#loading_spin").show();
+				},
+				error: function(){
+					console.log('error al consumir token de ApiReporter');
+					$("#loading_spin").hide();
+				},
+				success: function (data){
+					tok=data.token;
+					$.ajax({
+						// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+						url: `${base_url}index.php/servicio/obtener_formato_orden_servicio/${tok}/${id_orden}`,
+						type: "POST",
+						headers: {
+							Authorization: `Token ${tok}`,
+						},
+						//habilitar xhrFields cuando se requiera descargar
+						//xhrFields: {responseType: "blob"},
+						data: {
+							name:'OrdenServicio',
+							dwn:'0',
+							opt:'2',
+							path:'None',
+							vin:t_vin,
+							garantia:signGrtia,
+							nomCte:t_nomCte,
+							signAsesor:t_signAsesor,
+							id:id_orden,
+							id_orden:id_orden,
+							type: 'orden_servicio',
+							idsucursal: 110, //sucursal temporal de pruebas
+							// url:'https://isapi.intelisis-solutions.com/reportes/reportes/imprimir'
+							// url:`http://127.0.0.1:8000/reportes/imprimir?type=orden_servicio&id=${id_orden}&idsucursal=110`,
+							// url:`http://127.0.0.1:8000/reportes/getPDFOrden`,
+							url:`https://isapi.intelisis-solutions.com/reportes/getPDFOrden`,
+							img_formato: img_formato,
+							img_reverso: img_reverso,
+						},
+						beforeSend: function(){
+							$("#loading_spin").show();
+							toastr.info("Generando Formato");
+						},
+						error: function(){
+							console.log('error al consumir getPDF de ApiReporter');
+							toastr.error("Error al generar el formato");
+							$("#loading_spin").hide();
+						},
+						success: function (blob){
+							$("#loading_spin").hide();
+							data = JSON.parse(blob);
+							if(data.estatus) {
+								const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+								link[0].click();
+							} else {
+								toastr.info(data.mensaje);
+							}
+						}
+					});
+				}
+			});
 
 	    $("#loading_spin").hide();
 	    b_profeco = false;
@@ -1727,6 +1961,7 @@ $(document).ready(function() {
         $("#iframe_formato").prop("src", url_formato);													//1ero se ejecuta esto
         $("#iframe_reversoformato").prop("src", url_reverso);
         console.log(url_formato)
+        console.log(url_reverso)
         $("#iframe_formato, #iframe_reversoformato").off("load").on("load", function (){				//luego se ejecuta esto
         
             setTimeout(function(){               
@@ -3179,32 +3414,43 @@ $(document).on("click", "#btn_guardar_doc", function(event){
     });
     guardar_documentacion(data);
 });
+var total=0;
 function optimizar_archivo(e)
 {
-	$("#loading_spin").show();
-    var fileName = e.target.files[0].name;
-    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
-    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
-    reader.onload = event => {
-        var binaryData = event.target.result;
-      //Converting Binary Data to base 64
-      var base64String = window.btoa(binaryData);
-      base64data = reader.result;
-      //showing file converted to base64
-      const archivo = `
-      	<tr>
-      		<input type='hidden' value='${base64data}' name="doc_adjunto[]" />
-      		<input type='hidden' value='${$('input[name="tipo_archivo"]:checked').val()}' name="tipo[]" />
-      		<td>${fileName}</td>
-      		<td>${$('input[name="tipo_archivo"]:checked').val()}</td>
-      		<td><i class="fa fa-times text-danger td_borrar_doc" style="cursor: pointer;"></i></td>
-      	</tr>
-      `;
-      $('#archivos_adjuntos_doc').append(archivo);
-	  
-	  $("#loading_spin").hide();
-	  $('#cargar_doc').val('');
-    };
+	var pesoArchivo=e.target.files[0].size;
+	if(pesoArchivo < 10485760){											//Se verifica 
+		if(total < 31000000){
+			total+=pesoArchivo;
+			$("#loading_spin").show();
+		    var fileName = e.target.files[0].name;
+		    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
+		    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
+		    reader.onload = event => {
+		        var binaryData = event.target.result;
+		      //Converting Binary Data to base 64
+		      var base64String = window.btoa(binaryData);
+		      base64data = reader.result;
+		      //showing file converted to base64
+		      const archivo = `
+		      	<tr>
+		      		<input type='hidden' value='${base64data}' name="doc_adjunto[]" />
+		      		<input type='hidden' value='${$('input[name="tipo_archivo"]:checked').val()}' name="tipo[]" />
+		      		<td>${fileName}</td>
+		      		<td>${$('input[name="tipo_archivo"]:checked').val()}</td>
+		      		<td><i class="fa fa-times text-danger td_borrar_doc" style="cursor: pointer;"></i></td>
+		      	</tr>
+		      `;
+		      $('#archivos_adjuntos_doc').append(archivo);
+			  
+			  $("#loading_spin").hide();
+			  $('#cargar_doc').val('');
+		    };
+		} else{
+			toastr.error("No puedes subir mas de 30 MB al mismo tiempo");
+		}
+	} else{
+        toastr.error("Los archivos no deben pesar mas de 10 MB.");
+	}
 }
 function guardar_documentacion(form)
 {
@@ -3740,7 +3986,8 @@ $(document).on("change", "#oasisInput", function(event){
 });
 //Cambio para adjuntar pdf
 $(document).on("click", "#btn_guardarOasis", function(event){
-     event.preventDefault();
+    event.preventDefault();
+    total=0;
     var data = new FormData();
     var id_orden = localStorage.getItem("hist_id_orden");
     var oasis = $("#input_vista_previa_pdf").val();
@@ -3750,20 +3997,30 @@ $(document).on("click", "#btn_guardarOasis", function(event){
 });
 function optimizar_PDF(e)
 {
-	$("#loading_spin").show();
-    var fileName = e.target.files[0].name;
-    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
-    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
-    reader.onload = event => {
-        var binaryData = event.target.result;
-      //Converting Binary Data to base 64
-      var base64String = window.btoa(binaryData);
-      base64data = reader.result;
-      //showing file converted to base64
-      $('#input_vista_previa_pdf').val(base64data);
-	  $('#vista_previa_pdf').prop('src', base64data);
-	  $("#loading_spin").hide();
-    };
+	var pesoArchivo=e.target.files[0].size;
+	if(pesoArchivo < 10485760){											//Se verifica peso de archivos individuales 
+		if(total < 31000000){											//Se verifica peso de conjunto de archivos 
+			total+=pesoArchivo;
+			$("#loading_spin").show();
+		    var fileName = e.target.files[0].name;
+		    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
+		    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
+		    reader.onload = event => {
+		        var binaryData = event.target.result;
+		      //Converting Binary Data to base 64
+		      var base64String = window.btoa(binaryData);
+		      base64data = reader.result;
+		      //showing file converted to base64
+		      $('#input_vista_previa_pdf').val(base64data);
+			  $('#vista_previa_pdf').prop('src', base64data);
+			  $("#loading_spin").hide();
+		    };
+		} else{
+			toastr.error("No puedes subir mas de 30 MB al mismo tiempo");
+		}
+	} else{
+		toastr.error("Los archivos no deben pesar mas de 10 MB.");
+	}
 }
 function guardar_oasis(form)
 {
@@ -3798,6 +4055,7 @@ function guardar_oasis(form)
 }
 $(document).on('click', '#btn_borrarOasis', function (e) {
 	e.preventDefault();
+	total=0;
 	$('#vista_previa_pdf').prop('src', '');
 	$('#input_vista_previa_pdf').val('');
 	$('#oasisInput').val('');
@@ -4596,7 +4854,7 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 			tok=data.token;
 			$.ajax({
 				// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
-				url: `${base_url}index.php/servicio/generar_formato_causa_raiz_componente/${tok}/${id_orden}`,
+				url: `${base_url}index.php/servicio/obtener_pdf_api/${tok}/${id_orden}`,
 				type: "POST",
 				headers: {
 					Authorization: `Token ${tok}`,
@@ -4604,7 +4862,7 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 				//habilitar xhrFields cuando se requiera descargar
 				//xhrFields: {responseType: "blob"},
 				data: {
-					name:'INV',
+					name:'Inventario',
 					dwn:'0',
 					opt:'1',
 					path:'None',
@@ -4616,8 +4874,9 @@ $(document).off("click", "#archivos_documentacion tr td a.formatoInventario").on
 					id_orden:id_orden,
 					type: 'inventario',
 					idsucursal: 110, //sucursal temporal de pruebas
-					url:'https://isapi.intelisis-solutions.com/reportes/reportes/imprimir'
-					//url:'http://127.0.0.1:8000/reportes/imprimir'
+					// url:'https://isapi.intelisis-solutions.com/reportes/reportes/imprimir'
+					// url:`http://127.0.0.1:8000/reportes/imprimir?type=inventario&id=${id_orden}&idsucursal=110`
+					url:`https://isapi.intelisis-solutions.com/reportes/imprimir?type=inventario&id=${id_orden}&idsucursal=110`
 				},
 				beforeSend: function(){
 					$("#loading_spin").show();

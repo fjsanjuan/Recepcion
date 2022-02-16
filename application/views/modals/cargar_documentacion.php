@@ -9,7 +9,7 @@
 	
 </ul>
 <div class="tab-content" id="cargardocContent">
-	<div class="col-md-12 tab-pane fade" id="cargarDoc" role="tabpanel" aria-labelledby="cargardoc-tab">
+		<div class="col-md-12 tab-pane fade" id="cargarDoc" role="tabpanel" aria-labelledby="cargardoc-tab">
 		<div class="col-sm-12 col-lg-6">
 			<input type="radio" id="PDF" name="tipo_archivo" value="PDF"checked>
 			<label for="PDF">PDF</label>
@@ -25,7 +25,7 @@
 					>
 		        </div>
 	        </div>
-			
+			<span class="nav-link">Los archivos no deben pesar mas de 10 MB cada uno o 30 MB en conjunto.</span>
 		</div>
 		<br><br><br>
 		<?php

@@ -3653,4 +3653,23 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function obtener_formato_orden_servicio($token = null, $id = null)
+	{
+		$datos = $this->input->post();
+		$datos['id_orden'] = $id;
+		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
+		if ($token == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Token no válido.";
+		} elseif ($id == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		} {
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
+			}
+		}
+		echo json_encode($response);
+	}
 }

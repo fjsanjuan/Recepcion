@@ -15,6 +15,7 @@
 
 	            <span>Capturar Foto  <i class="fa fa-camera"></i></span>
 	        </div>
+	        <span class="nav-link">Los archivos no deben pesar mas de 10 MB cada uno o 30 MB en conjunto.</span>
         </div>
 		<?php
             $attributes = array('id' => 'form_foto');
