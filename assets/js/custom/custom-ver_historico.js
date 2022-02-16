@@ -5116,9 +5116,9 @@ function obtener_cotizaciones(id_orden){
 					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='presupuesto2"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Precio Unitario</th><th>Cantidad</th><th>Total</th><th>Comentario</th><th>En Existencia</th></tr></thead><tbody style='text-align:center;'></tbody></table>");
 					$.each(value.detalle, function(index2, value2){
 						if (value2.comentario != "" && value2.comentario != null){
-							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
+							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto1' id='comen_"+index2+"'> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
 						}else{
-							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto2' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
+							var disable = "<td><button class='btn btn-sm btn-info coment_presupuesto1' id='comen_"+index2+"' disabled> <i class='fa fa-comment' data-val='"+value2.comentario+"'></i></button></td>";
 						}
 						if(value2.autorizado == 0){
 							var row = $("<tr><td>"+value2.cve_articulo+"</td><td>"+value2.descripcion+"</td><td>"+value2.precio_unitario+"</td><td>"+value2.cantidad+"</td><td>"+value2.total_arts+"</td>"+disable+"<td><input type='checkbox' style='height: 24px; width: 24px;' class='chk_aut2' id='"+idpres+"-"+value2.cve_articulo+"' name='check_aut2' value='1' "+(value2['en_existencia'] == 1? 'checked' : '')+" disabled><label for='"+idpres+"-"+value2.cve_articulo+"'></label> </td></tr>");
