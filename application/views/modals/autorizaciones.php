@@ -27,7 +27,7 @@
                             <button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_preg">X</button>
                             </td>
                         </tr>
-        				<tr id="lineAdicional">
+        				<!--<tr id="lineAdicional">
                             <td>Adicional (ADD)</td>
                             <td>
                             <div class="form-check">
@@ -56,7 +56,7 @@
                             <td>
                             <button type="button" class="btn btn-outline-warning btn-sm" id="cancelar_cp">X</button>
                             </td>
-                        </tr>
+                        </tr>-->
         			</tbody>
         		</table>
         	</div>
