@@ -477,7 +477,7 @@ word-break: break-word;
 			$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
 			$costo_tiempo += is_nan($aux) ? 0 : $aux;
 			$tiempo_inicio[$key]['FechaInicio'] = $aux_inicio->format('d/m/Y H:i:s');
-			$tiempo_inicio[$key]['FechafIN'] = $aux_fin->format('d/m/Y H:i:s');
+			$tiempo_inicio[$key]['FechafIN'] = $inicio['FechafIN'] ? $aux_fin->format('d/m/Y H:i:s') : '';
 		}
 		$json_inicio = json_encode($tiempo_inicio);
 	?>

@@ -626,7 +626,7 @@ $(document).ready(function(){
             costo_tiempo = isNaN(costo_tiempo) ? 0 : costo_tiempo;
             $('.costo_tiempo').text(costo_tiempo.toFixed(2)+' Hrs.')
             $(tiempos_inicio[index]).text(inicio.toLocaleString('en-GB').replace(',', ''));
-            $(tiempos_fin[index]).text(fin.toLocaleString('en-GB').replace(',', ''));
+            $(tiempos_fin[index]).text(val.FechafIN ? fin.toLocaleString('en-GB').replace(',', '') : '');
         });
         $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {

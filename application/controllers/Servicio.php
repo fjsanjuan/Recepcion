@@ -3292,7 +3292,7 @@ class Servicio extends CI_Controller {
 					$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
 					$costo_tiempo += is_nan($aux) ? 0 : $aux;
 					$datos['tiempo_inicio'][$key]['FechaInicio'] = $aux_inicio->format('d/m/Y H:i:s');
-					$datos['tiempo_inicio'][$key]['FechafIN'] = $aux_fin->format('d/m/Y H:i:s');
+					$datos['tiempo_inicio'][$key]['FechafIN'] = $inicio['FechafIN'] ? $aux_fin->format('d/m/Y H:i:s') : '';
 				}
 				$datos['costo_tiempo'] = number_format($costo_tiempo, 2).' hrs.';
 			} else{
