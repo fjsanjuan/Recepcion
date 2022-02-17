@@ -93,18 +93,82 @@ $(document).ready(function() {
 	{
 	    // var hoja_multipuntos = localStorage.getItem("hoja_multipuntos");
 	    var id_orden = localStorage.getItem("hist_id_orden");
-	    var doc = new jsPDF("p", "mm", "legal", true);
+	    /*var doc = new jsPDF("p", "mm", "legal", true);
 	    var width = 0;
 	    var height = 0;
 	    width = doc.internal.pageSize.width;    
-	    height = doc.internal.pageSize.height;
+	    height = doc.internal.pageSize.height;*/
 	    html2canvas($(".subcuerpo"),{
 		   	onrendered:function(canvas){
-			   img = canvas.toDataURL("image/png");
+			    img = canvas.toDataURL("image/png");
+			    var t_vin = "<?=$orden_servicio["vin"]?>";
+				t_vin = t_vin.replace(".", "");
+				t_vin = t_vin.replace(" ", "");
+				var tok=""
+				$.ajax({
+					url: "https://isapi.intelisis-solutions.com/auth/",
+					type: "POST",
+					dataType: 'json',
+					data: {
+						username:'TEST001',
+						password:'intelisis'
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+					},
+					error: function(){
+						console.log('error al consumir token de ApiReporter');
+						$("#loading_spin").hide();
+					},
+					success: function (data){
+						tok=data.token;
+						$.ajax({
+							// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+							url: `${base_url}index.php/servicio/obtener_formato_inventario/${tok}/${id_orden}`,
+							type: "POST",
+							headers: {
+								Authorization: `Token ${tok}`,
+							},
+							//habilitar xhrFields cuando se requiera descargar
+							//xhrFields: {responseType: "blob"},
+							data: {
+								name:'Hoja_Multipuntos',
+								dwn:'0',
+								opt:'1',
+								path:'None',
+								vin:t_vin,
+								id:id_orden,
+								id_orden:id_orden,
+								url:`https://isapi.intelisis-solutions.com/reportes/getPDFInventario`,
+								// url:`http://127.0.0.1:8000/reportes/getPDFInventario`,
+								img_formato: img,
+							},
+							beforeSend: function(){
+								$("#loading_spin").show();
+								toastr.info("Generando Formato");
+							},
+							error: function(){
+								console.log('error al consumir getPDF de ApiReporter');
+								toastr.error("Error al generar el formato");
+								$("#loading_spin").hide();
+							},
+							success: function (blob){
+								$("#loading_spin").hide();
+								data = JSON.parse(blob);
+								if(data.estatus) {
+									const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+									link[0].click();
+								} else {
+									toastr.info(data.mensaje);
+								}
+							}
+						});
+					}
+				});
 			   // localStorage.removeItem("hoja_multipuntos");
 			   // localStorage.setItem("hoja_multipuntos", img);
-			   doc.addImage(img, 'PNG', 0, 0, width, height, undefined, 'FAST');
-	    		doc.save('Hoja_Multipuntos'+id_orden+'.pdf');
+			  /* doc.addImage(img, 'PNG', 0, 0, width, height, undefined, 'FAST');
+	    		doc.save('Hoja_Multipuntos'+id_orden+'.pdf');*/
 		   	}
 	    });
 	    // doc.addImage(hoja_multipuntos, 'PNG', 0, 0, width, height, undefined, 'FAST');

@@ -2353,6 +2353,8 @@ class Servicio extends CI_Controller {
 
 	public function generar_formatoInventario($bandera = 0, $id_orden = null)
 	{
+		$orden = $this->db->select('movimiento')->from('orden_servicio')->where(['id' => $id_orden])->get()->row_array();
+		$id_orden = isset($orden['movimiento']) ? $orden['movimiento'] : $id_orden;
 		$datos = $this->buscador_model->obtener_datosFormato_inventario($id_orden);
 		$datos["orden"]["bandera"] = $bandera;
 		
@@ -3665,6 +3667,25 @@ class Servicio extends CI_Controller {
 		echo json_encode($presupuesto);
 	}
 	public function obtener_formato_orden_servicio($token = null, $id = null)
+	{
+		$datos = $this->input->post();
+		$datos['id_orden'] = $id;
+		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
+		if ($token == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Token no válido.";
+		} elseif ($id == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		} {
+			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+			if ($response["estatus"]) {
+				$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
+			}
+		}
+		echo json_encode($response);
+	}
+	public function obtener_formato_inventario($token = null, $id = null)
 	{
 		$datos = $this->input->post();
 		$datos['id_orden'] = $id;

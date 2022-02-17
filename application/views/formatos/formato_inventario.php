@@ -1587,6 +1587,7 @@
 <script>
 $(document).ready(function(){
 	var b_generar = "<?=$orden["bandera"]?>";						//para detectar si se abre desde el botón o desde enviar el correo
+	var  base_url = "<?=base_url();?>";
 
 	$(".boton_imprimir").click(function(){
 		$(".boton_imprimir, .boton_pdf").css("display", "none");
@@ -1609,8 +1610,72 @@ $(document).ready(function(){
 	function generar_pdf(img_formato, img_reverso)
 	{
 	    var formato_inventario = sessionStorage.getItem("formato_inventario");
-	    var id_orden = "<?=$orden["cliente"]["id"]?>"
-	    var doc = new jsPDF("p", "mm", "A4", true);
+	    var id_orden = "<?=$orden["cliente"]["id"]?>";
+	    var t_vin = "<?=$orden["cliente"]["vin_v"]?>";
+		t_vin = t_vin.replace(".", "");
+		t_vin = t_vin.replace(" ", "");
+		var tok=""
+		$.ajax({
+			url: "https://isapi.intelisis-solutions.com/auth/",
+			type: "POST",
+			dataType: 'json',
+			data: {
+				username:'TEST001',
+				password:'intelisis'
+			},
+			beforeSend: function(){
+				$("#loading_spin").show();
+			},
+			error: function(){
+				console.log('error al consumir token de ApiReporter');
+				$("#loading_spin").hide();
+			},
+			success: function (data){
+				tok=data.token;
+				$.ajax({
+					// url: "https://isapi.intelisis-solutions.com/reportes/getPDF",
+					url: `${base_url}index.php/servicio/obtener_formato_inventario/${tok}/${id_orden}`,
+					type: "POST",
+					headers: {
+						Authorization: `Token ${tok}`,
+					},
+					//habilitar xhrFields cuando se requiera descargar
+					//xhrFields: {responseType: "blob"},
+					data: {
+						name:'Formato_inventario',
+						dwn:'0',
+						opt:'1',
+						path:'None',
+						vin:t_vin,
+						id:id_orden,
+						id_orden:id_orden,
+						url:`https://isapi.intelisis-solutions.com/reportes/getPDFInventario`,
+						// url:`http://127.0.0.1:8000/reportes/getPDFInventario`,
+						img_formato: formato_inventario,
+					},
+					beforeSend: function(){
+						$("#loading_spin").show();
+						toastr.info("Generando Formato");
+					},
+					error: function(){
+						console.log('error al consumir getPDF de ApiReporter');
+						toastr.error("Error al generar el formato");
+						$("#loading_spin").hide();
+					},
+					success: function (blob){
+						$("#loading_spin").hide();
+						data = JSON.parse(blob);
+						if(data.estatus) {
+							const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+							link[0].click();
+						} else {
+							toastr.info(data.mensaje);
+						}
+					}
+				});
+			}
+		});
+	    /*var doc = new jsPDF("p", "mm", "A4", true);
 	    var width = 0;
 	    var height = 0;
 
@@ -1619,7 +1684,7 @@ $(document).ready(function(){
 	    height = height - 10;
 
 	    doc.addImage(formato_inventario, 'PNG', 0, 5, width, height, undefined, 'FAST');
-	    doc.save('Formato_inventario'+id_orden+'.pdf');
+	    doc.save('Formato_inventario'+id_orden+'.pdf');*/
 	}
 
 	$(".boton_pdf").click(function(){

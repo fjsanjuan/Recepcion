@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -221,7 +221,7 @@
 				// es decir solo aparecera el boton para ver la carta siempre y cuando el cliente firme la carta desde la creacion de la orden
 				//  bnt_renunciaGrtia == true  solo si aplicar para ford en los distribuidores que necesiten la carta de rechazo a extensión de garantía
 				btn_refacciones 	=``;
-				btn_refacciones		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn_refacciones		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				if (val["movimiento"] != null) {
 					action_refacciones	="";
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
@@ -232,7 +232,7 @@
 				}
 				btn_garantias	=``;
 				btn_garantias	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				btn_garantias	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn_garantias	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_garantias	= "";
 				if (val['movimiento'] != null) {
 					action_garantias	+="<button type='button' class='btn btn-sm btn-primary ver_tipoGtia' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#lineaTrabajoModal' id='ver_tipoGtia-"+val["id"]+"'><i class='fas fa-list-ul'></i>&nbsp&nbsp Tipo Garantías</button>";
@@ -251,7 +251,7 @@
 				}
 				btn_gerente		=``;
 				btn_gerente 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				btn_gerente		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn_gerente		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_gerente		="";
 				if (val['movimiento'] != null){
 					action_gerente		+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
@@ -266,7 +266,7 @@
 				}
 				btn_jefe       = ``;
 				btn_jefe 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				btn_jefe	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn_jefe	+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				action_jefe		="";
 				if(val['movimiento'] != null){
 					//action_jefe		+="<button type='button' class='btn btn-sm btn-primary anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='anverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbsp Anverso</button>";
@@ -284,7 +284,7 @@
 				}
 				btn_tecnico    = ``;
 				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				btn_tecnico		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn_tecnico		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
 					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
 					btn_refacciones     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
@@ -327,7 +327,7 @@
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
 				btn		+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				btn		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				if (val['movimiento'] != null) {
 					action	="";
 					/*action  +="<button class='btn btn-sm CP' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#2B95FF;' id='CP-"+val["id"]+"' data-vin='"+val['vin']+"' data-inte='"+val['id_orden_intelisis']+"'><i class='fa fa-car-crash'></i>&nbsp&nbsp Carro Parado</button>";*/
@@ -351,7 +351,7 @@
 				btn_presupuesto += "<button class='btn btn-sm search_budgets' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='"+val["id"]+"'><i class='fas fa-search'></i>  &nbsp&nbsp Ver Presupuestos</button>";
 				btn_comentario = "<div style='display: none;' id='comentario-"+val["id"]+"'>"+val["comentario_tecnico_multip"]+"</div><button class='btn btn-sm btn-info comentario-tec' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px;' data-id='"+val["id"]+"'><i class='fa fa-edit'></i>&nbsp&nbsp Ver</button>";
 				action2  ="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
-				//action2  +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				//action2  +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				if (val["movimiento"] != null) {
 					action2	 +="<button type='button' class='btn btn-sm btn-primary requisiciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' data-toggle='modal' data-target='#requisModal' id='requisiciones-"+val["id"]+"' data-mov='"+val['movimiento']+"'><i class='fas fa-bars'></i>&nbsp&nbsp Requisiciones</button>";
 					action2  +="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Ver Requisiciones</button>";
@@ -724,7 +724,7 @@
 		t_vin = t_vin.replace(" ", "");
 		//console.log(t_signAsesor);
 		var tok=""
-		$.ajax({
+		/*$.ajax({
 			url: "https://isapi.intelisis-solutions.com/auth/",
 			type: "POST",
 			dataType: 'json',
@@ -788,8 +788,8 @@
 					}
 				});
 			}
-		});
-		//window.open(base_url+"index.php/servicio/ver_hojaMultipuntos/"+ id_orden, "_blank");
+		});*/
+		window.open(base_url+"index.php/servicio/ver_hojaMultipuntos/"+ id_orden, "_blank");
 	});
 	
 	//formato de Inventario
@@ -1090,12 +1090,14 @@
 		var id_orden = $(this).prop("id");
 		id_orden = id_orden.split("-");
 		id_orden = id_orden[1];
+		movimiento = $(this).data('movimiento');
 		$('#adjuntosdoc-tab').trigger('click');
 		localStorage.setItem("hist_id_orden", id_orden);
 		$('#modaldocumentacion .down_f1816').prop('id', `f-${id_orden}`);
 		trae_signGrtia = $(this).data('trae_signgrtia');
 		$('#trae_signGrtia').val(trae_signGrtia);
-		cargar_documentacion(id_orden, trae_signGrtia, bnt_renunciaGrtia);
+		$('.refreshDoc').data('movimiento', movimiento);
+		cargar_documentacion(id_orden, trae_signGrtia, bnt_renunciaGrtia, movimiento);
 	});
 
 
@@ -5661,7 +5663,7 @@ $(document).off('click','.f1863').on('click', '.f1863', function(event) {
 		});
 });
 
-function cargar_documentacion(idOrden, signGrtia, renunciaGrtia) {
+function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0) {
 	$('#archivos_documentacion').empty();
 		const firmaVacia = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAakAAADSCAYAAADwvj/tAAAAAXNSR0IArs4c6QAAB/JJREFUeF7t1UENAAAMArHh3/Rs3KNTQMoSdo4AAQIECEQFFs0lFgECBAgQOCPlCQgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAgQee7QDT4w9urAAAAABJRU5ErkJggg==";
 		$.ajax({
@@ -5688,19 +5690,19 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia) {
 					archivos += `<tr>
 						<td>Formato Profeco</td>
 						<td>PDF</td>
-						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Descargar formato profeco"><a class="profec" id="profeco-${idOrden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
+						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Descargar formato profeco"><a class="profec" id="profeco-${(movimiento != 0 ? movimiento : idOrden)}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
 						archivos += id_perfil == 7 ? '<td></td>' : '';
 					archivos +=`<tr>`;
 					archivos += `<tr>
 						<td>Hoja Multipuntos</td>
 						<td>PDF</td>
-						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver hoja multipuntos"><a class="multipuntos" id="multi-${idOrden}" href="#!"><i class="fa fa-eye"></i></a></td>`;
+						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver hoja multipuntos"><a class="multipuntos" id="multi-${(movimiento != 0 ? movimiento : idOrden)}" href="#!"><i class="fa fa-eye"></i></a></td>`;
 						archivos += id_perfil == 7 ? '<td></td>' : '';
 					archivos +=`<tr>`;
 					archivos += `<tr>
 						<td>Formato de Inventario</td>
 						<td>PDF</td>
-						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver formato de inventario"><a class="formatoInventario" id="inv-${idOrden}" href="#!"><i class="fa fa-eye"></i></a></td>`;
+						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver formato de inventario"><a class="formatoInventario" id="inv-${(movimiento != 0 ? movimiento : idOrden)}" href="#!"><i class="fa fa-eye"></i></a></td>`;
 						archivos += id_perfil == 7 ? '<td></td>' : '';
 					archivos +=`<tr>`;
 					if((signGrtia != firmaVacia && signGrtia != null) && renunciaGrtia == true){
@@ -5740,7 +5742,8 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia) {
 
 $(document).off('click', '#modaldocumentacion button.refreshDoc').on('click', '#modaldocumentacion button.refreshDoc', function(event) {
 	event.preventDefault();
-	cargar_documentacion(localStorage.getItem('hist_id_orden'), $('#trae_signGrtia').val(), bnt_renunciaGrtia);
+	movimiento = $(this).data('movimiento');
+	cargar_documentacion(localStorage.getItem('hist_id_orden'), $('#trae_signGrtia').val(), bnt_renunciaGrtia, movimiento);
 });
 
 $(document).off('click', '#verReqModal input[ name="auth_req[]"]').on('click', '#verReqModal input[ name="auth_req[]"]', function(event) {
