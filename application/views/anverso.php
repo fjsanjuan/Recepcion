@@ -876,7 +876,7 @@ $(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso
     })
 });
 
-var newlinecode = "<?=(isset($data['detalles']) ? sizeof($data['detalles']) : 1);?>";
+var newlinecode = "<?=(isset($data['detalles']) ? (sizeof($data['detalles']) == 0 ? 1 : sizeof($data['detalles']) ) : 1);?>";
 $(document).on('click', '.nuevo_codigo', function (e) {
 	e.preventDefault();
     console.log('newlinecode', newlinecode);
