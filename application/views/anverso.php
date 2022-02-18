@@ -162,7 +162,7 @@ input:focus{
 	$attributes = array('id' => 'form_codigos');
 	echo form_open('',$attributes);
    ?>
-   <?php if($total_anversos < $total_manos): ?>
+   <?php if($total_anversos < $total_manos || $id_perfil == 7): ?>
 	    <body class="gray-bg" style="overflow-x: auto;" cz-shortcut-listen="true">
 	        <div class="sidebar">
 	            <?php 
@@ -613,8 +613,7 @@ $(document).ready(function(){
 		$('input, select, textarea').val('');
 	})
 	//console.log('document',this.documentElement.innerHTML);
-    if (id_perfil == 4){$('#firmaTecnico').hide();}
-		if (id_perfil == 5){$('#firmJefe').hide();}
+		if (id_perfil == 5 || id_perfil == 7){$('#firmJefe').hide();}
         const tiempos_inicio =  $('.tiempo_inicio');
         const tiempos_fin =  $('.tiempo_fin');
         let costo_tiempo = 0;

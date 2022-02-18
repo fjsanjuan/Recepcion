@@ -2986,8 +2986,9 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 	public function garantia_anverso($idOrden = null, $idDiagnostico = null){
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
 		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'id_orden' => $idOrden, 'terminado' => 0])->count_all_results();
-		if ($idOrden == null || $idDiagnostico == null || $existe == 0) {
+		if ($idOrden == null || $idDiagnostico == null || $existe == 0 && $perfil != 7) {
 			$response['estatus'] = false;
 			$response['heading'] = 'Anverso no válido.';
 			$response['message'] = 'No se encontró ningún anverso pendiente con la información proporcionada.';
@@ -2995,7 +2996,7 @@ class Servicio extends CI_Controller {
 			return;
 		}
 		$this->db2 = $this->load->database('other',true); 
-		$datos = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
+		$datos = $perfil == 7 ? $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idDiagnostico) : $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
 		$orden = $this->db->select("id_orden_intelisis, torrenumero")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
 		$Mov = $this->db2->select('MovID, ServicioNumero,ServicioSerie AS vin')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
 		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
@@ -3027,6 +3028,7 @@ class Servicio extends CI_Controller {
 			$datos['json_inicio'] = "[]";
 			$datos['json_fin'] = "[]";
 		}
+		$datos['id_perfil'] = $perfil;
 		/*echo "<pre>"; print_r($datos);
 		echo "</pre>";*/
 		$this->load->view("anverso", $datos);
