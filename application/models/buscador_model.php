@@ -5248,6 +5248,13 @@ class Buscador_Model extends CI_Model{
 	}
 	public function obtener_detalles_diagnostico_pdf($idOrden, $idRevision)
 	{
+		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idRevision])->get()->row_array();
+		if ($existe > 0) {
+			$diagnostico = $this->db->select('cve_intelisis')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idRevision])->get()->row_array();
+		$response['firma'] = $this->db->select('firma_electronica, CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where("cve_intelisis", $existe['cve_intelisis'])->get()->row_array();
+		/*echo '<pre>'; print_r($this->db->last_query());
+		echo '</pre>';*/
+		}
 		$response['data'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'id_diagnostico' => $idRevision])->get()->row_array();
 		if (sizeof($response['data']) > 0) {
 			$response['data']['detalles'] = $this->db->select('*')->from('detalles_diagnostico_tecnico')->where(['id_diagnostico' => $response['data']['id_diagnostico']])->get()->result_array();
