@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -257,6 +257,7 @@
 				if (val['movimiento'] != null){
 					action_gerente		+="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
 					action_gerente		+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
+					action_gerente		+="<button type='button' class='btn btn-sm btn-primary historial_anverso' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d; ' id='historialAnverso-"+val["id"]+"'><i class='fas fa-bars'></i>&nbsp&nbspVer Manos Obra</button>";
 					
 				} else {
 					action_gerente		+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
@@ -6136,7 +6137,7 @@ $(document).on("click", '#boton_agregarManObra', function (e){
     tabla += "<td><input class='qty md-textarea' id='mo_qty' value='"+cantidad+"' readonly/></td>";
     tabla += "<td class='d-none'><input class='cost md-textarea' id='mo_cost' value='"+precio+"' readonly/></td>";
     tabla += "<td class='price d-none'>"+total+"</td>";
-	tabla += "<td><input type='checkbox' style='height: 24px; width: 24px;' value='1' class='add_adicional' id='add'><label for='add'></label></td>";
+	//tabla += "<td><input type='checkbox' style='height: 24px; width: 24px;' value='1' class='add_adicional' id='add'><label for='add'></label></td>";
     tabla += "<td style='display:none;' id='articulosmo'>mo</td>";
     tabla += "<td style='display:none;' id='idpq'>" + 'NA' + "</td>";
     tabla += "<td><select name='Agente' class='form-control' style='display: block !important;'>"+select_tec_mo.html()+"</select></td>";
@@ -6567,7 +6568,10 @@ function construir_tabla_historial_anversos(data) {
 	tr = $('<tr>');
 	tr.append($('<th>',{'text': 'Mano de Obra'}));
 	tr.append($('<th>',{'text': 'Técnico'}));
-	tr.append($('<th>',{'text': 'Autorización'}));
+	tr.append($('<th>',{'text': 'Adicional'}));
+	tr.append($('<th>',{'text': 'Autoriz Jefe'}));
+	tr.append($('<th>',{'text': 'Autoriz Grte'}));
+	tr.append($('<th>',{'text': 'Autoriz Grtias'}));
 	tr.append($('<th>',{'text': 'Terminada'}));
 	tr.append($('<th>',{'text': 'Anverso'}));
 	tr.append($('<th>',{'text': 'Cambiar Técnico'}));
@@ -6580,11 +6584,17 @@ function construir_tabla_historial_anversos(data) {
 		tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
+		adicional = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'id': `adicional-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.adicional, 'disabled': (id_perfil != 5 ? true : false)}) : '' ;
 		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
+		autorizar2 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'id': `authGrte-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autoriz_grte, 'disabled': (id_perfil != 8 ? true : false)}) : 'Autorizar.';
+		autorizar3 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'id': `authGrtias-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autoriz_grtias, 'disabled': (id_perfil != 7 ? true : false)}) : 'Autorizar.';
 		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		if (val.diagnostico) {
 			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+			/*$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+			$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+			$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});*/
 		}
 		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
 		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
@@ -6596,7 +6606,10 @@ function construir_tabla_historial_anversos(data) {
 		}
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
+		tr.append($('<td>').append(adicional));
 		tr.append($('<td>').append(autorizar));
+		tr.append($('<td>').append(autorizar2));
+		tr.append($('<td>').append(autorizar3));
 		tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
 		tr.append($('<td>').append(anverso));
 		tr.append($('<td>').append(tecnico));
