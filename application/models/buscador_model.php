@@ -4552,15 +4552,15 @@ class Buscador_Model extends CI_Model{
 					$response['desglose'][$key]['tiempo'] = $costo_tiempo;
 				}
 				$desglose = [];
-  				$sin_dannos = array_filter($response['desglose'], function($val, $index)
+  				$sin_dannos = array_filter($response['desglose'], function($val)
   				{
   					return $val['IDDanno'] === null;
-  				}, ARRAY_FILTER_USE_BOTH);
+  				});
   				foreach ($sin_dannos as $key => $valor) {
-  					$dannos_aux = array_filter($response['desglose'], function($val, $index) use($valor)
+  					$dannos_aux = array_filter($response['desglose'], function($val) use($valor)
 	  				{
 	  					return $val['IDDanno'] === $valor['IdVenta'] && $val['RenglonDanno'] == $valor['Renglon'] && $val['RenglonIDDanno'] == $valor['RenglonID'] && $val['RenglonSubDanno'] == $valor['RenglonSub'];
-	  				}, ARRAY_FILTER_USE_BOTH);
+	  				});
 	  				$sin_dannos[$key]['basico'] .= '('.implode(', ', array_column($dannos_aux,'basico')).')';
 	  				$sin_dannos[$key]['basico'] = str_replace('\n', '', $sin_dannos[$key]['basico']);
 	  				$sin_dannos[$key]['basico'] = str_replace('\t', '', $sin_dannos[$key]['basico']);
