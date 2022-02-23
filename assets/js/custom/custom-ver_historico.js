@@ -6577,6 +6577,7 @@ function construir_tabla_historial_anversos(data) {
 	tr.append($('<th>',{'text': 'Cambiar Técnico'}));
 	tr.append($('<th>',{'text': 'PDF'}));
 	tr.append($('<th>',{'text': 'Detalles'}));
+	tr.append($('<th>',{'text': 'Daños relacionados'}));
 	$('#tabla_diagnosticos').append(tr);
 	$.each(data, function(index, val) {
 		tr = $('<tr>');
@@ -6588,13 +6589,18 @@ function construir_tabla_historial_anversos(data) {
 		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
 		autorizar2 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'id': `authGrte-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autoriz_grte, 'disabled': (id_perfil != 8 ? true : false)}) : 'Autorizar.';
 		autorizar3 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'id': `authGrtias-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autoriz_grtias, 'disabled': (id_perfil != 7 ? true : false)}) : 'Autorizar.';
+		dannos = $('<button>', {'class': 'btn btn-sm btn-primary dannos', 'id': `dannos-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-code-fork'}));
 		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		$(dannos).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		if (val.diagnostico) {
 			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 			/*$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 			$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 			$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});*/
+		}
+		if (val.IDDanno) {
+			$(dannos).prop('disabled', true);
 		}
 		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
 		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
@@ -6615,6 +6621,7 @@ function construir_tabla_historial_anversos(data) {
 		tr.append($('<td>').append(tecnico));
 		tr.append($('<td>').append(pdf));
 		tr.append($('<td>').append(detalles));
+		tr.append($('<td>').append(dannos));
 		$('#tabla_diagnosticos').append(tr);
 	});
 }
@@ -6888,4 +6895,104 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .abrira
 			$('#loading_spin').hide();
 		});
 	}
+});
+
+$(document).off('click', '.dannos').on('click', '.dannos', function(event) {
+	event.preventDefault();
+	$('#tabla_dannos').empty();
+	console.log('data', $(this).data());
+	data = $(this).data();
+	$('#btn_guardarDannos').data(data);
+	idOrden = localStorage.getItem('hist_id_orden');
+	$.ajax({
+			cache: false,
+			url: `${base_url}index.php/servicio/obtener_dannos/${idOrden}/${data.idVenta}`,
+			contentType: false,
+			processData: false,
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		}).done(function (response) {
+			if (response.estatus) {
+				thead = $('<thead>');
+				tbody = $('<tbody>');
+				tr = $('<tr>');
+				tr.append($('<th>',{'text': 'Mano de obra'}));
+				tr.append($('<th>',{'text': 'Daño en relación'}));
+				thead.append(tr);
+				$.each(response.data, function(index, val) {
+					if (val.IdVenta == data.idVenta && val.RenglonID != data.renglonId && val.Renglon != data.renglon) {
+						check = val.IDDanno == data.idVenta && val.RenglonIDDanno == data.renglonId && val.RenglonDanno == data.renglon && val.RenglonSubDanno == data.renglonSub;
+						console.log(check);
+						danno = $('<input>',{'type': 'checkbox', 'data-renglon': val.Renglon, 'data-renglonid': val.RenglonID, 'data-renglonsub': val.RenglonSub, 'data-id': val.IdVenta, 'class': 'check esdanno', 'id': `esdanno-${index}`} ).prop({'checked': check, 'disabled': false});
+						tr = $('<tr>');
+						tr.append($('<td>',{'text': val.descripcion+'('+val.articulo+')'}));
+						tr.append($('<td>').append(danno));
+						tbody.append(tr);
+					}
+				});
+				$('#tabla_dannos').append(thead);
+				$('#tabla_dannos').append(tbody);
+			}else {
+				toastr.info(response.mensaje);
+			}
+		}).fail(function(error) {
+			toastr.warning('Ocurrió un error al obtener los daños en relación.');
+			console.log("error", error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+
+	$('#dannosModal').modal('toggle');
+});
+
+$(document).off('click', '#btn_guardarDannos').on('click', '#btn_guardarDannos', function(event) {
+	event.preventDefault();
+	data = $(this).data();
+	console.log('DATA', data);
+	datos = $('.esdanno');
+	form = new FormData();
+	form.append('ID', data.idVenta);
+	form.append('Renglon', data.renglon);
+	form.append('RenglonID', data.renglonId);
+	form.append('RenglonSub', data.renglonSub);
+	$.each(datos, function(index, val) {
+		danno_relacion = $(val).data();
+		console.log('datos', danno_relacion);
+		form.append(`dannos[ID][${index}]`, danno_relacion.id);
+		form.append(`dannos[Renglon][${index}]`, danno_relacion.renglon);
+		form.append(`dannos[RenglonSub][${index}]`, danno_relacion.renglonsub);
+		form.append(`dannos[RenglonID][${index}]`, danno_relacion.renglonid);
+		form.append(`dannos[check][${index}]`, $(val).is(':checked') ? true : false);
+	});
+	$.ajax({
+		cache: false,
+		url: `${base_url}index.php/servicio/guardar_dannos/${idOrden}/${data.idVenta}`,
+		contentType: false,
+		processData: false,
+		type: 'POST',
+		dataType: 'json',
+		data: form,
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	}).done(function (response) {
+		if (response.estatus) {
+			localStorage.setItem('abrirmodal', 1);
+			toastr.info(response.mensaje);
+			obtener_historial_anversos(idOrden);
+			$('#dannosModal').modal('toggle');
+		}else {
+			toastr.info(response.mensaje);
+		}
+	}).fail(function(error) {
+		toastr.warning('Ocurrió un error al guardar los daños en relación.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
 });

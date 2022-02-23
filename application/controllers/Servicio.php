@@ -3706,4 +3706,34 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	public function obtener_dannos($idOrden = null, $idVenta = null)
+	{
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif ($idVenta == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Venta no válida.';
+		}else {
+			$response = $this->buscador_model->obtener_dannos($idOrden, $idVenta);
+		}
+		echo json_encode($response);
+	}
+	public function guardar_dannos($idOrden = null, $idVenta = null)
+	{
+		$datos = $this->input->post();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif ($idVenta == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Venta no válida.';
+		}else if(sizeof($datos) > 4){
+			$response = $this->buscador_model->guardar_dannos($idOrden, $datos);
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Daños en relación no válidos.';
+		}
+		echo json_encode($response);
+	}
 }

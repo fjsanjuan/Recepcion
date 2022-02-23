@@ -4551,6 +4551,27 @@ class Buscador_Model extends CI_Model{
 					}
 					$response['desglose'][$key]['tiempo'] = $costo_tiempo;
 				}
+				$desglose = [];
+  				$sin_dannos = array_filter($response['desglose'], function($val, $index)
+  				{
+  					return $val['IDDanno'] === null;
+  				}, ARRAY_FILTER_USE_BOTH);
+  				foreach ($sin_dannos as $key => $valor) {
+  					$dannos_aux = array_filter($response['desglose'], function($val, $index) use($valor)
+	  				{
+	  					return $val['IDDanno'] === $valor['IdVenta'] && $val['RenglonDanno'] == $valor['Renglon'] && $val['RenglonIDDanno'] == $valor['RenglonID'] && $val['RenglonSubDanno'] == $valor['RenglonSub'];
+	  				}, ARRAY_FILTER_USE_BOTH);
+	  				$sin_dannos[$key]['basico'] .= '('.implode(', ', array_column($dannos_aux,'basico')).')';
+	  				$sin_dannos[$key]['basico'] = str_replace('\n', '', $sin_dannos[$key]['basico']);
+	  				$sin_dannos[$key]['basico'] = str_replace('\t', '', $sin_dannos[$key]['basico']);
+	  				$sin_dannos[$key]['basico'] = str_replace(' ', '', $sin_dannos[$key]['basico']);
+	  				$sin_dannos[$key]['basico'] = str_replace('\r', '', $sin_dannos[$key]['basico']);
+	  				$sin_dannos[$key]['descripcion'] .= '('.implode(', ', array_column($dannos_aux,'articulo')).')';
+	  				$sin_dannos[$key]['descripcion'] .= '('.implode(', ', array_column($dannos_aux,'descripcion')).')';
+	  				$sin_dannos[$key]['importe_mano'] .= '('.implode(', ', array_column($dannos_aux,'importe_mano')).')';
+	  				$sin_dannos[$key]['tiempo'] .= '('.implode(', ', array_column($dannos_aux,'tiempo')).')';
+	  			}
+	  			$response['desglose'] = array_values($sin_dannos);
 			}
 
 			$response["asesor"] = $this->db->select("firma_electronica, nombre, apellidos")
@@ -5607,6 +5628,65 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = false;
 			$response['subtipo']    = [];
 			$response['mensaje'] = "El subtipo de garantía no existe.";
+		}
+		return $response;
+	}
+	public function obtener_dannos($idOrden, $idVenta)
+	{
+		$this->db2 = $this->load->database('other',true); 
+		$response['estatus'] = false;
+		$response['data'] = $this->db2->select('vwCA_GarantiasMoDannos.*,CA_VentaD.ID AS idDetalles')->from('vwCA_GarantiasMoDannos')->join('CA_VentaD', 'CA_VentaD ON IdVenta = CA_VentaD.VentaID AND vwCA_GarantiasMoDannos.Renglon = CA_VentaD.Renglon AND vwCA_GarantiasMoDannos.RenglonID = CA_VentaD.RenglonID AND vwCA_GarantiasMoDannos.RenglonSub = CA_VentaD.RenglonSub', 'LEFT')->where(['Tipo' => 'Servicio', 'IdVenta' => $idVenta])->get()->result_array();
+		if (sizeof($response['data']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
+		}else {
+			$response['mensaje'] = 'No hay manos de obra vinculadas.';
+			$response['data'] = [];
+		}
+		return $response;
+	}
+	public function guardar_dannos($idOrden, $datos)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$this->db2->trans_start();
+		foreach ($datos['dannos']['ID'] as $key => $value) {
+			$insert = [
+				'VentaID' => $datos['dannos']['ID'][$key],
+				'Renglon' => $datos['dannos']['Renglon'][$key],
+				'RenglonID' => $datos['dannos']['RenglonID'][$key],
+				'RenglonSub' => $datos['dannos']['RenglonSub'][$key],
+				'IDDanno' =>  $datos['dannos']['check'][$key] == 'true' ? $datos['ID'] : null,
+				'RenglonDanno' =>  $datos['dannos']['check'][$key] == 'true' ? $datos['Renglon'] : null,
+				'RenglonIDSubDanno' =>  $datos['dannos']['check'][$key] == 'true' ? $datos['RenglonID'] : null,
+				'RenglonSubDanno' =>  $datos['dannos']['check'][$key] == 'true' ? $datos['RenglonSub'] : null,
+			];
+			$existe = $this->db2->select('*')->from('CA_VentaD')->where( [
+				'VentaID' => $datos['dannos']['ID'][$key],
+				'Renglon' => $datos['dannos']['Renglon'][$key],
+				'RenglonID' => $datos['dannos']['RenglonID'][$key],
+				'RenglonSub' => $datos['dannos']['RenglonSub'][$key],
+			])->get()->row_array();
+			if (sizeof($existe)>0) {
+				if ( $datos['dannos']['check'][$key] == 'false' && $datos['ID'] == $existe['IDDanno'] && $datos['Renglon'] == $existe['RenglonDanno'] && $datos['RenglonID'] == $existe['RenglonIDSubDanno'] && $datos['RenglonSub'] == $existe['RenglonSubDanno']) {
+					$this->db2->where('ID', $existe['ID']);
+					$this->db2->update('CA_VentaD', $insert);
+				}elseif( $datos['dannos']['check'][$key] == 'true') {
+					$this->db2->where('ID', $existe['ID']);
+					$this->db2->update('CA_VentaD', $insert);
+				}
+			}else {
+				$this->db2->insert('CA_VentaD', $insert);
+			}
+		}
+		$this->db2->trans_complete();
+		if ($this->db2->trans_status() === FALSE){
+			$this->db2->trans_rollback();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'No fue posible guardar los Daños relacionadas.';
+		}else{
+			$this->db2->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Daños relacionadas guardados correctamente.';
 		}
 		return $response;
 	}

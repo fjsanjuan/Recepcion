@@ -850,3 +850,5 @@ table tr.active {
             </div>
     </div>
 </div>
+<!-- modal para ver requisiciones-->
+<?php $this->load->view('modals/dannos_relacion'); ?>
