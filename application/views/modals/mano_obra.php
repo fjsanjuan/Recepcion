@@ -28,8 +28,8 @@
 							<td class="text-center"><strong>Cantidad</strong></td>
 							<td class="text-center d-none"><strong>Precio U</strong></td>
 							<td class="text-center d-none"><strong>Total</strong></td>
-							<td class="text-center"><strong>Adicional</strong></td>
-							<td class="text-center">Técnico</td>
+							<!--<td class="text-center"><strong>Adicional</strong></td>-->
+							<td class="text-center"><strong>Técnico</strong></td>
 						</tr>
 					</thead>
 					<tbody>

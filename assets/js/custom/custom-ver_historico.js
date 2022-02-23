@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -6585,19 +6585,19 @@ function construir_tabla_historial_anversos(data) {
 		tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
-		adicional = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'id': `adicional-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.adicional, 'disabled': (id_perfil != 5 ? true : false)}) : '' ;
+		adicional = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'id': `adicional-${val.diagnostico.VentaID}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false}) : '' ;
 		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
-		autorizar2 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'id': `authGrte-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autoriz_grte, 'disabled': (id_perfil != 8 ? true : false)}) : 'Autorizar.';
-		autorizar3 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'id': `authGrtias-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autoriz_grtias, 'disabled': (id_perfil != 7 ? true : false)}) : 'Autorizar.';
 		dannos = $('<button>', {'class': 'btn btn-sm btn-primary dannos', 'id': `dannos-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-code-fork'}));
+		autorizar2 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'id': `authGrte-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.Autoriz_grte, 'disabled': (id_perfil != 8 || !val.Adicional ? true : false)}) : 'Autorizar.';
+		autorizar3 = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'id': `authGrtias-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.Autoriz_grtias, 'disabled': (id_perfil != 7 || !val.Adicional ? true : false)}) : 'Autorizar.';
 		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(dannos).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		if (val.diagnostico) {
 			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-			/*$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-			$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-			$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});*/
 		}
 		if (val.IDDanno) {
 			$(dannos).prop('disabled', true);
@@ -6994,5 +6994,165 @@ $(document).off('click', '#btn_guardarDannos').on('click', '#btn_guardarDannos',
 	})
 	.always(function() {
 		$('#loading_spin').hide();
+	});
+});
+
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .maradicional').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .maradicional', function(event) {
+	id = $(this).prop('id').split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	data = $(this).data();
+	console.log(data);
+	form = new FormData();
+	form.append('id_diagnostico', id);
+	form.append('check', $(this).is(':checked'));
+	const _this = this;
+	form.append('Renglon', data.renglon);
+	form.append('RenglonID', data.renglonId);
+	form.append('RenglonSub', data.renglonSub);
+	form.append('VentaID', data.idVenta);
+	swal({
+		title: $(_this).is(':checked') ? '¿Marcar como Adicional?' : '¿Desmarcar Adicional?',
+		showCancelButton: true,
+		confirmButtonText: $(_this).is(':checked') ? 'Marcar' : 'Desmarcar',
+		cancelButtonText: 'Cancelar',
+		type: 'info',
+	})
+	.then((result) => {
+		if (result.value){
+		$.ajax({
+			url: base_url+ "index.php/servicio/marcar_adicional/"+id,
+			type: 'POST',
+			dataType: 'json',
+			data: form,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+	}else if (result.dismiss) {
+		$(_this).prop('checked', !$(_this).is(':checked'));
+	}
+	});
+});
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrte').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrte', function(event) {
+	id = $(this).prop('id').split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	data = $(this).data();
+	console.log(data);
+	form = new FormData();
+	form.append('id_diagnostico', id);
+	form.append('check', $(this).is(':checked'));
+	const _this = this;
+	form.append('Renglon', data.renglon);
+	form.append('RenglonID', data.renglonId);
+	form.append('RenglonSub', data.renglonSub);
+	form.append('VentaID', data.idVenta);
+	swal({
+		title: $(_this).is(':checked') ? '¿Autorizar Adicional?' : '¿Desautorizar Adicional?',
+		showCancelButton: true,
+		confirmButtonText: $(_this).is(':checked') ? 'Autorizar' : 'Desautorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info',
+	})
+	.then((result) => {
+		if (result.value){
+		$.ajax({
+			url: base_url+ "index.php/servicio/grteAutoriza_adicional/"+id,
+			type: 'POST',
+			dataType: 'json',
+			data: form,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+	}else if (result.dismiss) {
+		$(_this).prop('checked', !$(_this).is(':checked'));
+	}
+	});
+});
+$(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrtias').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrtias', function(event) {
+	id = $(this).prop('id').split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	data = $(this).data();
+	console.log(data);
+	form = new FormData();
+	form.append('id_diagnostico', id);
+	form.append('check', $(this).is(':checked'));
+	const _this = this;
+	form.append('Renglon', data.renglon);
+	form.append('RenglonID', data.renglonId);
+	form.append('RenglonSub', data.renglonSub);
+	form.append('VentaID', data.idVenta);
+	swal({
+		title: $(_this).is(':checked') ? '¿Autorizar Adicional?' : '¿Desautorizar Adicional?',
+		showCancelButton: true,
+		confirmButtonText: $(_this).is(':checked') ? 'Autorizar' : 'Desautorizar',
+		cancelButtonText: 'Cancelar',
+		type: 'info',
+	})
+	.then((result) => {
+		if (result.value){
+		$.ajax({
+			url: base_url+ "index.php/servicio/grtiasAutoriza_adicional/"+id,
+			type: 'POST',
+			dataType: 'json',
+			data: form,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+	}else if (result.dismiss) {
+		$(_this).prop('checked', !$(_this).is(':checked'));
+	}
 	});
 });

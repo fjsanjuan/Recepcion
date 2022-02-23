@@ -5246,7 +5246,7 @@ class Buscador_Model extends CI_Model{
 			}elseif (isset($venta['MovID'])) {
 				$this->db->trans_begin();
 				$this->db->where(['id_diagnostico' => $idDiagnostico]);
-				$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
+				$this->db->update('diagnostico_tecnico', ['autorizado' => $check], ['adicional' => $check]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE ){
 					$this->db->trans_rollback();
@@ -5687,6 +5687,146 @@ class Buscador_Model extends CI_Model{
 			$this->db2->trans_commit();
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Daños relacionadas guardados correctamente.';
+		}
+		return $response;
+	}
+
+	public function marcar_adicional($datos)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$this->db2->trans_start();
+		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+		if (sizeof($existen) > 0) {
+			$data = [
+				'adicional' => $datos['check'],
+				'Renglon'	=> $datos['Renglon'],
+				'RenglonID'	=> $datos['RenglonID'],
+				'RenglonSub'	=> $datos['RenglonSub'],
+				'VentaID'	=> $datos['VentaID']
+			];
+			
+			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+			$this->db2->update('CA_VentaD', $data);
+			
+		} else {
+			$this->db2->insert('CA_VentaD', $data);
+			}
+		$this->db2->trans_complete();
+		if ($this->db2->trans_status() === FALSE) {
+			$this->db2->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
+		}else {
+			$this->db2->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Estatus de la adicional actualizado.';
+		}
+		return $response;
+	}
+
+	public function grteAutoriza_adicional($datos)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$this->db2->trans_start();
+		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+		if (sizeof($existen) > 0) {
+			$data = [
+				'Autoriz_grte' => $datos['check'],
+				'Renglon'	=> $datos['Renglon'],
+				'RenglonID'	=> $datos['RenglonID'],
+				'RenglonSub'	=> $datos['RenglonSub'],
+				'VentaID'	=> $datos['VentaID']
+			];
+			
+			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+			$this->db2->update('CA_VentaD', $data);
+			
+		} else {
+			$this->db2->insert('CA_VentaD', $data);
+			}
+		$this->db2->trans_complete();
+		if ($this->db2->trans_status() === FALSE) {
+			$this->db2->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
+		}else {
+			$this->db2->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Estatus de la adicional actualizado.';
+		}
+		return $response;
+	}
+
+	public function grtiasAutoriza_adicional($datos)
+	{
+		$this->db2 = $this->load->database('other',true);
+		$this->db2->trans_start();
+		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+		if (sizeof($existen) > 0) {
+			$data = [
+				'Autoriz_grtias' => $datos['check'],
+				'Renglon'	=> $datos['Renglon'],
+				'RenglonID'	=> $datos['RenglonID'],
+				'RenglonSub'	=> $datos['RenglonSub'],
+				'VentaID'	=> $datos['VentaID']
+			];
+			
+			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+			$this->db2->update('CA_VentaD', $data);
+			
+		} else {
+			$this->db2->insert('CA_VentaD', $data);
+			}
+		$this->db2->trans_complete();
+		if ($this->db2->trans_status() === FALSE) {
+			$this->db2->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
+		}else {
+			$this->db2->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Estatus de la adicional actualizado.';
+		}
+		return $response;
+	}
+	public function guardaRecepcion_partes($idOrden, $datos)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+		$logged_in = $this->session->userdata("logged_in");
+		$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
+		$id = 'id';
+		$retornoPartes = [
+			'id_requisicion'  => $id,
+			'cantidad'        => isset($datos['cantidad']) ? $datos['cantidad'] : null,
+			'cve_articulo'    => isset($datos['cve_articulo']) ? $datos['cve_articulo'] : null,
+			'descripcion'     => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'recepcion_partes'	=> $datos('check'),
+			'fecha_recepcion'   => date('d-m-Y H:i:s'),
+			'nom_tecnico'       => isset($tecnico['nombre']) ? $tecnico['nombre'] : null,
+			'id_orden'          => $idOrden,
+			'id_usuario'        => $logged_in['id'],
+			'firma_de_tecnico'	=> $firma['firma_electronica'],
+			'firma_de_admon'	=> $firma['firma_electronica']
+		];
+	}
+		$this->db->trans_start();
+		$this->db->insert('retorno_partes', $retornoPartes);
+		$id = $this->db->insert_id();
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar el retorno de partes.';
+			return $response;
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Retorno de partes guardado.';
+			$response['id']      = $id;
 		}
 		return $response;
 	}

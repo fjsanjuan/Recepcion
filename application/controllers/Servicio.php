@@ -2911,14 +2911,14 @@ class Servicio extends CI_Controller {
 			}
 		}
 	}
-	public function obtener_requisiciones($idOrden = null)
+	public function obtener_requisiciones($idOrden = null, $requisicion = null)
 	{
 		$datos = [];
 		if ($idOrden == null ) {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		}else {
-			$response = $this->buscador_model->obtener_requisiciones($idOrden);
+			$response = $this->buscador_model->obtener_requisiciones($idOrden, $requisicion);
 		}
 		echo json_encode($response);
 	}
@@ -3658,16 +3658,6 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	public function recepcion_partes(){
-		$datos = $this->input->post();
-		/*echo "<pre>";
-		print_r ($datos);
-		echo "</pre>";
-		die();*/
-		// print_r($datos);die();
-		$presupuesto = $this->buscador_model->recepcion_partes($datos);
-		echo json_encode($presupuesto);
-	}
 	public function obtener_formato_orden_servicio($token = null, $id = null)
 	{
 		$datos = $this->input->post();
@@ -3733,6 +3723,53 @@ class Servicio extends CI_Controller {
 		}else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Daños en relación no válidos.';
+		}
+		echo json_encode($response);
+	}
+
+	public function marcar_adicional($VentaID=null)
+	{
+		$datos = $this->input->post();
+		if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->marcar_adicional($datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function grteAutoriza_adicional($VentaID=null)
+	{
+		$datos = $this->input->post();
+		if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->grteAutoriza_adicional($datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function grtiasAutoriza_adicional($VentaID=null)
+	{
+		$datos = $this->input->post();
+		if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->grtiasAutoriza_adicional($datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+
+	public function guardaRecepcion_partes($idORden = null)
+	{
+		$datos = [];
+		$datos = $this->input->post();
+		if ($idOrden == null ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}else {
+			$response = $this->buscador_model->guardaRecepcion_partes($idOrden, $datos);
 		}
 		echo json_encode($response);
 	}
