@@ -3123,12 +3123,13 @@ $(document).ready(function() {
 		 */
 		//$('#linea_tipo').val(lineas_reparacion.ventaID);
 		$(`#linea_tipo option[value='${lineas_reparacion.VentaID}'][data-renglon='${lineas_reparacion.Renglon}'][data-renglonsub='${lineas_reparacion.RenglonSub}'][data-renglonid='${lineas_reparacion.RenglonID}']`).prop('selected', true);
+		$('#linea_tipo').trigger('change');
 		$('input[name="num_reparacion"]').val(lineas_reparacion.num_reparacion);
 		$('select[name="tipo_garantia"]').val(lineas_reparacion.tipo_garantia);
 		$('select[name="subtipo_garantia"]').val(lineas_reparacion.subtipo_garantia);
 		$('input[name="danio_ralacion"]').val(lineas_reparacion.dannio);
-		$('input[name="autoriz_1"]').val(lineas_reparacion.autoriz_1);
-		$('input[name="autoriz_2"]').val(lineas_reparacion.autoriz_2);
+		/*$('input[name="autoriz_1"]').val(lineas_reparacion.autoriz_1);
+		$('input[name="autoriz_2"]').val(lineas_reparacion.autoriz_2);*/
 		$('input[name="partes_totales"]').val(lineas_reparacion.partes_totales);
 		$('input[name="mano_obra_total"]').val(lineas_reparacion.mano_obra_total);
 		$('input[name="misc_total"]').val(lineas_reparacion.misc_total);
@@ -5528,7 +5529,7 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 			let con_movimientos = 0;
 			if (respLineas.estatus) {
 				$.each(respLineas.manos, function(index, val) {
-					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`}));
+					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`, 'data-gte': val.Nombre_gte, 'data-admon': val.Nombre_grtias, 'data-jefe': val.Nombre_jefe}));
 				});
 				$('#lineaTrabajoModal').modal('show');
 			}else {
@@ -7159,3 +7160,10 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 	}
 	});
 });
+$(document).off('change', 'select[name="linea_tipo"]').on('change', 'select[name="linea_tipo"]', function(event) {
+	event.preventDefault();
+	data = $(this).find('option:selected').data();
+	console.log(data);
+	$('#auth_1').val(data.jefe ? data.jefe : '');
+	$('#auth_2').val(data.gte ? data.gte : '');
+});;
