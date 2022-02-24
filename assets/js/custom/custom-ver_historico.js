@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -6586,7 +6586,7 @@ function construir_tabla_historial_anversos(data) {
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
 		adicional = $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'style': 'height: 20px; width: 20px;', 'id': `adicional-${val.diagnostico ? val.diagnostico.VentaID : ''}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false});
-		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'style': 'height: 20px; width: 20px;', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.Autoriz_jefe, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
+		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'style': 'height: 20px; width: 20px;', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
 		dannos = $('<button>', {'class': 'btn btn-sm btn-primary dannos', 'id': `dannos-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-code-fork'}));
 		autorizar2 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'style': 'height: 20px; width: 20px;', 'id': `authGrte-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grte, 'disabled': (id_perfil != 8 || !val.Adicional ? true : false)}) ;
 		autorizar3 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'style': 'height: 20px; width: 20px;', 'id': `authGrtias-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grtias, 'disabled': (id_perfil != 7 || !val.Adicional ? true : false)});
