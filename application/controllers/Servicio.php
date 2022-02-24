@@ -3349,7 +3349,7 @@ class Servicio extends CI_Controller {
 				}
 			}
 			if ($response['estatus'] == true) {
-				$response = $this->buscador_model->autorizar_linea($idDiagnostico, $datos['check'], $datos['asigna_tecnico']);
+				$response = $this->buscador_model->autorizar_linea($idDiagnostico, $datos['check'], $datos['asigna_tecnico'],$datos);
 			}
 		}
 		echo json_encode($response);

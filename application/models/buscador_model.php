@@ -5231,7 +5231,7 @@ class Buscador_Model extends CI_Model{
 	}
 	return $response;
 	}
-	public function autorizar_linea($idDiagnostico, $check, $cve_intelisis)
+	public function autorizar_linea($idDiagnostico, $check, $cve_intelisis,$datos)
 	{
 		$intelisis = $this->load->database('other',true);
 		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->count_all_results();
@@ -5244,9 +5244,37 @@ class Buscador_Model extends CI_Model{
 				$response['estatus'] = false;
 				$response['mensaje'] = "El técnico con clave {$cve_intelisis} ya tiene un anverso trabajando. Es necesario terminar el anverso o asigne otro técnico.";
 			}elseif (isset($venta['MovID'])) {
+				$this->db2 = $this->load->database('other',true);
+				$this->db2->trans_start();
+				$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['idVenta'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+				$data = [
+					'Autoriz_jefe' => $datos['check'],
+					'Renglon'      => $datos['Renglon'],
+					'RenglonID'    => $datos['RenglonID'],
+					'RenglonSub'   => $datos['RenglonSub'],
+					'VentaID'      => $datos['idVenta']
+				];
+				if (sizeof($existen) > 0) {
+					
+					$this->db2->where(['VentaID' => $datos['idVenta'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+					$this->db2->update('CA_VentaD', $data);
+				} else {
+					$this->db2->insert('CA_VentaD', $data);
+					}
+				$this->db2->trans_complete();
+				if ($this->db2->trans_status() === FALSE) {
+					$this->db2->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = $check == 'true' ? 'No fue posible autorizar el anverso.' : 'No fue posible desautorizar el anverso.';
+				}else {
+					$this->db2->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = $check == 'true' ? 'Anverso autorizado correctamente.' : 'Anverso desautorizado correctamente.';
+				}
+
 				$this->db->trans_begin();
 				$this->db->where(['id_diagnostico' => $idDiagnostico]);
-				$this->db->update('diagnostico_tecnico', ['autorizado' => $check], ['adicional' => $check]);
+				$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE ){
 					$this->db->trans_rollback();
