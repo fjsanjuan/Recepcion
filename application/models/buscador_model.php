@@ -5235,6 +5235,7 @@ class Buscador_Model extends CI_Model{
 	{
 		$intelisis = $this->load->database('other',true);
 		$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->count_all_results();
+		$logged_in = $this->session->userdata("logged_in");
 		if ($existe > 0) {
 			$diagnostico = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'terminado !=' => 1])->get()->row_array();
 			$pendientes = $this->db->select('*')->from('diagnostico_tecnico')->where(['cve_intelisis' => $cve_intelisis, 'terminado !=' => 1])->count_all_results();
@@ -5252,8 +5253,13 @@ class Buscador_Model extends CI_Model{
 					'Renglon'      => $datos['Renglon'],
 					'RenglonID'    => $datos['RenglonID'],
 					'RenglonSub'   => $datos['RenglonSub'],
-					'VentaID'      => $datos['idVenta']
+					'VentaID'      => $datos['idVenta'],
+					'nombre_jefe'   => $datos['check'] == 'true' ? $logged_in['nombre'] : null
 				];
+				if ($logged_in['perfil'] != 4) {
+					$response['estatus'] = false;
+					$response['mensaje'] = 'Tu perfil no cumple con los permisos requeridos.';
+				}else {
 				if (sizeof($existen) > 0) {
 					
 					$this->db2->where(['VentaID' => $datos['idVenta'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
@@ -5271,7 +5277,7 @@ class Buscador_Model extends CI_Model{
 					$response['estatus'] = true;
 					$response['mensaje'] = $check == 'true' ? 'Anverso autorizado correctamente.' : 'Anverso desautorizado correctamente.';
 				}
-
+			}
 				$this->db->trans_begin();
 				$this->db->where(['id_diagnostico' => $idDiagnostico]);
 				$this->db->update('diagnostico_tecnico', ['autorizado' => $check]);
