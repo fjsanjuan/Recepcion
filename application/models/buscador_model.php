@@ -5724,14 +5724,14 @@ class Buscador_Model extends CI_Model{
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_start();
 		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+		$data = [
+			'adicional' => $datos['check'],
+			'Renglon'	=> $datos['Renglon'],
+			'RenglonID'	=> $datos['RenglonID'],
+			'RenglonSub'	=> $datos['RenglonSub'],
+			'VentaID'	=> $datos['VentaID']
+		];
 		if (sizeof($existen) > 0) {
-			$data = [
-				'adicional' => $datos['check'],
-				'Renglon'	=> $datos['Renglon'],
-				'RenglonID'	=> $datos['RenglonID'],
-				'RenglonSub'	=> $datos['RenglonSub'],
-				'VentaID'	=> $datos['VentaID']
-			];
 			
 			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
 			$this->db2->update('CA_VentaD', $data);
@@ -5757,14 +5757,14 @@ class Buscador_Model extends CI_Model{
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_start();
 		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+		$data = [
+			'Autoriz_grte' => $datos['check'],
+			'Renglon'	=> $datos['Renglon'],
+			'RenglonID'	=> $datos['RenglonID'],
+			'RenglonSub'	=> $datos['RenglonSub'],
+			'VentaID'	=> $datos['VentaID']
+		];
 		if (sizeof($existen) > 0) {
-			$data = [
-				'Autoriz_grte' => $datos['check'],
-				'Renglon'	=> $datos['Renglon'],
-				'RenglonID'	=> $datos['RenglonID'],
-				'RenglonSub'	=> $datos['RenglonSub'],
-				'VentaID'	=> $datos['VentaID']
-			];
 			
 			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
 			$this->db2->update('CA_VentaD', $data);
@@ -5790,14 +5790,14 @@ class Buscador_Model extends CI_Model{
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_start();
 		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
+		$data = [
+			'Autoriz_grtias' => $datos['check'],
+			'Renglon'	=> $datos['Renglon'],
+			'RenglonID'	=> $datos['RenglonID'],
+			'RenglonSub'	=> $datos['RenglonSub'],
+			'VentaID'	=> $datos['VentaID']
+		];
 		if (sizeof($existen) > 0) {
-			$data = [
-				'Autoriz_grtias' => $datos['check'],
-				'Renglon'	=> $datos['Renglon'],
-				'RenglonID'	=> $datos['RenglonID'],
-				'RenglonSub'	=> $datos['RenglonSub'],
-				'VentaID'	=> $datos['VentaID']
-			];
 			
 			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
 			$this->db2->update('CA_VentaD', $data);

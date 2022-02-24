@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -6569,9 +6569,9 @@ function construir_tabla_historial_anversos(data) {
 	tr.append($('<th>',{'text': 'Mano de Obra'}));
 	tr.append($('<th>',{'text': 'Técnico'}));
 	tr.append($('<th>',{'text': 'Adicional'}));
-	tr.append($('<th>',{'text': 'Autoriz Jefe'}));
-	tr.append($('<th>',{'text': 'Autoriz Grte'}));
-	tr.append($('<th>',{'text': 'Autoriz Grtias'}));
+	tr.append($('<th>',{'text': 'Autorización Jefe'}));
+	tr.append($('<th>',{'text': 'Autorización Gerente'}));
+	tr.append($('<th>',{'text': 'Autorización Garantías'}));
 	tr.append($('<th>',{'text': 'Terminada'}));
 	tr.append($('<th>',{'text': 'Anverso'}));
 	tr.append($('<th>',{'text': 'Cambiar Técnico'}));
@@ -6585,7 +6585,7 @@ function construir_tabla_historial_anversos(data) {
 		tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
-		adicional = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'id': `adicional-${val.diagnostico.VentaID}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false}) : '' ;
+		adicional = $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'id': `adicional-${val.diagnostico ? val.diagnostico.VentaID : ''}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false});
 		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.Autoriz_jefe, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
 		dannos = $('<button>', {'class': 'btn btn-sm btn-primary dannos', 'id': `dannos-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-code-fork'}));
 		autorizar2 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'id': `authGrte-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grte, 'disabled': (id_perfil != 8 || !val.Adicional ? true : false)}) ;
