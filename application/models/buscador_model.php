@@ -5754,66 +5754,79 @@ class Buscador_Model extends CI_Model{
 
 	public function grteAutoriza_adicional($datos)
 	{
+		$logged_in = $this->session->userdata["logged_in"];
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_start();
 		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
 		$data = [
 			'Autoriz_grte' => $datos['check'],
-			'Renglon'	=> $datos['Renglon'],
-			'RenglonID'	=> $datos['RenglonID'],
-			'RenglonSub'	=> $datos['RenglonSub'],
-			'VentaID'	=> $datos['VentaID']
+			'Renglon'      => $datos['Renglon'],
+			'RenglonID'    => $datos['RenglonID'],
+			'RenglonSub'   => $datos['RenglonSub'],
+			'VentaID'      => $datos['VentaID'],
+			'nombre_gte'   => $datos['check'] == 'true' ? $logged_in['nombre'] : null
 		];
-		if (sizeof($existen) > 0) {
-			
-			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
-			$this->db2->update('CA_VentaD', $data);
-			
-		} else {
-			$this->db2->insert('CA_VentaD', $data);
-			}
-		$this->db2->trans_complete();
-		if ($this->db2->trans_status() === FALSE) {
-			$this->db2->trans_rollback();
+		if ($logged_in['perfil'] != 8) {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
+			$response['mensaje'] = 'Tu perfil no cumple con los permisos requeridos.';
 		}else {
-			$this->db2->trans_commit();
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Estatus de la adicional actualizado.';
+			if (sizeof($existen) > 0) {
+				
+				$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+				$this->db2->update('CA_VentaD', $data);
+				
+			} else {
+				$this->db2->insert('CA_VentaD', $data);
+				}
+			$this->db2->trans_complete();
+			if ($this->db2->trans_status() === FALSE) {
+				$this->db2->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
+			}else {
+				$this->db2->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Estatus de la adicional actualizado.';
+			}
 		}
 		return $response;
 	}
 
 	public function grtiasAutoriza_adicional($datos)
 	{
+		$logged_in = $this->session->userdata["logged_in"];
 		$this->db2 = $this->load->database('other',true);
 		$this->db2->trans_start();
 		$existen = $this->db2->select('*')->from('CA_VentaD')->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->get()->row_array();
 		$data = [
 			'Autoriz_grtias' => $datos['check'],
-			'Renglon'	=> $datos['Renglon'],
-			'RenglonID'	=> $datos['RenglonID'],
-			'RenglonSub'	=> $datos['RenglonSub'],
-			'VentaID'	=> $datos['VentaID']
+			'Renglon'        => $datos['Renglon'],
+			'RenglonID'      => $datos['RenglonID'],
+			'RenglonSub'     => $datos['RenglonSub'],
+			'VentaID'        => $datos['VentaID'],
+			'nombre_grtias'  => $datos['check'] == 'true' ? $logged_in['nombre'] : null
 		];
-		if (sizeof($existen) > 0) {
-			
-			$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
-			$this->db2->update('CA_VentaD', $data);
-			
-		} else {
-			$this->db2->insert('CA_VentaD', $data);
-			}
-		$this->db2->trans_complete();
-		if ($this->db2->trans_status() === FALSE) {
-			$this->db2->trans_rollback();
+		if ($logged_in['perfil'] != 7) {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
-		}else {
-			$this->db2->trans_commit();
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Estatus de la adicional actualizado.';
+			$response['mensaje'] = 'Tu perfil no cumple con los permisos requeridos.';
+		}else{
+			if (sizeof($existen) > 0) {
+				$this->db2->where(['VentaID' => $datos['VentaID'], 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+				$this->db2->update('CA_VentaD', $data);
+				
+			} else {
+				$this->db2->insert('CA_VentaD', $data);
+				}
+			$this->db2->trans_complete();
+			if ($this->db2->trans_status() === FALSE) {
+				$this->db2->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el estatus de la adicional.';
+			}else {
+				$this->db2->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Estatus de la adicional actualizado.';
+			}
 		}
 		return $response;
 	}
