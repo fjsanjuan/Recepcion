@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -6935,6 +6935,11 @@ $(document).off('click', '.dannos').on('click', '.dannos', function(event) {
 				});
 				$('#tabla_dannos').append(thead);
 				$('#tabla_dannos').append(tbody);
+				if (response.data.length > 1) {
+					$('#dannosModal').modal('toggle');
+				}else {
+					toastr.info('No hay manos de obra que puedan ser daños relacionados.');
+				}
 			}else {
 				toastr.info(response.mensaje);
 			}
@@ -6945,8 +6950,6 @@ $(document).off('click', '.dannos').on('click', '.dannos', function(event) {
 		.always(function() {
 			$('#loading_spin').hide();
 		});
-
-	$('#dannosModal').modal('toggle');
 });
 
 $(document).off('click', '#btn_guardarDannos').on('click', '#btn_guardarDannos', function(event) {
