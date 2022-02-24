@@ -4561,14 +4561,20 @@ class Buscador_Model extends CI_Model{
 	  				{
 	  					return $val['IDDanno'] === $valor['IdVenta'] && $val['RenglonDanno'] == $valor['Renglon'] && $val['RenglonIDDanno'] == $valor['RenglonID'] && $val['RenglonSubDanno'] == $valor['RenglonSub'];
 	  				});
-	  				$sin_dannos[$key]['basico'] .= '('.implode(', ', array_column($dannos_aux,'basico')).')';
+					  if(sizeof(array_column($dannos_aux,'basico')) > 0)
+	  					$sin_dannos[$key]['basico'] .= '('.implode(', ', array_column($dannos_aux,'basico')).')';
 	  				$sin_dannos[$key]['basico'] = str_replace('\n', '', $sin_dannos[$key]['basico']);
 	  				$sin_dannos[$key]['basico'] = str_replace('\t', '', $sin_dannos[$key]['basico']);
 	  				$sin_dannos[$key]['basico'] = str_replace(' ', '', $sin_dannos[$key]['basico']);
 	  				$sin_dannos[$key]['basico'] = str_replace('\r', '', $sin_dannos[$key]['basico']);
-	  				$sin_dannos[$key]['descripcion'] .= '('.implode(', ', array_column($dannos_aux,'articulo')).')';
-	  				$sin_dannos[$key]['descripcion'] .= '('.implode(', ', array_column($dannos_aux,'descripcion')).')';
-	  				$sin_dannos[$key]['importe_mano'] .= '('.implode(', ', array_column($dannos_aux,'importe_mano')).')';
+					  if(sizeof(array_column($dannos_aux,'articulo')) > 0)
+					  	$sin_dannos[$key]['descripcion'] .= '('.implode(', ', array_column($dannos_aux,'articulo')).')';
+					  if(sizeof(array_column($dannos_aux,'descripcion')) > 0)
+	  					$sin_dannos[$key]['descripcion'] .= '('.implode(', ', array_column($dannos_aux,'descripcion')).')';
+	  				//print_r(array_column($dannos_aux,'importe_mano'));
+					  if(sizeof(array_column($dannos_aux,'importe_mano')) > 0)
+					  	$sin_dannos[$key]['importe_mano'] .= '('.implode(', ', array_column($dannos_aux,'importe_mano')).')';
+	
 	  				$sin_dannos[$key]['tiempo'] .= '('.implode(', ', array_column($dannos_aux,'tiempo')).')';
 	  			}
 	  			$response['desglose'] = array_values($sin_dannos);
