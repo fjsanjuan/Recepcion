@@ -1099,6 +1099,11 @@ $(document).ready(function() {
 		trae_signGrtia = $(this).data('trae_signgrtia');
 		$('#trae_signGrtia').val(trae_signGrtia);
 		$('.refreshDoc').data('movimiento', movimiento);
+		if (movimiento < 1) {
+			$('.documentacionOrden').hide();
+		}else {
+			$('.documentacionOrden').show();
+		}
 		cargar_documentacion(id_orden, trae_signGrtia, bnt_renunciaGrtia, movimiento);
 	});
 
@@ -5690,31 +5695,31 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0)
 				}
 				if (data.estatus){
 					let archivos = "";
-					archivos += `<tr>
+					archivos += `<tr class="no-sort">
 						<td>Formato Profeco</td>
 						<td>PDF</td>
 						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Descargar formato profeco"><a class="profec" id="profeco-${(movimiento != 0 ? movimiento : idOrden)}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
 						archivos += id_perfil == 7 ? '<td></td>' : '';
-					archivos +=`<tr>`;
-					archivos += `<tr>
+					archivos +=`</tr>`;
+					archivos += `<tr class="no-sort">
 						<td>Hoja Multipuntos</td>
 						<td>PDF</td>
 						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver hoja multipuntos"><a class="multipuntos" id="multi-${(movimiento != 0 ? movimiento : idOrden)}" href="#!"><i class="fa fa-eye"></i></a></td>`;
 						archivos += id_perfil == 7 ? '<td></td>' : '';
-					archivos +=`<tr>`;
-					archivos += `<tr>
+					archivos +=`</tr>`;
+					archivos += `<tr class="no-sort">
 						<td>Formato de Inventario</td>
 						<td>PDF</td>
 						<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver formato de inventario"><a class="formatoInventario" id="inv-${(movimiento != 0 ? movimiento : idOrden)}" href="#!"><i class="fa fa-eye"></i></a></td>`;
 						archivos += id_perfil == 7 ? '<td></td>' : '';
-					archivos +=`<tr>`;
+					archivos +=`</tr>`;
 					if((signGrtia != firmaVacia && signGrtia != null) && renunciaGrtia == true){
-						archivos += `<tr>
+						archivos += `<tr class="no-sort">
 							<td>Carta de Renuncia a Beneficios</td>
 							<td>PDF</td>
 							<td class="text-warning" data-toggle="tooltip" data-placement="top" title="Ver carta de renuncia a beneficios"><a class="renunciaGrtia" id="renunGrtia-${idOrden}" href="#!"><i class="fa fa-file-download"></i></a></td>`;
 							archivos += id_perfil == 7 ? '<td></td>' : '';
-						archivos +=`<tr>`;
+						archivos +=`</tr>`;
 					}
 					/*archivos += `<tr>
 							<td>Causa Raíz Componente</td>
@@ -5724,8 +5729,8 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0)
 						archivos +=`<tr>`;*/
 					if (data.archivos && data.archivos.length >0) {
 						$.each(data.archivos, function(index, archivo){
-							archivos += `<tr>`;
-							archivos += `<td>${archivo['nombre']}</td>`;
+							archivos += `<tr class="${(archivo['nombre'].includes('F1863')  || movimiento < 1 ? 'no-sort' : 'cursor-move')}" data-id="${archivo['id']}">`;
+							archivos += `<td>${(archivo['nombre'].includes('F1863') || movimiento < 1 ? '' : '<i class="fa fa-arrows-alt-v"></i>')}${archivo['nombre']}</td>`;
 							archivos += `<td>${archivo['tipo']}</td>`;
 							archivos += `<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver archivo ${archivo['nombre']}"><a href="${archivo['ruta']}" target="_blank"><i class="fa fa-eye"></i></a></td>`;
 							archivos += id_perfil == 7 ? `<td class="text-danger" data-toggle="tooltip" data-placement="top" title="Eliminar archivo ${archivo['nombre']}"><a href="#!" class="deladjunto" id="deladjunto-${archivo['id']}"><i class="fa fa-times text-danger"></i></a></td>` : '';
@@ -5735,6 +5740,12 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0)
 					}else{
 						//archivos += '<tr><td colspan="3" class="text-center text-danger">No hay documentación adjunta.</td></tr>';
 						$('#archivos_documentacion').html(archivos);
+					}
+					if (movimiento > 0) {
+						$('#archivos_documentacion').sortable({
+							 cancel: ".no-sort",
+							 items: "tr:not('.no-sort')"
+						});
 					}
 				}else{
 					toastr.warning('No hay documentación adjunta.');
@@ -7166,4 +7177,31 @@ $(document).off('change', 'select[name="linea_tipo"]').on('change', 'select[name
 	console.log(data);
 	$('#auth_1').val(data.jefe ? data.jefe : '');
 	$('#auth_2').val(data.gte ? data.gte : '');
-});;
+});
+
+$(document).off('click', '#modaldocumentacion button.documentacionOrden').on('click', '#modaldocumentacion button.documentacionOrden', function(event) {
+	event.preventDefault();
+	$.ajax({
+			url: base_url+ "index.php/servicio/guardar_orden_documentacion/"+localStorage.getItem('hist_id_orden'),
+			type: 'POST',
+			dataType: 'json',
+			data: {orden:$('#archivos_documentacion').sortable('toArray', {attribute: 'data-id'})},
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+});

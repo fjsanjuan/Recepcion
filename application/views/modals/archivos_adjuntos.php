@@ -6,6 +6,9 @@
         <div class="col-sm-2">
             <button class="btn btn-outline btn-info refreshDoc" title="Recargar documentación" style="z-index: 9999;"><i class="fa fa-refresh"></i></button>
         </div>
+        <div class="col-sm-2">
+            <button class="btn btn-outline btn-info documentacionOrden" title="Guardar orden documentación" style="z-index: 9999;"><i class="fa fa-sort"></i></button>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-12">

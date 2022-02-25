@@ -3302,12 +3302,13 @@ class Buscador_Model extends CI_Model{
 		}
 		return $creado;
 	}
-	public function get_archivos_orden_servicio($id_orden = null, $tipo = 7)
+	public function get_archivos_orden_servicio($id_orden = [], $tipo = [7])
 	{
 		$this->load->database();
-		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 order by archivo.id ASC;");
-		if($query->num_rows() > 0){
-			return $query->result_array();
+		$query = $this->db->select('archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo')->from('archivo')->join('tipo_archivo', 'archivo.tipo_archivo = tipo_archivo.id', 'INNER')->where_in('archivo.id_orden_servicio', $id_orden)->where_in('archivo.tipo_archivo', $tipo)->where('archivo.eliminado', 0)->order_by('archivo.orden', 'ASC')->get()->result_array();
+		// $query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio IN {$id_orden} and archivo.tipo_archivo IN {$tipo} and archivo.eliminado = 0 order by archivo.orden ASC;");
+		if(sizeof($query) > 0){
+			return $query;
 		}else
 			return [];
 	}
@@ -3924,12 +3925,13 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-	public function get_archivos_f1863($id_orden = null, $tipo = 7, $f1863 = "")
+	public function get_archivos_f1863($id_orden = [], $tipo = [7], $f1863 = "")
 	{
 		$this->load->database();
-		$query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 {$f1863} order by archivo.id desc;");
-		if($query->num_rows() > 0){
-			return $query->result_array();
+		$query = $this->db->select('archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo')->from('archivo')->join('tipo_archivo', 'archivo.tipo_archivo = tipo_archivo.id', 'INNER')->where_in('archivo.id_orden_servicio', $id_orden)->where_in('archivo.tipo_archivo', $tipo)->where('archivo.eliminado', 0)->order_by('archivo.orden', 'ASC')->get()->result_array();
+		// $query = $this->db->query("select archivo.id, archivo.id_orden_servicio, archivo.tipo_archivo, archivo.ruta_archivo, tipo_archivo.tipo from archivo INNER JOIN tipo_archivo ON (archivo.tipo_archivo = tipo_archivo.id) where archivo.id_orden_servicio = {$id_orden} and archivo.tipo_archivo = {$tipo} and archivo.eliminado = 0 {$f1863} order by archivo.id desc;");
+		if(sizeof($query) > 0){
+			return $query;
 		}else
 			return [];
 	}
@@ -5880,6 +5882,34 @@ class Buscador_Model extends CI_Model{
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Retorno de partes guardado.';
 			$response['id']      = $id;
+		}
+		return $response;
+	}
+	public function guardar_orden_documentacion($idOrden, $datos)
+	{
+		$id_publica = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
+		$ids[] = $idOrden;
+		if ($id_publica['movimiento']) {
+			$ids[] = $id_publica['movimiento'];
+		}
+		$this->db->trans_start();
+		foreach ($datos['orden'] as $key => $orden) {
+			$this->db->where("id", $orden);
+			$this->db->where_in('id_orden_servicio', $ids);
+			$this->db->update('archivo', ['orden' =>$key+1]);
+		}
+		$this->db->trans_complete();
+		if($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible guardar el orden.';
+			return $response;
+		}else
+		{
+			$this->db->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Orden guardado correctamente.';
 		}
 		return $response;
 	}

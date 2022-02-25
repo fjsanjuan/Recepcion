@@ -82,6 +82,9 @@ table tr.active {
 	display: flex !important;
 	font-size: 0.7em !important;
 }
+	.cursor-move {
+		cursor: move;
+	}
 </style>
 <div class="container">
     <br>

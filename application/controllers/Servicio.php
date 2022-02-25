@@ -2403,8 +2403,25 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['archivos'] = [];
 		}else{
+			$ids[] = $id_orden;
 			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
-			if (isset($orden['movimiento'])) {
+			if ($orden['movimiento']) {
+				$ids[] = $orden['movimiento'];
+			}
+			$archivos = $this->buscador_model->get_archivos_orden_servicio($ids, [7,8]);
+			$array    = [];
+			foreach ($archivos as $key => $value) {
+				$path = base_url().$value['ruta_archivo'];
+				if (file_exists($value['ruta_archivo'])) {
+					$array[] = [
+						'ruta'   => $path,
+						'tipo'   => $value['tipo'],
+						'nombre' => pathinfo($path)['filename'],
+						'id'     => $value['id']
+					];
+				}
+			}
+			/*if (isset($orden['movimiento'])) {
 				$oasis  = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 7);
 				$audios = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 8);
 			}
@@ -2433,7 +2450,7 @@ class Servicio extends CI_Controller {
 						'id'     => $value['id']
 					];
 				}
-			}
+			}*/
 			$response['archivos'] = $array;
 			$response['estatus'] = true;
 		}
@@ -2738,7 +2755,11 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'no existe autorizacion';
 		}else {
+			$ids[] = $idOrden;
 			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
+			if ($orden['movimiento']) {
+				$ids[] = $orden['movimiento'];
+			}
 			foreach ($datos['formatos'] as $key => $formato) {
 				$data         = $datos;
 				$data['url']  = $formato['url'];
@@ -2756,13 +2777,14 @@ class Servicio extends CI_Controller {
 					$this->buscador_model->guardar_formato($data['id_orden'], $archivo["data"]["ruta_rel"]);
 				}
 			}
-			$archivos = $this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo LIKE '%F1863-%'");
+			$archivos = $this->buscador_model->get_archivos_f1863($ids, [7]);
+			$datos["archivos"] = $archivos;
 			#$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
-			if (isset($orden['movimiento'])) {
+			/*if (isset($orden['movimiento'])) {
 				$archivos = array_merge($archivos ,$this->buscador_model->get_archivos_f1863($orden['movimiento'], 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
 			}
 			$archivos = array_merge($archivos,$this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
-			$datos["archivos"] = $archivos;
+			$datos["archivos"] = $archivos;*/
 			$response = $this->buscador_model->obtener_union_pdf($token, $datos);
 		}
 		echo json_encode($response);
@@ -3770,6 +3792,19 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Orden no válida.';
 		}else {
 			$response = $this->buscador_model->guardaRecepcion_partes($idOrden, $datos);
+		}
+		echo json_encode($response);
+	}
+	public function guardar_orden_documentacion($idOrden = null)
+	{
+		$datos = $this->input->post();
+		$response['estatus'] = false;
+		$response['mensaje'] = 'Datos del orden no válida.';
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Orden no válida.';
+		}elseif (sizeof($datos) > 0) {
+			$response = $this->buscador_model->guardar_orden_documentacion($idOrden, $datos);
 		}
 		echo json_encode($response);
 	}
