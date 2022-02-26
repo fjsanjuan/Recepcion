@@ -5744,7 +5744,9 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0)
 					if (movimiento > 0) {
 						$('#archivos_documentacion').sortable({
 							 cancel: ".no-sort",
-							 items: "tr:not('.no-sort')"
+							 items: "tr:not('.no-sort')",
+							 axis: "y",
+							 handle: ".fa"
 						});
 					}
 				}else{
