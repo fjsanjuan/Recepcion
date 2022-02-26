@@ -1099,7 +1099,7 @@ $(document).ready(function() {
 		trae_signGrtia = $(this).data('trae_signgrtia');
 		$('#trae_signGrtia').val(trae_signGrtia);
 		$('.refreshDoc').data('movimiento', movimiento);
-		if (movimiento < 1) {
+		if (movimiento < 1 || id_perfil != 7) {
 			$('.documentacionOrden').hide();
 		}else {
 			$('.documentacionOrden').show();
@@ -5729,8 +5729,8 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0)
 						archivos +=`<tr>`;*/
 					if (data.archivos && data.archivos.length >0) {
 						$.each(data.archivos, function(index, archivo){
-							archivos += `<tr class="${(archivo['nombre'].includes('F1863')  || movimiento < 1 ? 'no-sort' : 'cursor-move')}" data-id="${archivo['id']}">`;
-							archivos += `<td>${(archivo['nombre'].includes('F1863') || movimiento < 1 ? '' : '<i class="fa fa-arrows-alt-v"></i>')}${archivo['nombre']}</td>`;
+							archivos += `<tr class="${(archivo['nombre'].includes('F1863')  || movimiento < 1 || id_perfil != 7 ? 'no-sort' : '')}" data-id="${archivo['id']}">`;
+							archivos += `<td>${(archivo['nombre'].includes('F1863') || movimiento < 1 || id_perfil != 7 ? '' : '<i class="fa fa-arrows-alt-v cursor-move"></i>')}${archivo['nombre']}</td>`;
 							archivos += `<td>${archivo['tipo']}</td>`;
 							archivos += `<td class="text-info" data-toggle="tooltip" data-placement="top" title="Ver archivo ${archivo['nombre']}"><a href="${archivo['ruta']}" target="_blank"><i class="fa fa-eye"></i></a></td>`;
 							archivos += id_perfil == 7 ? `<td class="text-danger" data-toggle="tooltip" data-placement="top" title="Eliminar archivo ${archivo['nombre']}"><a href="#!" class="deladjunto" id="deladjunto-${archivo['id']}"><i class="fa fa-times text-danger"></i></a></td>` : '';
@@ -5741,7 +5741,7 @@ function cargar_documentacion(idOrden, signGrtia, renunciaGrtia, movimiento = 0)
 						//archivos += '<tr><td colspan="3" class="text-center text-danger">No hay documentación adjunta.</td></tr>';
 						$('#archivos_documentacion').html(archivos);
 					}
-					if (movimiento > 0) {
+					if (movimiento > 0 && id_perfil == 7) {
 						$('#archivos_documentacion').sortable({
 							 cancel: ".no-sort",
 							 items: "tr:not('.no-sort')",
