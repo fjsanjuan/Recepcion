@@ -3342,7 +3342,7 @@ class Buscador_Model extends CI_Model{
 	public function crear_archivo_v2($datos = null)
 	{
 		$archivo = $datos["archivo"];
-		$ruta = RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"].'/'.$datos['tipo_nombre']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
+		$ruta = RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"].'/'.$archivo['name']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
 		if(!file_exists(RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"])) {
 			mkdir(RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"], 0777, true);
 		}

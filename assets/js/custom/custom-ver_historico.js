@@ -3427,8 +3427,9 @@ $(document).on("click", "#btn_guardar_doc", function(event){
     data.append('id_orden_servicio', id_orden);
      $.each(archivos, function(index, val)
     {
-        var file = base64toFile($(val).val(), "archivo-"+(index+1));
-        data.append("archivo-"+(index+1), file);
+        var file = base64toFile($(val).val(), $(val).data('nombre'));
+        data.append($(val).data('nombre'), file);
+        data.append("nombre[]", $(val).data('nombre'));
     });
      $.each(tipos, function(index, val)
     {
@@ -3445,6 +3446,8 @@ function optimizar_archivo(e)
 			total+=pesoArchivo;
 			$("#loading_spin").show();
 		    var fileName = e.target.files[0].name;
+		    fileName = fileName.replace(' ', '');
+		    console.log('fileName', e.target.files[0]);
 		    var reader = new FileReader(); 								//Se crea instancia de FileReader Js API
 		    reader.readAsDataURL(e.target.files[0]);					//Lee la imagen que está en el input usando el FileReader
 		    reader.onload = event => {
@@ -3455,7 +3458,7 @@ function optimizar_archivo(e)
 		      //showing file converted to base64
 		      const archivo = `
 		      	<tr>
-		      		<input type='hidden' value='${base64data}' name="doc_adjunto[]" />
+		      		<input type='hidden' value='${base64data}' name="doc_adjunto[]" data-nombre="${fileName.replace(/\.[^/.]+$/, "")}"/>
 		      		<input type='hidden' value='${$('input[name="tipo_archivo"]:checked').val()}' name="tipo[]" />
 		      		<td>${fileName}</td>
 		      		<td>${$('input[name="tipo_archivo"]:checked').val()}</td>
