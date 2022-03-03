@@ -169,7 +169,7 @@
                                                 <div class="col-sm-2">
                                                     <div class="col-sm">
                                                         <label for="cve_asesor" class="grey-text">Clave</label>
-                                                        <input type="text" id="cve_cliente" name="cve_cliente" class="form-control">
+                                                        <input type="text" id="cve_cliente" name="cve_cliente" class="form-control" readonly="true">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
