@@ -176,7 +176,8 @@ input:focus{
 	            	<!-- <a class="no_print" name="" id="auth_linea" type="button" href="#">Autorizar</a> -->
 	            <?php endif; ?>
 	            <a class="active no_print" href="#home" id="imprimir">Imprimir</a>
-				<a class="no_print" type="button" id="clearForm">Limpiar</a>
+				<a class="no_print" type="button" id="recibirPartes" href="#home">Recibir Partes</a>
+				<a class="no_print" type="button" id="clearForm" href="#home">Limpiar</a>
 	            <!--<a href="#news">News</a>
 	            <a href="#contact">Contact</a>
 	            <a href="#about">About</a>-->
@@ -399,7 +400,7 @@ input:focus{
 	                                <input class="required write" type="text" name="" id="" style="width: 98%;" readonly>
 	                            </div>
 	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="date" name="retorno_partes" id="" style="width: 98%;" value="<?= isset($data['retorno_partes']) ? $data['retorno_partes'] : "";?>">
+	                                <input class="required write" type="date" name="retorno_partes" id="parts_r" style="width: 98%;" value="<?= isset($data['retorno_partes']) ? $data['retorno_partes'] : "";?>">
 	                            </div>
 	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
 	                               
@@ -479,10 +480,10 @@ input:focus{
 	                            <div class="column sesentayocho border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
 	                                <textarea class="required write" type="textarea" name="reparacion_efectuada" id="" style="width: 98%;" rows="5" cols="15" ><?= isset($data['reparacion_efectuada']) ? $data['reparacion_efectuada'] : "";?></textarea>
 	                            </div>
-	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito revisar_tiempos">
+	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_inicio">
 	                                
 	                            </div>
-	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito revisar_tiempos">
+	                            <div class="column diesiseis border-right-light border-bottom-light pad-tp pad-bt requisito tiempo_fin">
 	                                
 	                            </div>
 	                        </div>
@@ -525,6 +526,7 @@ input:focus{
 	            </p>
 	            
 	        </div>
+			<?php $this->load->view('modals/retorno_piezas'); ?>
 	    </body>
 	<?php else: ?>
 		<body class="gray-bg" style="overflow-x: auto;" cz-shortcut-listen="true">
@@ -537,6 +539,8 @@ input:focus{
 	<!--scripts-->
 	<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.min.js"></script>
 	<script src="<?=base_url()?>assets/js/toastr.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
+	<script src="<?=base_url();?>assets/librerias/bootstrap-select-1.10.0/js/bootstrap-select.min.js"></script>
 	<script src="<?= base_url()?>assets/librerias/jq-signature-master/jq-signature.min.js"></script>
 	<script src="<?=base_url();?>assets/librerias/sweetalert2-7.17.0/dist/sweetalert2.all.js"></script>
 	<script src="<?=base_url()?>assets/js/toastr.min.js"></script>
@@ -614,6 +618,9 @@ $(document).ready(function(){
 	})
 	//console.log('document',this.documentElement.innerHTML);
 		if (id_perfil == 5 || id_perfil == 7){$('#firmJefe').hide();}
+		if (id_perfil !=7){
+			$('#recibirPartes').hide();
+		}
         const tiempos_inicio =  $('.tiempo_inicio');
         const tiempos_fin =  $('.tiempo_fin');
         let costo_tiempo = 0;
@@ -719,56 +726,61 @@ $(document).ready(function(){
 		});*/
     });
 });	
-$(document).on("click", '#save_anverso', function(e){
-	e.preventDefault();
-    console.log('id_orden', idOrden);
-    const form = new FormData(document.getElementById("form_codigos"));
+$(document).off("click", '#verRetModal .entregar_partes').on("click", '#verRetModal .entregar_partes', function(e){
+	let id_orden = $(this).prop('id');
+    id_orden = id_orden.split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	data = $(this).data();
+	console.log(data);
+	form = new FormData();
+	form.append('check', $(this).is(':checked'));
 	form.append('id_orden', idOrden);
-    if (!$('#form_codigos').valid()) {
-        toastr.info('Revisar campos requeridos y firmar antes de Guardar.');
-		return;
-	}
-    swal({
-		title: '¿Guardar el Anverso?',
+	form.append('id_requisicion', id_orden);
+	const _this = this;
+	form.append('cve_articulo', data.cve_articulo);
+	form.append('descripcion', data.descripcion);
+	form.append('cantidad', data.cantidad);
+	swal({
+		title: $(_this).is(':checked') ? '¿Entregar esta Pieza?' : '¿No entregar esta Pieza?',
 		showCancelButton: true,
-		confirmButtonText: 'Guardar',
+		confirmButtonText: $(_this).is(':checked') ? 'Entregar' : 'No Entregar',
 		cancelButtonText: 'Cancelar',
-		type: 'info'
+		type: 'info',
 	})
-    .then((result) => {
-        if (result.value) {
-            $.ajax({
-                cache: false,
-                url: base_url+ "index.php/servicio/guardar_diagnostico/"+idOrden,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                dataType: 'json',
-                data: form,
-                beforeSend: function(){
-                    $("#loading_spin").show();
-                }
-            })
-            .done(function(data) {
-                if (data.estatus) {
-                    swal('Diagnóstico guardado.', '', 'success');
-                    $('#form_anverso').trigger('reset');
-                    onClick=document.location.reload(true);
-                
-                }else{
-                    toastr.warning(data.mensaje);
-                }
-            })
-            .fail(function() {
-                toastr.warning('Hubo un error al guardar el Anverso.');
-            })
-            .always(function() {
-                $("#loading_spin").hide();
-            });	
-        }else if (result.dismiss) {
-            swal('Cancelado', '', 'error');
-        }
-    })
+	.then((result) => {
+		if (result.value){
+	$.ajax({
+			cache: false,
+			url: base_url+ "index.php/servicio/guardaRecepcion_partes/"+idOrden,
+			type: 'POST',
+			dataType: 'json',
+			data: form,
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$("#loading_spin").show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				
+			}else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(resp) {
+			console.log('error', resp);
+			toastr.warning("Ocurrió un error al guardar la recepcion de partes.");
+		})
+		.always(function(resp) {
+			$("#loading_spin").hide();
+		});
+	}else if (result.dismiss) {
+		$(_this).prop('checked', !$(_this).is(':checked'));
+	}
+	});
 	
 });
         
@@ -810,7 +822,6 @@ $(document).on('click', '#firmaJefe', function(e){
         $('#print_firma').addClass('no_print');
 
     }
-    
 		
 });
 
@@ -853,7 +864,12 @@ $(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso
         })
         .done(function(data) {
             if (data.estatus) {
-                swal('Anverso actualizado correctamente.', '', 'success');
+                swal('Anverso actualizado correctamente.', '', 'success')
+				.then(okay => { 
+					if (okay && id_perfil == 5 && $('input[name="retorno_partes"]').val()){
+				obtener_requisiciones(idOrden);
+				}
+				});
                 //$('#form_codigos').trigger('reset');
 				if (id_perfil == 4){
                 $('#imprimir').trigger('click');
@@ -876,6 +892,62 @@ $(document).off("click", '#actualizar_anverso').on("click", '#actualizar_anverso
 });
 
 var newlinecode = "<?=(isset($data['detalles']) ? (sizeof($data['detalles']) == 0 ? 1 : sizeof($data['detalles']) ) : 1);?>";
+function obtener_requisiciones(idOrden){
+	$('#verRetModal .modal-body').empty();
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_requisiciones/${idOrden}`,
+		type: 'GET',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			console.log('error al buscar');
+		},
+		success: function (data){
+			$("#loading_spin").hide();
+			if(data.estatus == true){
+				requisicionesArray = data.requisiciones;
+				$.each(data.requisiciones, function(index, value){
+					var idReq = value.id_requisicion;
+					var row_title = $("<div class='row'></div>");
+					row_title.append($(`<div class='row'>
+						<div class='col-md-2'>
+							<label>Num. Requisición: ${(value.id_requisicion ? value.id_requisicion : 'N/D')}</label>
+						</div>
+						<div class='col-md-2'>
+							<label>Solicito: ${(value.nom_tecnico ? value.nom_tecnico : 'N/D')}</label>
+						</div>
+						<div class='col-md-4'>
+							<label>Fecha Requisición: ${(value.fecha_requisicion ? value.fecha_requisicion : 'N/D')}</label>
+						</div>
+						<div class='col-md-4'>
+							<label>Fecha Entrega: ${(value.fecha_recepcion ? value.fecha_recepcion : 'N/D')}</label>
+						</div>
+					</div>`));
+
+					var table = $("<table class='table table-bordered table-striped table-hover animated fadeIn no-footer tablepres' id='tbl_req"+(index+1)+"'><thead style='text-align:center;'><tr><th>Clave Articulo</th><th>Descripcion</th><th>Cantidad</th><th>Entregar</th><th>Garantías<br>Recibe<br><input type='checkbox' class='recibe_parts' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-recibir' name='recibe_parts[]' value='1' "+(value['recibi_piezas'] == 1? 'checked' : '')+" "+((id_perfil != 7 || value['recibi_piezas'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-recibir'></label></th></tr></thead><tbody style='text-align:center;'></tbody></table>");
+					$.each(value.detalles, function(index2, value2){
+						if(value2.autorizado == 0){
+							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td><input type='checkbox' class='entregar_partes' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-entrega' data-cve_articulo='"+value2.cve_articulo+"' data-descripcion='"+value2.descripcion+"' data-cantidad='"+value2.cantidad+"' name='entregado_partes[]' value='1' "+(value2['recepcion_partes'] == 1? 'checked' : '')+" "+((id_perfil != 5 || value2['recepcion_partes'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-entrega'></label></th></tr>");
+						}else{
+							var row = $("<tr><td>"+(value2.cve_articulo ? value2.cve_articulo : '')+"</td><td>"+(value2.descripcion ? value2.descripcion : '')+"</td><td>"+(value2.cantidad ? value2.cantidad : '')+"</td><td><input type='checkbox' class='entregar_partes' value='1' id='"+value.id_orden+"-"+value.id_requisicion+"-entrega' data-cve_articulo='"+value2.cve_articulo+"' data-descripcion='"+value2.descripcion+"' data-cantidad='"+value2.cantidad+"' name='entregado_partes[]' value='1' "+(value2['recepcion_partes'] == 1? 'checked' : '')+" "+((id_perfil != 5 || value2['recepcion_partes'] == 1) ? 'disabled': '')+"><label for='"+value.id_orden+"-"+value.id_requisicion+"-entrega'></label></th></tr>");
+						}
+						table.append(row);
+					});
+					$('#verRetModal .modal-body').append(row_title);
+					$('#verRetModal .modal-body').append(table);
+				});
+				$('#verRetModal').modal('show');
+			}else{
+				toastr.error(data.mensaje);
+			}
+		}
+	});
+}
+
 $(document).on('click', '.nuevo_codigo', function (e) {
 	e.preventDefault();
     console.log('newlinecode', newlinecode);
@@ -975,5 +1047,123 @@ $(document).on("click", '#auth_linea', function(e){
     });
 });
 
+$(document).off("click", '#recibirPartes').on("click", '#recibirPartes', function(e){
+	e.preventDefault();
+	id_orden = $(this).prop('id');
+	id_orden = idOrden.split('-')[1];
+	$('#verRetModal .modal-body').empty();
+	if ($('input[name="retorno_partes"]').val()){
+		obtener_requisiciones(idOrden);
+		}
+});
+
+$(document).off('click', '#verRetModal input[ name="recibe_parts[]"]').on('click', '#verRetModal input[ name="recibe_parts[]"]', function(event) {
+	let id  = $(this).prop('id');
+	let idOrden = id.split('-')[0];
+	let idReq   = id.split('-')[1];
+	idOrden = localStorage.getItem('hist_id_orden');
+	data = $(this).data();
+	console.log(data);
+	form = new FormData();
+	form.append('check', $(this).is(':checked'));
+	const _this = this;
+	form.append('cve_articulo', data.cve_articulo);
+	form.append('descripcion', data.descripcion);
+	form.append('cantidad', data.cantidad);
+	swal({
+		title: $(_this).is(':checked') ? '¿Recibir partes marcadas?' : '¿No recibir partes?',
+		showCancelButton: true,
+		confirmButtonText: $(_this).is(':checked') ? 'Recibir' : 'No recibir',
+		cancelButtonText: 'Cancelar',
+		type: 'info',
+	})
+	.then((result) => {
+		if (result.value){
+		$.ajax({
+			url: `${base_url}index.php/servicio/adminRecibe_partes/${idOrden}/${idReq}`,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				check : $(_this).is(':checked')
+			},
+			beforeSend: function () {
+				$('#loading_spin').show();
+			}
+		})
+		.done(function(resp) {
+			if (resp.estatus) {
+				toastr.info(resp.mensaje);
+				formato_entrega_refacciones(idReq);
+			} else {
+				$(_this).prop('checked', $(_this).is(':checked') ? false : true);
+				toastr.warning(resp.mensaje);
+			}
+		})
+		.fail(function(error) {
+			console.log('error', error);
+		})
+		.always(function() {
+			$('#loading_spin').hide();
+		});
+	}else if (result.dismiss) {
+		$(_this).prop('checked', !$(_this).is(':checked'));
+	}
+	});
+});
+
+function formato_entrega_refacciones(id) {
+	var tok = "";
+	$.ajax({
+		url: "https://isapi.intelisis-solutions.com/auth/",
+		type: "POST",
+		dataType: 'json',
+		data: {
+			username:'TEST001',
+			password:'intelisis'
+		},
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			console.log('error al consumir token de ApiReporter');
+			$("#loading_spin").hide();
+		},
+		success: function (data){
+			tok=data.token;
+			$.ajax({
+				url: `${base_url}index.php/servicio/formato_retorno_partes/${tok}/${id}`,
+				type: "POST",
+				headers: {
+					Authorization: `Token ${tok}`,
+				},
+				//habilitar xhrFields cuando se requiera descargar
+				//xhrFields: {responseType: "blob"},
+				data: {
+					name:'retorno-partes-'+id,
+					dwn:'0',
+					opt:'3',
+					path:'None',
+					url:'https://isapi.intelisis-solutions.com/reportes/reqEntregadaPDF'
+					// url:'http://127.0.0.1:8000/reportes/reqEntregadaPDF'
+				},
+				beforeSend: function(){
+					$("#loading_spin").show();
+					toastr.info("Generando Formato");
+				},
+				error: function(){
+					console.log('error al consumir getPDF de ApiReporter');
+					toastr.error("Error al generar el formato");
+					$("#loading_spin").hide();
+				},
+				success: function (blob){
+					$("#loading_spin").hide();
+					data = JSON.parse(blob);
+					const link = $('<a>', {'href':data.data['archivo'], 'download':data.data['nombre']+'.pdf', 'target':'_blank'});
+					link[0].click();
+				}
+			});
+		}
+	});
+}
     </script>
 </html>

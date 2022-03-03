@@ -3783,9 +3783,8 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	public function guardaRecepcion_partes($idORden = null)
+	public function guardaRecepcion_partes($idOrden = null)
 	{
-		$datos = [];
 		$datos = $this->input->post();
 		if ($idOrden == null ) {
 			$response['estatus'] = false;
@@ -3805,6 +3804,47 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Orden no válida.';
 		}elseif (sizeof($datos) > 0) {
 			$response = $this->buscador_model->guardar_orden_documentacion($idOrden, $datos);
+		}
+		echo json_encode($response);
+	}
+
+	public function adminRecibe_partes($idOrden = null, $idRequisicion = null)
+	{
+		$datos = $this->input->post();
+		if ($idOrden == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'orden no valida';
+		}else {
+			$response = $this->buscador_model->adminRecibe_partes($idOrden, $idRequisicion, $datos);
+		}
+		echo json_encode($response);
+	}
+	public function formato_retorno_partes($token = null, $id = null)
+	{
+		$this->db2 = $this->load->database('other',true); 
+		$data = [];
+		$datos = $this->input->post();
+		if ($token == null || $id == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Requisición no válida.";
+		} else {
+			$requisicion = $this->buscador_model->obtener_retorno_partes($id);
+			if ($requisicion['estatus']) {
+				$datos = array_merge($datos, $requisicion);
+				$datos['vin'] = $requisicion['vin'];
+				$datos['id_orden'] = $requisicion['id_orden'];
+				$datos['firmaTec'] = $requisicion['firmaTec'];
+				$datos['firmaRef'] = "";
+				$orden = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where(['id' => $requisicion['id_orden']])->get()->row_array();
+				$movID = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
+				$datos['requisicion']['n1863'] = isset($movID['MovID']) ? $movID['MovID'] : '';
+				$response = $this->buscador_model->obtener_pdf_api($token, $datos);
+				if ($response["estatus"]) {
+					$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
+				}
+			}else {
+				$response = $requisicion;
+			}
 		}
 		echo json_encode($response);
 	}

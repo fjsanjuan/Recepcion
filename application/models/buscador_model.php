@@ -4371,7 +4371,7 @@ class Buscador_Model extends CI_Model{
 	{
 		$response['requisiciones'] = $this->db->select('*')->from('requisiciones')->where('id_orden', $idOrden)->get()->result_array();
 		foreach ($response['requisiciones'] as $key => $requisicion) {
-			$response['requisiciones'][$key]['detalles'] = $this->db->select('*')->from('detalles_requisiciones')->where(['id_requisicion' => $requisicion['id_requisicion']])->get()->result_array();
+			$response['requisiciones'][$key]['detalles'] = $this->db->select('detalles_requisiciones.*, retorno_partes.recepcion_partes')->from('detalles_requisiciones')->join('retorno_partes', 'detalles_requisiciones.cve_articulo = retorno_partes.cve_articulo AND detalles_requisiciones.id_requisicion = retorno_partes.id_requisicion', 'left')->where(['detalles_requisiciones.id_requisicion' => $requisicion['id_requisicion']])->get()->result_array();
 		}
 		if ( sizeof($response['requisiciones']) > 0) {
 			$response['estatus'] = true;
@@ -5846,42 +5846,117 @@ class Buscador_Model extends CI_Model{
 	}
 	public function guardaRecepcion_partes($idOrden, $datos)
 	{
-		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
-		$perfil = $this->session->userdata["logged_in"]["perfil"];
-		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 		$logged_in = $this->session->userdata("logged_in");
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
 		$tecnico = $this->db->select('CONCAT( nombre, \' \', apellidos) AS nombre')->from('usuarios')->where('id', $logged_in['id'])->get()->row_array();
-		$id = 'id';
-		$retornoPartes = [
-			'id_requisicion'  => $id,
+		$this->db->trans_start();
+		$existen = $this->db->select('*')->from('retorno_partes')->where(['id_requisicion' => $datos['id_requisicion'], 'id_orden' => $idOrden, 'cve_articulo' => $datos['cve_articulo']])->get()->row_array();
+		/*echo '<pre>'; 
+		print_r($this->db->last_query());
+		echo '</pre>';*/
+		$data = [
+			'id_requisicion'  => $datos['id_requisicion'],
+			'id_orden'          => $idOrden,
 			'cantidad'        => isset($datos['cantidad']) ? $datos['cantidad'] : null,
 			'cve_articulo'    => isset($datos['cve_articulo']) ? $datos['cve_articulo'] : null,
 			'descripcion'     => isset($datos['descripcion']) ? $datos['descripcion'] : null,
-			'recepcion_partes'	=> $datos('check'),
+			'recepcion_partes'	=> $datos['check'],
 			'fecha_recepcion'   => date('d-m-Y H:i:s'),
 			'nom_tecnico'       => isset($tecnico['nombre']) ? $tecnico['nombre'] : null,
-			'id_orden'          => $idOrden,
-			'id_usuario'        => $logged_in['id'],
-			'firma_de_tecnico'	=> $firma['firma_electronica'],
-			'firma_de_admon'	=> $firma['firma_electronica']
+			'firma_de_tecnico'	=> $firma['firma_electronica']
 		];
+	
+	if (sizeof($existen) > 0) {
+		$this->db->where(['id_requisicion' => $datos['id_requisicion'], 'id_orden' => $idOrden, 'cantidad' => $datos['cantidad'], 'cve_articulo' => $datos['cve_articulo'], 'descripcion' => $datos['descripcion']]);
+		$this->db->update('retorno_partes', $data);
+	}else {
+		$this->db->insert('retorno_partes', $data);
 	}
-		$this->db->trans_start();
-		$this->db->insert('retorno_partes', $retornoPartes);
-		$id = $this->db->insert_id();
-		$this->db->trans_complete();
-		if($this->db->trans_status() === FALSE)
-		{
-			$this->db->trans_rollback();
-			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue posible guardar el retorno de partes.';
-			return $response;
-		}else
-		{
-			$this->db->trans_commit();
+	$this->db->trans_complete();
+	if($this->db->trans_status() === FALSE) {
+		$this->db->trans_rollback();
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No fue posible guardar el retorno de partes.';
+	}else {
+		$this->db->trans_commit();
+		$response['estatus'] = true;
+		$response['mensaje'] = 'Retorno de partes guardado.';
+	}
+	}else {
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No se encontro firma electronica.';
+	}
+	return $response;
+	}
+
+	public function adminRecibe_partes($idOrden, $idRequisicion, $datos)
+	{
+		$firma = $this->db->select('firma_electronica')->from('usuarios')->where("id", $this->session->userdata["logged_in"]["id"])->get()->row_array();
+		$perfil = $this->session->userdata["logged_in"]["perfil"];
+		if(isset($firma['firma_electronica']) && !empty($firma['firma_electronica'])){
+		$existen = $this->db->select("*")->from('retorno_partes')->where(['id_requisicion' => $idRequisicion])->get()->row_array();
+		if (sizeof($existen) > 0){
+		$data = [
+			'firma_de_admon' => $firma['firma_electronica']
+		];
+		$fecha = [
+			'recibi_piezas' => $datos['check'],
+			'fecha_recepcion' => date('d-m-Y H:i:s'),
+		];
+		/*echo '<pre>'; print_r($existen);
+		echo '</pre>';*/
+		if ($existen['recepcion_partes']) {
+			$this->db->trans_start();
+			$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
+			if($perfil == 7){
+				$this->db->update('retorno_partes', $data);
+				$this->db->where(['id_requisicion' => $idRequisicion, 'id_orden' => $idOrden]);
+				$this->db->update('requisiciones', $fecha);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No fue posible actualizar el estatus de retorno de partes.';
+				}else {
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = 'Estatus de retorno de partes actualizado.';
+				}
+			}else{
+				$response["estatus"] = false;
+				$response["mensaje"] = 'Su perfil no es el indicado para recibir partes.';
+			}
+		}else {
+			$response["estatus"] = false;
+			$response["mensaje"] = 'No existen partes para recibir, verificar con el técnico si realizó el retorno partes.';
+		}
+	}else{
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No se encontró ningun retorno de partes.';
+	}
+	}else {
+		$response['estatus'] = false;
+		$response['mensaje'] = 'No tienes firma registrada.';
+	}
+	return $response;
+	}
+
+	public function obtener_retorno_partes($id)
+	{
+		$response['requisicion'] = $this->db->select('*')->from('requisiciones')->where(['id_requisicion' => $id])->get()->row_array();
+		if (sizeof($response['requisicion']) > 0) {
 			$response['estatus'] = true;
-			$response['mensaje'] = 'Retorno de partes guardado.';
-			$response['id']      = $id;
+			$response['mensaje'] = 'Ok.';
+			$response['requisicion']['detalles'] = $this->db->select('*')->from('detalles_requisiciones')->join('retorno_partes', 'detalles_requisiciones.cve_articulo = retorno_partes.cve_articulo AND detalles_requisiciones.id_requisicion = retorno_partes.id_requisicion', 'inner')->where('detalles_requisiciones.id_requisicion', $id)->get()->result_array();
+			$orden = $this->db->select('*')->from('orden_servicio')->where('id', $response['requisicion']['id_orden'])->get()->row_array();
+			$tec = $this->db->select('*')->from('usuarios')->where('id', $response['requisicion']['id_usuario'])->get()->row_array();
+			$response['vin'] = $orden['vin'];
+			$response['id_orden'] = $orden['id'];
+			$response['firmaTec'] = $tec['firma_electronica'];
+		}else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No existe la requisición.';
 		}
 		return $response;
 	}
