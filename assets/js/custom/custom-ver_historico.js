@@ -6627,6 +6627,9 @@ function construir_tabla_historial_anversos(data) {
 		if (id_perfil == 7) {
 			$(anverso).prop('disabled', false);
 		}
+		if (val.Adicional){
+		$(tr).css( 'background-color', '#bfbdbd' );
+		}
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
 		tr.append($('<td>').append(adicional));

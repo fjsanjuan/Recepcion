@@ -85,6 +85,9 @@ table tr.active {
 	.cursor-move {
 		cursor: move;
 	}
+.adicional{
+	background-color: #bfbdbd!important;
+}
 </style>
 <div class="container">
     <br>
