@@ -3361,17 +3361,20 @@ class Servicio extends CI_Controller {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Orden no válida.';
 		} else {
-			$tecnico = $this->db->select('cve_intelisis')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'cve_intelisis' => $datos['asigna_tecnico']])->count_all_results();
-			$datos['id_diagnostico'] = $idDiagnostico;
-			$response['estatus'] = true;
-			if ($tecnico == 0) {
-				$asignacion = $this->buscador_model->asignar_tecnico_linea($datos['idVenta'], $datos);
-				if ($asignacion['estatus'] != true) {
-					$response = $asignacion;
+			$response = $this->buscador_model->validar_operacion_curso($datos['idVenta'], $datos);
+			if ($response['estatus'] || $datos['check'] == 'true') {
+				$tecnico = $this->db->select('cve_intelisis')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'cve_intelisis' => $datos['asigna_tecnico']])->count_all_results();
+				$datos['id_diagnostico'] = $idDiagnostico;
+				$response['estatus'] = true;
+				if ($tecnico == 0) {
+					$asignacion = $this->buscador_model->asignar_tecnico_linea($datos['idVenta'], $datos);
+					if ($asignacion['estatus'] != true) {
+						$response = $asignacion;
+					}
 				}
-			}
-			if ($response['estatus'] == true) {
-				$response = $this->buscador_model->autorizar_linea($idDiagnostico, $datos['check'], $datos['asigna_tecnico'],$datos);
+				if ($response['estatus'] == true) {
+					$response = $this->buscador_model->autorizar_linea($idDiagnostico, $datos['check'], $datos['asigna_tecnico'],$datos);
+				}
 			}
 		}
 		echo json_encode($response);
@@ -3753,7 +3756,10 @@ class Servicio extends CI_Controller {
 	{
 		$datos = $this->input->post();
 		if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->marcar_adicional($datos);
+			$response = $this->buscador_model->validar_operacion_curso($datos['VentaID'], $datos);
+			if ($response['estatus'] || $datos['check'] == 'true') {
+				$response = $this->buscador_model->marcar_adicional($datos);
+			}
 		} else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Datos no válidos';
@@ -3764,7 +3770,10 @@ class Servicio extends CI_Controller {
 	{
 		$datos = $this->input->post();
 		if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->grteAutoriza_adicional($datos);
+			$response = $this->buscador_model->validar_operacion_curso($datos['VentaID'], $datos);
+			if ($response['estatus'] || $datos['check'] == 'true') {
+				$response = $this->buscador_model->grteAutoriza_adicional($datos);
+			}
 		} else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Datos no válidos';
@@ -3775,7 +3784,10 @@ class Servicio extends CI_Controller {
 	{
 		$datos = $this->input->post();
 		if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->grtiasAutoriza_adicional($datos);
+			$response = $this->buscador_model->validar_operacion_curso($datos['VentaID'], $datos);
+			if ($response['estatus'] || $datos['check'] == 'true') {
+				$response = $this->buscador_model->grtiasAutoriza_adicional($datos);
+			}
 		} else {
 			$response['estatus'] = false;
 			$response['mensaje'] = 'Datos no válidos';

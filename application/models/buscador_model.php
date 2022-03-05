@@ -4528,6 +4528,9 @@ class Buscador_Model extends CI_Model{
 				$response['desglose'] = $intelisis->select('*')->from('vwCA_GarantiasPartsOperaciones')->where("IdVenta", $ordenGarantia["id_orden_intelisis"])->get()->result_array();
 
 			if (is_array($response['desglose'])) {
+				$tabla = "SeguimientoOperaciones";
+				if ($this->Version == 'V6000') 
+					$tabla = "CA_SeguimientoOperaciones";
 				foreach ($response['desglose'] as $key => $valor) {
 					$costo_tiempo = null;
 					if ($valor['tipo'] === 'Servicio') {
@@ -4540,7 +4543,7 @@ class Buscador_Model extends CI_Model{
 						$linea = $this->db->select('*')->from('lineas_reparacion')->where(['VentaID' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID']])->get()->row_array();
 						$response['desglose'][$key]['num_rem'] = isset($linea['num_reparacion']) ? $linea['num_reparacion'] : null;
 						$response['desglose'][$key]['importe_mano'] = isset($linea['mano_obra_total']) ? $linea['mano_obra_total'] : 0;
-						$tiempos = $intelisis->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
+						$tiempos = $intelisis->select('*')->from($tabla)->where(['IdVenta' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
 						foreach (is_array($tiempos) ? $tiempos : [] as $key2 => $inicio) {
 							$aux_fin = new DateTime($inicio['FechafIN'] ? $inicio['FechafIN'] : $inicio['FechaInicio']);
 							$aux_inicio = new DateTime($inicio['FechaInicio']);
@@ -5985,6 +5988,21 @@ class Buscador_Model extends CI_Model{
 			$this->db->trans_commit();
 			$response['estatus'] = true;
 			$response['mensaje'] = 'Orden guardado correctamente.';
+		}
+		return $response;
+	}
+	public function validar_operacion_curso($idVenta, $datos)
+	{
+		$response['estatus'] = false;
+		$response['mensaje'] = 'La operación se encuentra en curso y no puede cambiar su estatus de autorización';
+		$tabla = "SeguimientoOperaciones";
+		if ($this->Version == 'V6000') 
+			$tabla = "CA_SeguimientoOperaciones";
+		$this->db2 = $this->load->database('other', TRUE);
+		$curso = $this->db2->select('*')->from($tabla)->where(['IdVenta' => $idVenta, 'Renglon' => $datos['Renglon'], 'RenglonID' => $datos['RenglonID'], 'Estado' => 'En Curso'])->count_all_results();
+		if ($curso == 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Ok.';
 		}
 		return $response;
 	}
