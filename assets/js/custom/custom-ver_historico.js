@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -6628,7 +6628,7 @@ function construir_tabla_historial_anversos(data) {
 			$(anverso).prop('disabled', false);
 		}
 		if (val.Adicional){
-		$(tr).css( 'background-color', '#bfbdbd' );
+		$(tr).css( 'background-color', '#f0ffff' );
 		}
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
