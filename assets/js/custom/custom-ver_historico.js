@@ -6621,15 +6621,16 @@ function construir_tabla_historial_anversos(data) {
 		}
 		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
 		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
+		$(adicional).prop('disabled', val.diagnostico ? (val.diagnostico.autorizado ? true : false) : false);
 		if (id_perfil != 4) {
 			$(tecnico).prop('disabled', true);
 		}
 		if (id_perfil == 7) {
 			$(anverso).prop('disabled', false);
 		}
-		if (val.Adicional){
+		/*if (val.Adicional){
 		$(tr).css( 'background-color', '#f0ffff' );
-		}
+		}*/
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
 		tr.append($('<td>').append(adicional));

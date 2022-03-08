@@ -8,9 +8,9 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="col-md-6" style="text-align: right;">
+			<!--<div class="col-md-6" style="text-align: right;">
 				<span class="adicional">&nbsp&nbsp&nbsp</span><label for=""><b>Adicional</b></label>		
-			</div>
+			</div>-->
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-sm-12 table-responsive">
