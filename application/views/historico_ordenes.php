@@ -858,3 +858,6 @@ table tr.active {
 </div>
 <!-- modal para ver requisiciones-->
 <?php $this->load->view('modals/dannos_relacion'); ?>
+
+<!-- modal busqueda ordenes -->
+<?php $this->load->view('modals/back_order'); ?>
