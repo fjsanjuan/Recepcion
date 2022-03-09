@@ -17,7 +17,7 @@ echo form_open('',$attributes);
 		<div class="row" >
 			<form role="form">
 				<div class="form-group col-md-8">
-					<label for="linea_tipo" class="grey-text">Linea de trabajo</label>
+					<label for="linea_tipo" class="grey-text">Manos de Obra</label>
 					<select id="linea_tipo" name="linea_tipo" class="browser-default form-control validate[required]" required>
 					<option value="">seleccione una línea...</option>
 					</select>
