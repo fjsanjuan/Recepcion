@@ -663,7 +663,7 @@ class User_model extends CI_Model {
 			$usuarios["password"] = $password;
 		}
 		//Ford star   --------------->>>>>
-		$fordStar =  $datos["cve_fordStar"];
+		$fordStar =  isset($datos["cve_fordStar"]) ? $datos["cve_fordStar"] : '';
 		if( $fordStar != "")
 		{
 			//$usuarios["fordStar"] = $datos["cve_fordStar"];

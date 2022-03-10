@@ -230,7 +230,7 @@ $(document).ready(function(){
             return;
         }
         //Ford Star
-        if(fordStar != "")
+        if(id_perfil == 5)
         {
             var validar = validar_fordStar(fordStar);
 
