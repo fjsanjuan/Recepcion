@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -5538,7 +5538,7 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 			let con_movimientos = 0;
 			if (respLineas.estatus) {
 				$.each(respLineas.manos, function(index, val) {
-					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`, 'data-gte': val.Nombre_gte, 'data-admon': val.Nombre_grtias, 'data-jefe': val.Nombre_jefe}));
+					$('#linea_tipo').append($(`<option>`,{'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`, 'data-gte': val.Nombre_gte, 'data-admon': val.Nombre_grtias, 'data-jefe': val.Nombre_jefe, 'data-num_reparacion': val.num_reparacion}));
 				});
 				$('#lineaTrabajoModal').modal('show');
 			}else {
@@ -7187,6 +7187,7 @@ $(document).off('change', 'select[name="linea_tipo"]').on('change', 'select[name
 	console.log(data);
 	$('#auth_1').val(data.jefe ? data.jefe : '');
 	$('#auth_2').val(data.gte ? data.gte : '');
+	$('#num_rep').val(data.num_reparacion ? data.num_reparacion : '');
 });
 
 $(document).off('click', '#modaldocumentacion button.documentacionOrden').on('click', '#modaldocumentacion button.documentacionOrden', function(event) {

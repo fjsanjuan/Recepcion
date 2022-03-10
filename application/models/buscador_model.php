@@ -5337,6 +5337,15 @@ class Buscador_Model extends CI_Model{
 			if (sizeof($response['manos']) > 0) {
 				foreach ($response['manos'] as $key => $mano) {
 					$response['manos'][$key]['autorizado'] = $this->db->select('autorizado')->from('diagnostico_tecnico')->where(['VentaID' => $mano['ID'], 'Renglon' => $mano['Renglon'], 'RenglonID' => $mano['RenglonID'],'RenglonSub' => $mano['RenglonSub'], 'autorizado' => 1])->count_all_results();
+					$num = $this->db->select("ddt.num_reparacion")->from('detalles_diagnostico_tecnico AS ddt')
+						->join('diagnostico_tecnico AS dt','ddt.id_diagnostico = dt.id_diagnostico', 'INNER')
+						->where([
+							'dt.Renglon' => $mano['Renglon'],
+							'dt.RenglonID' => $mano['RenglonID'],
+							'dt.VentaID' => $mano['IdVenta'],
+						])->get()->row_array();
+					$response['manos'][$key]['num_reparacion'] = isset($num['num_reparacion']) ? $num['num_reparacion'] : '';
+					
 				}
 				$response['estatus'] = true;
 				$response['mensaje'] = "Ok.";

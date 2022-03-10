@@ -24,7 +24,7 @@ echo form_open('',$attributes);
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="num_rep" class="control-label" style="white-space: nowrap;">No. Reparación</label>
-					<input type="text" class="form-control" name="num_reparacion" id="num_rep">
+					<input type="text" class="form-control" name="num_reparacion" id="num_rep" readonly>
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="tipo_garantia" class="control-label" style="white-space: nowrap;">Tipo de Garantía</label>
