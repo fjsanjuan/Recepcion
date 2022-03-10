@@ -3860,10 +3860,4 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-
-	function ord_por_folio(){
-		$folio = $this->input->post('folio');
-		$data = $this->buscador_model->orden_por_folio($folio);
-		echo json_encode($data);
-	}
 }

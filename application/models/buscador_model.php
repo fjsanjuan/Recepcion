@@ -6006,17 +6006,4 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-
-	public function orden_por_folio($folio){
-		$this->db2 = $this->load->database("other", true);
-		$query = $this->db2->query("SELECT Articulo, Modelo FROM VIN WHERE VIN = ?", array($folio));
-		if ($query->num_rows() > 0){
-			$art = $query->result_array();
-		}else{
-			echo 'sin';
-		}
-		$query2 = $this->db2->query("SELECT DISTINCT Articulo, IdPaquete, DescripcionC, DescripcionL, kilometraje, Modelo, TipoPaquete FROM ". $this->vista ." WHERE Articulo IN (?, 'Todos') AND Modelo IN (?, 'Todos') AND TipoPaquete = 'Mantenimiento' OR (Articulo ='Todos' AND TipoPaquete = 'Mantenimiento' AND Modelo ='Todos')", array($art[0]['Articulo'], $art[0]['Modelo']))->result_array();
-			return  $query2;
-
-	}
 }
