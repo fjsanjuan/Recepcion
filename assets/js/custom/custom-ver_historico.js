@@ -6628,10 +6628,13 @@ function construir_tabla_historial_anversos(data) {
 		}
 		if (id_perfil == 7) {
 			$(anverso).prop('disabled', false);
+			$(adicional).prop('disabled', false);
+			$(autorizar2).prop('disabled', true);
 		}
-		/*if (val.Adicional){
-		$(tr).css( 'background-color', '#f0ffff' );
-		}*/
+		if ($('input.adicional').is(':checked') && val.diagnostico.terminado == 1){
+			$(autorizar2).prop('disabled', false);
+			$(autorizar3).prop('disabled', false);
+		}
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
 		tr.append($('<td>').append(adicional));
@@ -7185,8 +7188,7 @@ $(document).off('change', 'select[name="linea_tipo"]').on('change', 'select[name
 	event.preventDefault();
 	data = $(this).find('option:selected').data();
 	console.log(data);
-	$('#auth_1').val(data.jefe ? data.jefe : '');
-	$('#auth_2').val(data.gte ? data.gte : '');
+	$('#auth_1').val(data.gte ? data.gte : '');
 	$('#num_rep').val(data.num_reparacion ? data.num_reparacion : '');
 });
 
