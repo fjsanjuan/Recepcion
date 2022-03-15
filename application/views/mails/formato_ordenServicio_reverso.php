@@ -4,7 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <head>
 <link rel="stylesheet" href="<?=base_url()?>assets/librerias/fontawesome-free-5.2.0-web/css/all.css"/>
-<link rel="icon" href="<?=base_url();?>assets/img/favicon.ico" type="image/x-icon">
 <link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" media="all">
 <link href="<?=base_url()?>assets/css/style.css" rel="stylesheet">
 
@@ -108,7 +107,7 @@ body {
 			</div>
 			<div class="col-2">
 				<label>Folio:</label>
-				<input type="text" name="folio" id="folio" class="input_bordeInferior_reverso" value="<?= isset($cliente['MovID']) ? $cliente['MovID'] : '' ?>">
+				<input type="text" name="folio" id="folio" class="input_bordeInferior_reverso" value="<?=$cliente['MovID']?>">
 				<label>Fecha:</label>
 				<?php 
 					$fecha_actual = date("d-m-Y");

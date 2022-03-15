@@ -374,11 +374,7 @@ $( document ).ready(function() {
 				Email: <?=$sucursal["email_contacto"]?>  Web: <?=$sucursal["sitio_web"]?>
 				<br>
 				Horario en Recepción y Entrega de Unidades: <?=$sucursal["horario_recep"]?>
-				<!--
-				<br>
-				Horario de Caja: <?=$sucursal["horario_caja"]?> 
-				</p>
-				-->
+				
 			</div>
 			<div class="col-3 div_tres">
 				<div class="col-12">

@@ -83,8 +83,8 @@
 								<?php
 									$total = 0;
 									foreach ($detalle as $key => $value) {
-										$iva= round(($value["precio_unitario"] * 0.16),2);
-										//$iva = $value["precio_unitario"] - $iva;
+										$iva= round(($value["precio_unitario"]/1.16),2);
+										$iva = $value["precio_unitario"] - $iva;
 										$totalIva = $iva*$value["cantidad"];
 										echo "<tr><td>".$value["cve_articulo"]."</td>";
 										echo "<td>".$value["descripcion"]."</td>";
@@ -148,11 +148,10 @@
 </html>
 <script>
 $(document).ready(function() {
-	//variables que controlan la ruta donde se guardan las fotos de la inspeccion y seguimiento en el presupuesto
-	//mostrar guardadas en el mismo proyecto dejarlas vacias alias_exists = '' var dir_fotos= '';
-	//mostrar guardadas en otra ruta  alias_exists = 'nom_alias' var dir_fotos= 'F:/recepcion_activa/fotografias/';
-	var alias_exists = ''; 
-	var dir_fotos= '';
+	//variableque controlan la ruta donde se guardan las fotos de la inspeccion 
+	//en este caso para poder vizualizarlas desde el historico
+	var alias_exists = 'uploads';
+	var dir_fotos= 'F:/recepcion_activa/fotografias/';
 
 	var base_url = "<?=base_url();?>";
 	$("#btn_update_mail").on("click", function(){

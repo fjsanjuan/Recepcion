@@ -169,7 +169,7 @@
                                                 <div class="col-sm-2">
                                                     <div class="col-sm">
                                                         <label for="cve_asesor" class="grey-text">Clave</label>
-                                                        <input type="text" id="cve_cliente" name="cve_cliente" class="form-control" readonly="true">
+                                                        <input type="text" id="cve_cliente" name="cve_cliente" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -386,12 +386,11 @@
                                         <a class="btn-floating indigo waves-effect waves-light" id="mostrar_modalemail"><i class="fa fa-at"></i></a>
                                     </li>                            
                                     <li>
-                                        <a class="btn-floating white waves-effect waves-light" id="enviar_whatsapp" style ="display:none;" ><img src="<?=base_url()?>assets/img/whatsapp.png" alt="logo whatsapp" class="icono_whatsapp"></a>
+                                        <a class="btn-floating white waves-effect waves-light" id="enviar_whatsapp"><img src="<?=base_url()?>assets/img/whatsapp.png" alt="logo whatsapp" class="icono_whatsapp"></a>
                                     </li>
                                     <li>
                                         <a class="btn-floating red waves-effect waves-light" id="generar_pdf"><i class="far fa-file-pdf" aria-hidden="true"></i></a>
                                     </li>
-                            
                                     <li>
                                         <a class="btn-floating blue waves-effect waves-light" id="mostrar_modalfirma"><i class="fa fa-file-signature"></i></a>
                                     </li>
@@ -427,9 +426,6 @@
               </div>
               <div class="steps-step-2">
                   <a href="#step-3" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect" data-toggle="tooltip" data-placement="top" title="Fotos"><i class="fa fa-image" aria-hidden="true"></i>3</a>
-              </div>
-              <div class="steps-step-2">
-                  <a href="#step-4" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect" data-toggle="tooltip" data-placement="top" title="Audios"><i class="fa fa-file-audio" aria-hidden="true"></i>4</a>
               </div>
           </div>
       </div>
@@ -573,11 +569,11 @@
                           </tr>
                           <tr>
                             <td>
-                               <label for="">Extensión de garantía</label>
-                              <!--  <label for="">Garantía</label>  --> <!-- para fame -->
+                               <!--<label for="">Extensión de garantía</label>-->
+							   <label for="">Garantía</label>
                                 <!-- Material inline 1 -->
                                 <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="extGSI" name="ext_garantia" value="si" checked>
+                                  <input type="radio" class="form-check-input" id="extGSI" name="ext_garantia" value="si">
                                   <label class="form-check-label" for="extGSI">Sí</label>
                                 </div>
                                 <!-- Material inline 2 -->
@@ -1862,7 +1858,7 @@
     <div class="row setup-content-2" id="step-3">
               <div class="col-md-12">
                   <br>
-                  <h5 style="color: #4285f4;"><center><b>Paso 3: Fotos</b></center></h5>
+                  <h5 style="color: #4285f4;"><center><b>Paso 3: Fotos y Audio</b></center></h5>
                   <br>
                   <h3 class="font-weight-bold pl-0 my-4"><strong>Registro de Daños</strong></h3>
                   <div class="col-12">
@@ -1980,565 +1976,7 @@
                         <li>
                             <a class="btn-floating red waves-effect waves-light" id="mostrar_modalfotos"><i class="fa fa-camera"></i></a>
                         </li>
-                        <li>
-                            <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
-                        </li>
                        <!--  <li>
-                            <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
-                        </li> -->
-                    </ul>
-                    <!-- modal oasis -->
-                    <div class="modal fade" id="modaloasis" tabindex="-1" role="dialog" data-backdrop="false">
-                        <div class="modal-dialog modal-lg"  role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Cargar Oasis</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php $this->load->view("cargar_oasis");?>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                    <!--Modal Oasis-->
-                    <!-- <div id="ModalGoasis" class="modal fade" role="dialog">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">GOASIS</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body" id="modalBodyO">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-            </section>
-        </div>
-      <!-- Fourth Step -->
-    <div class="row setup-content-2" id="step-4">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-            <br>
-            <h5 style="color: #4285f4; text-align: center;"><center><b>Paso 4: Causa Raíz Componente</b></center></h5>
-            <br>
-            <div class="col-12">
-                <div class="col-6 voz">
-                    <label for="autorizacion_voz"><strong>¿Autorización para grabar voz?</strong></label>
-                    <div class="switch div_switchvoz">
-                        <label>
-                            No
-                            <input type="checkbox" name="autorizacion_voz" id="autorizacion_voz">
-                            <span class="lever success"></span>
-                            Sí
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 div_causa_raiz_componente">
-                <br>
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <blockquote class="blockquote bq-primary htext">Identificación de necesidades de servicio</blockquote>
-                        <div class="form-check">
-                            <label for="">Definición de falla</label>
-                            <textarea class="form-control" type="text" rows="5" name="articulos_personales[]" value=""></textarea>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <blockquote class="blockquote bq-primary htext">Condiciones Ambientales</blockquote>
-                            <label class="form-label" for="temperatura">Temperatura ambiente</label>
-                            <input type="range" list="temperatura_list" class="form-range" name="temperatura[]" value="0"> 
-                            <datalist id="temperatura_list">
-                                <option value="-10" label="-10°C">
-                                <option value="0" label="0°C">
-                                <option value="10" label="10°C">
-                                <option value="20" label="20°C">
-                                <option value="30" label="30°C">
-                                <option value="40" label="40°C">
-                                <option value="50" label="50°C">
-                                <option value="60" label="60°C">
-                            </datalist>
-                        <div class="form-check">
-                            <label class="form-check-label" for="">Húmedad</label><br>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadSeco0" name="humedad[]" value="seco">
-                                  <label class="form-check-label" id="labelSeco0" for="humedadSeco0">Seco</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadHumedo0" name="humedad[]" value="humedo">
-                                  <label class="form-check-label" id="labelHumedo0" for="humedadHumedo0">Húmedo</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadMojado0" name="humedad[]" value="mojado" >
-                                  <label class="form-check-label" id="labelMojado0" for="humedadMojado0">Mojado</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="humedadLluvia0" name="humedad[]" value="lluvia">
-                                  <label class="form-check-label" id="labelLluvia0" for="humedadLluvia0">Lluvia</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" id="humedadHielo0" name="humedad[]" value="hielo">
-                                  <label class="form-check-label" id="labelHielo0" for="humedadHielo0">Hielo</label>
-                                </div>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="">Viento</label><br>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoLigero0" name="viento[]" value="ligero">
-                                  <label class="form-check-label" id="labelLigero0" for="vientoLigero0">Ligero</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoMedio0" name="viento[]" value="medio">
-                                  <label class="form-check-label" id="labelMedio0" for="vientoMedio0">Medio</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="vientoFuerte0" name="viento[]" value="fuerte">
-                                  <label class="form-check-label" id="labelFuerte0" for="vientoFuerte0">Fuerte</label>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">                      
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <div class="table-responsive">                                          <!-- tabla fallas cuando -->
-                            <table class="table table-bordered table-striped table-hover animated fadeIn" id="tabla_falla_presenta">
-                                <thead class="mdb-color primary-color" style="font-weight: bold; color:#fff;">
-                                    <tr>
-                                        <th colspan="2">
-                                            <center>
-                                                <h6>La falla se presenta cuando:</h6>
-                                            </center>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Arranca el vehículo</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="arranca[]" id="falla_arranca0" value="Arranca el vehículo">
-                                                <label class="form-check-label" id="label_arranca0" for="falla_arranca0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Inicia movimiento</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="inicia[]" id="falla_inicia0" value="Inicia movimiento">
-                                                <label class="form-check-label" id="label_inicia0" for="falla_inicia0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Disminuye la velocidad</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="disminuye[]" id="falla_disminuye_vel0" value="Disminuye la velocidad">
-                                                <label class="form-check-label" id="label_disminuye_vel0" for="falla_disminuye_vel0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Da vuelta a la izquiera</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="vuelta_izq[]" id="falla_vuelta_izq0" value="Da vuelta a la izquiera">
-                                                <label class="form-check-label" id="label_vuelta_izq0" for="falla_vuelta_izq0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Da vuelta a la derecha</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="vuelta_der[]" id="falla_vuelta_der0" value="Da vuelta a la derecha">
-                                                <label class="form-check-label" id="label_vuelta_der0" for="falla_vuelta_der0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pasa un tope</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="tope[]" id="falla_pasa_tope0" value="pasa un tope">
-                                                <label class="form-check-label" id="label_pasa_tope0" for="falla_pasa_tope0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pasa un bache</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="bache[]" id="falla_pasa_bache0" value="Pasa un bache">
-                                                <label class="form-check-label" id="label_pasa_bache0" for="falla_pasa_bache0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cambia la velocidad</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="cambia[]" id="falla_cambia_vel0" value="Cambia la velocidad">
-                                                <label class="form-check-label" id="label_cambia_vel0" for="falla_cambia_vel0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Está sin movimiento</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="movimiento[]" id="falla_sin_movimiento0" value="Está sin movimiento">
-                                                <label class="form-check-label" id="label_sin_movimiento0" for="falla_sin_movimiento0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Constantemente</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="constantemente[]" id="falla_constantemente0" value="Constantemente">
-                                                <label class="form-check-label" id="label_constantemente0" for="falla_constantemente0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Esporádicamente</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_presenta" name="esporadicamente[]" id="falla_esporadicamente0" value="Esporádicamente">
-                                                <label class="form-check-label" id="label_esporadicamente0" for="falla_esporadicamente0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="table-responsive">                                          <!-- tabla fallas cuando -->
-                            <table class="table table-bordered table-striped table-hover animated fadeIn" id="tabla_falla_presenta">
-                                <thead class="mdb-color primary-color" style="font-weight: bold; color:#fff;">
-                                    <tr>
-                                        <th colspan="4">
-                                            <center>
-                                                <h6>La falla se percibe en:</h6>
-                                            </center>
-                                        </th>
-                                    </tr>                                   
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Volante</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="volante[]" id="falla_volante0" value="Volante">
-                                                <label class="form-check-label" id="label_volante0" for="falla_volante0"></label>
-                                            </div>
-                                        </td>
-                                        <td>Cofre</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="cofre[]" id="falla_cofre0" value="Cofre">
-                                                <label class="form-check-label" id="label_cofre0" for="falla_cofre0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Asiento</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="asiento[]" id="falla_asiento0" value="Asiento">
-                                                <label class="form-check-label" id="label_asiento0" for="falla_asiento0"></label>
-                                            </div>
-                                        </td>
-                                        <td>Cajuela</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="cajuela_f[]" id="falla_cajuela0" value="Cajuela">
-                                                <label class="form-check-label" id="label_cajuela0" for="falla_cajuela0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cristales</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="cristales[]" id="falla_cristales0" value="Cristales">
-                                                <label class="form-check-label" id="label_cristales0" for="falla_cristales0"></label>
-                                            </div>
-                                        </td>
-                                        <td>Toldo</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="toldo[]" id="falla_toldo0" value="Toldo">
-                                                <label class="form-check-label" id="label_toldo0" for="falla_toldo0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Carrocería</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="carroceria[]" id="falla_carroceria0" value="Carrocería">
-                                                <label class="form-check-label" id="label_carroceria0" for="falla_carroceria0"></label>
-                                            </div>
-                                        </td>
-                                        <td>Debajo del vehículo</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="debajo[]" id="estando_debajo0" value="Debajo del vehículo">
-                                                <label class="form-check-label" id="label_debajo_vehiculo0" for="estando_debajo0"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                        <td>Estando</td>
-                                        <td colspan="4">
-                                            <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="dentro[]" id="falla_dentro0" value="Dentro">
-                                                <label class="form-check-label" id="label_dentro0" for="falla_dentro0">Dentro</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="fuera[]" id="falla_fuera0" value="Fuera">
-                                                <label class="form-check-label" id="label_fuera0" for="falla_fuera0">Fuera</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="frente[]" id="falla_frente0" value="Frende">
-                                                <label class="form-check-label" id="label_frente0" for="falla_frente0">Frente</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input type="checkbox" class="form-check-input check-falla_percibe" name="detras[]" id="falla_detras0" value="Detrás">
-                                                <label class="form-check-label" id="label_detras0" for="falla_detras0">Detrás</label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <blockquote class="blockquote bq-primary htext">Condiciones Operativas</blockquote>
-                        <div class="form-check">
-                            <label class="form-check-label" for="velocidad">Velocidad Km/hr</label>
-                            <input type="range" min="0" max="260" list="velocidad_list" name="velocidad[]" class="form-check-input" value="0">
-                            <datalist id="velocidad_list">
-                                <option value="0" label="0">
-                                <option value="20" label="20">
-                                <option value="40" label="40">
-                                <option value="60" label="60">
-                                <option value="80" label="80">
-                                <option value="100" label="100">
-                                <option value="120" label="120">
-                                <option value="140" label="140">
-                                <option value="160" label="160">
-                                <option value="180" label="180">
-                                <option value="200" label="200">
-                                <option value="220" label="220">
-                                <option value="240" label="240">
-                                <option value="260" label="260">
-                            </datalist>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="">Cambio transmisión</label>
-                            <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionR0" name="cambioTransmision[]" value="r">
-                                  <label class="form-check-label" id="labelTransmisionR0" for="cambioTransmisionR0">R</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionUno0" name="cambioTransmision[]" value="1">
-                                  <label class="form-check-label" id="labelTransmisionUno0" for="cambioTransmisionUno0">1</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionDos0" name="cambioTransmision[]" value="2">
-                                  <label class="form-check-label" id="labelTransmisionDos0" for="cambioTransmisionDos0">2</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionTres0" name="cambioTransmision[]" value="3">
-                                  <label class="form-check-label" id="labelTransmisionTres0" for="cambioTransmisionTres0">3</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionCuatro0" name="cambioTransmision[]" value="4">
-                                  <label class="form-check-label" id="labelTransmisionCuatro0" for="cambioTransmisionCuatro0">4</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionCinco0" name="cambioTransmision[]" value="5">
-                                  <label class="form-check-label" id="labelTransmisionCinco0" for="cambioTransmisionCinco0">5</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="cambioTransmisionSeis0" name="cambioTransmision[]" value="6">
-                                  <label class="form-check-label" id="labelTransmisionSeis0" for="cambioTransmisionSeis0">6</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input check-4x2" name="cambioTipo[]" id="cambioTransmisionSiete0" value="4x2">
-                                   <label class="form-check-label" id="labelTransmisionSiete0" for="cambioTransmisionSiete0">4x2</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input check-4x4" name="cambioTipo[]" id="cambioTransmisionOcho0" value="4x4">
-                                   <label class="form-check-label" id="labelTransmisionOcho0" for="cambioTransmisionOcho0">4x4</label>
-                                </div>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="rpm">Rpm x1000</label>
-                            <input type="range" min="0" max="8" list="rpm_list" class="form-check-input" name="rpm[]" value="0">
-                            <datalist id="rpm_list">
-                                <option value="0" label="0">
-                                <option value="1" label="1">
-                                <option value="2" label="2">
-                                <option value="3" label="3">
-                                <option value="4" label="4">
-                                <option value="5" label="5">
-                                <option value="6" label="6">
-                                <option value="7" label="7">
-                                <option value="8" label="8">
-                            </datalist>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="carga">Carga</label>
-                            <input type="range" min="0" max="100" list="carga_carga" name="carga[]" class="form-check-input" value="0">
-                            <datalist id="carga_carga">
-                                <option value="0" label="0%">
-                                <option value="25" label="25%">
-                                <option value="50%" label="50%">
-                                <option value="75%" label="75%">
-                                <option value="100" label="100%">
-                                <option value="101" label="+Remolque">
-                            </datalist>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="pasajeros">Pasajeros</label>
-                            <input type="range" min="0" max="9" list="pasajeros[]" name="pasajeros[]" class="form-check-input" value="0">
-                            <datalist id="pasajeros[]">
-                                <option value="0" label="0">
-                                <option value="1" label="1">
-                                <option value="2" label="2">
-                                <option value="3" label="3">
-                                <option value="4" label="4">
-                                <option value="5" label="5">
-                                <option value="6" label="6">
-                                <option value="7" label="7">
-                                <option value="8" label="8">
-                                <option value="9" label="9">
-                            </datalist>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="cajuela">Cajuela</label>
-                            <input type="range" min="0" max="100" list="cajuela_list" name="cajuela[]" class="form-check-input" value="0">
-                            <datalist id="cajuela_list">
-                                <option value="0" label="0%">
-                                <option value="25" label="25%">
-                                <option value="50%" label="50%">
-                                <option value="75%" label="75%">
-                                <option value="100" label="100%">
-                            </datalist>
-                        </div><br>
-                        <blockquote class="blockquote bq-primary htext">Condiciones del Camino</blockquote>
-                        <div class="form-check">
-                            <label class="form-check-label" for="">Estructura</label><br>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraPlano0" name="estructura[]" value="plano">
-                                  <label class="form-check-label" id="labelPlano0" for="estructuraPlano0">Plano</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraVado0" name="estructura[]" value="vado" >
-                                  <label class="form-check-label" id="labelVado0" for="estructuraVado0">Vado</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraTope0" name="estructura[]" value="tope">
-                                  <label class="form-check-label" id="labelTope0" for="estructuraTope0">Tope</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraBaches0" name="estructura[]" value="Baches">
-                                  <label class="form-check-label" id="labelBaches0" for="estructuraBaches0">Baches</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="estructuraVibradores0" name="estructura[]" value="Vibradores">
-                                  <label class="form-check-label" id="labelVibradores0" for="estructuraVibradores0">Vibradores</label>
-                                </div>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="">Camino</label><br>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoRecto0" name="camino[]" value="recto">
-                                  <label class="form-check-label" id="labelRecto0" for="caminoRecto0">Recto</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaLigera0" name="camino[]" value="curva ligera">
-                                  <label class="form-check-label" id="labelCurvaLigera0" for="caminoCurvaLigera0">Curva ligera</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaCerrada0" name="camino[]" value="curva cerrada">
-                                  <label class="form-check-label" id="labelCurvaCerrada0" for="caminoCurvaCerrada0">Curva cerrada</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="caminoCurvaSinuoso0" name="camino[]" value="curva sinuoso">
-                                  <label class="form-check-label" id="labelCurvaSinuoso0" for="caminoCurvaSinuoso0">Sinuoso</label>
-                                </div>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label" for="">Pendiente</label><br>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteRecto0" name="pendiente[]" value="Recto">
-                                  <label class="form-check-label" id="labelPendRecto0" for="pendienteRecto0">Recto</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteLigera0" name="pendiente[]" value="Pendiente ligera">
-                                  <label class="form-check-label" id="labelLigera0" for="pendienteLigera0">Pendiente ligera 10°</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteMediana0" name="pendiente[]" value="Pendiente mediana">
-                                  <label class="form-check-label" id="labelMediana0" for="pendienteMediana0">Pendiente mediana</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input type="radio" class="form-check-input" id="pendienteMontania0" name="pendiente[]" value="Pendiente Montaña">
-                                  <label class="form-check-label" id="labelMontania0" for="pendienteMontania0">Pendiente Motaña</label>
-                                </div>
-                        </div><br><br>
-                        <div class="row"> 
-                            <div class="col-sm-2 col-md-2 col-lg-2">
-                                <button class="btn btn-danger btn_borrarFirma"><i class="fa fa-eraser"></i></button>
-                            </div>
-                            <div class="col-sm-8 col-md-8 col-lg-8">
-                            	<input type="hidden" name="idCRC[]">
-                                <input type="hidden" name="valor_firma[]" id="valor_firma0">
-                                <div id="firma0" name="firma[]"></div>
-                                <!-- <button class="btn btn-success" id="btn_guardarFirma">Guardar Firma</button> -->
-                            </div>                   
-                        </div>
-                        <center><h5>Firma del Cliente</h5></center>
-                    </div> 
-                    <a class="btn btn-info add_causa_raiz" id="add_causa_raiz"><i class="fa fa-copy"></i>Nueva Página</a>
-                    <button class="btn btn-danger btn_delete_page">Borrar Página</button>          
-                </div>
-                <input type="file" name="pic" id="pic"  style="display:none;" />
-            </div>
-            <section>
-                <!-- audios -->
-                <div class="fixed-action-btn" style="bottom: 60px; right: 24px;">
-                    <a class="btn-floating btn-lg red waves-effect waves-light">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a class="btn-floating red waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone"></i></a>
-                        </li>
-                        <!--<li>
-                            <a class="btn-floating yellow waves-effect waves-light" id="mostrar_modalOasis"><i class="fa fa-file-pdf"></i></a>
-                        </li>-->
-                        <!-- <li>
-                            <a class="btn-floating green waves-effect waves-light" id="add_causa_raiz"><i class="fa fa-copy"></i></a>
-                        </li> -->
-                         <!-- <li>
                             <a class="btn-floating green waves-effect waves-light" id="mostrar_modalsonido"><i class="fa fa-microphone" aria-hidden="true"></i></a>
                         </li> -->
                     </ul>
@@ -2821,7 +2259,7 @@
 </div>
 <!-- modal capturar sonido-->
 <div class="modal fade" id="modalsonido" tabindex="-1" role="dialog" data-backdrop="false">
-    <div class="modal-dialog modal-md"  role="document">
+    <div class="modal-dialog modal-sm"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Capturar Audio</h5>
@@ -2876,6 +2314,24 @@
     </div>
 </div>
 
+<!--Modal Oasis-->
+<!-- <div id="ModalGoasis" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">GOASIS</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyO">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div> -->
 <!-- Genera el formato de orden servicio -->
 <iframe src="" id="iframe_correo" style="width: 100%; height: 0px; border: none;"></iframe>
 <input type="hidden" id="url_correo" value="<?=site_url().'servicio/mensaje'?>">

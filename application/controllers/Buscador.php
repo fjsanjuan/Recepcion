@@ -98,7 +98,7 @@ class Buscador extends CI_Controller {
 			$q  =  $valor;
 			//bucar mano de obra
 			$result= $this->buscador_model->autocomplete_mo($q);
-			echo json_encode($result);
+  			echo json_encode($result);
 		}
 	}
 
@@ -203,11 +203,6 @@ class Buscador extends CI_Controller {
 		$presupuestos = $this->buscador_model->search_budget($id_orden);
 		echo json_encode($presupuestos);
 	}
-	public function search_verificacion(){
-		$id_orden = $this->input->post("id");
-		$verificacion_refacciones = $this->buscador_model->search_verificacion($id_orden);
-		echo json_encode($verificacion_refacciones);
-	}
 
 	public function revisar_tickaje()
 	{
@@ -215,67 +210,4 @@ class Buscador extends CI_Controller {
 		$ret = $this->buscador_model->revisar_tickaje($data);
 		echo json_encode($ret);
 	}
-
-	public function buscar_mo_lineas(){
-		if (isset($_GET['term'])){
-			$valor = ($_GET['term']);
-			$q  =  $valor;
-			//bucar mano de obra
-			$response= $this->buscador_model->autocomplete_mo_lineas($q);
-		}else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Lista no válida.';
-		}
-		echo json_encode($response);
-	}
-	public function administrar_tipos()
-	{
-		$logged_in = $this->session->userdata("logged_in");
-		if(empty($logged_in) == false && $logged_in['perfil'] == 7)
-		{
-			$data["scripts"] = $this->load->view("scripts", "", true);	
-			$data["navbar"] = $this->load->view("navbar", "", true);	
-			$data["contenido"] = $this->load->view("tipos_garantia", "", true);
-			$this->load->view("base", $data);
-		}else
-		{
-			$response['heading'] = 'Permiso denegado.';
-			$response['message'] = 'Solo los administradores pueden visualizar la página de tipos de garantía.';
-			$this->load->view("errors/html/error_404", $response);
-		}	
-	}
-	
-	public function administrar_subtipos()
-	{
-		$logged_in = $this->session->userdata("logged_in");
-		if(empty($logged_in) == false && $logged_in['perfil'] == 7)
-		{
-			$data["scripts"] = $this->load->view("scripts", "", true);	
-			$data["navbar"] = $this->load->view("navbar", "", true);	
-			$data["contenido"] = $this->load->view("subtipos_garantia", "", true);
-			$this->load->view("base", $data);
-		}else
-		{
-			$response['heading'] = 'Permiso denegado.';
-			$response['message'] = 'Solo los administradores pueden visualizar la página de subtipos de garantía.';
-			$this->load->view("errors/html/error_404", $response);
-		}	
-	}
-
-	// public function administrar_tecnicos()
-	// {
-	// 	$logged_in = $this->session->userdata("logged_in");
-	// 	if(empty($logged_in) == false && $logged_in['perfil'] == 5)
-	// 	{
-	// 		$data["scripts"] = $this->load->view("scripts", "", true);	
-	// 		$data["navbar"] = $this->load->view("navbar", "", false);	
-	// 		$data["contenido"] = $this->load->view("configuracion_perfil", "", true);
-	// 		$this->load->view("base", $data);
-	// 	}else
-	// 	{
-	// 		$response['heading'] = 'Permiso denegado.';
-	// 		$response['message'] = 'Solo los técnicos, realizan este proceso.';
-	// 		$this->load->view("errors/html/error_404", $response);
-	// 	}	
-	// }
 }

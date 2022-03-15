@@ -28,7 +28,7 @@
     <div class="col-sm-2">
         <div class="sm-"> 
             <label for="cel_cliente" class="grey-text">Celular</label>
-            <input type="text" id="cel_cliente" name="cel_cliente" class="form-control  validate[required,custom[onlyNumberSp],minSize[13],maxSize[13]] ">
+            <input type="text" id="cel_cliente" name="cel_cliente" class="form-control  validate[required,custom[onlyNumberSp],maxSize[10]] ">
         </div>
     </div>
     <div class="col-sm-3">

@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once APPPATH."libraries\dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 class Servicio extends CI_Controller {
@@ -7,26 +7,8 @@ class Servicio extends CI_Controller {
 		parent::__construct();
 		$this->load->model('buscador_model');
 		$this->form_validation->set_error_delimiters('', '<br/>');
-		
-		//variable que controlan el tipo de formato de orden de servicio(profeco) que se enviara por correo 
-		$this->formt_servicio = "ford";
-		//variable para crear directorio donde se guardaran los formatos creador
-		$this->ruta_formts = "../recepcion/";
-		//variable para hablitar o deshabilitar el adjunto de fotos de recepcion al envio de correo
-		// se solicito en cever hyundai aeropuero
-		$this->adjuntar_fotos = true;
-
-		//datos de configuracion por default para envio de correos
-		$this->mail_host = "smtp.gmail.com";
-		$this->mail_smtpAuth = true;
-		$this->mail_username = "sistemas.intelisis@gmail.com";
-		$this->mail_password = "1234*Sistema";
-		$this->mail_smtpSecure = "ssl";
-		$this->mail_port = 465;
-		$this->APPLICATION_PATH = realpath("/");
-
-		$this->obtener_configEmail();
-		
+		$this->ASSETS = "./assets/";
+		$this->UPLOADS = "uploads/";
 	}
 
 	function tablero(){
@@ -41,28 +23,6 @@ class Servicio extends CI_Controller {
 		$sucursal= $logged_in["id_sucursal"];
 		$result= $this->buscador_model->obtener_asesores($b, $sucursal);
 		echo json_encode($result);
-	}
-
-	function obtener_configEmail()
-	{
-		$result= $this->buscador_model->obtener_configEmail();
-		$config = array('success' =>0, 'msj' => ('Se ha agregado configuracion para envio de correos por defecto, revisar con soporte.'));
-
-		//si la consulta de obtener_configEmail() es exitosa agregará la config por bd al envio de correos de lo contrario dejará la config que se define por default en el constructor
-		if($result != null){
-			foreach ($result as $row) {
-				$this->mail_host = $row['mail_host'];
-				$this->mail_smtpAuth = $row['mail_smtpAuth'];
-				$this->mail_username = $row['mail_userName'];
-				$this->mail_password = $row['mail_password'];
-				$this->mail_smtpSecure = $row['mail_smtpSecure'];
-				$this->mail_port = $row['mail_port'];
-			}
-		$config = array('success' =>1, 'msj' => ('Configuracion por bd para envio de correos exitosa'));
-		}		
-		//print_r($this->mail_host);print_r($this->mail_smtpAuth);print_r($this->mail_username);print_r($this->mail_password);print_r($this->mail_smtpSecure);print_r($this->mail_port);
-		
-		//echo json_encode($config);
 	}
 
 	function obtener_horario(){
@@ -284,30 +244,16 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    // $mail->ErrorInfo;
-			    // $mail->isSMTP();// Set mailer to use SMTP
-			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    // $mail->SMTPAuth = true;// Enable SMTP authentication
-			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    // $mail->Password = '9F8a*37x';  // SMTP password
-			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    // $mail->Port = 465;// TCP port to connect to
-
-			    //Server settings
-			    //$mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
 			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
+			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = true;// Enable SMTP authentication
+			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    $mail->Password = '9F8a*37x';  // SMTP password
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = 465;// TCP port to connect to
 			    
 			    //Recipients
-			     $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			     $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
 			    //$mail->addAddress($data['usuario']['email_cliente']);// Name is optional
 			    // $mail->AddReplyTo($correo_asesor,'Service Excellence');  //A quien debe ir dirigida la respuesta
 			    $mail->addCC($correo_asesor);											//Con copia a
@@ -335,122 +281,6 @@ class Servicio extends CI_Controller {
 			    if($enviar)
 			    {
 			    	$envio = true;
-			    }else 
-			    {
-			    	$envio = false;
-			    	var_dump($mail->ErrorInfo);
-			    }
-			} catch (Exception $e) {
-			    echo 'Message could not be sent.';
-			    echo 'Mailer Error: ' . $mail->ErrorInfo;
-
-			    $envio = false;
-			}
-       
-        echo json_encode($envio);	
-	}
-	public function envia_verificacion_mail()
-	{
-		$datos = $this->input->post();
-		
-		$data = $this->buscador_model->datos_verificacion($datos);
-		$data['MovID'] = isset($data['usuario']['movID']) && isset($data['usuario']['movID']['MovID']) ? $data['usuario']['movID']['MovID'] : '';
-		$url = base_url()."index.php/Servicio/email_verificacion/".$datos['id'];
-		$data['datos_cliente'] = $data['usuario'];
-		$data['datos_refacciones'] = $data['user'];
-		$data['datos_tecnico'] = $data['userTecnico'];
-		$data["datos_suc"] = $data["datos_sucursal"];
-		$data['movID'] = $data["usuario"];
-		$data['cve_articulo'] = $data["detalle"];
-		$refacciones = $data['user']['nombre']." ".$data['user']['apellidos']." ";
-		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
-		$data["datos_tecnico"]["tecnico"] = $tecnico;
-		$data["datos_tecnico"]["actualizado"] =date('Y-m-d');
-		$data["datos_tecnico"]["autorizado"] = 1;
-		$data["bandera_correo"] = 1;
-		$correo_refacciones=$data['user']['correo_refacciones'];
-		$data["datos_refacciones"]["refacciones"] = $correo_refacciones;
-		$correo_tecnico=$data['userTecnico']['correo_tecnico'];
-		$data["datos_tecnico"]["tecnico"] = $correo_tecnico;
-		ini_set('memory_limit', '1024M');
-		$data['comentario_existencia'] = $this->input->post('comentario_existencia');
-		// cargando las librerias para envío de correo.
-		$html = $this->load->view('formatos/formato_verificacion_refacciones', $data, true); 
-        // $this->load->helper('dompdf');
-        // $pdf = pdf_create($html, '', false);
-
-		// no se utliza pdf_create por que vuelve a enviar importar la libreria y causa conflicto
-        $dompdf = new DOMPDF();
-    	$dompdf->load_html($html);
-    	$dompdf->render();
-    	$pdf = $dompdf->output();
-    
-        #$correo_tecnico = $this->session->userdata["logged_in"]["correo"];
-        // $correo_asesor = "lorozco@intelisis.com";
-
-        // enviar correo       
-       	$this->load->library("PhpMailerLib");
-		$mail = $this->phpmailerlib->load();
-			try {
-			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    // $mail->ErrorInfo;
-			    // $mail->isSMTP();// Set mailer to use SMTP
-			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    // $mail->SMTPAuth = true;// Enable SMTP authentication
-			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    // $mail->Password = '9F8a*37x';  // SMTP password
-			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    // $mail->Port = 465;// TCP port to connect to
-
-			    //Server settings
-			    //$mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
-			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
-			    
-			    //Recipients
-			     $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
-			    //$mail->addAddress($data['usuario']['email_cliente']);// Name is optional
-			    // $mail->AddReplyTo($correo_asesor,'Service Excellence');  //A quien debe ir dirigida la respuesta
-			    $mail->addAddress($correo_refacciones);											//Con copia a
-			    //$mail->addBCC('mlopez@intelisis.com');	 //Con copia oculta a
-			    //$mail->addCC($correo_tecnico);											//Con copia a
-			   //$mail->addBCC('tpena@intelisis.com');	 //Con copia oculta a
-			    
-			    //Attachments
-			    $mail->AddStringAttachment($pdf, 'Verificación.pdf');                 // Agregar archivo adjunto
-			    $datos["comentarios"] = "Hello there";
-			    //Content
-			                                     // Set email format to HTML
-			    $mail->CharSet = 'UTF-8';
-			    $mail->Subject = 'Verificación';
-
-			    $mail->Body      = "<html><body><p>Estimado ".$refacciones.":
-				Requiero que me haga una verificacion de piezas en existencia que necesito para efectuar la reparación de la orden {$data['MovID']}</p>
-				<p><a href='".$url."?Comentario={$data['comentario_existencia']}' target='_blank' >REVISAR VERIFICACIÓN</a></p>
-				<p>Sin más por el momento, saludos cordiales. <br>
-
-				Gracias! </p></html></body>";
-			    $mail->isHTML(true); 
-				$envia = $mail->send();
-				
-			    $data = array('success' => 1, 'data' => ('Verificación enviada.'));
-			    //$this->eliminar_archivoTemp($formato["ruta"]);
-				//$enviar = false;
-			    if($envia)
-			    {
-			    	$envio = true;
-			    	$this->db->where('id_presupuesto', $datos['id']);
-			    	$this->db->update('verificacion_refacciones', ['autorizado' => 1]);
 			    }else 
 			    {
 			    	$envio = false;
@@ -516,19 +346,11 @@ class Servicio extends CI_Controller {
 
 	function orden_de_servicio($vta, $cliente = 0, $vin = 0){
 		// echo $cliente;die;
-		// si se recibe el vin en base64 es por que viene con punto 
-		if ( base64_encode(base64_decode($vin, true)) === $vin){
-			$decoded64Vin = base64_decode($vin);
-		} else {
-			$decoded64Vin = $vin;
-		}
-		
 		$logged_in = $this->session->userdata("logged_in");
 		if(!empty($logged_in))	{
 			// var_dump($vta);die();
 			
-			//$firma_cliente = ['firma_formato_raiz_componente' =>"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAakAAADSCAYAAADwvj/tAAAAAXNSR0IArs4c6QAAB/JJREFUeF7t1UENAAAMArHh3/Rs3KNTQMoSdo4AAQIECEQFFs0lFgECBAgQOCPlCQgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAASPlBwgQIEAgK2CkstUIRoAAAQJGyg8QIECAQFbASGWrEYwAAQIEjJQfIECAAIGsgJHKViMYAQIECBgpP0CAAAECWQEjla1GMAIECBAwUn6AAAECBLICRipbjWAECBAgYKT8AAECBAhkBYxUthrBCBAgQMBI+QECBAgQyAoYqWw1ghEgQICAkfIDBAgQIJAVMFLZagQjQIAAgQee7QDT4w9urAAAAABJRU5ErkJggg=="]; -->
-			$idVenta = array('vta' => $vta ,'cliente' =>$cliente, 'vin' => $decoded64Vin);
+			$idVenta = array('vta' => $vta ,'cliente' =>$cliente, 'vin' => $vin);
 			// var_dump($idVenta);die;
 			$data['contenido'] = $this->load->view("orden_servicio",$idVenta,true);
 			$data['navbar'] = $this->load->view('navbar','', true);
@@ -1272,71 +1094,14 @@ class Servicio extends CI_Controller {
 			$dato['reqRev_sistFrenos'] = 0;
 		}
 
-		/*Datos del formato causa raíz componente para la voz del cliente*/
-		$dato['autorizacion_voz']     = $this->input->post('autorizacion_voz') == "on" ? 1 : 0;
-		$dato['articulos_personales'] = $this->input->post('articulos_personales[]') !== "" ?  $this->input->post('articulos_personales[]') : [];
-		$dato['temperatura']          = $this->input->post('temperatura[]') !== "" ?  $this->input->post('temperatura[]') : [];
-		$dato['humedad']              = $this->input->post('humedad[]') !== "" ?  $this->input->post('humedad[]') : [];
-		$dato['viento']               = $this->input->post('viento[]') !== "" ?  $this->input->post('viento[]') : [];
-		$dato['arranca']              = $this->input->post('arranca[]') !== "" ?  $this->input->post('arranca[]') : [];
-		$dato['inicia']               = $this->input->post('inicia[]') !== "" ?  $this->input->post('inicia[]') : [];
-		$dato['disminuye']            = $this->input->post('disminuye[]') !== "" ?  $this->input->post('disminuye[]') : [];
-		$dato['vuelta_izq']           = $this->input->post('vuelta_izq[]') !== "" ?  $this->input->post('vuelta_izq[]') : [];
-		$dato['vuelta_der']           = $this->input->post('vuelta_der[]') !== "" ?  $this->input->post('vuelta_der[]') : [];
-		$dato['tope']                 = $this->input->post('tope[]') !== "" ?  $this->input->post('tope[]') : [];
-		$dato['bache']                = $this->input->post('bache[]') !== "" ?  $this->input->post('bache[]') : [];
-		$dato['cambia']               = $this->input->post('cambia[]') !== "" ?  $this->input->post('cambia[]') : [];
-		$dato['movimiento']           = $this->input->post('movimiento[]') !== "" ?  $this->input->post('movimiento[]') : [];
-		$dato['constantemente']       = $this->input->post('constantemente[]') !== "" ?  $this->input->post('constantemente[]') : [];
-		$dato['esporadicamente']      = $this->input->post('esporadicamente[]') !== "" ?  $this->input->post('esporadicamente[]') : [];
-		$dato['volante']              = $this->input->post('volante[]') !== "" ?  $this->input->post('volante[]') : [];
-		$dato['cofre']                = $this->input->post('cofre[]') !== "" ?  $this->input->post('cofre[]') : [];
-		$dato['asiento']              = $this->input->post('asiento[]') !== "" ?  $this->input->post('asiento[]') : [];
-		$dato['cajuela_f']            = $this->input->post('cajuela_f[]') !== "" ?  $this->input->post('cajuela_f[]') : [];
-		$dato['cristales']            = $this->input->post('cristales[]') !== "" ?  $this->input->post('cristales[]') : [];
-		$dato['toldo']                = $this->input->post('toldo[]') !== "" ?  $this->input->post('toldo[]') : [];
-		$dato['debajo']                = $this->input->post('debajo[]') !== "" ?  $this->input->post('debajo[]') : [];
-		$dato['carroceria']           = $this->input->post('carroceria[]') !== "" ?  $this->input->post('carroceria[]') : [];
-		$dato['dentro']               = $this->input->post('dentro[]') !== "" ?  $this->input->post('dentro[]') : [];
-		$dato['fuera']                = $this->input->post('fuera[]') !== "" ?  $this->input->post('fuera[]') : [];
-		$dato['frente']               = $this->input->post('frente[]') !== "" ?  $this->input->post('frente[]') : [];
-		$dato['detras']               = $this->input->post('detras[]') !== "" ?  $this->input->post('detras[]') : [];
-		$dato['velocidad']            = $this->input->post('velocidad[]') !== "" ?  $this->input->post('velocidad[]') : [];
-		$dato['cambioTransmision']    = $this->input->post('cambioTransmision[]') !== "" ?  $this->input->post('cambioTransmision[]') : [];
-		$dato['cambioTipo']           = $this->input->post('cambioTipo[]') !== "" ?  $this->input->post('cambioTipo[]') : [];
-		$dato['rpm']                  = $this->input->post('rpm[]') !== "" ?  $this->input->post('rpm[]') : [];
-		$dato['carga']                = $this->input->post('carga[]') !== "" ?  $this->input->post('carga[]') : [];
-		$dato['pasajeros']            = $this->input->post('pasajeros[]') !== "" ?  $this->input->post('pasajeros[]') : [];
-		$dato['cajuela']              = $this->input->post('cajuela[]') !== "" ?  $this->input->post('cajuela[]') : [];
-		$dato['estructura']           = $this->input->post('estructura[]') !== "" ?  $this->input->post('estructura[]') : [];
-		$dato['camino']               = $this->input->post('camino[]') !== "" ?  $this->input->post('camino[]') : [];
-		$dato['pendiente']            = $this->input->post('pendiente[]') !== "" ?  $this->input->post('pendiente[]') : [];
-		$dato['valor_firma']          = $this->input->post('valor_firma[]') !== "" ?  $this->input->post('valor_firma[]') : [];
-		$dato['id']          = $this->input->post('idCRC[]') !== "" ?  $this->input->post('idCRC[]') : [];
-
-
-
-		if ($dato['autorizacion_voz'] == 1) {
-			$data = array('success' =>0, 'data' => ('Cuando se autoriza la grabación de voz no puedes guardar la inspección sin audios.'));
-			$voc = $this->db->select('*')->from('archivo')->where(['id_orden_servicio'=> $id_orden, 'tipo_archivo' => 8])->count_all_results();
-			if ($voc > 0) {
-				$create = $this->buscador_model->guardar_inspeccion($dato);
-				if($create){
-					$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
-				}else{
-					$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
-				}
-			}
-		}else {
-			$create = $this->buscador_model->guardar_inspeccion($dato);
-			if($create){
-				$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
-			}else{
-				$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
-			}
-		}
-
 		// var_dump($dato);die;
+		$create = $this->buscador_model->guardar_inspeccion($dato);
+		
+		if($create){
+			$data = array('success' =>1, 'data' => ('Orden de Servicio creada satisfactoriamente.'));
+		}else{
+			$data = array('success' =>0, 'data' => ('Ocurrió un error durante el proceso.'));
+		}
 
 		$data = json_encode($data);
 		$data=array('response'=>$data);
@@ -1382,81 +1147,52 @@ class Servicio extends CI_Controller {
 		$correo_b64 = file_get_contents($correo_b64);//para obtener solo el string de la imagen sin la cabecera base64 firma valida e invalida
         $formato_inventario = $this->input->post("inv");
         $correo_asesor = $this->session->userdata["logged_in"]["correo"];
-        $correo_refacciones = $this->session->userdata["logged_in"]["correo"];
-        $correo_tecnico = $this->session->userdata["logged_in"]["correo"];
 		
 		//$multipunto = $this->crear_pdf_multipunto($multipunto, $id_orden);
-		
+		//$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);
 		
 		//guardar en intelisis los archvios generados pendiente de validar
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($formato["ruta"], $id_orden,'orden' );
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($multipunto["ruta"], $id_orden, 'multipuntos' );
 
-		if($this->formt_servicio == 'ford'){
-			$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
-			$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);	
-		}
-		else{
-			$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
-			$finventario["estatus"] = false;
-			$finventario["ruta"] = "";
-		}
-
+        //$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
+		$formato = $this->profeco_make($id_orden); //se utliza cuando se manda a llamar el formato de Fame Toyota en este caso
         // enviar correo       
-        if($formato['estatus'])
+
+		//if($formato['estatus']) //se utliza cuando se manda a llamar el formato de Ford
+        if($formato)
         {
 			try {
 			    //Server settings
 			    //$mail->SMTPDebug = 2;// Enable verbose debug output
 			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
+			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = true;// Enable SMTP authentication
+			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    $mail->Password = '9F8a*37x';  // SMTP password
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = 465;// TCP port to connect to
 			    
 			    //Recipients
-			    $mail->SetFrom( $mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
 			    $mail->addAddress($email_envio, $cliente_envio);// Name is optional
-			    $mail->AddReplyTo($mail_username_env,'Service Excellence');  //A quien debe ir dirigida la respuesta
+			    $mail->AddReplyTo("fameserviceexcellence@gmail.com",'Service Excellence');  //A quien debe ir dirigida la respuesta
 			    $mail->addCC($correo_asesor);						  			  			//Con copia a
-			    $mail->addCC($correo_refacciones);						  			  			//Con copia a
-			    $mail->addCC($correo_tecnico);						  			  			//Con copia a
 			    //$mail->addBCC('fsanjuan@intelisis.com');						  			//Con copia oculta a
 			    
 			    //Content
 			    $mail->isHTML(true);                                  // Set email format to HTML
 			    $mail->CharSet = 'UTF-8';
 			    $mail->Subject = 'Copia Orden de Servicio ';
-			    
-				// esta imagen adjunta siempre va a ir por eso se agrega primero
-				$mail->addStringEmbeddedImage($correo_b64, 'mensaje', '', 'base64','image/png'); //Se agrega el parametro de type : image/png ya que sino lo adjunta como un archivo temporal sin extención
-			    $imgs='<img width="800" height="400" src="cid:mensaje" alt="texto">';
-
-				if($this->adjuntar_fotos){
-					$fotos = $this->buscador_model->traer_fotos($id_orden);
-
-					// si existen fotos se van concatenando a la variable $imgs y la funcion addEmbeddedImage para el envio en el correo
-					// hace la concatenacion si adjuntar_fotos = True
-					if($fotos){
-						foreach ($fotos as $row) {
-							$mail->addEmbeddedImage($row['ruta_archivo'], $row['ruta_archivo'], '', 'base64','image/jpg'); //Se agrega el parametro de type : image/png ya que sino lo adjunta como un archivo temporal sin extención
-							$imgs.='<img width="400" height="200" src="cid:'.$row['ruta_archivo'].'" alt="fotos">';
-						}
-					}
-				}
-				
-				$mail->Body = $imgs;
+			    $mail->addStringEmbeddedImage($correo_b64, 'mensaje', '', 'base64','image/png'); //Se agrega el parametro de type : image/png ya que sino lo adjunta como un archivo temporal sin extención
+			    $mail->Body    = '<img width="800" height="400" src="cid:mensaje" alt="texto">';
 
 				//Attachments 
 				// Se cambiaron al final para permitir cargar imagen dentro del cuerpo
 			    //$mail->addAttachment($formato["ruta"]);
-			    $mail->addAttachment($formato["ruta"]); //Agregar archivo adjunto formato orden de servicio
-			    $mail->addAttachment($finventario["ruta"]); // Agregar archivo adjunto
+			    //$mail->addAttachment($formato["ruta"]); //formato de Ford
+			    $mail->addAttachment($formato);                  // Agregar archivo adjunto
+			    //$mail->addAttachment($finventario["ruta"]);                 // Agregar archivo adjunto
 
 				$enviar = $mail->send();
 				
@@ -1499,16 +1235,11 @@ class Servicio extends CI_Controller {
 
 	public function profeco_print($id_orden = null){
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
-		 /*echo "<pre>";
-		 print_r($datos);
-		 echo "</pre>";*/
+		// var_dump($datos);die;
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
-		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
-		if(!file_exists($ruta_temp)) {
-			mkdir($ruta_temp, 0777, true);
-		}
+		$ruta_temp                = $this->createFolder("Ordenes"); //Se crea el folder si no existe
+		
 		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		if (false) {
 			$this->load->view("mails/formato_ordenServicioFame", $datos);
@@ -1519,7 +1250,7 @@ class Servicio extends CI_Controller {
 			$dompdf->render();
 			$output = $dompdf->output();
 			file_put_contents($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf", $output);
-			$this->showFile("archivos_recepcion", "FormatoDeOrdenServicio".$id_orden);
+			$this->showFile("Ordenes", "FormatoDeOrdenServicio".$id_orden);
 		}
 		
 	}
@@ -1528,7 +1259,7 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$ruta_temp                = $this->createFolder("Ordenes"); //Se crea el folder si no existe
 		
 		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		$dompdf = new DOMPDF();
@@ -1537,36 +1268,23 @@ class Servicio extends CI_Controller {
 		$dompdf->render();
 		$output = $dompdf->output();
 		file_put_contents($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf", $output);
-
-
-		if(file_exists($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf"))
-		{
-			$creado["estatus"] = true;
-			$creado["ruta"] = $ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf";
-		}else
-		{
-			$creado["estatus"] = false;
-			$creado["ruta"] = "";
-		}
-
-
-		return $creado;
+		return $ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf";
 	}
 
 	public function createFolder($folder){
-		$base = $this->ruta_formts;
-		$ruta = $this->ruta_formts.$folder."/";
+		$base = $this->ASSETS.$this->UPLOADS;
+		$ruta = $this->ASSETS.$this->UPLOADS.$folder."/";
 		if(!is_dir($ruta) && !file_exists($ruta)){
-			//mkdir($this->ASSETS, 0777);
-			//mkdir($base, 0777);
+			mkdir($this->ASSETS, 0777);
+			mkdir($base, 0777);
 			mkdir($ruta, 0777);
 		}
 		return $ruta;
 	}
 
 	public function showFile($folder, $name){
-		$base = $this->ruta_formts;
-		$directorio = $this->ruta_formts.$folder;
+		$base = $this->ASSETS.$this->UPLOADS;
+		$directorio = $this->ASSETS.$this->UPLOADS.$folder;
 		if(is_dir($directorio)){
 			$filename = $name.".pdf";
 			$ruta = base_url($directorio."/".$filename);
@@ -1609,7 +1327,6 @@ class Servicio extends CI_Controller {
 
 	public function crear_pdf($imagenb64 = null, $id_orden = null, $img_reverso = null)
 	{
-		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		include_once('./application/libraries/MPDF60/mpdf.php');
 
 		$nombre = "FormatoDeOrdenServicio".$id_orden.".pdf";
@@ -1632,16 +1349,12 @@ class Servicio extends CI_Controller {
 		$mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 		$html2 = "";
 		$mpdf->WriteHTML($html2);
-		$mpdf->Output($ruta_temp.$nombre, "F");
-		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
-		if(!file_exists($ruta_temp)) {
-			mkdir($ruta_temp, 0777, true);
-		}
+		$mpdf->Output('./archivos_recepcion/'.$nombre, "F");
 
-		if(file_exists($ruta_temp.$nombre))
+		if(file_exists('./archivos_recepcion/'.$nombre))
 		{
 			$creado["estatus"] = true;
-			$creado["ruta"] = $ruta_temp.$nombre;
+			$creado["ruta"] = './archivos_recepcion/'.$nombre;
 		}else
 		{
 			$creado["estatus"] = false;
@@ -1653,7 +1366,6 @@ class Servicio extends CI_Controller {
 
 	public function crear_pdfInv($finventario = null, $id_orden = null)
 	{
-		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		include_once('./application/libraries/MPDF60/mpdf.php');
 
 		$nombre = "FormatoDeInventario".$id_orden.".pdf";
@@ -1666,17 +1378,13 @@ class Servicio extends CI_Controller {
 		$mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 		$html = "";
 		$mpdf->WriteHTML($html);
-		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
-		if(!file_exists($ruta_temp)) {
-			mkdir($ruta_temp, 0777, true);
-		}
 
-		$mpdf->Output($ruta_temp.$nombre, "F");
+		$mpdf->Output('./archivos_recepcion/'.$nombre, "F");
 
-		if(file_exists($ruta_temp.$nombre))
+		if(file_exists('./archivos_recepcion/'.$nombre))
 		{
 			$creado["estatus"] = true;
-			$creado["ruta"] = $ruta_temp.$nombre;
+			$creado["ruta"] = './archivos_recepcion/'.$nombre;
 		}else
 		{
 			$creado["estatus"] = false;
@@ -1773,15 +1481,9 @@ class Servicio extends CI_Controller {
 
 	public function traer_fotos_inspeccion(){
 		$id = $this->input->post('id');
-		$fotos = [];
-		$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $id)->get()->row_array();
-		if (isset($orden['movimiento'])) {
-			$archivos = $this->buscador_model->traer_fotos($orden['movimiento']);
-			$fotos = $archivos ? $archivos : [];
-		}
-		$archivos = $this->buscador_model->traer_fotos($id);
-		$fotos = array_merge($fotos,($archivos ? $archivos : []));
-		if(sizeof($fotos) > 0){
+		$fotos = $this->buscador_model->traer_fotos($id);
+
+		if($fotos){
 			$data = array('success' =>1, 'data' => ('Mensaje en proceso, se abrirá una nueva ventana.'), 'fotos'=>$fotos);
 		}else{
 			$data = array('success' =>0, 'data' => ('No se encontraron fotos guardadas.'));
@@ -1804,26 +1506,6 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($presupuesto);
 	}
-	public function GuardaVerificacion(){
-		$logged_in =  $this->session->userdata("logged_in");
-		$datos = $this->input->post();
-		$datos['id_tecnico'] = $logged_in['id'];
-		$presupuesto = $this->buscador_model->GuardaVerificacion($datos);
-		$perfil    =  $logged_in["perfil"];
-		/*if($perfil == 6 && $presupuesto["estatus"] == true){ //si es de refacciones enviar mail al tecnico
-			$info["perfil"] = $perfil;
-			$info["id"] = $presupuesto["id_presupuesto"];
-			$notify = $this->notificar_tecnico($info);
-			$presupuesto["correo_refacciones"] = $notify;
-		if($perfil == 5 && $presupuesto["estatus"] == true){ //si es de tecnico enviar mail a refacciones
-			$info["perfil"] = $perfil;
-			$info["id"] = $presupuesto["id_presupuesto"];
-			$notify = $this->notificar_refacciones($info);
-			$presupuesto["correo_tecnico"] = $notify;
-		}
-	}*/
-		echo json_encode($presupuesto);
-	}
 	// public function ver_presupuestoPdF(){
 	// 	$datos = $this->input->post();
 	// 	$data = $this->buscador_model->datos_presupuesto($datos);
@@ -1837,25 +1519,8 @@ class Servicio extends CI_Controller {
 		$data = $this->buscador_model->datos_presupuesto($data);
 		$data['datos_cliente'] = $data['usuario'];
 		$data["datos_suc"] = $data["datos_sucursal"];
-		//print_r($data);
+		// print_r($data);
 		$this->load->view('formatos/formato_presupuesto',$data);
-	}
-	public function ver_verificacionPdF($datos= 0){
-		$data["id"] = $datos;
-		$data = $this->buscador_model->datos_verificacion($data);
-		$data['datos_cliente'] = $data['usuario'];
-		$data["datos_suc"] = $data["datos_sucursal"];
-		$data['movID'] = $data["usuario"];
-		$data['cve_articulo'] = $data["detalle"];
-		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
-		//print_r($data['id_orden']);
-		$data["datos_tecnico"]["tecnico"] = $tecnico;
-		$data["datos_tecnico"]["actualizado"] =date('Y-m-d');
-		$data["datos_tecnico"]["correo_tecnico"] = $tecnico;
-		$data['datos_tecnico'] = $data['userTecnico'];
-		$data['datos_refacciones'] = $data['user'];
-		//print_r($data);
-		$this->load->view('formatos/formato_verificacion_refacciones',$data);
 	}
 	public function email_presupuesto($datos= 0){
 		$data["id"] = $datos;
@@ -1867,30 +1532,6 @@ class Servicio extends CI_Controller {
 		$data['id_orden'] = $data["usuario"]["id_orden"];
 		if($data['usuario']['vista_email'] == 0)
 			$this->load->view('formatos/formato_presupuesto_mail',$data);
-		else show_404();
-	}
-	public function email_verificacion($datos= 0){
-		$data["id"] = $datos;
-		$logged_in =  $this->session->userdata("logged_in");
-		$perfil    =  $logged_in["perfil"];
-		$data = $this->buscador_model->datos_verificacion($data);
-		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
-		$data['comentario_existencia'] = $this->input->get('Comentario');
-		$data['datos_tecnico'] = $data['userTecnico'];
-		$data['datos_refacciones'] = $data['user'];
-		$data['id_presupuesto'] = $datos;
-		$data['cve_articulo'] = $data["detalle"];
-		//$correo_refacciones = $datos["datos_sucursal"]["email_refacciones"];
-		$data["datos_suc"] = $data["datos_sucursal"];
-		$data['id_presupuesto'] = $datos;
-		//$data['vin'] = $data["user"]["vin"];
-		$data['id_orden'] = $data["usuario"]["id_orden"];
-		$logged_in =  $this->session->userdata("logged_in");
-		$data['perfil'] = $logged_in["perfil"];
-		if($data['usuario']['vista_email'] == 0)
-			$this->load->view('formatos/formato_verificacion_mail',$data);
-		else if($data['usuario']['vista_email'] == 1)
-			$this->load->view('formatos/formato_verificacion_mail',$data);
 		else show_404();
 	}
 	public function autorizar_presupuesto($estatus = null,  $id_presupuesto = null){
@@ -1913,29 +1554,6 @@ class Servicio extends CI_Controller {
 		$presupuesto = $this->buscador_model->Autorizar_todo($datos);
 		echo json_encode($presupuesto);
 	}
-	public function autorizar_verificacion($estatus = null,  $id_presupuesto = null){
-		$data = $this->buscador_model->autorizar_verificacion($estatus, $id_presupuesto);
-		echo json_encode($data);
-	}
-	public function EditarVerificacion(){
-		$logged_in =  $this->session->userdata("logged_in");
-		$datos = $this->input->post();
-		$datos['id_tecnico'] = $logged_in['id'];
-		// print_r($datos);die();
-		$presupuesto = $this->buscador_model->EditarVerificacion($datos);
-		$perfil    =  $logged_in["perfil"];
-		echo json_encode($presupuesto);
-	}
-	public function verificar_articulo(){
-		$datos = $this->input->post();
-		$presupuesto = $this->buscador_model->verificar_articulo($datos);
-		echo json_encode($presupuesto);
-	}
-	/*public function verificar_todo(){
-		$datos = $this->input->post();
-		$presupuesto = $this->buscador_model->verificar_todo($datos);
-		echo json_encode($presupuesto);
-	}*/
 	public function presupuesto_mail_cte(){
 		$datos = $this->input->post();
 		$presupuesto = $this->buscador_model->presupuesto_mail_cte($datos);
@@ -1946,132 +1564,7 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($presupuesto);
 	}
-	public function verificacion_mail_refacciones(){
-		$datos = $this->input->post();
-		$presupuesto = $this->buscador_model->verificacion_mail_refacciones($datos);
-		$logged_in =  $this->session->userdata("logged_in");
-		$perfil    =  $logged_in["perfil"];
-		if($presupuesto["estatus"])
-		{
-			$datos_verificacion["id"] = $datos["id_presupuesto"];
-			$datos_verificacion["perfil"] = $perfil;
-			$this->notificar_verificacionRefacciones($datos_verificacion);
-		}
-		echo json_encode($presupuesto);
-	}
 
-	public function enviar_notificacion_tecnico(){
-		$datos = $this->input->post();
-		$logged_in =  $this->session->userdata("logged_in");
-		$perfil    =  $logged_in["perfil"];
-		$presupuesto = [
-			'estatus' => false,
-			'mensaje' => 'No fue posible enviar el correo.'
-		];
-		if ($perfil == 6){
-			$datos_verificacion["id"] = $datos["id"];
-			$datos_verificacion["perfil"] = $perfil;
-			$presupuesto['estauts'] = $this->notificar_verificacionRefacciones($datos_verificacion);
-			$presupuesto['mensaje'] = $presupuesto['estauts'] ? 'Notificación enviada correctamente.' : 'Ocurrió un error al enviar la notificación.';
-		} else {
-			$presupuesto = [
-				'estatus' => false,
-				'mensaje' => 'Solo refacciones puede enviar la notificación al técnico.'
-			];
-		}
-		echo json_encode($presupuesto);
-	}
-
-	public function notificar_verificacionRefacciones($datos)
-	{
-		ini_set('memory_limit', '1024M');
-		//$datos = $this->buscador_model->datos_verificacion($datos);
-		$data = $this->buscador_model->datos_verificacion($datos);
-		$data['MovID'] = isset($data['usuario']['movID']) && isset($data['usuario']['movID']['MovID']) ? $data['usuario']['movID']['MovID'] : '';
-		$refacciones = $data['user']['nombre']." ".$data['user']['apellidos'];
-		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
-		$data['comentario_existencia'] = $this->input->post('comentario_existencia');
-		//print_r($data);die();
-		#$refacciones = $data['user']['refacciones'];
-		#$tecnico = $data['userTecnico']['tecnico'];
-		$correo_refacciones = $data["datos_sucursal"]["email_refacciones"];
-		#$num_cita = $data['user']['num_cita'];
-		#$vin = $data['user']['vin'];
-		$vin = "";
-		$num_cita = "";
-		$correo_tecnico = "";
-		if($datos["perfil"] == 6){ //notificar a tecnico de la verificación de refacciones
-			$comentario_email = "Buen día Técnico, este mensaje es para informarle que se ha revisado verificación de refacciones de la orden {$data['MovID']}<br> Ya puede ver las refacciones existentes en el sistema.<br><a href='".base_url("index.php/Servicio/email_verificacion/{$datos['id']}?Comentario={$data['comentario_existencia']}")." ' target='_blank'>REVISAR VERIFICACIÓN</a><br>Sin más por el momento, quedo a sus ordenes, saludos.";
-			$correo_tecnico = $data['userTecnico']['correo_tecnico'];
-		}else{
-			$correo_tecnico = "";
-			$comentario_email = "";
-		}
-        
-        // enviar correo       
-       	$this->load->library("PhpMailerLib");
-		$mail = $this->phpmailerlib->load();
-			try {
-			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
-			    // $mail->isSMTP();// Set mailer to use SMTP
-			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    // $mail->SMTPAuth = true;// Enable SMTP authentication
-			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    // $mail->Password = '9F8a*37x';  // SMTP password
-			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    // $mail->Port = 465;// TCP port to connect to
-
-			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
-			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
-			    
-			    //Recipients
-			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
-			    $mail->addAddress($correo_tecnico);// Name is optional
-				#$mail->addCC("mlopez@intelisis.com");
-			    #$mail->addAddress($correo_refacciones);// Name is optional
-				//$mail->addCC("tpena@intelisis.com");
-			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
-			                              // Set email format to HTML
-			    $mail->CharSet = 'UTF-8';
-			    $mail->Subject = 'Verificación';
-			    $mail->Body      = "<html><body>".$comentario_email."</html></body>";
-
-			    $mail->isHTML(true); 
-				$envia = $mail->send();
-				
-			    $data = array('success' => 1, 'data' => ('Verificación enviada.'));
-			    //$this->eliminar_archivoTemp($formato["ruta"]);
-
-			    if($envia)
-			    {
-			    	$envio = true;
-			    }else 
-			    {
-			    	$envio = false;
-			    	var_dump($mail->ErrorInfo);
-			    }
-			} catch (Exception $e) {
-			    echo 'Message could not be sent.';
-			    echo 'Mailer Error: ' . $mail->ErrorInfo;
-
-			    $envio = false;
-			}
-       
-        return $envio;	
-	}
 	public function notificar_autorizacionCliente($datos_presupuesto = null)
 	{
 		ini_set('memory_limit', '1024M');
@@ -2113,30 +1606,16 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
-			    // $mail->isSMTP();// Set mailer to use SMTP
-			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    // $mail->SMTPAuth = true;// Enable SMTP authentication
-			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    // $mail->Password = '9F8a*37x';  // SMTP password
-			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    // $mail->Port = 465;// TCP port to connect to
-
-				//Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
-				$mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
-
+			    $mail->isSMTP();// Set mailer to use SMTP
+			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = true;// Enable SMTP authentication
+			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    $mail->Password = '9F8a*37x';  // SMTP password
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = 465;// TCP port to connect to
+			    
 			    //Recipients
-			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
 			    //$mail->addAddress("fsanjuan@intelisis.com");// Name is optional
 			    $mail->addAddress($correo_asesor);// Name is optional
 			    $mail->addCC($correo_refacciones);
@@ -2193,30 +1672,16 @@ class Servicio extends CI_Controller {
 			    //Server settings
 			    // $mail->SMTPDebug = 2;// Enable verbose debug output
 			    //$mail->ErrorInfo;
-			    // $mail->isSMTP();// Set mailer to use SMTP
-			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    // $mail->SMTPAuth = true;// Enable SMTP authentication
-			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    // $mail->Password = '9F8a*37x';  // SMTP password
-			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    // $mail->Port = 465;// TCP port to connect to
-
-			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
 			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
+			    $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+			    $mail->SMTPAuth = true;// Enable SMTP authentication
+			    $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
+			    $mail->Password = '9F8a*37x';  // SMTP password
+			    $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
+			    $mail->Port = 465;// TCP port to connect to
 			    
 			    //Recipients
-			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
+			    $mail->SetFrom('fameserviceexcellence@gmail.com', 'Service Excellence');  	//Quien envía el correo
 			    $mail->addAddress($correo_asesor);// Name is optional
 			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
 			                              // Set email format to HTML
@@ -2230,99 +1695,6 @@ class Servicio extends CI_Controller {
 			    //$this->eliminar_archivoTemp($formato["ruta"]);
 
 			    if($enviar)
-			    {
-			    	$envio = true;
-			    }else 
-			    {
-			    	$envio = false;
-			    	var_dump($mail->ErrorInfo);
-			    }
-			} catch (Exception $e) {
-			    echo 'Message could not be sent.';
-			    echo 'Mailer Error: ' . $mail->ErrorInfo;
-
-			    $envio = false;
-			}
-       
-        return $envio;	
-	}
-	public function notificar_refacciones($info) //PENDIENTE DE VERIFICAR SU USABILIDAD
-	{
-		ini_set('memory_limit', '1024M');
-
-		$data = $this->buscador_model->datos_verificacion($info);
-		$refacciones = $data['user']['nombre']." ".$data['user']['apellidos'];
-		$tecnico = $data['userTecnico']['nombre']." ".$data['userTecnico']['apellidos']." ".$data['userTecnico']['actualizado']." ";
-		// print_r($data);die();
-		$refacciones = $data['user']['refacciones'];
-		$tecnico = $data['userTecnico']['tecnico'];
-		$correo_refacciones = $datos["datos_sucursal"]["email_refacciones"];
-		#$num_cita = $data['user']['num_cita'];
-		#$vin = $data['user']['vin'];
-		$vin = "";
-		$num_cita = "";
-		if($info["perfil"] == 6){ //notificar a tecnico de la verificación de refacciones
-			$comentario_email = "Buen día ".$tecnico.", este mensaje es para informarle que se ha revisado verificación de refacciones: ".$tecnico.".</b><br> Ya puede verificarlo en el sistema. <br>Saludos.";
-			$correo_refacciones = $data['user']['correo_refacciones'];
-		}else{
-			$correo_tecnico = "";
-			$comentario_email = "";
-		}
-		if($info["perfil"] == 5){ //notificar a refacciones de la verificación de refacciones
-			$comentario_email = "Buen día ".$refacciones.", este mensaje es para informarle que se ha generado una nueva verificación de refacciones: ".$refacciones.".</b><br> Favor de verificarlo en el sistema a la brevedad. <br>Saludos.";
-			$correo_tecnico = $data['userTecnico']['correo_tecnico'];
-		}else{
-			$correo_refacciones = "";
-			$comentario_email = "";
-		}
-        
-        // enviar correo       
-       	$this->load->library("PhpMailerLib");
-		$mail = $this->phpmailerlib->load();
-			try {
-			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
-			    // $mail->isSMTP();// Set mailer to use SMTP
-			    // $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-			    // $mail->SMTPAuth = true;// Enable SMTP authentication
-			    // $mail->Username = 'fameserviceexcellence@gmail.com'; // SMTP username
-			    // $mail->Password = '9F8a*37x';  // SMTP password
-			    // $mail->SMTPSecure = 'ssl';   // Enable TLS encryption, `ssl` also accepted
-			    // $mail->Port = 465;// TCP port to connect to
-
-			    //Server settings
-			    // $mail->SMTPDebug = 2;// Enable verbose debug output
-			    //$mail->ErrorInfo;
-			    $mail->isSMTP();// Set mailer to use SMTP
-			    $mail->Host = $this->mail_host;// Specify main and backup SMTP servers
-			    $mail->SMTPAuth = $this->mail_smtpAuth;// Enable SMTP authentication
-			    $mail->Username = $this->mail_username; // SMTP username
-			    $mail->Password = $this->mail_password;  // SMTP password
-			    $mail->SMTPSecure = $this->mail_smtpSecure;   // Enable TLS encryption, `ssl` also accepted
-			    $mail->Port = $this->mail_port;// TCP port to connect to
-				
-				//se agrega a variable para se utilizado el nombre de correo del remitente config en bd
-				$mail_username_env = $this->mail_username;
-			    
-			    //Recipients
-			    $mail->SetFrom($mail_username_env, 'Service Excellence');  	//Quien envía el correo
-			    //$mail->addAddress($correo_tenico);// Name is optional
-				//$mail->addCC("mlopez@intelisis.com");
-			    $mail->addAddress($correo_refacciones);// Name is optional
-				//$mail->addCC("tpena@intelisis.com");
-			    //$mail->addBCC('fsanjuan@intelisis.com');	//Con copia oculta
-			                              // Set email format to HTML
-			    $mail->CharSet = 'UTF-8';
-			    $mail->Subject = 'Verificación';
-			    $mail->Body      = "<html><body><p>".$comentario_email."</p></html></body>";
-			    $mail->isHTML(true); 
-				$envia = $mail->send();
-				
-			    $data = array('success' => 1, 'data' => ('Verificación enviada.'));
-			    //$this->eliminar_archivoTemp($formato["ruta"]);
-
-			    if($envia)
 			    {
 			    	$envio = true;
 			    }else 
@@ -2353,8 +1725,6 @@ class Servicio extends CI_Controller {
 
 	public function generar_formatoInventario($bandera = 0, $id_orden = null)
 	{
-		$orden = $this->db->select('movimiento')->from('orden_servicio')->where(['id' => $id_orden])->get()->row_array();
-		$id_orden = isset($orden['movimiento']) ? $orden['movimiento'] : $id_orden;
 		$datos = $this->buscador_model->obtener_datosFormato_inventario($id_orden);
 		$datos["orden"]["bandera"] = $bandera;
 		
@@ -2374,1490 +1744,5 @@ class Servicio extends CI_Controller {
 		// var_dump($datos);
 		// die();
 		$this->load->view("formatos/formato_ProfecoTalisman", $datos);
-	}
-
-	public function guardar_formatoOasis($id_orden = null)
-	{
-		ini_set('memory_limit', '1024M');
-		ini_set('max_execution_time', 900); //300 seconds = 5 minutes
-		$formato_oasis = $this->input->post("oasis");
-		$id_orden = $this->input->post("id_orden");
-		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
-		$ruta_temp = "";
-		$oasis = $this->buscador_model->cargar_oasis($ruta_temp, $formato_oasis, $id_orden);
-		echo json_encode($oasis);
-	}
-	public function guardar_voc()
-	{
-		ini_set('memory_limit', '1024M');
-		ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-		$datos = $this->input->post();
-		$response = $this->buscador_model->guardar_voc($datos);
-		echo json_encode($response);
-	}
-	public function get_archivos_orden_servicio($id_orden = null)
-	{
-		$oasis  = [];
-		$audios = [];
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['archivos'] = [];
-		}else{
-			$ids[] = $id_orden;
-			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
-			if ($orden['movimiento']) {
-				$ids[] = $orden['movimiento'];
-			}
-			$archivos = $this->buscador_model->get_archivos_orden_servicio($ids, [7,8]);
-			$array    = [];
-			foreach ($archivos as $key => $value) {
-				$path = base_url().$value['ruta_archivo'];
-				if (file_exists($value['ruta_archivo'])) {
-					$array[] = [
-						'ruta'   => $path,
-						'tipo'   => $value['tipo'],
-						'nombre' => pathinfo($path)['filename'],
-						'id'     => $value['id']
-					];
-				}
-			}
-			/*if (isset($orden['movimiento'])) {
-				$oasis  = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 7);
-				$audios = $this->buscador_model->get_archivos_orden_servicio($orden['movimiento'], 8);
-			}
-
-			$oasis  = array_merge($oasis, $this->buscador_model->get_archivos_orden_servicio($id_orden, 7));
-			$audios = array_merge($audios, $this->buscador_model->get_archivos_orden_servicio($id_orden, 8));
-			$array  = [];
-			foreach ($oasis as $key => $value) {
-				$path = base_url().$value['ruta_archivo'];
-				if (file_exists($value['ruta_archivo'])) {
-					$array[] = [
-						'ruta'   => $path,
-						'tipo'   => $value['tipo'],
-						'nombre' => pathinfo($path)['filename'],
-						'id'     => $value['id']
-					];
-				}
-			}
-			foreach ($audios as $key => $value) {
-				$path = base_url().$value['ruta_archivo'];
-				if (file_exists($value['ruta_archivo'])) {
-					$array[] = [
-						'ruta'   => $path,
-						'tipo'   => $value['tipo'],
-						'nombre' => pathinfo($path)['filename'],
-						'id'     => $value['id']
-					];
-				}
-			}*/
-			$response['archivos'] = $array;
-			$response['estatus'] = true;
-		}
-		echo json_encode($response);
-	}
-	public function guardar_documentacion()
-	{
-		ini_set('memory_limit', '1024M');
-		ini_set('max_execution_time', 900); //300 seconds = 5 minutes;
-		$tipo = $this->input->post("tipo");
-		$id_orden = $this->input->post("id_orden_servicio");
-		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
-		$ruta_temp = "";
-		$response = $this->buscador_model->cargar_documentacion($ruta_temp, $tipo, $id_orden);
-		echo json_encode($response);
-	}
-	public function abrir_pregarantia()
-	{
-		$id_orden_servicio = $this->input->post('id_orden_servicio');
-		$response = $this->buscador_model->abrir_pregarantia($id_orden_servicio);
-		echo json_encode($response);
-	}
-	public function obtener_datos_quejas($id_orden = null)
-	{
-		$response = [];
-		if ($id_orden == null) {
-			$response = [
-				'estatus' => false,
-				'mensaje' => 'Orden de servicio no válida.'
-			];
-		}else {
-			$response['data']    = $this->buscador_model->obtener_datos_quejas($id_orden);
-			$response['estatus'] = sizeof($response['data']) > 0 ? true : false;
-			$response['mensaje'] = sizeof($response['data']) > 0 ? 'Quejas encontradas para la orden de servicio.' : 'La orden de servicio no tiene ninguna queja vinculada.';
-		}
-		echo json_encode($response);
-	}
-	public function eliminar_archivo_documentacion($id_archivo = null)
-	{
-		if ($id_archivo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Archivo no válido.';
-		}else {
-			$response = $this->buscador_model->eliminar_archivo_documentacion($id_archivo);
-		}
-		echo json_encode($response);
-	}
-	public function autorizar_pregarantia()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->autorizar_pregarantia($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmasPregarantia($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response = $this->buscador_model->obtenerFirmasPregarantia($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function cancelar_firma_pregarantia()
-		{
-			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-			if ($id_orden == null) {
-				$response['estatus'] = false;
-				$response['mensaje'] = 'no existe autorizacion';
-			}else {
-				$response = $this->buscador_model->cancelar_firma_pregarantia($id_orden);
-			}
-			echo json_encode($response);
-		}
-	public function autorizar_adicional()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->autorizar_adicional($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmaAdd($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmaAdd($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function cancelar_firma_adicional()
-		{
-			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-			if ($id_orden == null) {
-				$response['estatus'] = false;
-				$response['mensaje'] = 'no existe autorizacion';
-			}else {
-				$response = $this->buscador_model->cancelar_firma_adicional($id_orden);
-			}
-			echo json_encode($response);
-		}
-	public function autorizar_cp()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->autorizar_cp($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmaCP($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmaCP($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function cancelar_firma_cp()
-		{
-			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-			if ($id_orden == null) {
-				$response['estatus'] = false;
-				$response['mensaje'] = 'no existe autorizacion';
-			}else {
-				$response = $this->buscador_model->cancelar_firma_cp($id_orden);
-			}
-			echo json_encode($response);
-		}
-	public function obtener_firmas($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response = $this->buscador_model->obtener_firmas($id_orden);
-		}
-		echo json_encode($response);
-	}
-	/*public function verificar_cp($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Orden no válida.";
-		} else {
-			$response = $this->buscador_model->verificar_cp($id_orden);
-		}
-		echo json_encode($response);
-	}*/
-	public function obtener_datos_cp($id_orden_servicio = null, $id_orden_intelisis = null, $vin = null){
-		if ($id_orden_servicio == null || $id_orden_intelisis == null || $vin == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Orden no válida.";
-		} else {
-			$response = $this->buscador_model->obtener_datos_cp($id_orden_servicio, $id_orden_intelisis, $vin);
-		}
-		echo json_encode($response);
-	}
-	public function autorizar_refacc()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->autorizar_refacc($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmaRefacc($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmaRefacc($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function cancelar_firma_refacc()
-		{
-			$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-			if ($id_orden == null) {
-				$response['estatus'] = false;
-				$response['mensaje'] = 'no existe autorizacion';
-			}else {
-				$response = $this->buscador_model->cancelar_firma_refacc($id_orden);
-			}
-			echo json_encode($response);
-		}
-	public function recibo_refacc()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') != '' ? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->recibo_refacc($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmaTecnico($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmaTecnico($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function cancelar_firma_tecnico()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'no existe autorizacion';
-		}else {
-			$response = $this->buscador_model->cancelar_firma_tecnico($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_pdf_api($token = null)
-	{
-		$datos = $this->input->post();
-		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
-		if ($token == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Token no válido.";
-		} else {
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
-			}
-		}
-		echo json_encode($response);
-	}
-
-	public function generar_formato_causa_raiz_componente($token = null, $id_orden = null)
-	{
-		#$id_orden = 34762;  orden de prueba
-		$data = [];
-    	$data = $this->buscador_model->obtener_datos_quejas($id_orden);
-    	$datos = $this->input->post();
-    	$datos["quejas"] = $data;
-		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
-		if ($token == null || $id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Orden no válida.";
-		} else if(sizeof($data) > 0) {
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($id_orden, $response["data"]["ruta_rel"]);
-			}
-		}else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'La orden no tiene registros de cuasa raíz componente.';
-		}
-    	/*$html = $this->load->view('formatos/causa_raiz_componente', $data, TRUE);
-		$dompdf = new DOMPDF();
-		$dompdf->setBasePath(realpath("{$this->ruta_formts}/assets"));
-    	$dompdf->load_html($html);
-    	$dompdf->render();
-    	//$dompdf->stream();
-    	$output = $dompdf->output();
-    	$pdf = fopen("{$this->ruta_formts}prueba.pdf", 'w');
-		fwrite($pdf, $output);
-		fclose($pdf);
-    	if (file_exists("{$this->ruta_formts}prueba.pdf")) {
-    		$response = ['value' => 'si'];
-    	} else {
-    		$response = ['value' => 'no'];
-    	}*/
-    	#$dompdf->folder($this->ruta_formts);
-    	#$dompdf->create('save');
-    	echo json_encode($response);
-	}
-	public function obtener_union_pdf($token = null, $idOrden = null)
-	{
-		$data     = [];
-		$archivos = [];
-		$datos    = $this->input->post();
-		if ($idOrden == null || $token == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'no existe autorizacion';
-		}else {
-			$ids[] = $idOrden;
-			$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
-			if ($orden['movimiento']) {
-				$ids[] = $orden['movimiento'];
-			}
-			foreach ($datos['formatos'] as $key => $formato) {
-				$data         = $datos;
-				$data['url']  = $formato['url'];
-				$data['name'] = $formato['name'];
-				if ($data['name'] == 'CRC') {
-					$data['id_orden'] = isset($orden['movimiento']) ? $orden['movimiento'] : $idOrden;
-					$data['quejas'] = $this->buscador_model->obtener_datos_quejas($data['id_orden']);
-				}elseif (isset($orden['movimiento']) && $data['name'] == 'F1863') {
-					$data['id_orden'] = $idOrden;
-					$f1863            = $this->buscador_model->obtener_datos_f1863($data['id_orden']);
-					$data             = array_merge($data, $f1863);
-				}
-				$archivo = $this->buscador_model->obtener_pdf_api($token, $data);
-				if ($archivo["estatus"]) {
-					$this->buscador_model->guardar_formato($data['id_orden'], $archivo["data"]["ruta_rel"]);
-				}
-			}
-			$archivos = $this->buscador_model->get_archivos_f1863($ids, [7]);
-			$datos["archivos"] = $archivos;
-			#$orden = $this->db->select('movimiento')->from('orden_servicio')->where('id', $idOrden)->get()->row_array();
-			/*if (isset($orden['movimiento'])) {
-				$archivos = array_merge($archivos ,$this->buscador_model->get_archivos_f1863($orden['movimiento'], 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
-			}
-			$archivos = array_merge($archivos,$this->buscador_model->get_archivos_f1863($idOrden, 7, "AND archivo.ruta_archivo NOT LIKE '%F1863-%'"));
-			$datos["archivos"] = $archivos;*/
-			$response = $this->buscador_model->obtener_union_pdf($token, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function guardar_requisiciones($idOrden = null)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos de requisiciones faltantes.';
-		}else {
-			$response = $this->buscador_model->guardar_requisiciones($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function guardar_diagnostico($idOrden)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos del diagnóstico faltantes.';
-		}else { 
-			$response = $this->buscador_model->guardar_diagnostico($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_diagnosticos($idOrden = null)
-	{
-		$datos = [];
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_diagnosticos($idOrden);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_detalles_diagnostico($idOrden = null, $idDiagnostico = null)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
-		}
-		echo json_encode($response);
-	}
-	public function editar_diagnostico($idOrden)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		/*echo "<pre>";
-		print_r ($datos);
-		echo "</pre>";
-		die();*/
-		//print_r($datos);die();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif (!isset($datos['id_diagnostico'])) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Diagnóstico no válido.';
-		}elseif(!isset($datos['detalles']) || sizeof($datos['detalles']) <= 0) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos del diagnóstico faltantes.';
-		}else {
-			$response = $this->buscador_model->editar_diagnostico($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function ver_diagnosticoPdf($datos = 0){
-		$data["id"] = $datos;
-		$data = $this->buscador_model->detalles_formato_diagnostico($data);
-		$data["datos_suc"] = $data["datos_sucursal"];
-		$data['movID'] = $data["usuario"];
-		$tecnico = $data['userTecnico']['tecnico']." ";
-		$jefeTaller = $data['userJefe']['jefe_de_taller']." ";
-		$codig = $data['codigo']['num_reparacion']." ".$data['codigo']['luz_de_falla']." ".$data['codigo']['tren_motriz']." ".$data['codigo']['codigos']." ".$data['codigo']['fecha_creacion']." ";
-		$notes = $data['anotaciones']['queja_cliente']." ".$data['anotaciones']['sintomas_falla']." ".$data['anotaciones']['equipo_diagnostico']." ".$data['anotaciones']['comentarios_tecnicos']." ".$data['anotaciones']['publica']." ".$data['anotaciones']['garantia']." ".$data['anotaciones']['adicional']." ".$data['anotaciones']['firma_tecnico']." ".$data['anotaciones']['firma_jefe_taller']." ";
-		//print_r($data['id_orden']);
-		$data["datos_notes"]["notes"] = $notes;
-		$data['datos_notes'] = $data['anotaciones'];
-		$data["datos_code"]["codig"] = $codig;
-		$data['datos_code'] = $data['codigo'];
-		$data["datos_tecnico"]["tecnico"] = $tecnico;
-		$data['datos_tecnico'] = $data['userTecnico'];
-		$data["datos_jefe"]["jefeTaller"] = $jefeTaller;
-		$data['datos_jefe'] = $data['userJefe'];
-		//print_r($data);
-		$this->load->view("formatos/formato_diagnostico_tecnico",$data);
-		
-	}
-	public function firmar_diagnostico($idDiagnostico = null){
-		if ($idDiagnostico == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Firma no valida.';
-		}else {
-			$response = $this->buscador_model->autorizar_diagnostico($idDiagnostico);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmaDiagnostico($idDiagnostico = null)
-	{
-		if ($idDiagnostico == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "no existen firmas.";
-		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmaDiagnostico($idDiagnostico);
-		}
-		echo json_encode($response);
-	}
-	/*public function cancela_diagnostico()
-	{
-		$idDiagnostico = $this->input->post('id_diagnostico') !=''? $this->input->post('id_diagnostico') : null;
-		if ($idDiagnostico == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'no existe autorizacion';
-		}else {
-			$response = $this->buscador_model->cancela_diagnostico($idDiagnostico);
-		}
-		echo json_encode($response);
-	}*/
-	public function generar_formato_inventario($token = null, $id_orden = null)
-	{
-		#$id_orden = 34762;  orden de prueba
-		$data = [];
-		$datos = $this->input->post();
-		if ($token == null || $id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Orden no válida.";
-		} else {
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($id_orden, $response["data"]["ruta_rel"]);
-			}
-		}
-	}
-	public function obtener_requisiciones($idOrden = null, $requisicion = null)
-	{
-		$datos = [];
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_requisiciones($idOrden, $requisicion);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_detalles_requisicion($idReq = null)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idReq == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_detalles_requisicion($idReq);
-		}
-		echo json_encode($response);
-	}
-	public function convertir_cotizacion($idPresupuesto = null)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idPresupuesto == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Presupuesto no válido.';
-		}else {
-			$response = $this->buscador_model->convertir_cotizacion($idPresupuesto);
-		}
-		echo json_encode($response);
-	}
-	public function editar_requisicion(){
-		$datos = $this->input->post();
-		/*echo "<pre>";
-		print_r ($datos);
-		echo "</pre>";
-		die();*/
-		// print_r($datos);die();
-		$presupuesto = $this->buscador_model->editar_requisicion($datos);
-		echo json_encode($presupuesto);
-	}
-	public function generar_formato_requisicion($token = null, $id = null)
-	{
-		$this->db2 = $this->load->database('other',true); 
-		$data = [];
-		$datos = $this->input->post();
-		if ($token == null || $id == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Requisición no válida.";
-		} else {
-			$requisicion = $this->buscador_model->obtener_detalles_requisicion($id);
-			if ($requisicion['estatus']) {
-				$datos = array_merge($datos, $requisicion);
-				$datos['vin'] = $requisicion['vin'];
-				$datos['id_orden'] = $requisicion['id_orden'];
-				$datos['firmaTec'] = $requisicion['firmaTec'];
-				$datos['firmaRef'] = "";
-				$orden = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where(['id' => $requisicion['id_orden']])->get()->row_array();
-				$movID = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
-				$datos['requisicion']['n1863'] = isset($movID['MovID']) ? $movID['MovID'] : '';
-				$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-				if ($response["estatus"]) {
-					$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
-				}
-			}else {
-				$response = $requisicion;
-			}
-		}
-		echo json_encode($response);
-	}
-	public function garantia_anverso($idOrden = null, $idDiagnostico = null){
-		$perfil = $this->session->userdata["logged_in"]["perfil"];
-		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'id_orden' => $idOrden, 'terminado' => 0])->count_all_results();
-		if ($idOrden == null || $idDiagnostico == null || $existe == 0 && $perfil != 7) {
-			$response['estatus'] = false;
-			$response['heading'] = 'Anverso no válido.';
-			$response['message'] = 'No se encontró ningún anverso pendiente con la información proporcionada.';
-			$this->load->view("errors/html/error_404", $response);
-			return;
-		}
-		$this->db2 = $this->load->database('other',true); 
-		$datos = $perfil == 7 ? $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idDiagnostico) : $this->buscador_model->obtener_detalles_diagnostico($idOrden, $idDiagnostico);
-		$orden = $this->db->select("id_orden_intelisis, torrenumero")->from("orden_servicio")->where(["id"=>$idOrden])->get()->row_array();						  
-		$Mov = $this->db2->select('MovID, ServicioNumero,ServicioSerie AS vin')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
-		$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
-		$datos['total_anversos'] = $this->db->select('*')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'terminado' => 1])->count_all_results();
-		$datos['total_manos'] =  $this->buscador_model->obtener_manos_obra_orden($idOrden)['total_manos'];
-		$datos['id_orden']= $idOrden;
-		$datos['id_orden']= $idOrden;
-		$datos['Mov'] = $Mov;
-		$datos['movID'] = $movID;
-		/*echo "<pre>";
-		print_r ($datos);
-		echo "</pre>";*/
-		if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
-			$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
-			$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
-			$json_inicio = json_encode($datos['tiempo_inicio']);
-			$json_inicio = str_replace('\n', '', $json_inicio);
-			$json_inicio = str_replace('\r', '', $json_inicio);
-			$json_inicio = str_replace('\t', '', $json_inicio);
-			$json_fin = json_encode($datos['tiempo_fin']);
-			$json_fin = str_replace('\n', '', $json_fin);
-			$json_fin = str_replace('\r', '', $json_fin);
-			$json_fin = str_replace('\t', '', $json_fin);
-			$datos['json_inicio'] = $json_inicio;
-			$datos['json_fin'] = $json_fin;
-		} else{
-			$datos['tiempo_inicio'] = [];
-			$datos['tiempo_fin'] = [];
-			$datos['json_inicio'] = "[]";
-			$datos['json_fin'] = "[]";
-		}
-		$datos['id_perfil'] = $perfil;
-		/*echo "<pre>"; print_r($datos);
-		echo "</pre>";*/
-		$this->load->view("anverso", $datos);
-	}
-	public function obtener_datos_f1863($idOrden = null){
-		$datos = $this->buscador_model->obtener_datos_f1863($idOrden);
-		echo json_encode($datos);
-	}
-	public function generar_formato_f1863($token = null,$idOrden = null){
-		if ($token == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Token no válido.';
-		} elseif ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válaida.';
-		}else{
-			$datos    = $this->input->post();
-			$f1863    = $this->buscador_model->obtener_datos_f1863($idOrden);
-			$datos    = array_merge($datos, $f1863);
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($idOrden, $response["data"]["ruta_rel"]);
-			}
-		}
-		echo json_encode($response);
-	}
-
-	public function guardar_linea($idOrden = null)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif(!isset($datos) || sizeof($datos) <= 0) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos de lineas de reparación faltantes.';
-		}else {
-			$response = $this->buscador_model->guardar_linea($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-
-	public function editar_linea($idOrden = null)
-	{
-		$datos = [];
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif (!isset($datos['id'])) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Carga de líneas no válido.';
-		}elseif(!isset($datos) || sizeof($datos) <= 0) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos de la línea de reparación faltantes.';
-		}else {
-			$response = $this->buscador_model->editar_linea($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-
-	public function obtener_lineas($idOrden)
-	{
-		$datos = [];
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_lineas($idOrden);
-		}
-		echo json_encode($response);
-	}
-
-	public function firmar_lineas($id_orden)
-	{
-		$id_orden = $this->input->post('id_orden') != '' ? $this->input->post('id_orden') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->firmar_lineas($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function obtenerFirmaAdmon($id_orden = null)
-	{
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "orden no válida.";
-		}else {
-			$response['estatus'] = true;
-			$response['data'] = $this->buscador_model->obtenerFirmaAdmon($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function cancelar_firma_Admon()
-	{
-		$id_orden = $this->input->post('id_orden_servicio') !=''? $this->input->post('id_orden_servicio') : null;
-		if ($id_orden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'no existe autorizacion';
-		}else {
-			$response = $this->buscador_model->cancelar_firma_Admon($id_orden);
-		}
-		echo json_encode($response);
-	}
-	public function autorizar_requisicion($idOrden = null, $idRequisicion = null)
-	{
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}
-		elseif ($idRequisicion == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Requisición no válida.';
-		}else {
-			$response = $this->buscador_model->autorizar_requisicion($idOrden, $idRequisicion, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function entrega_requisicion($idOrden = null, $idRequisicion = null)
-	{
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}
-		elseif ($idRequisicion == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Requisición no válida.';
-		}else {
-			$response = $this->buscador_model->entrega_requisicion($idOrden, $idRequisicion, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function save_docs_anexo_mov($idOrden = null)
-	{
-		$formato = $this->input->post('name') ? $this->input->post('name'): null;
-		$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		} elseif ($formato == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Archivo no valido.';
-		}else {
-			$nomArchivo = $formato;
-			//$rutaArchivo = realpath(RUTA_FORMATS.$orden['vin']."/".$idOrden."/".$nomArchivo); // ruta para produccion
-			$rutaArchivo = '\\\\10.251.0.10\\www\\Demos\\Ford\\garantias\\Recepcion\\assets\\uploads\\'.$orden['vin']."\\".$idOrden."\\".$nomArchivo; // ruta para pruebas
-			$response = $this->buscador_model->save_docs_anexo_mov($idOrden, $nomArchivo, $rutaArchivo);
-		}
-
-		echo json_encode($response);
-	}
-	public function firmar_anverso($idOrden)
-	{
-		$idOrden = $this->input->post('id_orden') != '' ? $this->input->post('id_orden') : null;
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->firmar_anverso($idOrden);
-		}
-		echo json_encode($response);
-	}
-	function guardar_mano_obra($idOrden = null)
-	{
-		$logged_in = $this->session->userdata("logged_in");
-		$formulario = $this->input->post();
-		$elementos = (isset($formulario["elementos"])) ? json_decode($formulario["elementos"], true) : [];
-		if($idOrden == null){
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif(sizeof($elementos) > 0) {
-			$response = $this->buscador_model->guardar_mo_lineas($idOrden,$formulario, $elementos);//guarda datos en bd del proyecto
-			#$articulos_mo = json_decode($this->input->post('artmo'));
-			#
-			if($response['estatus']){
-				//recopilando los post
-				$datar['Importe'] = $this->input->post('totales');
-				$datar['Impuestos'] = '';
-				$datar['Total'] = $this->input->post('totales');
-				$datar['iva'] = $this->input->post('ivaTotal');
-				//mano de obras y datos
-				$response=array_merge($response, $this->buscador_model->guardar_mo_lineas_intelisis($idOrden,$datar, $elementos));
-			}
-		}else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'No hay líneas para guardar.';
-		}
-		echo json_encode($response);
-	}
-
-	public function obtener_mecanicos()
-	{
-		$response = $this->buscador_model->obtener_mecanicos();
-		echo json_encode($response);
-	}
-	public function obtener_iva($idOrden)
-	{
-		$response = $this->buscador_model->validar_estatus_orden_mano($idOrden);
-		if ($response['estatus'] == true) {
-			$response = $this->buscador_model->obtener_iva($idOrden);
-		}
-		echo json_encode($response);
-	}
-	public function firmar_reciboRefacciones($idOrden = null, $idRequisicion = null)
-	{
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->firmar_reciboRefacciones($idOrden, $idRequisicion, $datos);
-		}
-		echo json_encode($response);
-	}
-	function asignar_tecnico_linea($id = null ) {
-		$datos = $this->input->post();
-		if ($id == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Linea de reparación no válida.';
-		}elseif(sizeof($datos)<= 0){
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos de asignación no válidos';
-		}else {
-			$response = $this->buscador_model->asignar_tecnico_linea($id, $datos);
-		}
-		echo json_encode($response);
-	}
-
-	public function adjuntar_anverso($token,$idOrden = null, $idAnverso = null){
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else if ($idAnverso == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Anverso no válido.';
-		}else {
-			$data = $this->input->post();
-			$this->db2 = $this->load->database('other',true);
-			$datos = $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idAnverso);
-			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
-				$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
-				$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
-				$json_inicio = json_encode($datos['tiempo_inicio']);
-				$json_inicio = str_replace('\n', '', $json_inicio);
-				$json_inicio = str_replace('\r', '', $json_inicio);
-				$json_inicio = str_replace('\t', '', $json_inicio);
-				$json_fin = json_encode($datos['tiempo_fin']);
-				$json_fin = str_replace('\n', '', $json_fin);
-				$json_fin = str_replace('\r', '', $json_fin);
-				$json_fin = str_replace('\t', '', $json_fin);
-				$datos['json_inicio'] = $json_inicio;
-				$datos['json_fin'] = $json_fin;
-				$costo_tiempo = 0;
-				foreach ($datos['tiempo_inicio'] as $key => $inicio) {
-					$aux_fin = new DateTime($inicio['FechafIN'] ? $inicio['FechafIN'] : $inicio['FechaInicio']);
-					$aux_inicio = new DateTime($inicio['FechaInicio']);
-					//$aux = $aux_fin->diff($aux_inicio);
-					$aux = (($aux_fin->format('U.u') - $aux_inicio->format('U.u')) * 1000) / (1000 * 3600);
-					$costo_tiempo += is_nan($aux) ? 0 : $aux;
-					$datos['tiempo_inicio'][$key]['FechaInicio'] = $aux_inicio->format('d/m/Y H:i:s');
-					$datos['tiempo_inicio'][$key]['FechafIN'] = $inicio['FechafIN'] ? $aux_fin->format('d/m/Y H:i:s') : '';
-				}
-				$datos['costo_tiempo'] = number_format($costo_tiempo, 2).' hrs.';
-			} else{
-				$datos['tiempo_inicio'] = [];
-				$datos['tiempo_fin'] = [];
-				$datos['json_inicio'] = "[]";
-				$datos['json_fin'] = "[]";
-				$datos['costo_tiempo'] = '0 hrs.';
-			}
-			$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
-			$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
-			$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
-			$datos = array_merge($datos, $orden);
-			$datos = array_merge($datos, $this->input->post());
-			$datos['id_orden']= $idOrden;
-			$datos['Mov'] = $Mov;
-			$datos['movID'] = $movID;
-			$logged_in = $this->session->userdata("logged_in");
-			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
-			// $datos['container'] = $this->load->view("anverso_print", $datos, true);
-			//$token = "";
-			if (!isset($datos['vin'])) {
-				$datos['vin'] = $orden['vin'];
-			}
-			$datos['vin'] = str_replace('.', '', $datos['vin']);
-			$datos['vin'] = str_replace(' ', '', $datos['vin']);
-			$data['data'] = $datos;
-			if (!isset($data['vin'])) {
-				$data['vin'] = $orden['vin'];
-			}
-			$response = $this->buscador_model->obtener_pdf_api($token, $data);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($idOrden, $response["data"]["ruta_rel"]);
-			}
-		}
-		echo json_encode($response);
-	}
-	public function autorizar_linea($idDiagnostico = null)
-	{
-		$datos = $this->input->post();
-		if ($idDiagnostico == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		} else {
-			$response = $this->buscador_model->validar_operacion_curso($datos['idVenta'], $datos);
-			if ($response['estatus'] || $datos['check'] == 'true') {
-				$tecnico = $this->db->select('cve_intelisis')->from('diagnostico_tecnico')->where(['id_diagnostico' => $idDiagnostico, 'cve_intelisis' => $datos['asigna_tecnico']])->count_all_results();
-				$datos['id_diagnostico'] = $idDiagnostico;
-				$response['estatus'] = true;
-				if ($tecnico == 0) {
-					$asignacion = $this->buscador_model->asignar_tecnico_linea($datos['idVenta'], $datos);
-					if ($asignacion['estatus'] != true) {
-						$response = $asignacion;
-					}
-				}
-				if ($response['estatus'] == true) {
-					$response = $this->buscador_model->autorizar_linea($idDiagnostico, $datos['check'], $datos['asigna_tecnico'],$datos);
-				}
-			}
-		}
-		echo json_encode($response);
-	}
-	public function obtener_manos_obra_orden($idOrden)
-	{
-		$datos = [];
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_manos_obra_orden($idOrden);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_historial_anversos($idOrden)
-	{
-		$datos = [];
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_historial_anversos($idOrden);
-		}
-		echo json_encode($response);
-	}
-	public function garantia_anverso_historico($idOrden = null, $idAnverso = null){
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-			$response['heading'] = 'Orden no válida.';
-			$response['message'] = 'Orden no válida.';
-			$this->load->view("errors/html/error_404", $response);
-		}else if ($idAnverso == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Anverso no válido.';
-			$response['heading'] = 'Anverso no válido.';
-			$response['message'] = 'Anverso no válido.';
-			$this->load->view("errors/html/error_404", $response);
-		}else {
-			$this->db2 = $this->load->database('other',true); 
-			$datos = $this->buscador_model->obtener_detalles_diagnostico_pdf($idOrden, $idAnverso);
-			$datos['id_orden']= $idOrden;
-			if (isset($datos['data']['VentaID']) && isset($datos['data']['Renglon']) && isset($datos['data']['RenglonID'])){
-				$datos['tiempo_inicio'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'En Curso'])->get()->result_array();
-				$datos['tiempo_fin'] = $this->db2->select('*')->from('SeguimientoOperaciones')->where(['IdVenta' => $datos['data']['VentaID'], 'Renglon' => $datos['data']['Renglon'], 'RenglonId' => $datos['data']['RenglonID'], 'Estado' => 'Completada'])->get()->result_array();
-				$json_inicio = json_encode($datos['tiempo_inicio']);
-				$json_inicio = str_replace('\n', '', $json_inicio);
-				$json_inicio = str_replace('\r', '', $json_inicio);
-				$json_inicio = str_replace('\t', '', $json_inicio);
-				$json_fin = json_encode($datos['tiempo_fin']);
-				$json_fin = str_replace('\n', '', $json_fin);
-				$json_fin = str_replace('\r', '', $json_fin);
-				$json_fin = str_replace('\t', '', $json_fin);
-				$datos['json_inicio'] = $json_inicio;
-				$datos['json_fin'] = $json_fin;
-			} else{
-				$datos['tiempo_inicio'] = [];
-				$datos['tiempo_fin'] = [];
-				$datos['json_inicio'] = "[]";
-				$datos['json_fin'] = "[]";
-			}
-			$orden = $this->db->select('*')->from('orden_servicio')->where(['id' => $idOrden])->get()->row_array();
-			$datos = array_merge($datos, $orden);
-			$datos = array_merge($datos, $this->input->post());
-			$datos['id_orden']= $idOrden;
-			$Mov = $this->db2->select('MovID, ServicioNumero')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();	
-			$movID = $this->db2->select('OrigenID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
-			$datos['Mov'] = $Mov;
-			$datos['movID'] = $movID;
-			$logged_in = $this->session->userdata("logged_in");
-			$datos['nombre_jefe'] = $logged_in['perfil'] == 4 ? $logged_in['nombre'] : '';
-			$this->load->view("anverso_print", $datos);
-		}
-	}
-	public function obtener_correo($id_presupuesto){
-		$logged_in = $this->session->userdata("logged_in");
-		$perfil    =  $logged_in["perfil"];
-			if ($perfil == 6){
-			$email = $this->db->select('*')->from('verificacion_refacciones')->where(['id_presupuesto' => $id_presupuesto])->get()->row_array();
-			$correo_tecnico = $this->db->select('usuarios.email')->from('usuarios')->where('usuarios.perfil', 5)->get()->row_array();
-			if(!empty($email['id_tecnico'])){
-				$correo_tecnico = $this->db->select('usuarios.email')->from('usuarios')->where('usuarios.id', $email['id_tecnico'])->get()->row_array();
-			}
-			$correo = $correo_tecnico['email'];
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Correo encontrado.';
-			$response['correo'] = $correo;
-			}
-		else{
-			$correo_refacciones = $this->db->select('usuarios.email')->from('usuarios')->where('usuarios.perfil', 6)->get()->row_array();
-			$correo = $correo_refacciones['email'];
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Correo encontrado.';
-			$response['correo'] = $correo;
-		}
-		echo json_encode( $response);
-		
-	}
-	public function generar_anverso($idOrden = null, $idVenta = null)
-	{
-		$renglon = $this->input->post('renglon') !== '' ? $this->input->post('renglon') : null;
-		$renglonId = $this->input->post('renglonId') !== '' ? $this->input->post('renglonId') : null;
-		$renglonSub = $this->input->post('renglonSub') !== '' ? $this->input->post('renglonSub') : null;
-		$claveTecnico = $this->input->post('claveTecnico') !== '' ? $this->input->post('claveTecnico') : null;
-		$existe = $this->db->select('id_diagnostico')->from('diagnostico_tecnico')->where(['id_orden' => $idOrden, 'VentaID' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, 'renglonSub' => $renglonSub])->count_all_results();
-		//$tecnico = $this->db->select('id')->from('usuarios')->where(['cve_intelisis' => $claveTecnico])->get()->row_array();
-		$orden_pendiente = $this->db->select('*')->from('diagnostico_tecnico')->where(['cve_intelisis' => isset($claveTecnico) ? $claveTecnico : null, 'terminado' => 0])->get()->row_array();
-		if ($idOrden == null || $idVenta == null || $renglon == null || $renglonId == null || $renglonSub == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else if($existe > 0) {
-			$response['mensaje'] = 'Ya existe un anverso abierto para está mano de obra, recarga la página si no puedes visualizarlo.';
-			$response['estatus'] = false;
-		}else if(sizeof($orden_pendiente) > 0){
-			$response['estatus'] = false;
-			$this->db2 = $this->load->database('other',true);
-			$venta = $this->db2->select('descripcion')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $orden_pendiente['VentaID'], 'Renglon' => $orden_pendiente['Renglon'], 'RenglonID' => $orden_pendiente['RenglonID'], /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
-			$movID = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden_pendiente['VentaID']])->get()->row_array();
-			$response['mensaje'] = 'El técnico tiene una mano de obra pendiente.('.(isset($venta['descripcion']) ? $venta['descripcion'] : '').') Para la orden: '.(isset($movID['MovID']) ? $movID['MovID'] : 'Sin Afectar');
-		} else {
-			$this->db2 = $this->load->database('other',true);
-			$venta = $this->db2->select('FordStar')->from('vwCA_GarantiasPartsOperaciones')->where(['IdVenta' => $idVenta, 'Renglon' => $renglon, 'RenglonID' => $renglonId, /*'renglonSub' => $renglonSub,*/ 'tipo' => 'Servicio'])->get()->row_array();
-			$response['estatus'] = false;
-			$response['mensaje'] = 'No hay ninguna mano de obra programada con la información proporcionada.';
-			if (sizeof($venta) > 0) {
-				$diagnostico['mecanico_clave'] = $venta['FordStar'];
-				$diagnostico['VentaID'] = $idVenta;
-				$diagnostico['Renglon'] = $renglon;
-				$diagnostico['RenglonSub'] = $renglonSub;
-				$diagnostico['RenglonID'] = $renglonId;
-				$diagnostico['cve_intelisis'] =isset($claveTecnico) ? $claveTecnico : null;
-				$diagnostico['detalles'] = [];
-				$response = $this->buscador_model->guardar_diagnostico($idOrden, $diagnostico);
-				if ($response['estatus'] == true) {
-					$this->db->trans_begin();
-					unset($diagnostico['detalles']);
-					$this->db->where(['id_diagnostico' => $response['id_diagnostico']]);
-					$this->db->update('diagnostico_tecnico', $diagnostico);
-					$this->db->trans_complete();
-				}
-			}
-		}
-		echo json_encode($response);
-	}
-	public function obtener_tipos_garantia($idSucursal = null)
-	{
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else {
-			$response = $this->buscador_model->obtener_tipos_garantia($idSucursal);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_tipos_garantia_activos($idSucursal = null)
-	{
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else {
-			$response = $this->buscador_model->obtener_tipos_garantia_activos($idSucursal);
-		}
-		echo json_encode($response);
-	}
-	public function guardar_tipos_garantia($idSucursal = null)
-	{
-		$datos = $this->input->post();
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->guardar_tipos_garantia($idSucursal, $datos);
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function editar_tipos_garantia($idSucursal = null, $idTipo = null)
-	{
-		$datos = $this->input->post();
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if($idTipo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Tipo de garantía no válido.';
-		} else if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->editar_tipos_garantia($idSucursal, $idTipo, $datos);
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function estatus_tipos_garantia($idSucursal = null, $idTipo = null)
-	{
-		$datos = $this->input->post();
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if($idTipo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Tipo de garantía no válido.';
-		} else if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->estatus_tipos_garantia($idSucursal, $idTipo, $datos);
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function obtener_tipo_garantia($idSucursal = null, $idTipo = null)
-	{
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if($idTipo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Tipo de garantía no válido.';
-		} else {
-			$response = $this->buscador_model->obtener_tipo_garantia($idSucursal, $idTipo);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_subtipos_garantia($idSucursal = null)
-	{
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else {
-			$response = $this->buscador_model->obtener_subtipos_garantia($idSucursal);
-		}
-		echo json_encode($response);
-	}
-	public function obtener_subtipos_garantia_activos($idSucursal = null)
-	{
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else {
-			$response = $this->buscador_model->obtener_subtipos_garantia_activos($idSucursal);
-		}
-		echo json_encode($response);
-	}
-	public function guardar_subtipos_garantia($idSucursal = null)
-	{
-		$datos = $this->input->post();
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->guardar_subtipos_garantia($idSucursal, $datos);
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function editar_subtipos_garantia($idSucursal = null, $idSubtipo = null)
-	{
-		$datos = $this->input->post();
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if($idSubtipo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Subtipo de garantía no válido.';
-		} else if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->editar_subtipos_garantia($idSucursal, $idSubtipo, $datos);
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function estatus_subtipos_garantia($idSucursal = null, $idSubtipo = null)
-	{
-		$datos = $this->input->post();
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if($idSubtipo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Subipo de garantía no válido.';
-		} else if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->estatus_subtipos_garantia($idSucursal, $idSubtipo, $datos);
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function obtener_subtipo_garantia($idSucursal = null, $idSubtipo = null)
-	{
-		if ($idSucursal == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Sucursal no válida';
-		} else if($idSubtipo == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Subtipo de garantía no válido.';
-		} else {
-			$response = $this->buscador_model->obtener_subtipo_garantia($idSucursal, $idSubtipo);
-		}
-		echo json_encode($response);
-	}
-
-	public function obtener_formato_orden_servicio($token = null, $id = null)
-	{
-		$datos = $this->input->post();
-		$datos['id_orden'] = $id;
-		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
-		if ($token == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Token no válido.";
-		} elseif ($id == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		} {
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
-			}
-		}
-		echo json_encode($response);
-	}
-	public function obtener_formato_inventario($token = null, $id = null)
-	{
-		$datos = $this->input->post();
-		$datos['id_orden'] = $id;
-		#$token = $this->input->post('token') != '' ? $this->input->post('token') : null;
-		if ($token == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Token no válido.";
-		} elseif ($id == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		} {
-			$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-			if ($response["estatus"]) {
-				$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
-			}
-		}
-		echo json_encode($response);
-	}
-	public function obtener_dannos($idOrden = null, $idVenta = null)
-	{
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif ($idVenta == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Venta no válida.';
-		}else {
-			$response = $this->buscador_model->obtener_dannos($idOrden, $idVenta);
-		}
-		echo json_encode($response);
-	}
-	public function guardar_dannos($idOrden = null, $idVenta = null)
-	{
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif ($idVenta == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Venta no válida.';
-		}else if(sizeof($datos) > 4){
-			$response = $this->buscador_model->guardar_dannos($idOrden, $datos);
-		}else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Daños en relación no válidos.';
-		}
-		echo json_encode($response);
-	}
-
-	public function marcar_adicional($VentaID=null)
-	{
-		$datos = $this->input->post();
-		if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->validar_operacion_curso($datos['VentaID'], $datos);
-			if ($response['estatus'] || $datos['check'] == 'true') {
-				$response = $this->buscador_model->marcar_adicional($datos);
-			}
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function grteAutoriza_adicional($VentaID=null)
-	{
-		$datos = $this->input->post();
-		if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->validar_operacion_curso($datos['VentaID'], $datos);
-			if ($response['estatus'] || $datos['check'] == 'true') {
-				$response = $this->buscador_model->grteAutoriza_adicional($datos);
-			}
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-	public function grtiasAutoriza_adicional($VentaID=null)
-	{
-		$datos = $this->input->post();
-		if(sizeof($datos) > 0) {
-			$response = $this->buscador_model->validar_operacion_curso($datos['VentaID'], $datos);
-			if ($response['estatus'] || $datos['check'] == 'true') {
-				$response = $this->buscador_model->grtiasAutoriza_adicional($datos);
-			}
-		} else {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Datos no válidos';
-		}
-		echo json_encode($response);
-	}
-
-	public function guardaRecepcion_partes($idOrden = null)
-	{
-		$datos = $this->input->post();
-		if ($idOrden == null ) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}else {
-			$response = $this->buscador_model->guardaRecepcion_partes($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function guardar_orden_documentacion($idOrden = null)
-	{
-		$datos = $this->input->post();
-		$response['estatus'] = false;
-		$response['mensaje'] = 'Datos del orden no válida.';
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'Orden no válida.';
-		}elseif (sizeof($datos) > 0) {
-			$response = $this->buscador_model->guardar_orden_documentacion($idOrden, $datos);
-		}
-		echo json_encode($response);
-	}
-
-	public function adminRecibe_partes($idOrden = null, $idRequisicion = null)
-	{
-		$datos = $this->input->post();
-		if ($idOrden == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = 'orden no valida';
-		}else {
-			$response = $this->buscador_model->adminRecibe_partes($idOrden, $idRequisicion, $datos);
-		}
-		echo json_encode($response);
-	}
-	public function formato_retorno_partes($token = null, $id = null)
-	{
-		$this->db2 = $this->load->database('other',true); 
-		$data = [];
-		$datos = $this->input->post();
-		if ($token == null || $id == null) {
-			$response['estatus'] = false;
-			$response['mensaje'] = "Requisición no válida.";
-		} else {
-			$requisicion = $this->buscador_model->obtener_retorno_partes($id);
-			if ($requisicion['estatus']) {
-				$datos = array_merge($datos, $requisicion);
-				$datos['vin'] = $requisicion['vin'];
-				$datos['id_orden'] = $requisicion['id_orden'];
-				$datos['firmaTec'] = $requisicion['firmaTec'];
-				$datos['firmaRef'] = "";
-				$orden = $this->db->select('id_orden_intelisis')->from('orden_servicio')->where(['id' => $requisicion['id_orden']])->get()->row_array();
-				$movID = $this->db2->select('MovID')->from('Venta')->where(['ID' => $orden['id_orden_intelisis']])->get()->row_array();
-				$datos['requisicion']['n1863'] = isset($movID['MovID']) ? $movID['MovID'] : '';
-				$response = $this->buscador_model->obtener_pdf_api($token, $datos);
-				if ($response["estatus"]) {
-					$this->buscador_model->guardar_formato($datos['id_orden'], $response["data"]["ruta_rel"]);
-				}
-			}else {
-				$response = $requisicion;
-			}
-		}
-		echo json_encode($response);
 	}
 }

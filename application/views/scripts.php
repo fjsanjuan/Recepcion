@@ -32,11 +32,6 @@ $caller_method = $this->router->fetch_method();
 <script src="<?= base_url()?>assets/librerias/Flatpickr/flatpickr.min.js"></script>
 <script src="<?= base_url()?>assets/librerias/Flatpickr/es.js"></script>
 <!-- scripts especificos -->
-
-<script src='<?=base_url()?>assets/js/jquery.validate.js'></script>
-<script src='<?=base_url()?>assets/js/jquery.validate.min.js'></script>
-<script src='<?=base_url()?>assets/js/jquery.validator.message.js'></script>
-<script src="<?=base_url()?>assets/js/jquery.ui.touch-punch.min.js"></script>
 <?php 
 	date_default_timezone_set('America/Mexico_City');
 	clearstatcache();                //clears the file status cache
