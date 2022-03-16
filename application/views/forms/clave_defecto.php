@@ -12,7 +12,7 @@
 				<form action="!#" id='form_clave'>
 					<div class="form-group">
 						<label for="clave">Clave</label>
-						<input type="text" class="required write form-control" id="nombreClave" name="clave" aria-describedby="claveHelpClave" placeholder="Clave de defecto" required />
+						<input type="text" class="required write form-control" id="nombreClave" name="clave" aria-describedby="claveHelpClave" placeholder="Clave de defecto" required maxlength="2" minlength="2" />
 						<small id="claveHelpClave" class="form-text text-muted">Ingresa la clave de defecto.</small>
 					</div>
 					<div class="form-group">

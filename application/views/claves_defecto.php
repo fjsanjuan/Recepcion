@@ -63,17 +63,19 @@
 	}
 	.selected {
 	background-color: #c4c0c0;
-  
-}
-table tr.active {
-	background: #ccc;
 	}
-.table tbody tr.highlight td {
-	background-color: #CFF5FF;
-}
-.modal {
-	overflow-y: auto !important;
-}
+	table tr.active {
+		background: #ccc;
+		}
+	.table tbody tr.highlight td {
+		background-color: #CFF5FF;
+	}
+	.modal {
+		overflow-y: auto !important;
+	}
+	label.error {
+		color: red;
+	}
 </style>
 <div class="container">
 	<br>

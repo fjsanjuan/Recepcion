@@ -216,7 +216,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		$('#nombreClave').val($('#nombreClave').val().trim());
 		$('#descripcionClave').val($('#descripcionClave').val().trim());
-		if (!$('#form_clave').is(':valid')){
+		if (!$('#form_clave').valid()){
 			toastr.info('Debe agregar una Clave de Defecto y descripción.');
 			return;
 		}
@@ -253,7 +253,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		$('#nombreClave').val($('#nombreClave').val().trim());
 		$('#descripcionClave').val($('#descripcionClave').val().trim());
-		if (!$('#form_clave').is(':valid')){
+		if (!$('#form_clave').valid()){
 			toastr.info('Debe agregar una Clave de Defecto y descripción.');
 			return;
 		}
