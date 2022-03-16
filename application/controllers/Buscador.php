@@ -261,6 +261,22 @@ class Buscador extends CI_Controller {
 			$this->load->view("errors/html/error_404", $response);
 		}	
 	}
+	public function administrar_clave_defecto()
+	{
+		$logged_in = $this->session->userdata("logged_in");
+		if(empty($logged_in) == false && $logged_in['perfil'] == 7)
+		{
+			$data["scripts"] = $this->load->view("scripts", "", true);	
+			$data["navbar"] = $this->load->view("navbar", "", true);	
+			$data["contenido"] = $this->load->view("claves_defecto", "", true);
+			$this->load->view("base", $data);
+		}else
+		{
+			$response['heading'] = 'Permiso denegado.';
+			$response['message'] = 'Solo los administradores pueden visualizar la página de administración de claves de defecto.';
+			$this->load->view("errors/html/error_404", $response);
+		}	
+	}
 
 	// public function administrar_tecnicos()
 	// {

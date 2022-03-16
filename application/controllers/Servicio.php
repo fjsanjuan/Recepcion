@@ -3863,4 +3863,93 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+
+	function ord_por_folio(){
+		$folio = $this->input->post('folio');
+		$data = $this->buscador_model->orden_por_folio($folio);
+		echo json_encode($data);
+	}
+
+	public function obtener_claves_defecto($idSucursal = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else {
+			$response = $this->buscador_model->obtener_claves_defecto($idSucursal);
+		}
+		echo json_encode($response);
+	}
+	public function obtener_claves_defecto_activos($idSucursal = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else {
+			$response = $this->buscador_model->obtener_claves_defecto_activos($idSucursal);
+		}
+		echo json_encode($response);
+	}
+	public function guardar_clave_defecto($idSucursal = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->guardar_clave_defecto($idSucursal, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function editar_clave_defecto($idSucursal = null, $idClave = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idClave == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Clave de Defecto no válido.';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->editar_clave_defecto($idSucursal, $idClave, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function estatus_clave_defecto($idSucursal = null, $idClave = null)
+	{
+		$datos = $this->input->post();
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idClave == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Clave de Defecto no válido.';
+		} else if(sizeof($datos) > 0) {
+			$response = $this->buscador_model->estatus_clave_defecto($idSucursal, $idClave, $datos);
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos no válidos';
+		}
+		echo json_encode($response);
+	}
+	public function obtener_clave_defecto($idSucursal = null, $idClave = null)
+	{
+		if ($idSucursal == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Sucursal no válida';
+		} else if($idClave == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Clave de Defecto no válido.';
+		} else {
+			$response = $this->buscador_model->obtener_clave_defecto($idSucursal, $idClave);
+		}
+		echo json_encode($response);
+	}
+
 }

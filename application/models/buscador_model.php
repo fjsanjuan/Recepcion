@@ -6015,4 +6015,160 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
+
+	public function orden_por_folio($folio){
+		$this->db2 = $this->load->database("other", true);
+		$query = $this->db2->query("SELECT Articulo, Modelo FROM VIN WHERE VIN = ?", array($folio));
+		if ($query->num_rows() > 0){
+			$art = $query->result_array();
+		}else{
+			echo 'sin';
+		}
+		$query2 = $this->db2->query("SELECT DISTINCT Articulo, IdPaquete, DescripcionC, DescripcionL, kilometraje, Modelo, TipoPaquete FROM ". $this->vista ." WHERE Articulo IN (?, 'Todos') AND Modelo IN (?, 'Todos') AND TipoPaquete = 'Mantenimiento' OR (Articulo ='Todos' AND TipoPaquete = 'Mantenimiento' AND Modelo ='Todos')", array($art[0]['Articulo'], $art[0]['Modelo']))->result_array();
+			return  $query2;
+
+	}
+
+	public function obtener_claves_defecto($idSucursal)
+	{
+		$response['claves'] = $this->db->select('*')->from('claves_defecto')->get()->result_array();
+		if (sizeof($response['claves']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = sizeof($response['claves'])." Claves de defecto encontrados.";
+		} else {
+			$response['estatus'] = false;
+			$response['claves'] = [];
+			$response['mensaje'] = "No se encontraron Claves de Defecto.";
+		}
+		return $response;
+	}
+	public function obtener_claves_defecto_activos($idSucursal)
+	{
+		$response['claves'] = $this->db->select('*')->from('claves_defecto')->where(['eliminado' => 0])->get()->result_array();
+		if (sizeof($response['claves']) > 0) {
+			$response['estatus'] = true;
+			$response['mensaje'] = sizeof($response['claves'])." Claves de Defecto encontrados.";
+		} else {
+			$response['estatus'] = false;
+			$response['claves'] = [];
+			$response['mensaje'] = "No se encontraron Claves de Defecto.";
+		}
+		return $response;
+	}
+	public function guardar_clave_defecto($idSucursal, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$data = [
+			'clave'          => isset($datos['clave']) ? $datos['clave'] : null,
+			'descripcion'    => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'fecha_creacion' => date("d-m-Y H:i:s"),
+			'eliminado'      => 0,
+			'usuario'        => $usuario['nombre']
+		];
+		if($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$id = $this->db->insert('claves_defecto', $data);
+			$id = $this->db->insert_id();
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['id'] = null;
+				$response['mensaje'] = 'No fue posible crear la Clave de Defecto.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['id'] = $id;
+				$response['mensaje'] = 'Clave de Defecto agregada correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['id'] = null;
+			$response['mensaje'] = "Solo los administradores de garantías pueden crear Claves de Defecto.";
+		}
+		return $response;
+	}
+	public function editar_clave_defecto($idSucursal,$idClave, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$data = [
+			'clave'              => isset($datos['clave']) ? $datos['clave'] : null,
+			'descripcion'         => isset($datos['descripcion']) ? $datos['descripcion'] : null,
+			'fecha_actualizacion' => date("d-m-Y H:i:s"),
+			'usuario'             => $usuario['nombre']
+		];
+		$existe = $this->db->select('*')->from('claves_defecto')->where(['id' => $idClave])->get()->row_array();
+		if ($existe == 0 ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "La Clave de Defecto seleccionada no existe.";
+		}elseif($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$this->db->where('id', $idClave);
+			$this->db->update('claves_defecto', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar la Clave de Defecto.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Clave de Defecto actualizada correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Solo los administradores de garantías pueden actualizar Claves de Defecto.";
+		}
+		return $response;
+	}
+	public function estatus_clave_defecto($idSucursal,$idClave, $datos)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$existe = $this->db->select('id')->from('claves_defecto')->where(['id' => $idClave])->count_all_results();
+		$data = [
+			'eliminado'           => $datos['eliminado'],
+			'fecha_eliminacion'   => $datos['eliminado'] == 1 ?  date("d-m-Y H:i:s") : null,
+			'fecha_actualizacion' => date("d-m-Y H:i:s"),
+			'usuario'             => $usuario['nombre']
+		];
+		if ($existe == 0 ) {
+			$response['estatus'] = false;
+			$response['mensaje'] = "La Clave de Defecto seleccionada no existe.";
+		}elseif($usuario['perfil'] == 7){
+			$this->db->trans_start();
+			$this->db->where('id', $idClave);
+			$this->db->update('claves_defecto', $data);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el estatus de la Clave de Defecto.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Estatus de la Clave de Defecto actualizada correctamente.';
+			}
+		} else {
+			$response['estatus'] = false;
+			$response['mensaje'] = "Solo los administradores de garantías pueden actualizar el estatus de las Claves de Defecto.";
+		}
+		return $response;
+	}
+
+	public function obtener_clave_defecto($idSucursal,$idClave)
+	{
+		$usuario = $this->session->userdata["logged_in"];
+		$existe = $this->db->select('*')->from('claves_defecto')->where(['id' => $idClave])->get()->row_array();
+		if (sizeof($existe) > 0 ) {
+			$response['estatus'] = true;
+			$response['tipo']    = $existe;
+			$response['mensaje'] = "Clave de Defecto encontrada.";
+		} else {
+			$response['estatus'] = false;
+			$response['tipo']    = [];
+			$response['mensaje'] = "La Clave de Defecto no existe.";
+		}
+		return $response;
+	}
+
 }

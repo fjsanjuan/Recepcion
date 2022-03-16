@@ -32,4 +32,8 @@
     <a href="<?=site_url('buscador/administrar_subtipos')?>"><span class="span-sidebar"><i class="fa fa-calendar-alt"></i>
     SubTipos Garantías</span></a>
   <?php endif;?>
+  <?php if($this->session->userdata["logged_in"]["perfil"] == 7):?>
+    <a href="<?=site_url('buscador/administrar_clave_defecto')?>"><span class="span-sidebar"><i class="fa fa-th-list"></i>
+    Claves Defecto</span></a>
+  <?php endif;?>
 </div>
