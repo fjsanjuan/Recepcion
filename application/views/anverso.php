@@ -244,7 +244,7 @@ input:focus{
 	                        <?php if ($estatus == false): ?>
 	                        <div class="row">
 	                            <div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="text" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
+	                                <input class="" type="number" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
 	                            </div>
 	                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
 	                                <input class="required write" type="text" name="detalles[0][luz_de_falla]" id="" style="width: 98%;" required>
@@ -276,7 +276,7 @@ input:focus{
 								<?php if(sizeof($data['detalles']) == 0): ?>
 									<div class="row">
 										<div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-											<input class="required write" type="text" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
+											<input class="required write" type="number" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
 										</div>
 										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
 											<input class="required write" type="text" name="detalles[0][luz_de_falla]" id="" style="width: 98%;" required>
@@ -309,7 +309,7 @@ input:focus{
 									<div class="row">
 									<input class="" value="<?=$detalle['id'];?>" name="detalles[<?=$key;?>][id_revision]" style="display: none;">
 										<div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-											<input class="required write" type="text" name="detalles[<?=$key;?>][num_reparacion]" id="" style="width: 98%" value="<?=$detalle['num_reparacion'];?>" required>
+											<input class="required write" type="number" name="detalles[<?=$key;?>][num_reparacion]" id="" style="width: 98%" value="<?=$detalle['num_reparacion'];?>" required>
 										</div>
 										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
 											<input class="required write" type="text" name="detalles[<?=$key;?>][luz_de_falla]" id="" style="width: 98%;" value="<?=$detalle['luz_de_falla'];?>" required>
@@ -390,9 +390,11 @@ input:focus{
 	                            <div class="column cinco border-right-light border-bottom-light pad-tp pad-bt requisito">
 	                                <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;" value="<?= isset($detalle['num_reparacion']) ? $detalle['num_reparacion'] : "";?>">
 	                            </div>
-	                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="required write" type="text" name="clave_defect" id="" style="width: 98%;" value="<?= isset($data['clave_defect']) ? $data['clave_defect'] : "";?>">
-	                            </div>
+	                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito" style='text-decoration: none;'>
+	                               <!-- <input class="required write" type="text" name="clave_defect" id="clave_defect" style="width: 98%;" value="">-->
+									<select id="clave_defect" name="clave_defect" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;">
+								</select>
+								</div>
 	                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito">
 	                                <input class="required write" type="text" name="mecanico_clave" id="" style="width: 98%;" value="<?= isset($data['mecanico_clave']) ? $data['mecanico_clave'] : "";?>" readonly>
 	                            </div>
@@ -634,6 +636,7 @@ $(document).ready(function(){
             $(tiempos_inicio[index]).text(inicio.toLocaleString('en-GB').replace(',', ''));
             $(tiempos_fin[index]).text(val.FechafIN ? fin.toLocaleString('en-GB').replace(',', '') : '');
         });
+		obtener_claves(idOrden);
         $('.sidebar').off('click', '#imprimir').on('click', '#imprimir', function(event) {
     	if (idDiagnostico <= 0) {
     		return;
@@ -953,6 +956,9 @@ $(document).on('click', '.nuevo_codigo', function (e) {
     console.log('newlinecode', newlinecode);
 	const code = $(this).closest('div.row').clone();
 	code.find('input[type="text"]').val("");
+	code.find('input[type="number"]').val();
+	$('input[type="number"]:eq(0)').css('color', 'red');
+	$('input[type="number"]:not(:eq(0))').prop('readonly', true);
     inputs = code.find('input[type="text"]');
     $.each(inputs, function (index,val) {
         console.log('val', val);
@@ -1165,5 +1171,40 @@ function formato_entrega_refacciones(id) {
 		}
 	});
 }
+
+function obtener_claves(idOrden){
+	idSucursal = 0;
+	$('#clave_defect').empty();
+	$('#clave_defect').append($('<option>', {'text': 'Seleccione..'}));
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_claves_defecto_activos/${idSucursal}`,
+		type: 'GET',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(error){
+			$("#loading_spin").hide();
+			toastr.warning('Ocurrió un error al obtener las claves de defecto.');
+			console.log('error', error);
+		},
+		success: function (data){
+			
+			$("#loading_spin").hide();
+			if(data.estatus == true){
+				$.each(data.claves, function(index, val) {
+					$('#clave_defect').append($('<option>', {'value': val.clave, 'text':val.clave}));
+					$('#clave_defect option[value="<?php echo isset($data['clave_defect']) ? $data['clave_defect']: '';?>"]').prop('selected', true);
+			
+				});
+			}else{
+				toastr.info(data.mensaje);
+			}
+		}
+	});
+}
+
     </script>
 </html>
