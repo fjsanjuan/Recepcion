@@ -244,7 +244,7 @@ input:focus{
 	                        <?php if ($estatus == false): ?>
 	                        <div class="row">
 	                            <div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-	                                <input class="" type="number" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
+	                                <input class="" min="1" type="number" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
 	                            </div>
 	                            <div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
 	                                <input class="required write" type="text" name="detalles[0][luz_de_falla]" id="" style="width: 98%;" required>
@@ -276,7 +276,7 @@ input:focus{
 								<?php if(sizeof($data['detalles']) == 0): ?>
 									<div class="row">
 										<div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-											<input class="required write" type="number" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
+											<input class="required write" min="1" type="number" name="detalles[0][num_reparacion]" id="" style="width: 98%" required>
 										</div>
 										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
 											<input class="required write" type="text" name="detalles[0][luz_de_falla]" id="" style="width: 98%;" required>
@@ -309,7 +309,7 @@ input:focus{
 									<div class="row">
 									<input class="" value="<?=$detalle['id'];?>" name="detalles[<?=$key;?>][id_revision]" style="display: none;">
 										<div class="column diez border-left-light border-right-light border-bottom-light pad-tp pad-bt requisito">
-											<input class="required write" type="number" name="detalles[<?=$key;?>][num_reparacion]" id="" style="width: 98%" value="<?=$detalle['num_reparacion'];?>" required>
+											<input class="required write" min="1" type="number" name="detalles[<?=$key;?>][num_reparacion]" id="" style="width: 98%" value="<?=$detalle['num_reparacion'];?>" required>
 										</div>
 										<div class="column veinte border-right-light border-bottom-light pad-tp pad-bt requisito">
 											<input class="required write" type="text" name="detalles[<?=$key;?>][luz_de_falla]" id="" style="width: 98%;" value="<?=$detalle['luz_de_falla'];?>" required>
@@ -957,10 +957,14 @@ $(document).on('click', '.nuevo_codigo', function (e) {
 	const code = $(this).closest('div.row').clone();
 	code.find('input[type="text"]').val("");
 	code.find('input[type="number"]').val();
-	$('input[type="number"]:eq(0)').css('color', 'red');
-	$('input[type="number"]:not(:eq(0))').prop('readonly', true);
     inputs = code.find('input[type="text"]');
     $.each(inputs, function (index,val) {
+        console.log('val', val);
+        name = $(val).prop('name');
+        $(val).prop('name', name.replace(/\d+/g, newlinecode));
+    });
+    input = code.find('input[type="number"]');
+    $.each(input, function (index,val) {
         console.log('val', val);
         name = $(val).prop('name');
         $(val).prop('name', name.replace(/\d+/g, newlinecode));
@@ -982,6 +986,7 @@ $(document).on('click', '.nuevo_codigo', function (e) {
 	newlinecode++;
 	code.find('select').val("");
 	code.insertAfter($(this).closest('div.row'));
+	$('input[type="number"]:not(:eq(0))').prop('readonly', true);
 	
 })
 $(document).on('click', '.nuevo_codigo', function (e) {
@@ -1002,6 +1007,7 @@ $(document).on('click', '.erase_line', function (e) {
     }
     if ($('.code_lines div.row ').length > 1) {
         $(this).closest('.code_lines div.row').remove();
+		$('input[type="number"]:eq(0)').prop('readonly', false);
     }else {
         toastr.warning('Debes matener una linea');
     }
@@ -1175,7 +1181,7 @@ function formato_entrega_refacciones(id) {
 function obtener_claves(idOrden){
 	idSucursal = 0;
 	$('#clave_defect').empty();
-	$('#clave_defect').append($('<option>', {'text': 'Seleccione..'}));
+	$('#clave_defect').append($('<option>', {'text': ''}));
 	$.ajax({
 		url: `${base_url}index.php/servicio/obtener_claves_defecto_activos/${idSucursal}`,
 		type: 'GET',
