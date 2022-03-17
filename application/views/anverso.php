@@ -391,7 +391,7 @@ input:focus{
 	                                <input class="required write" type="text" name="num_reparacion" id="" style="width: 98%;" value="<?= isset($detalle['num_reparacion']) ? $detalle['num_reparacion'] : "";?>">
 	                            </div>
 	                            <div class="column ocho border-right-light border-bottom-light pad-tp pad-bt requisito" style='text-decoration: none;'>
-	                               <!-- <input class="required write" type="text" name="clave_defect" id="clave_defect" style="width: 98%;" value="">-->
+	                               <!-- <input class="required write" type="text" name="clave_defect" id="clave_defect" style="width: 98%;" value=""> -->
 									<select id="clave_defect" name="clave_defect" class="requisito" style="appearance: none;-webkit-appearance: none;-moz-appearance: none; border: none;overflow:hidden;width: 100%;">
 								</select>
 								</div>
