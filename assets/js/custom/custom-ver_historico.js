@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
 
 	//variable que controlan la ruta donde se guardan las fotos de la inspeccion 
 	//en este caso para poder vizualizarlas desde el historico
@@ -286,33 +286,58 @@
 					action_jefe		+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";	
 				}
 				btn_tecnico    = ``;
-				btn_tecnico 	+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
-				btn_tecnico		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
+				btn_tecnico      +="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
+				btn_tecnico      +="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				//action_tecnico = `<button type="button" class="btn btn-sm btn-primary revisionqueja" id='revisionqueja-${val["id"]}'><i class="fa fa-tasks"></i>&nbsp&nbsp Revisión Quejas</button>`;
-					btn     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
-					btn_refacciones     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
-					btn_garantias     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
-					btn_gerente     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
-					btn_jefe     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
-					btn_tecnico     += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				btn              += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				btn_refacciones  += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				btn_garantias    += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				btn_gerente      += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				btn_jefe         += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				btn_tecnico      += "<input type='hidden' id='api_vin-"+val["id"]+"' value='"+val['vin']+"'>";
+				if(val['movimiento'] != null){
+					btn              += "<input type='hidden' id='api_vin-"+val["movimiento"]+"' value='"+val['vin']+"'>";
+					btn_refacciones  += "<input type='hidden' id='api_vin-"+val["movimiento"]+"' value='"+val['vin']+"'>";
+					btn_garantias    += "<input type='hidden' id='api_vin-"+val["movimiento"]+"' value='"+val['vin']+"'>";
+					btn_gerente      += "<input type='hidden' id='api_vin-"+val["movimiento"]+"' value='"+val['vin']+"'>";
+					btn_jefe         += "<input type='hidden' id='api_vin-"+val["movimiento"]+"' value='"+val['vin']+"'>";
+					btn_tecnico      += "<input type='hidden' id='api_vin-"+val["movimiento"]+"' value='"+val['vin']+"'>";
+				}
 				if((trae_signGrtia != firma_vacia && trae_signGrtia != null) && bnt_renunciaGrtia == true){
 					//btn     +="<button class='btn btn-sm renunciaGrtia' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #ff9800;' id='renunGrtia-"+val["id"]+"'><i class='fa fa-file-download'></i>  &nbsp&nbsp Carta de renuncia a beneficios</button>";
 					// se agregan los valores del vin y de la firma de renuncia a extesion de garantia para enviar a la ApiReporter que genera el formato
-					btn     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
-					btn     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
-					btn     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
-					btn_tecnico     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
-					btn_tecnico     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
-					btn_tecnico     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
-					btn_jefe     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
-					btn_jefe     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
-					btn_jefe     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
-					btn_garantias     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
-					btn_garantias     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
-					btn_garantias     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
-					btn_gerente     += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
-					btn_gerente     += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
-					btn_gerente     += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn           += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn           += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn           += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_tecnico   += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_tecnico   += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_tecnico   += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_jefe      += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_jefe      += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_jefe      += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_garantias += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_garantias += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_garantias += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					btn_gerente   += "<input type='hidden' id='api_signGrtia-"+val["id"]+"' value='"+trae_signGrtia+"'>";
+					btn_gerente   += "<input type='hidden' id='api_nomCte-"+val["id"]+"' value='"+nombre+"'>";
+					btn_gerente   += "<input type='hidden' id='api_signAsesor-"+val["id"]+"' value='"+val['signAsesor']+"'>";
+					if(val['movimiento'] != null){
+						btn           += "<input type='hidden' id='api_signGrtia-"+val["movimiento"]+"' value='"+trae_signGrtia+"'>";
+						btn           += "<input type='hidden' id='api_nomCte-"+val["movimiento"]+"' value='"+nombre+"'>";
+						btn           += "<input type='hidden' id='api_signAsesor-"+val["movimiento"]+"' value='"+val['signAsesor']+"'>";
+						btn_tecnico   += "<input type='hidden' id='api_signGrtia-"+val["movimiento"]+"' value='"+trae_signGrtia+"'>";
+						btn_tecnico   += "<input type='hidden' id='api_nomCte-"+val["movimiento"]+"' value='"+nombre+"'>";
+						btn_tecnico   += "<input type='hidden' id='api_signAsesor-"+val["movimiento"]+"' value='"+val['signAsesor']+"'>";
+						btn_jefe      += "<input type='hidden' id='api_signGrtia-"+val["movimiento"]+"' value='"+trae_signGrtia+"'>";
+						btn_jefe      += "<input type='hidden' id='api_nomCte-"+val["movimiento"]+"' value='"+nombre+"'>";
+						btn_jefe      += "<input type='hidden' id='api_signAsesor-"+val["movimiento"]+"' value='"+val['signAsesor']+"'>";
+						btn_garantias += "<input type='hidden' id='api_signGrtia-"+val["movimiento"]+"' value='"+trae_signGrtia+"'>";
+						btn_garantias += "<input type='hidden' id='api_nomCte-"+val["movimiento"]+"' value='"+nombre+"'>";
+						btn_garantias += "<input type='hidden' id='api_signAsesor-"+val["movimiento"]+"' value='"+val['signAsesor']+"'>";
+						btn_gerente   += "<input type='hidden' id='api_signGrtia-"+val["movimiento"]+"' value='"+trae_signGrtia+"'>";
+						btn_gerente   += "<input type='hidden' id='api_nomCte-"+val["movimiento"]+"' value='"+nombre+"'>";
+						btn_gerente   += "<input type='hidden' id='api_signAsesor-"+val["movimiento"]+"' value='"+val['signAsesor']+"'>";
+					}
 				}	
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				action_tecnico ='';
