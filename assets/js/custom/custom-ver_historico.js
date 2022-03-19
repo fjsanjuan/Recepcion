@@ -7284,3 +7284,12 @@ $(document).off('click', '.mostrar_det').on('click', '.mostrar_det', function(ev
     $('#mostrar_detalles').show();
 
 });
+
+$(document).off('change', '#lineaTrabajoModal .costo_total').on('change', '#lineaTrabajoModal .costo_total', function(event) {
+	event.preventDefault();
+	$(this).val(isNaN(Number($(this).val())) ? 0 : Number($(this).val()));
+	let costo_total = isNaN(Number($('#rep_total').val())) ? 0 : Number($('#rep_total').val());
+	console.log('costo_total', costo_total);
+	costo_total += isNaN(Number($(this).val())) ? 0 : Number($(this).val());
+	$('#rep_total').val(costo_total.toFixed(4));
+});

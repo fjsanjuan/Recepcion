@@ -68,33 +68,33 @@ echo form_open('',$attributes);
 				<div class="clearfix"></div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="part_total" class="col-sm-4 control-label" style="white-space: nowrap;">Partes Totales $</label>
-					<input type="text" class="form-control" name="partes_totales" id="part_total">
+					<input type="text" class="costo_total form-control" name="partes_totales" id="part_total">
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="m_obra" class="col-sm-4 control-label" style="white-space: nowrap;">Mano Obra Total $</label>
-					<input type="text" class="form-control" name="mano_obra_total" id="m_obra">
+					<input type="text" class="costo_total form-control" name="mano_obra_total" id="m_obra">
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="misc_total" class="col-sm-4 control-label" style="white-space: nowrap;">Misc. Total $</label>
-					<input type="text" class="form-control" name="misc_total" id="misc_total">
+					<input type="text" class="costo_total form-control" name="misc_total" id="misc_total">
 				</div>
 				<div class="clearfix"></div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
-					<label for="iva_total" class="col-sm-4 control-label" style="white-space: nowrap;">IVA %</label>
-					<input type="text" class="form-control" name="iva" id="iva_total">
+					<label for="iva_total" class="col-sm-4 control-label" style="white-space: nowrap;">IVA $</label>
+					<input type="text" class="costo_total form-control" name="iva" id="iva_total">
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="p_cliente" class="col-sm-4 control-label" style="white-space: nowrap;">Participación Cliente $</label>
-					<input type="text" class="form-control" name="participacion_cliente" id="p_cliente">
+					<input type="text" class="costo_total form-control" name="participacion_cliente" id="p_cliente">
 				</div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="p_dist" class="col-sm-4 control-label" style="white-space: nowrap;">Participación Distribuidor $</label>
-					<input type="text" class="form-control" name="participacion_distribuidor" id="p_dist">
+					<input type="text" class="costo_total form-control" name="participacion_distribuidor" id="p_dist">
 				</div>
 				<div class="clearfix"></div>
 				<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" >
 					<label for="rep_total" class="col-sm-4 control-label" style="white-space: nowrap;">Reparación Total $</label>
-					<input type="text" class="form-control" name="reparacion_total" id="rep_total">
+					<input type="text" class="form-control" name="reparacion_total" id="rep_total" readonly="readonly">
 				</div>
 				
 			</form>
