@@ -1,3 +1,6 @@
+let cloneID = 0;
+//variable que controlan el tipo de formato de orden de servicio(profeco) que se genera en pdf 
+var formt_serv_pdf = "Ford";
 $(window).on('load', function() {
     bind();
     var options = {
@@ -2896,7 +2899,15 @@ $(document).off("click", "#generar_pdf").on("click", "#generar_pdf", function(e)
                         localStorage.setItem("formatoReverso_base64", "");
                                                          
                         $("#loading_spin").show();
-                        generar_formatoProfeco(id_orden);
+                        // condicional para evaluar el tipo de formato a gener en PDF dependiendo de la marca
+                        switch (formt_serv_pdf) {
+	                        case 'Fame':
+	                            generar_formatoProfeco(id_orden);
+	                          break;
+	                        default:
+	                            generar_formato(id_orden);
+	                          break;
+	                    }
                     }                   
                 }else 
                 {
