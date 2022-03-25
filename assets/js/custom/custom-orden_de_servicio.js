@@ -2873,11 +2873,96 @@ function generar_pdf(img_formato, img_reverso, id_orden)
     b_profeco = false;
 }
 
+function generar_formatosPDF(id_orden)
+{
+    var url_formato = $("#url_formato").val();
+    url_formato += "/"+id_orden;
+    var url_reverso = $("#url_reversoformato").val();
+    url_reverso += "/"+id_orden;
+    var url_inventario = $("#url_inventario").val();
+    url_inventario += "/"+id_orden;
+    var img = "";
+    var img_reverso = "";
+    var img_inventario = "";
+    var bandera = true;
+
+    $("#iframe_formato").prop("src", url_formato);                                                  //1ero se ejecuta esto
+    $("#iframe_reversoformato").prop("src", url_reverso);
+    $("#iframe_inventario").prop("src", url_inventario);
+
+    $("#iframe_formato, #iframe_reversoformato, #iframe_inventario").off("load").on("load", function (){                //luego se ejecuta esto
+        
+        setTimeout(function(){               
+            if(bandera)                                                         //para que se ejecute solo 1 vez, no por cada iframe
+            {                   
+                revisar_creacionImgFormatos(id_orden);
+            }
+
+            bandera = false;
+        }, 1200);        
+    });
+}
+
+
+function revisar_creacionImgFormatos(id_orden)
+{
+    if(localStorage.getItem("formato_base64") != "" && localStorage.getItem("formatoReverso_base64") != "" && 
+        sessionStorage.getItem("formato_inventario") )
+    {
+        img = localStorage.getItem("formato_base64");
+        img_reverso = localStorage.getItem("formatoReverso_base64");
+        img_inventario= sessionStorage.getItem("formato_inventario");
+
+        generar_pdf1Vez(img, img_reverso, id_orden, img_inventario);
+    }else 
+    {
+        setTimeout(function(){
+            revisar_creacionImgFormatos(id_orden);
+        }, 1200);
+    }
+}
+
+function generar_pdf1Vez( img_formato, img_reverso, id_orden, img_inventario)
+{
+
+    $.ajax({
+        cache: false,
+        url: base_url+"index.php/servicio/crear_pdf1Vez/",
+        type: 'POST',
+        dataType: "json",
+        data:  {id_orden: id_orden, base64: img_formato,  img_reverso: img_reverso, inv: img_inventario},
+        beforeSend: function(){
+            // toastr.info("Generando los formatos, por favor, espere un momento.");
+            $('#loading_spin').show();
+        },
+        success: function(data) {
+            
+            if(data)
+            {
+               
+                toastr.success('Los formatos han sido credados correctamente.', {timeOut: 5000});
+                $("#loading_spin").hide();
+                b_profeco = false;
+                 $("#enviar_whatsapp").show()
+            }else 
+            {
+                toastr.error('Hubo un error al crear los formatos.', {timeOut: 5000});
+                 b_profeco = false;
+            }               
+        },
+        error : function(xhr, status) {
+            alert("Hubo un error al crear los formatos");
+            console.log(status);
+            b_profeco = false;
+        }
+    });
+}
+
 $(document).off("click", "#generar_pdf").on("click", "#generar_pdf", function(e){
     e.preventDefault();
     $.confirm({
         title: 'Generar Archivo PDF',
-        content: '¿Desea generar el archivo PDF de la Orden de Servicio?',
+        content: '¿Desea generar el archivo PDF de la Orden de Servicio? <br> <strong style=' +'"color:green"' +'>Es necesario para el envio por Whatsapp</strong> ',
         buttons: {
             Cancelar: function () {
                 //
@@ -2893,10 +2978,12 @@ $(document).off("click", "#generar_pdf").on("click", "#generar_pdf", function(e)
                         toastr.error("Es necesario tener la firma del Cliente para generar el archivo PDF.");
                     }else 
                     {
+                         toastr.info("Generando los formatos, por favor, espere un momento.");
                         var id_orden = localStorage.getItem("id_orden_servicio");           //se genera en el buscador al crear una nueva
                         b_profeco = true;
                         localStorage.setItem("formato_base64", "");
                         localStorage.setItem("formatoReverso_base64", "");
+                         sessionStorage.setItem("formato_inventario", "");
                                                          
                         $("#loading_spin").show();
                         // condicional para evaluar el tipo de formato a gener en PDF dependiendo de la marca
@@ -2926,6 +3013,15 @@ $(document).on("click", '#enviar_whatsapp', function (e){
     var cliente = localStorage.getItem("nom_cliente")+" "+localStorage.getItem("ap_cliente");
     var codigo_area = "521";                                                                   // equivale al +52 1 xxxxxxxxxx
     var num_cel = $("#cel_cliente").val();
+    //el que se usa para enviar el whtsapp
+    var numerowhats=null;
+
+    if (num_cel.length==13) {
+        numerowhats = num_cel.substring(3);
+    }
+    else{
+        numerowhats =  num_cel;
+    }
     var hora_actual = moment().format("HH:mm");
     var texto = "";
     var saludo = "";
@@ -2938,7 +3034,7 @@ $(document).on("click", '#enviar_whatsapp', function (e){
         '<div class="form-group">' +
         '<p>¿Desea enviar un mensaje de WhatsApp al Cliente con los datos de su Orden de Servicio?</p>' +
         '<label>Número Tel. Celular del Cliente:</label>' +
-        '<input type="text" placeholder="Celular" class="numero form-control" value="'+num_cel+'" required />' +
+        '<input type="text" placeholder="Celular" class="numero form-control" value="'+numerowhats+'" required />' +
         '</div>' +
         '</form>',
         buttons: {
@@ -2951,7 +3047,10 @@ $(document).on("click", '#enviar_whatsapp', function (e){
                 action: function () {
                     var numero = this.$content.find('.numero').val();
 
-                    if(!numero){
+                    if(numero.length ==10){
+                        
+                    }
+                    else{
                         $.alert("Por favor, escriba el número de celular del Cliente (10 dígitos).");
                         return false;
                     }

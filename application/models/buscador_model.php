@@ -1820,9 +1820,13 @@ class Buscador_Model extends CI_Model{
 		$deposito_refrigerante = $data["liq_refrigerante"];
 		$ext_garantia = $data["ext_garantia"];
 		$danios = $data["existen_danios"];
-		//demas
+		//Interiores (Opera, indicadores de falla)
+		$luces_tablero 		 = $data['motor_luz'] .',' . $data['servicio_luz'] .',' . $data['abs_luz'] .',' . $data['frenos_luz'].',' . $data['frenosp_luz'].',' . $data['airbag_luz'].',' . 
+			$data['presionaire_luz'].',' . $data['bateria_luz'];
+		//demas Interiores (opera)
 		$claxon          = $data["claxon"];
-		$luces_int       = $data["lucesok"];
+		//$luces_int       = $data["lucesok"];
+		$luces_int 		 = $data['lucesok'] .',' . $data['lucesDelant'] .',' . $data['lucesTraseras'] .',' . $data['lucesStop'];
 		$radio           = $data["radio"];
 		$pantalla        = $data["pantalla"];
 		$ac              = $data["ac"];
@@ -1879,10 +1883,10 @@ class Buscador_Model extends CI_Model{
 			$this->db->query("INSERT INTO orden_servicio_inspeccion(id_servicio,cajuela,exteriores,documentacion,gasolina,dejaArticulos, 
 				articulos, aceiteMotor, direccionHidraulica, liquidoTransmision, liquidoLimpiaPara, liquidoFreno,
 				plumas, llantas,tambores, discos, balatas, img, fecha_creacion, fecha_actualizacion,bateria, corriente_fabrica,corriente_real, nivel_carga, luces, parabrisas, perdida_fluidos, pruebaParabrisas, nivel_fluidos_cambiado, plumaslimp_cambiado, bateria_cambiado, sistemas1_cambiado, sistemas2_cambiado, deposito_refrigerante,claxon,luces_int,radio,pantalla,ac,encendedor,
-				vidrios,espejos,seguros_ele,co, asientosyvesti, tapetes, extension_garantia, existen_danios, dan_costDerecho, dan_parteDel, dan_intAsAlf, dan_costIzq, dan_parteTras, dan_cristFaros, inf_sistEsc, inf_amort, inf_tuberias, inf_transeje_transm, inf_sistDir, inf_chasisSucio, inf_golpesEspecif, sfrenos_ddBalata, sfrenos_ddDisco, sfrenos_ddNeumat, sfrenos_diBalata, sfrenos_diDisco,sfrenos_diNeumat, sfrenos_tdBalata, sfrenos_tdDisco, sfrenos_tdNeumat, sfrenos_tiBalata, sfrenos_tiDisco, sfrenos_tiNeumat, sfrenos_refNeumat, reqRev_inferior, reqRev_sistFrenos, profecoFame) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", array($orden_servicio,$cajuela, $exteriores,$documentacion ,
+				vidrios,espejos,seguros_ele,co, asientosyvesti, tapetes, extension_garantia, existen_danios, dan_costDerecho, dan_parteDel, dan_intAsAlf, dan_costIzq, dan_parteTras, dan_cristFaros, inf_sistEsc, inf_amort, inf_tuberias, inf_transeje_transm, inf_sistDir, inf_chasisSucio, inf_golpesEspecif, sfrenos_ddBalata, sfrenos_ddDisco, sfrenos_ddNeumat, sfrenos_diBalata, sfrenos_diDisco,sfrenos_diNeumat, sfrenos_tdBalata, sfrenos_tdDisco, sfrenos_tdNeumat, sfrenos_tiBalata, sfrenos_tiDisco, sfrenos_tiNeumat, sfrenos_refNeumat, reqRev_inferior, reqRev_sistFrenos, luces_tablero, profecoFame) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", array($orden_servicio,$cajuela, $exteriores,$documentacion ,
 					$gasolina,$deja_articulos, $articulos,$aceiteMotor, $direccionHidraulica,$liquidoTransmision,$liquidoLimpiaPara,
 					$liquidoFreno, $plumas, $llantas, $tambores, $discos, $balatas, $img, $fecha_creacion, $fecha_actualizacion,$bateria,$corriente_fabrica,$corriente_real, $nivel_carga,$luces,$parabrisas, $perdida_fluidos, $nivel_fluidos_cambiado, $prueba_parabrisas, $plumaslimp_cambiado, $bateria_cambiado, $sistemas1_cambiado, $sistemas2_cambiado, $deposito_refrigerante,
-					$claxon,$luces_int,$radio,$pantalla,$ac, $encendedor,$vidrios,$espejos, $seguros_ele,$co, $asientosyvesti, $tapetes, $ext_garantia, $danios, $dan_costDerecho, $dan_parteDel, $dan_intAsAlf, $dan_costIzq, $dan_parteTras, $dan_cristFaros, $inf_sistEsc, $inf_amort, $inf_tuberias, $inf_transeje_transm, $inf_sistDir, $inf_chasisSucio, $inf_golpesEspecif, $sfrenos_ddBalata, $sfrenos_ddDisco, $sfrenos_ddNeumat, $sfrenos_diBalata, $sfrenos_diDisco, $sfrenos_diNeumat, $sfrenos_tdBalata, $sfrenos_tdDisco, $sfrenos_tdNeumat, $sfrenos_tiBalata, $sfrenos_tiDisco, $sfrenos_tiNeumat, $sfrenos_refNeumat, $reqRev_inferior, $reqRev_sistFrenos, $profecoFame));
+					$claxon,$luces_int,$radio,$pantalla,$ac, $encendedor,$vidrios,$espejos, $seguros_ele,$co, $asientosyvesti, $tapetes, $ext_garantia, $danios, $dan_costDerecho, $dan_parteDel, $dan_intAsAlf, $dan_costIzq, $dan_parteTras, $dan_cristFaros, $inf_sistEsc, $inf_amort, $inf_tuberias, $inf_transeje_transm, $inf_sistDir, $inf_chasisSucio, $inf_golpesEspecif, $sfrenos_ddBalata, $sfrenos_ddDisco, $sfrenos_ddNeumat, $sfrenos_diBalata, $sfrenos_diDisco, $sfrenos_diNeumat, $sfrenos_tdBalata, $sfrenos_tdDisco, $sfrenos_tdNeumat, $sfrenos_tiBalata, $sfrenos_tiDisco, $sfrenos_tiNeumat, $sfrenos_refNeumat, $reqRev_inferior, $reqRev_sistFrenos,$luces_tablero,$profecoFame));
 
 			$id = $this->db->insert_id();
 		}else 
@@ -1919,6 +1923,7 @@ class Buscador_Model extends CI_Model{
 			$this->db->set("sistemas1_cambiado", $sistemas1_cambiado);
 			$this->db->set("sistemas2_cambiado", $sistemas2_cambiado);
 			$this->db->set("deposito_refrigerante", $deposito_refrigerante);
+			$this->db->set("luces_tablero",$luces_tablero);
 			$this->db->set("claxon",$claxon);
 			$this->db->set("luces_int",$luces_int);
 			$this->db->set("radio",$radio);

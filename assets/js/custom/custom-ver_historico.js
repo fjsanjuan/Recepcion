@@ -216,6 +216,8 @@
 				btn     += "<input type='hidden' id='btn_trae_firma' value='"+trae_firma+"'>";
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
+				// se usara para guardar el nombre del asesor que realizo la  orden 
+				btn     += "<input type='hidden' id='btn_asesor' value='"+val["asesor"]+"'>";
 
 				action  = "<button class='btn btn-sm whatsapp' style='background: #79c143;' id='whats-"+val["id"]+"'><i class='fab fa-whatsapp'></i>  &nbsp&nbsp Whatsapp</button>";
 				action  +="<button class='btn btn-sm correohist' style='background:#2B95FF;' id='correo-"+val["id"]+"'><i class='fa fa-envelope'></i>&nbsp&nbsp Correo</button>";
@@ -453,8 +455,46 @@
 
 		$("#oden_hide").val(id_orden);
 		var parent = $this.parent().parent().find('td:eq(2)').text();
-		var numerowhats = parent.substring(3);
+		var cte = $this.parent().parent().find('td:eq(1)').text();
+		
+		//el que se usa para enviar el whtsapp historico
+		if (parent.length==13) {
+        	numerowhats = parent.substring(3);
+    	}
+    	else{
+       		numerowhats =  parent;
+   		}
+
 		$("#numerowhats").val(numerowhats);
+
+		var asesor = $this.parent().parent().find('#btn_asesor').val();
+		//codigo para el envio de orden por whatsapp en historico
+		var textoWhats=null;
+		var hora_actual = moment().format("HH:mm");
+		var enlace_or =base_url+'servicio/descargar_orden/'+id_orden;
+		//var enlace_or ='http://fordravse.southcentralus.cloudapp.azure.com:8090/Recepcion/servicio/descargar_orden/'+id_orden;
+
+		if(hora_actual >= "00:00" && hora_actual <= "11:59")
+        {
+        	saludo = "¡Buenos días";
+        }else if(hora_actual >= "12:00" && hora_actual <= "19:00")
+            {
+                saludo = "¡Buenas tardes";
+	        }else 
+	            {
+	            	saludo = "¡Buenas noches";
+	             }
+
+		textoWhats = saludo +", "+ cte + "!";
+        textoWhats += "\n";
+        textoWhats += "Ponemos a su disposición la copia de su Órden de Servicio en el siguiente enlace " + enlace_or;
+        //textoWhats += "\n";
+        //textoWhats += "Agradecemos su visita al Taller de "+datos["sucursal"]["nombre"]+".";
+        //textoWhats += "\n";
+        //textoWhats += "Le atendió: "+asesor;
+
+
+		$("#TextWhats").val(textoWhats);
 		$('#modal_whatsapp').modal('show');
 	});
 	//modal envio correo 
@@ -1303,6 +1343,8 @@
 		// whatsapp_url = 'https://wa.me/'+codigo_area+numero+'?text='+texto;
 		var whatsapp_url = 'https://api.whatsapp.com/send?phone='+codigo_area+numero+'&text='+texto;
 		// window.open(whatsapp_url, "_blank");
+
+   		if(numero.length ==10){
 		var form = $("#form_send_whatsapp").serializeArray();
 		$.ajax({
 			url: base_url+ "index.php/Servicio/guardar_en_bitacora",
@@ -1323,6 +1365,12 @@
 				$('#modal_whatsapp').modal('hide');
 			}
 		});
+        }
+        else{
+        	toastr.info("Por favor, escriba el número de celular del Cliente (10 dígitos).", {timeOut: 5000});
+        }
+
+		
         
 	});
 	$(document).on("click", "button.whatsapp_pres", function(e){
