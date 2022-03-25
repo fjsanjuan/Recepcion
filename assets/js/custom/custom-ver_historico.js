@@ -226,7 +226,7 @@ $(document).ready(function() {
 					action_refacciones	="";
 					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary ver_req' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='ver_req-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Requisiciones</button>";
 					action_refacciones  +="<button class='btn btn-sm anexofotos' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='anexofotos-"+val["id"]+"'><i class='fa fa-photo'></i>&nbsp&nbsp Fotografías</button>";
-					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary bak_order' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='bak_order-"+val["id"]+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Ordenes</button>";
+					action_refacciones	+="<button type='button' class='btn btn-sm btn-primary bak_order' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;'  id='bak_order-"+val["id"]+"'data-folio='"+val.movID.MovID+"'><i class='fas fa-list-ol'></i>&nbsp&nbsp Ver Ordenes</button>";
 					//action_refacciones	+= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
 				} else {
 					action_refacciones	= "<button class='btn btn-sm search_verificacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #607d8b;' id='search_verificacion-"+val["id"]+"'><i class='fas fa-list-ol'></i>  &nbsp&nbsp Ver Cotizaciones</button>";
@@ -7245,29 +7245,30 @@ $(document).off('click', '#modaldocumentacion button.documentacionOrden').on('cl
 });
 
 $(document).off('click', '.bak_order').on('click', '.bak_order', function(event) {
-    $('#mostrar_detalles').hide();
-    var folio = $("#vin_cliente").val();
+	id = $(this).prop('id').split('-')[1];
+	var folio = $(this).data('folio');
     $('#modalBuscOrdenes').modal('show');
-    //empty
-    /*$.ajax({
+    $.ajax({
         cache: false,
         type: "POST",
-        url: base_url + "index.php/servicio/ord_por_folio",
-        data: ({ folio: folio } ),
+        url: base_url + "index.php/servicio/listado_back_orders",
+        datatype: 'json',
+		data: ({ folio: folio  }),
         beforeSend: function(){
             $("#loading_spin").show();
         },
         success: function(data){
-
+			//console.log(data);
             var data_from_ajax = data;
             var obj = JSON.parse(data_from_ajax);
             //console.log(obj);
             var items =[];
-            $.each(obj , function (key, val){ 
-                items.push("<tr id='" + val.IdPaquete    + "'>");
-                items.push("<td>" + val.IdPaquete  + "</td>");
-                items.push("<td>"  + val.DescripcionC + "</td>");
-                items.push("<td><button class='btn btn-success float-right mostrar_det'><i class='fa fa-plus'></i></button></td>");
+            $.each(obj.data , function (key, val){
+                items.push("<tr id='" + val.ID  + "'>");
+                items.push("<td>"+(val.MovIDCompra ? val.MovIDCompra : val.ID)+"</td>");
+                items.push("<td>" + val.MovIDVenta  + "</td>");
+				items.push("<td>" + val.Referencia + "</td>");
+                items.push("<td><button class='btn btn-success float-right mostrar_det' data-id='" +val.ID + "'><i class='fa fa-eye'></i></button></td>");
                 items.push("</tr>");
             });
 
@@ -7277,12 +7278,12 @@ $(document).off('click', '.bak_order').on('click', '.bak_order', function(event)
         },
         error: function(){
         }   
-    });*/
+    });
 });
 
 $(document).off('click', '.mostrar_det').on('click', '.mostrar_det', function(event) {
-    $('#mostrar_detalles').show();
-
+	var id = $(this).data('id');
+	window.open(base_url+"index.php/servicio/detalles_back_orders/"+ id, "_blank");
 });
 
 $(document).off('change', '#lineaTrabajoModal .costo_total').on('change', '#lineaTrabajoModal .costo_total', function(event) {

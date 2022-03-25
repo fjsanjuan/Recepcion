@@ -860,4 +860,20 @@ table tr.active {
 <?php $this->load->view('modals/dannos_relacion'); ?>
 
 <!-- modal busqueda ordenes -->
-<?php $this->load->view('modals/back_order'); ?>
+<div class="modal fade" id="modalBuscOrdenes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="false">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold" id="exampleModalLabel">Back Order</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <?php $this->load->view('modals/back_order'); ?>
+            </div>
+            <div class="modal-footer">
+	            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

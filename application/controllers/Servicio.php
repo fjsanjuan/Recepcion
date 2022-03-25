@@ -3864,10 +3864,20 @@ class Servicio extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	function ord_por_folio(){
+	function listado_back_orders(){
 		$folio = $this->input->post('folio');
-		$data = $this->buscador_model->orden_por_folio($folio);
+		$data = $this->buscador_model->listado_back_orders($folio);
 		echo json_encode($data);
+	}
+	function detalles_back_orders($id =  null){
+		if ($id == null) {
+			$response['heading'] = 'No tiene id de compra.';
+			$response['message'] = 'No existen backorders para esta orden.';
+			$this->load->view("errors/html/error_404", $response);
+		}else{
+		$data = $this->buscador_model->detalles_back_orders($id);
+		$this->load->view('detalles_backOrders',$data);
+		}
 	}
 
 	public function obtener_claves_defecto($idSucursal = null)

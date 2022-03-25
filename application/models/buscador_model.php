@@ -6016,17 +6016,31 @@ class Buscador_Model extends CI_Model{
 		return $response;
 	}
 
-	public function orden_por_folio($folio){
+	public function listado_back_orders($folio){
 		$this->db2 = $this->load->database("other", true);
-		$query = $this->db2->query("SELECT Articulo, Modelo FROM VIN WHERE VIN = ?", array($folio));
-		if ($query->num_rows() > 0){
-			$art = $query->result_array();
+		$query['data'] = $this->db2->select('*, ID, Referencia')->FROM('vwCA_backOrderFord')->WHERE(['MovIDVenta' => $folio])->get()->result_array();
+		if (count($query['data'] > 0)){
+			$query['estatus'] = true;
+			$query['mensaje'] = 'Ok';
 		}else{
-			echo 'sin';
+			$query['estatus'] = false;
+			$query['mensaje'] = 'No tienes ordenes';
 		}
-		$query2 = $this->db2->query("SELECT DISTINCT Articulo, IdPaquete, DescripcionC, DescripcionL, kilometraje, Modelo, TipoPaquete FROM ". $this->vista ." WHERE Articulo IN (?, 'Todos') AND Modelo IN (?, 'Todos') AND TipoPaquete = 'Mantenimiento' OR (Articulo ='Todos' AND TipoPaquete = 'Mantenimiento' AND Modelo ='Todos')", array($art[0]['Articulo'], $art[0]['Modelo']))->result_array();
-			return  $query2;
-
+		return  $query;
+		
+	}
+	public function detalles_back_orders($id){
+		$this->db2 = $this->load->database("other", true);
+		$query['compra'] = $this->db2->select('*')->from('vwCA_backOrderFord')->where(['ID' => $id])->get()->result_array();
+		$query['data'] = $this->db2->select('*')->FROM('vwCA_backOrderFordD')->WHERE(['ID' => $id])->get()->result_array();
+		if (count($query > 0)){
+			$query['estatus'] = true;
+			$query['mensaje'] = 'Ok';
+		}else{
+			$query['estatus'] = false;
+			$query['mensaje'] = 'La orden no tiene detalles';
+		}
+		return  $query;
 	}
 
 	public function obtener_claves_defecto($idSucursal)
