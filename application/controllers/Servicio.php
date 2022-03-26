@@ -1487,22 +1487,35 @@ class Servicio extends CI_Controller {
 
 	public function descargar_orden($id_orden = null){
 		//$id_orden="11733";
-		$directorio= "./archivos_recepcion";
-		$name='FormatoDeOrdenServicio';
-		if(is_dir($directorio)){
-			$filename = $name.$id_orden.".pdf";
-			$ruta = base_url($directorio."/".$filename);
-			if(file_exists($directorio."/".$filename)){
-				header('Content-type:application/pdf');
-				readfile($ruta);
-			}
-			else{
+		if ($id_orden == null) {
+			$response['heading'] = 'Orden no válida.';
+			$response['message'] = 'Número de orden de servicio no válida.';
+			$this->load->view("errors/html/error_404", $response);
+		}else {
+			$orden = $this->db->select('*')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
+			if (isset($orden['vin']) ) {
+				$directorio= RUTA_FORMATS.$orden['vin'].'/'.$id_orden;
+				$name='FormatoDeOrdenServicio';
+				if(is_dir($directorio)){
+					$filename = $name.$id_orden.".pdf";
+					$ruta = base_url($directorio."/".$filename);
+					if(file_exists($directorio."/".$filename)){
+						header('Content-type:application/pdf');
+						readfile($ruta);
+					}
+					else{
+						show_404();
+					}
+				}
+				else{
 				show_404();
+				}
+			}else {
+				$response['heading'] = 'Orden no válida.';
+				$response['message'] = 'Número de vin no válido.';
+				$this->load->view("errors/html/error_404", $response);
 			}
 		}
-		else{
-			show_404();
-			}
 	}
 
 	public function enviar_orden_mail()

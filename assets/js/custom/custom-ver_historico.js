@@ -999,8 +999,9 @@ $(document).ready(function() {
 		var $this = $(this);
 
 		$("#oden_hide").val(id_orden);
-		var parent = $this.parent().parent().find('td:eq(2)').text();
-		var cte = $this.parent().parent().find('td:eq(1)').text();
+		var parent = $this.parent().parent().find('td:eq(3)').text();
+		var cte = $this.parent().parent().find('td:eq(2)').text();
+		console.log(parent, cte);
 		
 		//el que se usa para enviar el whtsapp historico
 		if (parent.length==13) {
@@ -1016,7 +1017,7 @@ $(document).ready(function() {
 		//codigo para el envio de orden por whatsapp en historico
 		var textoWhats=null;
 		var hora_actual = moment().format("HH:mm");
-		var enlace_or =base_url+'servicio/descargar_orden/'+id_orden;
+		var enlace_or =base_url+'index.php/servicio/descargar_orden/'+id_orden;
 		//var enlace_or ='http://fordravse.southcentralus.cloudapp.azure.com:8090/Recepcion/servicio/descargar_orden/'+id_orden;
 
 		if(hora_actual >= "00:00" && hora_actual <= "11:59")

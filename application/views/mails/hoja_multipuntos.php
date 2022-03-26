@@ -784,7 +784,7 @@ $(document).ready(function() {
 <body>
 	<button class="btn btn-success boton_imprimir" title="Imprimir"><i class="fa fa-print"></i> Imprimir</button>
 	<button class="btn btn-success boton_pdf" title="Guardar PDF"><i class="fa fa-download"></i> Guardar PDF</button>
-	<button class="btn btn-success boton_enviar" title="Guardar PDF"><i class="fa fa-envelope"></i> Enviar</button>
+	<!-- <button class="btn btn-success boton_enviar" title="Guardar PDF"><i class="fa fa-envelope"></i> Enviar</button> -->
 	<div class="subcuerpo">
 	<div class="container">
 		<br>
