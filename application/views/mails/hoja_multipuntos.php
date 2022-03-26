@@ -620,6 +620,68 @@ $(document).ready(function() {
 			toastr.info("ya existe la firma del cliente");
 		}
 	});
+
+	$(".boton_enviar").click(function(){
+		var email = $("#correo_e").val();
+
+    	if(email.length==0){
+    		alert('Ingresa un correo electrónico')
+    		$("#correo_e").focus();
+    	}
+    	else{
+    		
+    		html2canvas($(".subcuerpo"),{
+			   	onrendered:function(canvas){
+				   img = canvas.toDataURL("image/png");
+				   //localStorage.removeItem("hoja_multipuntos");
+				   //localStorage.setItem("hoja_multipuntos", img);
+				   enviar_correo(img);
+				  
+			   	}
+	    	});
+    	}
+
+	});
+
+
+	function enviar_correo(img)
+	{
+	    var email = $("#correo_e").val();
+	    var cliente = $("#nombre").val();
+	    var id_orden = localStorage.getItem("hist_id_orden");
+	    var img2 = img;
+
+	    $.ajax({
+	        cache: false,
+	        url: base_url+"index.php/servicio/enviar_multi_mail/",
+	        type: 'POST',
+	        dataType: "json",
+	        data:  {email_envio: email, cliente_envio: cliente, id_orden: id_orden, multi: img2},
+	        beforeSend: function(){
+	            $('#loading_spin').show();
+	        },
+	        success: function(data) {
+	            if(data)
+	            {
+	         
+	                // toastr.success('El correo electrónico ha sido enviado.', {timeOut: 5000});
+	                alert('El correo electrónico ha sido enviado.');
+	            }else 
+	            {
+	                // toastr.error('Hubo un error al enviar el correo electrónico.', {timeOut: 5000});
+	                alert('Hubo un error al enviar el correo electrónico.');
+	                console.log(data);
+	            }               
+	        },
+	        error : function(xhr, status) {
+	            alert("Hubo un error al enviar el correo");
+	            console.log(data);
+	        }
+	    });
+}
+
+
+
 });
 </script>
 <style type="text/css" media="print">
@@ -722,6 +784,7 @@ $(document).ready(function() {
 <body>
 	<button class="btn btn-success boton_imprimir" title="Imprimir"><i class="fa fa-print"></i> Imprimir</button>
 	<button class="btn btn-success boton_pdf" title="Guardar PDF"><i class="fa fa-download"></i> Guardar PDF</button>
+	<!-- <button class="btn btn-success boton_enviar" title="Guardar PDF"><i class="fa fa-envelope"></i> Enviar</button> -->
 	<div class="subcuerpo">
 	<div class="container">
 		<br>

@@ -819,6 +819,93 @@ class Servicio extends CI_Controller {
 		}else{
 			$dato["discos"] =  "No se reviso";			
 		}
+		
+		/* Interiores (Opera, indicadores de falla) */
+
+		//funcionamiento del motor
+		if($this->input->post('motor_luz') == 'on'){
+			$dato["motor_luz"] =  "motor_on";	
+		}elseif ( $this->input->post('motor_luz') == 'off') {
+			$dato["motor_luz"] =  "motor_off";	
+		}elseif ($this->input->post('motor_luz') == 'nc') {
+			$dato["motor_luz"] =  "motor_nc";	
+		}else{
+			$dato["motor_luz"] =  "motor_nsr";	
+		}
+		//luz de servicio
+		if($this->input->post('servicio_luz') == 'on'){
+			$dato["servicio_luz"] =  "servicio_on";	
+		}elseif ( $this->input->post('servicio_luz') == 'off') {
+			$dato["servicio_luz"] =  "servicio_off";	
+		}elseif ($this->input->post('servicio_luz') == 'nc') {
+			$dato["servicio_luz"] =  "servicio_nc";	
+		}else{
+			$dato["servicio_luz"] =  "servicio_nsr";	
+		}
+		//frenos ABS
+		if($this->input->post('abs_luz') == 'on'){
+			$dato["abs_luz"] =  "abs_on";	
+		}elseif ( $this->input->post('abs_luz') == 'off') {
+			$dato["abs_luz"] =  "abs_off";	
+		}elseif ($this->input->post('abs_luz') == 'nc') {
+			$dato["abs_luz"] =  "abs_nc";	
+		}else{
+			$dato["abs_luz"] =  "abs_nsr";	
+		}
+		//luz de frenos
+		if($this->input->post('frenos_luz') == 'on'){
+			$dato["frenos_luz"] =  "frenosluz_on";	
+		}elseif ( $this->input->post('frenos_luz') == 'off') {
+			$dato["frenos_luz"] =  "frenosluz_off";	
+		}elseif ($this->input->post('frenos_luz') == 'nc') {
+			$dato["frenos_luz"] =  "frenosluz_nc";	
+		}else{
+			$dato["frenos_luz"] =  "frenosluz_nsr";	
+		}
+		//luz de freno de mano
+		if($this->input->post('frenosp_luz') == 'on'){
+			$dato["frenosp_luz"] =  "frenosluzp_on";	
+		}elseif ( $this->input->post('frenosp_luz') == 'off') {
+			$dato["frenosp_luz"] =  "frenosluzp_off";	
+		}elseif ($this->input->post('frenosp_luz') == 'nc') {
+			$dato["frenosp_luz"] =  "frenosluzp_nc";	
+		}else{
+			$dato["frenosp_luz"] =  "frenosluzp_nsr";	
+		}
+		//airbag bolsas de aire
+		if($this->input->post('airbag_luz') == 'on'){
+			$dato["airbag_luz"] =  "airbag_on";	
+		}elseif ( $this->input->post('airbag_luz') == 'off') {
+			$dato["airbag_luz"] =  "airbag_off";	
+		}elseif ($this->input->post('airbag_luz') == 'nc') {
+			$dato["airbag_luz"] =  "airbag_nc";	
+		}else{
+			$dato["airbag_luz"] =  "airbag_nsr";	
+		}
+
+		//presión de llantas
+		if($this->input->post('presionaire_luz') == 'on'){
+			$dato["presionaire_luz"] =  "presionaire_on";	
+		}elseif ( $this->input->post('presionaire_luz') == 'off') {
+			$dato["presionaire_luz"] =  "presionaire_off";	
+		}elseif ($this->input->post('presionaire_luz') == 'nc') {
+			$dato["presionaire_luz"] =  "presionaire_nc";	
+		}else{
+			$dato["presionaire_luz"] =  "presionaire_nsr";	
+		}
+
+		//luz bateria indicador
+		if($this->input->post('bateria_luz') == 'on'){
+			$dato["bateria_luz"] =  "bateria_on";	
+		}elseif ( $this->input->post('bateria_luz') == 'off') {
+			$dato["bateria_luz"] =  "bateria_off";	
+		}elseif ($this->input->post('bateria_luz') == 'nc') {
+			$dato["bateria_luz"] =  "bateria_nc";	
+		}else{
+			$dato["bateria_luz"] =  "bateria_nsr";	
+		}
+
+
 		//adicionales
 		//claxo
 		if($this->input->post('claxonok') == 'si'){
@@ -831,7 +918,7 @@ class Servicio extends CI_Controller {
 			$dato["claxon"] =  "No se reviso";	
 		}
 		//luces
-		if($this->input->post('lucesok') == 'si'){
+		/* if($this->input->post('lucesok') == 'si'){
 			$dato["lucesok"] =  "SI";	
 		}elseif ( $this->input->post('lucesok') == 'no') {
 			$dato["lucesok"] =  "NO";	
@@ -839,6 +926,39 @@ class Servicio extends CI_Controller {
 			$dato["lucesok"] =  "No cuenta";	
 		}else{
 			$dato["lucesok"] =  "No se reviso";	
+		} */
+		
+		if($this->input->post('lucesDelant') == 'si'){
+			$dato["lucesDelant"] =  "SI";	
+		}elseif ( $this->input->post('lucesDelant') == 'no') {
+			$dato["lucesDelant"] =  "NO";	
+		}elseif ($this->input->post('lucesDelant') == 'nc') {
+			$dato["lucesDelant"] =  "No cuenta";	
+		}else{
+			$dato["lucesDelant"] =  "No se reviso";	
+		}
+		if($this->input->post('lucesTraseras') == 'si'){
+			$dato["lucesTraseras"] =  "SI";	
+		}elseif ( $this->input->post('lucesTraseras') == 'no') {
+			$dato["lucesTraseras"] =  "NO";	
+		}elseif ($this->input->post('lucesTraseras') == 'nc') {
+			$dato["lucesTraseras"] =  "No cuenta";	
+		}else{
+			$dato["lucesTraseras"] =  "No se reviso";	
+		}
+		if($this->input->post('lucesStop') == 'si'){
+			$dato["lucesStop"] =  "SI";	
+		}elseif ( $this->input->post('lucesStop') == 'no') {
+			$dato["lucesStop"] =  "NO";	
+		}elseif ($this->input->post('lucesStop') == 'nc') {
+			$dato["lucesStop"] =  "No cuenta";	
+		}else{
+			$dato["lucesStop"] =  "No se reviso";	
+		}
+		if($this->input->post('lucesDelant') == 'si' && $this->input->post('lucesTraseras') == 'si' && $this->input->post('lucesStop') == 'si' ){
+			$dato["lucesok"] =  "SI";
+		}else{
+			$dato["lucesok"] =  "NO";	
 		}
 		//radio
 		if($this->input->post('radiook') == 'si'){
@@ -1365,6 +1485,39 @@ class Servicio extends CI_Controller {
 		$this->load->view("mails/formatos_demo/contenido_correo", $datos_mensaje);
 	}
 
+	public function descargar_orden($id_orden = null){
+		//$id_orden="11733";
+		if ($id_orden == null) {
+			$response['heading'] = 'Orden no válida.';
+			$response['message'] = 'Número de orden de servicio no válida.';
+			$this->load->view("errors/html/error_404", $response);
+		}else {
+			$orden = $this->db->select('*')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
+			if (isset($orden['vin']) ) {
+				$directorio= RUTA_FORMATS.$orden['vin'].'/'.$id_orden;
+				$name='FormatoDeOrdenServicio';
+				if(is_dir($directorio)){
+					$filename = $name.$id_orden.".pdf";
+					$ruta = base_url($directorio."/".$filename);
+					if(file_exists($directorio."/".$filename)){
+						header('Content-type:application/pdf');
+						readfile($ruta);
+					}
+					else{
+						show_404();
+					}
+				}
+				else{
+				show_404();
+				}
+			}else {
+				$response['heading'] = 'Orden no válida.';
+				$response['message'] = 'Número de vin no válido.';
+				$this->load->view("errors/html/error_404", $response);
+			}
+		}
+	}
+
 	public function enviar_orden_mail()
 	{
 		ini_set('memory_limit', '1024M');
@@ -1642,6 +1795,67 @@ class Servicio extends CI_Controller {
 		{
 			$creado["estatus"] = true;
 			$creado["ruta"] = $ruta_temp.$nombre;
+		}else
+		{
+			$creado["estatus"] = false;
+			$creado["ruta"] = "";
+		}
+
+		return $creado;
+	}
+
+	public function existe_pdf($id_orden= null)
+	{
+		
+		$nombre = "FormatoDeOrdenServicio".$id_orden.".pdf";
+
+		if(file_exists('./archivos_recepcion/'.$nombre))
+		{
+			$creado["estatus"] = true;
+			$creado["ruta"] = './archivos_recepcion/'.$nombre;
+		}else
+		{
+			$creado["estatus"] = false;
+			$creado["ruta"] = "";
+		}
+
+		return $creado;
+	}
+
+
+
+	public function crear_pdf1Vez()
+	{
+		include_once('./application/libraries/MPDF60/mpdf.php');
+
+		$imagenb64 = $this->input->post("base64");
+        $img_reverso = $this->input->post("img_reverso");
+        $id_orden = $this->input->post("id_orden");
+        $formato_inventario = $this->input->post("inv");
+
+        $formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso);
+		$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);
+
+		if($formato["estatus"] && $finventario["estatus"]){
+			$creado=true;
+		}
+		else{
+			$creado=false;
+		}
+
+		 echo json_encode($creado);
+	}
+
+
+	public function existe_pdfInv($id_orden= null)
+	{
+		
+		$nombre = "FormatoDeInventario".$id_orden.".pdf";
+
+		if(file_exists('./archivos_recepcion/'.$nombre))
+		{
+			$creado["estatus"] = true;
+			$creado["ruta"] = './archivos_recepcion/'.$nombre;
 		}else
 		{
 			$creado["estatus"] = false;

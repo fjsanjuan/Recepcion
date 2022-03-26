@@ -925,6 +925,8 @@
                       </tbody>
                 </table>
               </div>
+            <!-- se integra ala vista de la recepcion los campos con los indicadores del tablero de autp -->
+            <?php $this->load->view("muestra_datos/datos_luces_tablero");?>
               
              <blockquote class="blockquote bq-primary htext">Interiores (Opera)</blockquote>
               <div class="table-responsive">
@@ -955,7 +957,7 @@
                     </td>
                     </div>
                   </tr>
-                <tr>
+                <!-- <tr>
                     <div>
                     <td>
                     <span>Luces</span>
@@ -976,6 +978,82 @@
                         <div class="form-check form-check-inline border">
                           <input type="radio" class="form-check-input" id="lucesnc" name="lucesok" value="nc">
                           <label class="form-check-label" for="lucesnc" style="padding-right: 20px;">No cuenta</label>
+                        </div>
+                    </td>
+                    </div>
+                </tr> -->
+
+                <tr>
+                    <div>
+                    <td>
+                    <span>Luces Delanteras</span>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesokdelant" name="lucesDelant" value="si">
+                          <label class="form-check-label" for="lucesokdelant" style="padding-right: 20px;">Si</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesnodelant" name="lucesDelant" value="no">
+                          <label class="form-check-label" for="lucesnodelant" style="padding-right: 20px;">No</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesncdelant" name="lucesDelant" value="nc">
+                          <label class="form-check-label" for="lucesncdelant" style="padding-right: 20px;">No cuenta</label>
+                        </div>
+                    </td>
+                    </div>
+                </tr>
+                <tr>
+                    <div>
+                    <td>
+                    <span>Luces Traseras</span>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesoktraseras" name="lucesTraseras" value="si">
+                          <label class="form-check-label" for="lucesoktraseras" style="padding-right: 20px;">Si</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesnotraseras" name="lucesTraseras" value="no">
+                          <label class="form-check-label" for="lucesnotraseras" style="padding-right: 20px;">No</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesnctraseras" name="lucesTraseras" value="nc">
+                          <label class="form-check-label" for="lucesnctraseras" style="padding-right: 20px;">No cuenta</label>
+                        </div>
+                    </td>
+                    </div>
+                </tr>
+                <tr>
+                    <div>
+                    <td>
+                    <span>Luces Stop</span>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesokstop" name="lucesStop" value="si">
+                          <label class="form-check-label" for="lucesokstop" style="padding-right: 20px;">Si</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesnostop" name="lucesStop" value="no">
+                          <label class="form-check-label" for="lucesnostop" style="padding-right: 20px;">No</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check form-check-inline border">
+                          <input type="radio" class="form-check-input" id="lucesncstop" name="lucesStop" value="nc">
+                          <label class="form-check-label" for="lucesncstop" style="padding-right: 20px;">No cuenta</label>
                         </div>
                     </td>
                     </div>

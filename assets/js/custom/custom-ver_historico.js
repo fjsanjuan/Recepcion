@@ -354,6 +354,8 @@ $(document).ready(function() {
 				}
 				// se usara para ver a que cliente se envia en presupuesto
 				btn     += "<input type='hidden' id='btn_email_cte' value='"+correo_cte+"'>";
+				// se usara para guardar el nombre del asesor que realizo la  orden 
+				btn     += "<input type='hidden' id='btn_asesor' value='"+val["asesor"]+"'>";
 				btn		+="<button class='btn btn-sm verautorizaciones' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background: #152f6d;' id='verautorizaciones-"+val["id"]+"'><i class='fa fa-folder-open'></i>&nbsp&nbsp Ver firmas</button>";
 				btn		+="<button class='btn btn-sm cargardocumentacion' style='min-width: 140px; max-width: 140px; min-height: 50px; max-height: 50px; background:#C70039;' id='addDoc-"+val["id"]+"' data-movimiento='"+(val['movimiento'] != null ? val['movimiento'] : 0)+"' data-trae_signGrtia='"+trae_signGrtia+"'><i class='fa fa-file'></i>&nbsp Documentación</button>";
 				if (val['movimiento'] != null) {
@@ -997,9 +999,48 @@ $(document).ready(function() {
 		var $this = $(this);
 
 		$("#oden_hide").val(id_orden);
-		var parent = $this.parent().parent().find('td:eq(2)').text();
-		var numerowhats = parent.substring(3);
+		var parent = $this.parent().parent().find('td:eq(3)').text();
+		var cte = $this.parent().parent().find('td:eq(2)').text();
+		console.log(parent, cte);
+		
+		//el que se usa para enviar el whtsapp historico
+		if (parent.length==13) {
+        	numerowhats = parent.substring(3);
+    	}
+    	else{
+       		numerowhats =  parent;
+   		}
+
 		$("#numerowhats").val(numerowhats);
+
+		var asesor = $this.parent().parent().find('#btn_asesor').val();
+		//codigo para el envio de orden por whatsapp en historico
+		var textoWhats=null;
+		var hora_actual = moment().format("HH:mm");
+		var enlace_or =base_url+'index.php/servicio/descargar_orden/'+id_orden;
+		//var enlace_or ='http://fordravse.southcentralus.cloudapp.azure.com:8090/Recepcion/servicio/descargar_orden/'+id_orden;
+
+		if(hora_actual >= "00:00" && hora_actual <= "11:59")
+        {
+        	saludo = "¡Buenos días";
+        }else if(hora_actual >= "12:00" && hora_actual <= "19:00")
+            {
+                saludo = "¡Buenas tardes";
+	        }else 
+	            {
+	            	saludo = "¡Buenas noches";
+	             }
+
+		textoWhats = saludo +", "+ cte + "!";
+        textoWhats += "\n";
+        textoWhats += "Ponemos a su disposición la copia de su Órden de Servicio en el siguiente enlace " + enlace_or;
+        //textoWhats += "\n";
+        //textoWhats += "Agradecemos su visita al Taller de "+datos["sucursal"]["nombre"]+".";
+        //textoWhats += "\n";
+        //textoWhats += "Le atendió: "+asesor;
+
+
+		$("#TextWhats").val(textoWhats);
 		$('#modal_whatsapp').modal('show');
 	});
 	//modal envio correo 
@@ -1869,6 +1910,8 @@ $(document).ready(function() {
 		// whatsapp_url = 'https://wa.me/'+codigo_area+numero+'?text='+texto;
 		var whatsapp_url = 'https://api.whatsapp.com/send?phone='+codigo_area+numero+'&text='+texto;
 		// window.open(whatsapp_url, "_blank");
+
+   		if(numero.length ==10){
 		var form = $("#form_send_whatsapp").serializeArray();
 		$.ajax({
 			url: base_url+ "index.php/Servicio/guardar_en_bitacora",
@@ -1889,6 +1932,12 @@ $(document).ready(function() {
 				$('#modal_whatsapp').modal('hide');
 			}
 		});
+        }
+        else{
+        	toastr.info("Por favor, escriba el número de celular del Cliente (10 dígitos).", {timeOut: 5000});
+        }
+
+		
         
 	});
 	$(document).on("click", "button.whatsapp_pres", function(e){

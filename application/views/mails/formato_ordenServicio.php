@@ -26,9 +26,14 @@ $( document ).ready(function() {
 	var ids_exteriores = [];
 	var ids_documentacion = [];
 	var dejaArticulos = "<?=$inspeccion['dejaArticulos']?>";
-
+	//se extrae lo contenido en la varible de luces tablero 
+	var luces_tablero   = "<?=$inspeccion['luces_tablero']?>";
+	//se hace el conteo de el contenido de la variable para evitar problemas al mostrar la info
+	var cont_lucs_tblero = luces_tablero.length;
+	luces_tablero = luces_tablero.split(",");
 	var claxon      = "<?=$inspeccion['claxon']?>";
 	var luces_int   = "<?=$inspeccion['luces_int']?>";
+	luces_int = luces_int.split(",");
 	var radio       = "<?=$inspeccion['radio']?>";
 	var pantalla    = "<?=$inspeccion['pantalla']?>";
 	var ac          = "<?=$inspeccion['ac']?>";
@@ -42,12 +47,106 @@ $( document ).ready(function() {
 
 	var operaint = [];
 
+	//console.log(documentacion);
+	//console.log(documentacion[1]);
+
+	//validar campo de seguro de rines
+	if(documentacion[1] == "n/a"){
+		$("#i_seguro_rines").append("NC");
+	}
+	else{
+		$("#i_seguro_rines").append("<i class='fa fa-check'></i>");
+	}
 	if(dejaArticulos == "Si")
 	{
 		$("#artpersonales_si").val("x").css({"text-align":"center", "font-weight":"bold"});
 	}else 
 	{
 		$("#artpersonales_no").val("x").css({"text-align":"center", "font-weight":"bold"});
+	}
+
+	//validar contenido de la variable del tablero si es 0 es por que no tiene ningun contenido en los registro de la tabla por ser campo nuevo
+	if(cont_lucs_tblero > 0){
+		switch(luces_tablero[0]) {
+		  case "motor_on":
+		    $("#i_motor_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "motor_nc":
+		  	$("#i_motor_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[1]) {
+		  case "servicio_on":
+		    $("#i_servicio_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "servicio_nc":
+		  	$("#i_servicio_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[2]) {
+		  case "abs_on":
+		    $("#i_abs_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "abs_nc":
+		  	$("#i_abs_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[3]) {
+		  case "frenosluz_on":
+		    $("#i_frenos_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "frenosluz_nc":
+		  	$("#i_frenos_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[4]) {
+		  case "frenosluzp_on":
+		    $("#i_frenosp_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "frenosluzp_nc":
+		  	$("#i_frenosp_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[5]) {
+		  case "airbag_on":
+		    $("#i_airbag_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "airbag_nc":
+		  	$("#i_airbag_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[6]) {
+		  case "presionaire_on":
+		    $("#i_presionaire_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "presionaire_nc":
+		  	$("#i_presionaire_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
+		switch(luces_tablero[7]) {
+		  case "bateria_on":
+		    $("#i_bateria_luz").append("<i class='fa fa-times'></i>");
+		    break;
+		  case "bateria_nc":
+		  	$("#i_bateria_luz").append("NC");
+		    break;
+		  default:
+		    // code block
+		}
 	}
 
 	if(claxon == "NO" ){
@@ -57,13 +156,37 @@ $( document ).ready(function() {
 	}else{
 		$("#i_claxon").append("<i class='fa fa-check'></i>");
 	}
-	if(luces_int == "NO" ){
+	//console.log(luces_int[0])
+	//luces varias
+	if(luces_int[0] == "NO" ){
 		$("#i_luces_int").append("<i class='fa fa-times'></i>");
-	}else if(luces_int == "No cuenta"){
+	}else if(luces_int[0] == "No cuenta"){
 		$("#i_luces_int").append("NC");
-	}else{
+	}else if(luces_int[0] == "SI"){
 		$("#i_luces_int").append("<i class='fa fa-check'></i>");
 	}
+	if(luces_int[1] == "NO" ){
+		$("#i_luces_delant").append("<i class='fa fa-times'></i>");
+	}else if(luces_int[1] == "No cuenta"){
+		$("#i_luces_delant").append("NC");
+	}else if(luces_int[1] == "SI"){
+		$("#i_luces_delant").append("<i class='fa fa-check'></i>");
+	}
+	if(luces_int[2] == "NO" ){
+		$("#i_luces_traseras").append("<i class='fa fa-times'></i>");
+	}else if(luces_int[2] == "No cuenta"){
+		$("#i_luces_traseras").append("NC");
+	}else if(luces_int[2] == "SI"){
+		$("#i_luces_traseras").append("<i class='fa fa-check'></i>");
+	}
+	if(luces_int[3] == "NO" ){
+		$("#i_luces_stop").append("<i class='fa fa-times'></i>");
+	}else if(luces_int[3] == "No cuenta"){
+		$("#i_luces_stop").append("NC");
+	}else if(luces_int[3] == "SI"){
+		$("#i_luces_stop").append("<i class='fa fa-check'></i>");
+	}
+	//luces varias
 	if(radio == "NO" ){
 		$("#i_radio").append("<i class='fa fa-times'></i>");
 	}else if(encendedor == "No cuenta"){
@@ -899,7 +1022,9 @@ $( document ).ready(function() {
 					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px;">
 						<p class="texto">Seguro Rines</p>
 					</div>
-					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;"></div>
+					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;">
+						<span id="i_seguro_rines" class="span_celda"></span>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px;">
@@ -907,10 +1032,83 @@ $( document ).ready(function() {
 					</div>
 					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;"></div>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-12" style="padding: 0px; border: 1px solid #000; height: 40px;">
 							<img src="<?=base_url()?>assets/img/iconos.png" style="width: 85%; height: 25px;" alt="iconos tablero">
 						<p class="texto">Rociados y Limpiaparabrisas</p>
+					</div>
+				</div> -->
+				<!-- indicadores de falla -->
+				<div class="row">
+					<div class="col-2" style="padding: 0px; border-top: 1px solid #000; border-left: 1px solid #000;  height: 25px;">
+						
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000;  height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/check-engine.jpg" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000; height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/repair-car.png" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000;  height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/abs.png" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000;  height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/sis-frenos.png" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000;  height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/sis-p.png" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000;  height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/airbag.png" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000; height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/presion-car.png" style="height: 20px; margin-bottom: 2px;" alt="iconos tablero">
+					</div>
+					<div class="col-1" style="padding: 0px; border-top: 1px solid #000; height: 25px;">
+						<img src="<?=base_url()?>assets/img/icons_form/bateria.png" style="height: 20px; margin-bottom: 3px;" alt="iconos tablero">
+					</div>
+					<div class="col-2" style="padding: 0px; border-top: 1px solid #000; border-right: 1px solid #000; height: 25px;">
+						
+					</div>
+				</div>
+			
+				<div class="row">
+					<div class="col-2" style="padding: 0px; border-left: 1px solid #000; border-bottom: 1px solid #000; height: 15px;">
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_motor_luz" class="span_celda" style="left: 2px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_servicio_luz" class="span_celda" style="left: 2px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_abs_luz" class="span_celda" style="left: 2px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_frenos_luz" class="span_celda" style="left: 4px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_frenosp_luz" class="span_celda" style="left: 4px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_airbag_luz" class="span_celda" style="left: 3px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_presionaire_luz" class="span_celda" style="left: 3px;"></span>
+					</div>
+					<div class="col-1" style="padding: 0px; border-bottom: 1px solid #000; height: 15px;">
+						<span id="i_bateria_luz" class="span_celda" style="left: 3px;"></span>
+					</div>
+					<div class="col-2" style="padding: 0px; border-bottom: 1px solid #000; border-right: 1px solid #000; height: 15px;">
+						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px;">
+						<p class="texto">Rociados y Limpiaparabrisas</p>
+					</div>
+					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;">
+						<span id="i_parabrisas" class="span_celda"></span>
 					</div>
 				</div>
 				<div class="row">
@@ -933,19 +1131,25 @@ $( document ).ready(function() {
 					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px; text-align: center;">
 						<p class="texto" style="margin-left: 20px;">Delanteras</p>
 					</div>
-					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;"></div>
+					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;">
+						<span id="i_luces_delant" class="span_celda"></span>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px; text-align: center;">
 						<p class="texto" style="margin-left: 20px;">Traseras</p>
 					</div>
-					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;"></div>
+					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;">
+						<span id="i_luces_traseras" class="span_celda"></span>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px; text-align: center;">
 						<p class="texto" style="margin-left: 20px;">Stop</p>
 					</div>
-					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;"></div>
+					<div class="col-2" style="padding: 0px; border: 1px solid #000; height: 15px;">
+						<span id="i_luces_stop" class="span_celda"></span>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-10" style="padding: 0px; border: 1px solid #000; height: 15px;">
