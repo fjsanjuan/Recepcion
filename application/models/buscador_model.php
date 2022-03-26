@@ -25,6 +25,7 @@ class Buscador_Model extends CI_Model{
 		parent::__construct();
 		if ($this->Version == 'V6000') 
 			$this->vista = "vwCA_PaquetesWeb";
+		$dotenv = new Dotenv\Dotenv(realpath(''));
 	}
 	
 	public function busqueda($datos = null){
@@ -2335,7 +2336,7 @@ class Buscador_Model extends CI_Model{
 	}
 
 	public function obtener_ordenesPasadas($fecha_ini = null, $fecha_fin = null)
-	{	
+	{
 		$intelisis = $this->load->database("other", TRUE);
 		$usuario = $this->session->userdata["logged_in"]["cve_intelisis"];
 		$perfil = $this->session->userdata["logged_in"]["perfil"];
@@ -3207,7 +3208,7 @@ class Buscador_Model extends CI_Model{
 		fwrite($f, base64_decode($data[1]));
 		fclose($f);*/
 		$orden = $this->db->select('vin')->from('orden_servicio')->where(['id' => $id_orden])->get()->row_array();
-		$ruta = RUTA_FORMATS.$orden["vin"].'/'.$id_orden;
+		$ruta = getenv("URL_FORMATS").$orden["vin"].'/'.$id_orden;
 		if(!file_exists($ruta)) {
 			mkdir($ruta, 0777, true);
 		}
@@ -3271,9 +3272,9 @@ class Buscador_Model extends CI_Model{
 	{
 		$archivo = $datos["voc"];
 		$datos["vin"] = trim($datos["vin"]);
-		$ruta = RUTA_FORMATS.''.$datos["vin"].'/'.$datos["id_orden_servicio"].'/voc-'.$datos['id'].'.mp3'; 
-		if(!file_exists(RUTA_FORMATS.''.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
-			mkdir(RUTA_FORMATS.''.$datos["vin"].'/'.$datos["id_orden_servicio"], 0777, true);
+		$ruta = getenv("URL_FORMATS").''.$datos["vin"].'/'.$datos["id_orden_servicio"].'/voc-'.$datos['id'].'.mp3'; 
+		if(!file_exists(getenv("URL_FORMATS").''.$datos["vin"].'/'.$datos["id_orden_servicio"])) {
+			mkdir(getenv("URL_FORMATS").''.$datos["vin"].'/'.$datos["id_orden_servicio"], 0777, true);
 		}
 		//$nombrearchivo = $archivo["name"];
 		$nombrearchivo = 'voc-'.$datos['id'].'.mp3'; 
@@ -3347,9 +3348,9 @@ class Buscador_Model extends CI_Model{
 	public function crear_archivo_v2($datos = null)
 	{
 		$archivo = $datos["archivo"];
-		$ruta = RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"].'/'.$archivo['name']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
-		if(!file_exists(RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"])) {
-			mkdir(RUTA_FORMATS.''.$datos['vin'].'/'.$datos["id_orden_servicio"], 0777, true);
+		$ruta = getenv("URL_FORMATS").''.$datos['vin'].'/'.$datos["id_orden_servicio"].'/'.$archivo['name']."-".$datos["id"].($archivo["type"] == "application/pdf" ? ".pdf" : ".mp3"); 
+		if(!file_exists(getenv("URL_FORMATS").''.$datos['vin'].'/'.$datos["id_orden_servicio"])) {
+			mkdir(getenv("URL_FORMATS").''.$datos['vin'].'/'.$datos["id_orden_servicio"], 0777, true);
 		}
 		$nombrearchivo = $archivo["name"];
 		move_uploaded_file($archivo["tmp_name"], $ruta);
@@ -3903,7 +3904,7 @@ class Buscador_Model extends CI_Model{
 		} else {
 			curl_close($request);
 			$datos['vin'] = str_replace('.', '', $datos['vin']);
-			$ruta = RUTA_FORMATS.$datos['vin']."/".$datos['id_orden'];
+			$ruta = getenv("URL_FORMATS").$datos['vin']."/".$datos['id_orden'];
 			if(!file_exists($ruta)) 
 			{
 				mkdir($ruta, 0777, true);
@@ -3947,7 +3948,7 @@ class Buscador_Model extends CI_Model{
 		#$pdfs = "";
 		$pdfs = [];
 		$response = [];
-		$ruta = RUTA_FORMATS."{$datos['id_orden']}/";
+		$ruta = getenv("URL_FORMATS")."{$datos['id_orden']}/";
 		/*if(!file_exists($ruta)) {
 			mkdir($ruta, 0777, true);
 		}*/
@@ -4847,7 +4848,7 @@ class Buscador_Model extends CI_Model{
 		$orden_servicio = $this->db->select('id_orden_intelisis, vin')->from('orden_servicio')->where('id', $idOrden)->get()->row();
 		$idIntelisis = $this->db2->select('id')->from('venta')->where('id',$orden_servicio->id_orden_intelisis)->where("estatus <> 'CANCELADO' ")->get()->row();
 
-		if(file_exists(RUTA_FORMATS.$orden_servicio->vin."/".$idOrden."/".$nomArchivo)) {
+		if(file_exists(getenv("URL_FORMATS").$orden_servicio->vin."/".$idOrden."/".$nomArchivo)) {
 			//$sqlXp = "DECLARE @OkRef varchar(250) EXEC ".$nomXp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef",array($modulo,$tipo,$Sucursal,$nomArchivo,$rutaArchivo);
 			$ok = $this->db2->query("DECLARE @OkRef varchar(250) EXEC ".$xp." ?,?,?,?,?,@OkRef OUTPUT SELECT @OkRef", array($modulo, $idIntelisis->id, $tipo, $nomArchivo, $rutaArchivo));
 			/*echo "<pre>";
@@ -4856,7 +4857,7 @@ class Buscador_Model extends CI_Model{
 			if ($ok) {
 				$creado["estatus"] = true;
 				$creado["mensaje"] = 'Archivo anexado correctamente.';
-				$creado["rutaFisica"] = realpath(RUTA_FORMATS.$orden_servicio->vin."/".$idOrden."/".$nomArchivo);
+				$creado["rutaFisica"] = realpath(getenv("URL_FORMATS").$orden_servicio->vin."/".$idOrden."/".$nomArchivo);
 			} else {
 				$creado["estatus"] = false;
 				$creado["mensaje"] = 'No fue posible guardar el regitro del archivo.';

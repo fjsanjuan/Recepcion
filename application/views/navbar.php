@@ -36,4 +36,8 @@
     <a href="<?=site_url('buscador/administrar_clave_defecto')?>"><span class="span-sidebar"><i class="fa fa-th-list"></i>
     Claves Defecto</span></a>
   <?php endif;?>
+  <?php if($this->session->userdata["logged_in"]["perfil"] == 7):?>
+    <a><span class="span-sidebar menu-assets"><i class="fa fa-sitemap"></i>
+    Ruta Expediente Digital</span></a>
+  <?php endif;?>
 </div>

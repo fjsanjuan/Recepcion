@@ -41,5 +41,28 @@ class Admin extends CI_Controller {
 		
 	}
 
+	public function cambiar_variable_entorno() {
+		$logged_in = $this->session->userdata("logged_in");
+		$response['estatus'] = false;
+		$response['mensaje'] = 'Los campos "variable" y "valor" son requeridos.';
+		$key = $this->input->post('key') != '' ? $this->input->post('key') : null;
+		$value = $this->input->post('value') != '' ? $this->input->post('value') : null;
+		$create = $this->input->post('create') != '' ? $this->input->post('create') : null;
+		if (empty($logged_in) || $logged_in['perfil'] != 7) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Solo el administrador de garantía puede cambiar la ruta de almacenamiento del expediente digital.';
+		}elseif ($key !== null || $value !== null) {
+			$value = substr($value, 0,1) == '/' ? substr($value,1, -1) : $value;
+			$value = substr($value, -1) != '/' ? "{$value}/" : $value;
+			$dotenv = new Dotenv\Dotenv(realpath(''));
+			$response = $dotenv->setEnvironmentValue($key, $value);
+			if ($create != null && $create == true) {
+				if(!file_exists($value)) {
+					mkdir($value, 0777, true);
+				}
+			}
+		}
+		echo json_encode($response);
+	}
 
 }

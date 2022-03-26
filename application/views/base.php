@@ -47,8 +47,78 @@
     <!-- ./navbar  -->
     <!-- content here -->
 	<?=$contenido?>
+	<?php
+	    $this->load->view("modals/modal_ruta_expediente");
+	?>
     <!-- ./content here -->
-
+    <script type="text/javascript">
+    	if (id_perfil == 7) {
+			$(document).off('click','span.menu-assets').on('click', 'span.menu-assets', function(event) {
+				event.preventDefault();
+				$.ajax({
+					url: `${base_url}index.php/Servicio/obtener_ruta_expediente`,
+					type: 'POST',
+					dataType: 'json',
+					data: [],
+					contentType: false,
+					processData: false,
+					beforeSend: function () {
+						$('#loading_spin').show();
+					}
+				})
+				.done(function(resp) {
+					if (resp.estatus) {
+						$('#modal-ruta-expediente #rutaValue').val(resp.ruta_expediente);
+						$('#modal-ruta-expediente').modal('toggle');
+					}
+				})
+				.fail(function(error) {
+					console.log('error', error);
+					toastr.warning('Ocurrió un error inesperado, intente más tarde.');
+				})
+				.always(function() {
+					$('#loading_spin').hide();
+				});
+			});
+			$(document).off('click','#modal-ruta-expediente #btn_guardarRutaExpediente').on('click', '#modal-ruta-expediente #btn_guardarRutaExpediente', function(event) {
+				event.preventDefault();
+				if ($('#modal-ruta-expediente #rutaValue').val().trim().length > 3) {
+					const form = new FormData();
+					form.append('create', true);
+					form.append('key', 'URL_FORMATS');
+					form.append('value', $('#modal-ruta-expediente #rutaValue').val().trim());
+					$.ajax({
+						url: `${base_url}index.php/Admin/cambiar_variable_entorno`,
+						type: 'POST',
+						dataType: 'json',
+						data: form,
+						contentType: false,
+						processData: false,
+						beforeSend: function () {
+							$('#loading_spin').show();
+						}
+					})
+					.done(function(resp) {
+						if (resp.estatus) {
+							toastr.info(resp.mensaje);
+							$('#modal-ruta-expediente').modal('toggle');
+						} else {
+							toastr.warning(resp.mensaje);
+						}
+					})
+					.fail(function(error) {
+						console.log('error', error);
+						toastr.warning('Ocurrió un error inesperado, intente más tarde.');
+					})
+					.always(function() {
+						$('#loading_spin').hide();
+					});
+				}else {
+					toastr.warning('Ingresa una ruta mayor a 3 caracteres.');
+				}
+			});
+    }
+    </script>
 <div class="cargando" id="loading_spin" style="background-color: rgba(0, 0, 0, 0)">
     <div class="col-md-12">
         <div class="windows8">

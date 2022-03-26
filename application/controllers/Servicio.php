@@ -26,7 +26,7 @@ class Servicio extends CI_Controller {
 		$this->APPLICATION_PATH = realpath("/");
 
 		$this->obtener_configEmail();
-		
+		$dotenv = new Dotenv\Dotenv(realpath(''));
 	}
 
 	function tablero(){
@@ -1494,7 +1494,7 @@ class Servicio extends CI_Controller {
 		}else {
 			$orden = $this->db->select('*')->from('orden_servicio')->where('id', $id_orden)->get()->row_array();
 			if (isset($orden['vin']) ) {
-				$directorio= RUTA_FORMATS.$orden['vin'].'/'.$id_orden;
+				$directorio= getenv("URL_FORMATS").$orden['vin'].'/'.$id_orden;
 				$name='FormatoDeOrdenServicio';
 				if(is_dir($directorio)){
 					$filename = $name.$id_orden.".pdf";
@@ -1658,7 +1658,7 @@ class Servicio extends CI_Controller {
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
 		//$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
-		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		$ruta_temp = getenv("URL_FORMATS").''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
 		if(!file_exists($ruta_temp)) {
 			mkdir($ruta_temp, 0777, true);
 		}
@@ -1786,7 +1786,7 @@ class Servicio extends CI_Controller {
 		$html2 = "";
 		$mpdf->WriteHTML($html2);
 		$mpdf->Output($ruta_temp.$nombre, "F");
-		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		$ruta_temp = getenv("URL_FORMATS").''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
 		if(!file_exists($ruta_temp)) {
 			mkdir($ruta_temp, 0777, true);
 		}
@@ -1880,7 +1880,7 @@ class Servicio extends CI_Controller {
 		$mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 		$html = "";
 		$mpdf->WriteHTML($html);
-		$ruta_temp = RUTA_FORMATS.''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		$ruta_temp = getenv("URL_FORMATS").''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
 		if(!file_exists($ruta_temp)) {
 			mkdir($ruta_temp, 0777, true);
 		}
@@ -3414,7 +3414,7 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Archivo no valido.';
 		}else {
 			$nomArchivo = $formato;
-			//$rutaArchivo = realpath(RUTA_FORMATS.$orden['vin']."/".$idOrden."/".$nomArchivo); // ruta para produccion
+			//$rutaArchivo = realpath(getenv("URL_FORMATS").$orden['vin']."/".$idOrden."/".$nomArchivo); // ruta para produccion
 			$rutaArchivo = '\\\\10.251.0.10\\www\\Demos\\Ford\\garantias\\Recepcion\\assets\\uploads\\'.$orden['vin']."\\".$idOrden."\\".$nomArchivo; // ruta para pruebas
 			$response = $this->buscador_model->save_docs_anexo_mov($idOrden, $nomArchivo, $rutaArchivo);
 		}
@@ -4172,6 +4172,16 @@ class Servicio extends CI_Controller {
 			$response['mensaje'] = 'Clave de Defecto no válido.';
 		} else {
 			$response = $this->buscador_model->obtener_clave_defecto($idSucursal, $idClave);
+		}
+		echo json_encode($response);
+	}
+
+	public function obtener_ruta_expediente(){
+		$ruta_expediente = getenv('URL_FORMATS');
+		$response['estatus'] = false;
+		if(!empty($ruta_expediente)){
+			$response['estatus'] = true;
+			$response['ruta_expediente'] = $ruta_expediente;
 		}
 		echo json_encode($response);
 	}
