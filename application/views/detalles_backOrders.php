@@ -8,6 +8,7 @@
 	<link href="<?=base_url()?>assets/css/style.css" rel="stylesheet">
 
     <link href="<?=base_url()?>assets/css/compiled.min.css" rel="stylesheet">
+	<link rel="icon" href="<?=base_url();?>assets/img/favicon.ico" type="image/x-icon">
 
 	<script src="<?=base_url()?>assets/js/jquery.min.js"></script>
 	<script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
@@ -32,11 +33,11 @@
 								<tbody>
 								<?php
 									foreach ($compra as $key => $value) {
-										echo "<tr><td  style='border: 1px solid black'><b>".$value["MovCompra"].' '.($value["MovIDCompra"] ? $value["MovIDCompra"] : $value["ID"])."</b></td>";
-										echo "<td  style='border: 1px solid black'><b>".$value["MovIDVenta"]."</b></td>";
-										echo "<td  style='border: 1px solid black'><b>".$value["Estatus"]."</b></td>";
-										echo "<td  style='border: 1px solid black'><b>".$value["Moneda"]."</b></td>";
-										echo "<td  style= 'border: 1px solid black'><b>".$value["FechaEmision"]."</b></td></tr>";
+										echo "<tr><td  style='border: 1px solid black'><b>".$value["MovCompra"].'<br/> '.($value["MovIDCompra"] ? $value["MovIDCompra"] : $value["ID"])."</b></td>";
+										echo "<td  style='border: 1px solid black'><b> Orden Servicio <br> ".$value["MovIDVenta"]."</b></td>";
+										echo "<td  style='border: 1px solid black'><b> Estatus <br>".$value["Estatus"]."</b></td>";
+										echo "<td  style='border: 1px solid black'><b> Moneda <br/>".$value["Moneda"]."</b></td>";
+										echo "<td  style= 'border: 1px solid black'><b> Fecha Emision <br/>".$value["FechaEmision"]."</b></td></tr>";
 									}
 									?>
 								</tbody>
@@ -66,14 +67,14 @@
 					<div class="card">
 						<div class="card-body">
 							<table class="table table-striped table-hover animated fadeIn no-footer tableDesc">
-								<thead><tr><th><b>Almacén</b></th><th><b>Artículo</b></th><th><b>Descripción</b></th><th><b>Cantidad</b></th></tr></thead>
+								<thead><tr><th><b>Artículo</b></th><th><b>Descripción</b></th><th><b>Cantidad</b></th><th><b>Almacén</b></th></tr></thead>
 								<tbody>
 								<?php
 									foreach ($data as $key => $value) {
-										echo "<tr><td>".$value["Sucursal"]."</td>";
-										echo "<td>".$value["Articulo1"]."</td>";
+										echo "<tr><td>".$value["Articulo1"]."</td>";
 										echo "<td>".$value["Descripcion1"]."</td>";
-										echo "<td>".$value["Cantidad"]."</td></tr>";
+										echo "<td>".$value["Cantidad"]."</td>";
+										echo "<td>".$value["Almacen"]."</td></tr>";
 									} 
 									?>
 								</tbody>
