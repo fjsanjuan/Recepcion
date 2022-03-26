@@ -197,12 +197,185 @@
 						<span><?=$checked_poliza?></span>
 					</div>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-12">
 						<label>Indicadores de falla Activados:</label>
 					</div>
 					<div class="col-10">
 						<img src="<?=base_url()?>assets/img/iconos.png" style="width: 68%;" alt="iconos tablero">
+					</div>
+					<div class="col-2">
+						<span></span>														
+					</div>
+				</div> -->
+				<div class="row">
+					<div class="col-12">
+						<label>Indicadores de falla Activados:</label>
+					</div>
+					<?php
+						$luces_tablero = explode(",", $orden["inspeccion"]["luces_tablero"]);
+						//echo "string".count($luces_tablero);
+
+						$i_motor_luz = "";
+						$i_servicio_luz = "";
+						$i_abs_luz = "";
+						$i_frenos_luz = "";
+						$i_frenosp_luz = "";
+						$i_airbag_luz = "";
+						$i_presionaire_luz = "";
+						$i_bateria_luz = "";
+
+						if(count($luces_tablero)>1){
+							//var_dump($luces_tablero[1]);
+							switch ($luces_tablero[0]) 
+							{
+								case "motor_on":
+									$i_motor_luz = "<label>&nbsp;X</label>";
+								break;
+								case "motor_nc":
+									$i_motor_luz = "<label>X</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[1]) 
+							{
+								case "servicio_on":
+									$i_servicio_luz = "<label>&nbsp;X</label>";
+								break;
+								case "servicio_nc":
+									$i_servicio_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[2]) 
+							{
+								case "abs_on":
+									$i_abs_luz = "<label>&nbsp;X</label>";
+								break;
+								case "abs_nc":
+									$i_abs_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[3]) 
+							{
+								case "frenosluz_on":
+									$i_frenos_luz = "<label>&nbsp;X</label>";
+								break;
+								case "frenosluz_nc":
+									$i_frenos_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[4]) 
+							{
+								case "frenosluzp_on":
+									$i_frenosp_luz = "<label>&nbsp;X</label>";
+								break;
+								case "frenosluzp_nc":
+									$i_frenosp_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[5]) 
+							{
+								case "airbag_on":
+									$i_airbag_luz = "<label>&nbsp;X</label>";
+								break;
+								case "airbag_nc":
+									$i_airbag_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[6]) 
+							{
+								case "presionaire_on":
+									$i_presionaire_luz = "<label>&nbsp;X</label>";
+								break;
+								case "presionaire_nc":
+									$i_presionaire_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+							switch ($luces_tablero[7]) 
+							{
+								case "bateria_on":
+									$i_bateria_luz = "<label>&nbsp;X</label>";
+								break;
+								case "bateria_nc":
+									$i_bateria_luz = "<label>NC</label>";
+								break;
+								default:
+								break;
+							}
+						}
+					?>
+					<div class="col-2">
+						<span></span>														<!-- no hay datos -->
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/check-engine.jpg" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/repair-car.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/abs.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/sis-frenos.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/sis-p.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/airbag.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/presion-car.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-1">
+						<span><img src="<?=base_url()?>assets/img/icons_form/bateria.png" style="height: 20px;" alt="iconos tablero"></span>
+					</div>
+					<div class="col-2">
+						<span></span>														<!-- no hay datos -->
+					</div>
+
+					<!-- datos optenidos de la inspeccion -->
+
+					<div class="col-2">
+						<span></span>														<!-- no hay datos -->
+					</div>
+					<div class="col-1">
+						<span><?=$i_motor_luz?></span>
+					</div>
+					<div class="col-1">
+						<span><?=$i_servicio_luz?></span> 
+					</div>
+					<div class="col-1">
+						<span><?=$i_abs_luz?></span>
+					</div>
+					<div class="col-1">
+						<span><?=$i_frenos_luz?></span>
+					</div>
+					<div class="col-1">
+						<span><?=$i_frenosp_luz?></span>
+					</div>
+					<div class="col-1">
+						<span><?=$i_airbag_luz?></span>
+					</div>
+					<div class="col-1">
+						<span><?=$i_presionaire_luz?></span>
+					</div>
+					<div class="col-1">
+						<span><?=$i_bateria_luz?></span>
 					</div>
 					<div class="col-2">
 						<span></span>														<!-- no hay datos -->
@@ -256,17 +429,67 @@
 						<label>Luces:</label>												<!-- solo viene en general -->
 					</div>
 					<?php
-						switch ($orden["inspeccion"]["luces_int"]) 
+						
+						$luces_int = explode(",", $orden["inspeccion"]["luces_int"]);
+						//var_dump(count($luces_int));
+						if(count($luces_int)==1){
+							
+							switch ($luces_int[0]) 
+							{
+								case "SI":
+									$luces_delant = "<i class='fa fa-check'></i>";
+									$luces_traseras = "<i class='fa fa-check'></i>";
+									$luces_stop = "<i class='fa fa-check'></i>";
+								break;
+								case "NO":
+									$luces_delant = "<label>X</label>";
+									$luces_traseras = "<label>X</label>";
+									$luces_stop = "<label>X</label>";
+								break;
+								default:
+									$luces_delant = "<label>NC</label>";
+									$luces_traseras = "<label>NC</label>";
+									$luces_stop = "<label>NC</label>";
+								break;
+							}
+						}
+						else{
+							switch ($luces_int[1]) 
+							{
+								case "SI":
+									$luces_delant = "<i class='fa fa-check'></i>";
+								break;
+								case "NO":
+									$luces_delant = "<label>X</label>";
+								break;
+								default:
+									$luces_delant = "<label>NC</label>";
+								break;
+							}
+							switch ($luces_int[2]) 
 						{
 							case "SI":
-								$luces = "<i class='fa fa-check'></i>";
+									$luces_traseras = "<i class='fa fa-check'></i>";
 							break;
 							case "NO":
-								$luces = "<label>X</label>";
+									$luces_traseras = "<label>X</label>";
+								break;
+								default:
+									$luces_traseras = "<label>NC</label>";
+								break;
+							}
+							switch ($luces_int[3]) 
+							{
+								case "SI":
+									$luces_stop = "<i class='fa fa-check'></i>";
+								break;
+								case "NO":
+									$luces_stop = "<label>X</label>";
 							break;
 							default:
-								$luces = "<label>NC</label>";
+									$luces_stop = "<label>NC</label>";
 							break;
+						}
 						}
 					?>
 				</div>
@@ -276,7 +499,7 @@
 						<label>Delanteras</label>
 					</div>
 					<div class="col-2 col-sm-2 col-md-2 col-lg-2 celda-opc">
-						<span><?=$luces?></span>
+						<span><?=$luces_delant?></span>
 					</div>
 				</div>
 				<div class="row sin-borde">
@@ -285,7 +508,7 @@
 						<label>Traseras</label>
 					</div>
 					<div class="col-2 col-sm-2 col-md-2 col-lg-2 celda-opc">
-						<span><?=$luces?></span>
+						<span><?=$luces_traseras?></span>
 					</div>
 				</div>
 				<div class="row">
@@ -294,7 +517,7 @@
 						<label>Stop</label>
 					</div>
 					<div class="col-2 col-sm-2 col-md-2 col-lg-2">
-						<span><?=$luces?></span>
+						<span><?=$luces_stop?></span>
 					</div>
 				</div>
 				<div class="row">
