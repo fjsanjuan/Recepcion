@@ -1546,6 +1546,7 @@ class Servicio extends CI_Controller {
 			//$saveIntelisis = $this->buscador_model->SaveDocsIntelisis($multipunto["ruta"], $id_orden, 'multipuntos' );
 
 		if($this->formt_servicio == 'ford'){
+
 			$formato = $this->crear_pdf($imagenb64, $id_orden, $img_reverso); //se utliza cuando se manda a llamar el formato de Ford
 			$finventario = $this->crear_pdfInv($formato_inventario, $id_orden);	
 		}
@@ -1681,7 +1682,10 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		
 		//La función recibe el nombre del folder temporal para almacenar el PDF
-		$ruta_temp                = $this->createFolder("archivos_recepcion"); //Se crea el folder si no existe
+		$ruta_temp = getenv("URL_FORMATS").''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		if(!file_exists($ruta_temp)) {
+			mkdir($ruta_temp, 0777, true);
+		}
 		
 		$html = $this->load->view('mails/formato_ordenServicioFame', $datos, true);
 		$dompdf = new DOMPDF();
@@ -1689,13 +1693,13 @@ class Servicio extends CI_Controller {
 		$dompdf->setPaper('letter', 'portrait');
 		$dompdf->render();
 		$output = $dompdf->output();
-		file_put_contents($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf", $output);
+		file_put_contents($ruta_temp."OrdenServicio-".$id_orden.".pdf", $output);
 
 
-		if(file_exists($ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf"))
+		if(file_exists($ruta_temp."OrdenServicio-".$id_orden.".pdf"))
 		{
 			$creado["estatus"] = true;
-			$creado["ruta"] = $ruta_temp."FormatoDeOrdenServicio".$id_orden.".pdf";
+			$creado["ruta"] = $ruta_temp."OrdenServicio-".$id_orden.".pdf";
 		}else
 		{
 			$creado["estatus"] = false;
@@ -1785,8 +1789,8 @@ class Servicio extends CI_Controller {
 		$mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 		$html2 = "";
 		$mpdf->WriteHTML($html2);
-		$mpdf->Output($ruta_temp.$nombre, "F");
 		$ruta_temp = getenv("URL_FORMATS").''.$datos["cliente"]["vin"].'/'.$datos["cliente"]["id"].'/';
+		$mpdf->Output($ruta_temp.$nombre, "F");
 		if(!file_exists($ruta_temp)) {
 			mkdir($ruta_temp, 0777, true);
 		}
@@ -1846,11 +1850,11 @@ class Servicio extends CI_Controller {
 		 echo json_encode($creado);
 	}
 
-
+	// función sin uso actual
 	public function existe_pdfInv($id_orden= null)
 	{
 		
-		$nombre = "FormatoDeInventario".$id_orden.".pdf";
+		$nombre = "Formato_inventario-".$id_orden.".pdf";
 
 		if(file_exists('./archivos_recepcion/'.$nombre))
 		{
@@ -1870,7 +1874,7 @@ class Servicio extends CI_Controller {
 		$datos = $this->buscador_model->obtener_datosOrden($id_orden);
 		include_once('./application/libraries/MPDF60/mpdf.php');
 
-		$nombre = "FormatoDeInventario".$id_orden.".pdf";
+		$nombre = "Formato_inventario-".$id_orden.".pdf";
 		$finventario = "".$finventario."";
 
 		$mpdf = new mPDF('c','legal');
