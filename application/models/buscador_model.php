@@ -2351,17 +2351,20 @@ class Buscador_Model extends CI_Model{
 
 		//print_r($suc_or['id']['id_intelisis']); die();
 		$where = " fecha_creacion BETWEEN '".date('d-m-Y', strtotime($fecha_ini))." 00:00:00' AND '".date('d-m-Y', strtotime($fecha_fin))." 23:59:59'";
-		if($perfil == 2)																//refacciones
+		if($perfil == 2 || $perfil == 4 || $perfil == 7 || $perfil == 8)																//refacciones
 		{
-			$cond_claveUs = "1 = 1 and  id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
+			$cond_claveUs = "id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
-		}else if($perfil == 4 || $perfil == 5 || $perfil == 6 || $perfil == 7 || $perfil == 8){
-			$usuario = "AM2";
-			$cond_claveUs = "clave_asesor = '".$usuario."'";
-		}else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){ //se debe reacomodar esta condicional
+		}else if($perfil == 6){
+			$cond_claveUs = " movimiento IS NOT NULL";
+		}else if($perfil == 5){
+			$cond_claveUs = "id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
+			/*$usuario = "AM2";
+			$cond_claveUs = "clave_asesor = '".$usuario."'";*/
+		}/*else if($perfil == 4 || $perfil == 5 || $perfil == 7 || $perfil == 8){ //se debe reacomodar esta condicional
 			//$usuario = "AM2";
 			$cond_claveUs = " movimiento IS NOT NULL";
-		}else 
+		}*/else 
 		{
 			$cond_claveUs = "clave_asesor = '".$usuario."'";
 		}
@@ -2374,7 +2377,9 @@ class Buscador_Model extends CI_Model{
 							->where($where)
 							->order_by("fecha_creacion", "ASC")
 							->get()->result_array();
-
+		/*echo "<pre>";
+		print_r ($this->db->last_query());
+		echo "</pre>";*/
 		//sql donde se evalua si la orden de servicio esta firmada o no devolviendo 1 o 0 el resultado lo recibe custom-ver_historico.js 
 		foreach ($ordenes as $keyF => $valueF) 
 		{
@@ -2396,9 +2401,14 @@ class Buscador_Model extends CI_Model{
 		foreach ($ordenes as $key => $value) 
 		{
 			$venta = $intelisis->select("Estatus")
-												->from("Venta")
-												->where("ID", $value["id_orden_intelisis"])
-												->get()->row_array(); 
+									->from("Venta")
+									->where("ID", $value["id_orden_intelisis"])
+									->get()->row_array(); 
+		
+			$asignado = $intelisis->select('Agente')->from('VentaD')->where(['Agente' => $usuario, 'ID' => $value["id_orden_intelisis"]])->count_all_results();
+		/*echo "<pre>";
+		print_r ($intelisis->last_query());
+		echo "</pre>";*/
 			$ordenes[$key]["movID"] = $intelisis->select("MovID")
 												->from("Venta")
 												->where("ID", $value["id_orden_intelisis"])
@@ -2408,7 +2418,13 @@ class Buscador_Model extends CI_Model{
 												->where("ID", $value["id_orden_intelisis"])
 												->get()->row_array(); 
 			if (isset($venta['Estatus']) && $venta['Estatus'] != 'CANCELADO') {
-				$ordenes_validas[] = $ordenes[$key];
+				if ($perfil == 5) {
+					if ($asignado > 0) {
+						$ordenes_validas[] = $ordenes[$key];
+					}
+				}else {
+					$ordenes_validas[] = $ordenes[$key];
+				}
 			}
 		}
 
