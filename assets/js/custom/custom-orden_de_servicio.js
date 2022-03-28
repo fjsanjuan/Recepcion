@@ -2805,9 +2805,9 @@ function enviar_correo( img, img2, img_correo, img_reverso, img3)
             $('#loading_spin').show();
         },
         success: function(data) {
+            $('#loading_spin').hide();
             if(data)
             {
-                $('#loading_spin').hide();
                 $("#modalsendmail").modal("hide");
                 //$("#enviar_whatsapp").hide();
                 toastr.success('El correo electrónico ha sido enviado.', {timeOut: 5000});
@@ -2817,6 +2817,7 @@ function enviar_correo( img, img2, img_correo, img_reverso, img3)
             }               
         },
         error : function(xhr, status) {
+            $('#loading_spin').hide();
             toastr.error("Hubo un error al enviar el correo");
         }
     });
