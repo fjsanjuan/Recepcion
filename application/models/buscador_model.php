@@ -5181,39 +5181,55 @@ class Buscador_Model extends CI_Model{
 			$response['mensaje'] = 'Técnico asignado correctamente.';
 		}*/
 		$this->db2 = $this->load->database('other',true);
-		$this->db2->trans_begin();
-		$this->db2->where(['ID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
-		$this->db2->update('VentaD', $data);
-		$this->db2->trans_complete();
-		if ($this->db2->trans_status() === FALSE ){
-			$this->db2->trans_rollback();
+		/* Validación para no reasignar técnico en estatus no validos */
+		$situacions_valids = array('No Asignada', 'Asignada', 'En proceso');
+		$pendiente = $this->db2->select('Estado')->from('seguimientoTecnicosWeb')->where([
+			'ID'                   => $id,
+			'Renglon'              => $datos['Renglon'],
+			'RenglonID'            => $datos['RenglonID'],
+			'RenglonSub'           => $datos['RenglonSub'],
+			'Tipo'                 => 'Servicio',
+			'servicioTipoOperacion !=' => 'Hojalateria y Pintura',
+			'Estatus' => 'PENDIENTE'
+		])->where_in('Situacion',$situacions_valids)->where_in('Estado',['Completada', 'En Curso'])->get()->row_array();
+		if (isset($pendiente['Estado'])) {
 			$response['estatus'] = false;
-			$response['mensaje'] = 'No fue posible asignar el técnico a la línea.';
-		}else{
-			$this->db2->trans_commit();
-			$response['estatus'] = true;
-			$response['mensaje'] = 'Técnico asignado correctamente.';
-		}
-		if ($datos['id_diagnostico']) {
-			$data_diagnostico = [
-				'VentaID'       => $id,
-				'Renglon'       => $datos['Renglon'],
-				'RenglonID'     => $datos['RenglonID'],
-				'RenglonSub'    => $datos['RenglonSub'],
-				'cve_intelisis' => $datos['asigna_tecnico']
-			];
-			$this->db->trans_begin();
-			$this->db->where(['id_diagnostico' => $datos['id_diagnostico']]);
-			$this->db->update('diagnostico_tecnico', $data_diagnostico);
-			$this->db->trans_complete();
-			if ($this->db->trans_status() === FALSE ){
-				$this->db->trans_rollback();
+			$response['mensaje'] = "La mano de obra no puede ser asignada ya que se encuentra en el estado '{$pendiente['Estado']}'";
+		}else {
+			$this->db2->trans_begin();
+			$this->db2->where(['ID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+			$this->db2->update('VentaD', $data);
+			$this->db2->trans_complete();
+			if ($this->db2->trans_status() === FALSE ){
+				$this->db2->trans_rollback();
 				$response['estatus'] = false;
-				$response['mensaje'] = 'No fue posible actualizar el anverso con el nuevo técnico.';
+				$response['mensaje'] = 'No fue posible asignar el técnico a la línea.';
 			}else{
-				$this->db->trans_commit();
+				$this->db2->trans_commit();
 				$response['estatus'] = true;
 				$response['mensaje'] = 'Técnico asignado correctamente.';
+			}
+			if ($datos['id_diagnostico']) {
+				$data_diagnostico = [
+					'VentaID'       => $id,
+					'Renglon'       => $datos['Renglon'],
+					'RenglonID'     => $datos['RenglonID'],
+					'RenglonSub'    => $datos['RenglonSub'],
+					'cve_intelisis' => $datos['asigna_tecnico']
+				];
+				$this->db->trans_begin();
+				$this->db->where(['id_diagnostico' => $datos['id_diagnostico']]);
+				$this->db->update('diagnostico_tecnico', $data_diagnostico);
+				$this->db->trans_complete();
+				if ($this->db->trans_status() === FALSE ){
+					$this->db->trans_rollback();
+					$response['estatus'] = false;
+					$response['mensaje'] = 'No fue posible actualizar el anverso con el nuevo técnico.';
+				}else{
+					$this->db->trans_commit();
+					$response['estatus'] = true;
+					$response['mensaje'] = 'Técnico asignado correctamente.';
+				}
 			}
 		}
 		return $response;
