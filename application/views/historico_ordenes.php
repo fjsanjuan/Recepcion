@@ -877,3 +877,4 @@ table tr.active {
         </div>
     </div>
 </div>
+<?php $this->load->view('modals/asignar_encargado'); ?>

@@ -4189,5 +4189,17 @@ class Servicio extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-
+	function asignar_encargado_linea($id = null ) {
+		$datos = $this->input->post();
+		if ($id == null) {
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Linea de reparación no válida.';
+		}elseif(sizeof($datos)<= 0){
+			$response['estatus'] = false;
+			$response['mensaje'] = 'Datos de asignación no válidos';
+		}else {
+			$response = $this->buscador_model->asignar_encargado_linea($id, $datos);
+		}
+		echo json_encode($response);
+	}
 }

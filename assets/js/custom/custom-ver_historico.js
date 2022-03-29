@@ -6661,6 +6661,7 @@ function construir_tabla_historial_anversos(data) {
 	tr = $('<tr>');
 	tr.append($('<th>',{'text': 'Mano de Obra'}));
 	tr.append($('<th>',{'text': 'Técnico'}));
+	tr.append($('<th>',{'text': 'Técnico Encargado'}));
 	tr.append($('<th>',{'text': 'Adicional'}));
 	tr.append($('<th>',{'text': 'Autorización Jefe'}));
 	tr.append($('<th>',{'text': 'Autorización Gerente'}));
@@ -6668,6 +6669,7 @@ function construir_tabla_historial_anversos(data) {
 	tr.append($('<th>',{'text': 'Terminada'}));
 	tr.append($('<th>',{'text': 'Anverso'}));
 	tr.append($('<th>',{'text': 'Cambiar Técnico'}));
+	tr.append($('<th>',{'text': 'Cambiar Técnico Encargado'}));
 	tr.append($('<th>',{'text': 'PDF'}));
 	tr.append($('<th>',{'text': 'Detalles'}));
 	tr.append($('<th>',{'text': 'Daños relacionados'}));
@@ -6676,6 +6678,7 @@ function construir_tabla_historial_anversos(data) {
 		tr = $('<tr>');
 		anverso = $('<button>', {'class': 'btn btn-sm btn-primary abriranverso', 'id': `abriranverso-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-edit'}));
 		tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
+		encargado = $('<button>', {'class': 'btn btn-sm btn-primary asignar_encargado', 'id': `asignar_encargado-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
 		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
 		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
 		adicional = $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'style': 'height: 20px; width: 20px;', 'id': `adicional-${val.diagnostico ? val.diagnostico.VentaID : ''}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false});
@@ -6685,6 +6688,7 @@ function construir_tabla_historial_anversos(data) {
 		autorizar3 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'style': 'height: 20px; width: 20px;', 'id': `authGrtias-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grtias, 'disabled': (id_perfil != 7 || !val.Adicional ? true : false)});
 		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		$(encargado).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
 		$(dannos).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
@@ -6697,9 +6701,11 @@ function construir_tabla_historial_anversos(data) {
 		}
 		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
 		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
+		$(encargado).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
 		$(adicional).prop('disabled', val.diagnostico ? (val.diagnostico.autorizado ? true : false) : false);
 		if (id_perfil != 4) {
 			$(tecnico).prop('disabled', true);
+			$(encargado).prop('disabled', true);
 		}
 		if (id_perfil == 7) {
 			$(anverso).prop('disabled', false);
@@ -6712,6 +6718,7 @@ function construir_tabla_historial_anversos(data) {
 		}
 		tr.append($('<td>',{'text': val.Descripcion1}));
 		tr.append($('<td>',{'text': val.Nombre}));
+		tr.append($('<td>',{'text': val.NombreEncargado}));
 		tr.append($('<td>').append(adicional));
 		tr.append($('<td>').append(autorizar));
 		tr.append($('<td>').append(autorizar2));
@@ -6719,6 +6726,7 @@ function construir_tabla_historial_anversos(data) {
 		tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
 		tr.append($('<td>').append(anverso));
 		tr.append($('<td>').append(tecnico));
+		tr.append($('<td>').append(encargado));
 		tr.append($('<td>').append(pdf));
 		tr.append($('<td>').append(detalles));
 		tr.append($('<td>').append(dannos));
@@ -7345,3 +7353,120 @@ $(document).off('change', '#lineaTrabajoModal .costo_total').on('change', '#line
 	$(this).val(isNaN(Number($(this).val())) ? 0 : Number($(this).val()));
 	$('#rep_total').val(costo_total.toFixed(4));
 });
+
+$(document).off('click', 'button.asignar_encargado').on('click', 'button.asignar_encargado', function(event) {
+	const idOrden = $(this).prop('id').split('-')[1];
+	$("#btn_asignarEncargado").prop('data-id', idOrden);
+	data = $(this).data();
+	data.idDiagnostico = idOrden;
+	$("#btn_asignarEncargado").data(data);
+	//localStorage.setItem('hist_id_orden', idOrden);
+	event.preventDefault();
+	$('#asigna_encargado').empty();
+	$('#asigna_encargado').append($('<option>', {text: 'seleccione un técnico...', value: ''}));
+	$.ajax({
+		url: `${base_url}index.php/servicio/obtener_mecanicos/`,
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		let con_movimientos = 0;
+		if (resp.estatus) {
+			$.each(resp.data, function(index, val) {
+				if (val.TieneMovimientos > 0) {
+					con_movimientos++;
+					//linea de prueba
+					$('#asigna_encargado').append($(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`}));
+				}else{
+					$('#asigna_encargado').append($(`<option>`,{'value': val.Agente, 'text': `${val.Nombre}(${val.Agente})`}));
+				}
+			});
+			$('#asigna_encargado').val(data.Encargado);
+			//linea de prueba
+			con_movimientos = 0;
+			if (con_movimientos < resp.data.length) {
+				$('#asignEncargadoModal').modal('toggle');
+			}else{ 
+				toastr.info('No hay técnicos disponibles.');
+			}
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un error al cargar los técnicos disponibles.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
+});
+$(document).off('click', '#btn_asignarEncargado').on('click', '#btn_asignarEncargado', function(event) {
+	let id = $('#asigna_encargado').val();
+	data = $(this).data();
+	if (data.Encargado) {
+		swal({
+		title: `¿Seguro que desea cambiar el técnico asignado?`,
+		showCancelButton: true,
+		confirmButtonText: 'Si, Cambiar',
+		cancelButtonText: 'Cancelar',
+		type: 'warning',
+	})
+	.then((result) => {
+		if (result.value){
+			asignar_encargado(data);
+		}
+	});
+	}else{
+		asignar_encargado(data);
+	}
+});
+
+function asignar_encargado(data) {
+	const form = new FormData($('#formAsignarEncargado')[0]);
+	form.append('fin', $('.timepicker-asign-fin').val());
+	form.append('id_orden', localStorage.getItem('hist_id_orden'));
+	if (!$('#formAsignarEncargado').valid()) {
+		toastr.warning('Revise los datos.');
+		return;
+	}
+	//datos_renglon =  $('#asigna_linea').find('option:selected').data();
+	form.append('ID', data.idVenta);
+	form.append('Renglon', data.renglon);
+	form.append('RenglonID', data.renglonId);
+	form.append('RenglonSub', data.renglonSub);
+	form.append('id_diagnostico', data.idDiagnostico);
+	$.ajax({
+		url: `${base_url}index.php/servicio/asignar_encargado_linea/${data.idVenta}`,
+		type: 'POST',
+		dataType: 'json',
+		data: form,
+		contentType: false,
+		processData: false,
+		cache: false,
+		beforeSend: function () {
+			$('#loading_spin').show();
+		}
+	})
+	.done(function(resp) {
+		if (resp.estatus) {
+			$('#asignEncargadoModal').modal('toggle');
+			toastr.info(resp.mensaje);
+			$('#formAsignarEncargado')[0].reset();
+			localStorage.setItem('abrirmodal', 1);
+			obtener_historial_anversos(localStorage.getItem('hist_id_orden'));
+		}else {
+			toastr.info(resp.mensaje);
+		}
+	})
+	.fail(function(error) {
+		toastr.warning('Ocurrió un error al intentar asignar el técnico.');
+		console.log("error", error);
+	})
+	.always(function() {
+		$('#loading_spin').hide();
+	});
+}

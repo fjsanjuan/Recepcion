@@ -6206,5 +6206,52 @@ class Buscador_Model extends CI_Model{
 		}
 		return $response;
 	}
-
+	function asignar_encargado_linea($id, $datos) {
+		$data = [
+			'tecnico_encargado' => $datos['asigna_encargado']
+		];
+		$this->db2 = $this->load->database('other',true);
+		$existe = $this->db2->select('ID')->from('CA_VentaD')->where(['VentaID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']])->count_all_results();
+		$this->db2->trans_begin();
+		if ($existe > 0) {
+			$this->db2->where(['VentaID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+			$this->db2->update('CA_VentaD', $data);
+		}else {
+			$data = array_merge($data, ['VentaID' => $id, 'Renglon' => $datos['Renglon'],'RenglonID' => $datos['RenglonID'], 'RenglonSub' => $datos['RenglonSub']]);
+			$this->db2->insert('CA_VentaD', $data);
+		}
+		$this->db2->trans_complete();
+		if ($this->db2->trans_status() === FALSE ){
+			$this->db2->trans_rollback();
+			$response['estatus'] = false;
+			$response['mensaje'] = 'No fue posible asignar el técnico encargado a la línea.';
+		}else{
+			$this->db2->trans_commit();
+			$response['estatus'] = true;
+			$response['mensaje'] = 'Técnico encargado asignado correctamente.';
+		}
+		if ($datos['id_diagnostico']) {
+			/*$data_diagnostico = [
+				'VentaID'       => $id,
+				'Renglon'       => $datos['Renglon'],
+				'RenglonID'     => $datos['RenglonID'],
+				'RenglonSub'    => $datos['RenglonSub'],
+				'cve_intelisis' => $datos['asigna_tecnico']
+			];
+			$this->db->trans_begin();
+			$this->db->where(['id_diagnostico' => $datos['id_diagnostico']]);
+			$this->db->update('diagnostico_tecnico', $data_diagnostico);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE ){
+				$this->db->trans_rollback();
+				$response['estatus'] = false;
+				$response['mensaje'] = 'No fue posible actualizar el anverso con el nuevo técnico.';
+			}else{
+				$this->db->trans_commit();
+				$response['estatus'] = true;
+				$response['mensaje'] = 'Técnico asignado correctamente.';
+			}*/
+		}
+		return $response;
+	}
 }
