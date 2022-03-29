@@ -3518,7 +3518,7 @@ function optimizar_archivo(e)
 {
 	var pesoArchivo=e.target.files[0].size;
 	if(pesoArchivo < 10485760){											//Se verifica 
-		if(total < 31000000){
+		if(total <= 10485760){
 			total+=pesoArchivo;
 			$("#loading_spin").show();
 		    var fileName = e.target.files[0].name;
@@ -3547,10 +3547,10 @@ function optimizar_archivo(e)
 			  $('#cargar_doc').val('');
 		    };
 		} else{
-			toastr.error("No puedes subir mas de 30 MB al mismo tiempo");
+			toastr.error("El tamaño máximo de subida de archivos no debe ser mayor a 10 MB por petición");
 		}
 	} else{
-        toastr.error("Los archivos no deben pesar mas de 10 MB.");
+        toastr.error("Los archivos no deben pesar más de 10 MB por petición.");
 	}
 }
 function guardar_documentacion(form)
@@ -7326,7 +7326,7 @@ $(document).off('click', '.bak_order').on('click', '.bak_order', function(event)
                 items.push("<td>"+(val.MovIDCompra ? val.MovIDCompra : val.ID)+"</td>");
                 items.push("<td>" + val.MovIDVenta  + "</td>");
 				items.push("<td>" + val.Referencia + "</td>");
-                items.push("<td><button class='btn btn-success float-right mostrar_det' data-id='" +val.ID + "'><i class='fa fa-eye'></i></button></td>");
+                items.push("<td><button class='btn btn-success float-center mostrar_det' data-id='" +val.ID + "'><i class='fa fa-eye'></i></button></td>");
                 items.push("</tr>");
             });
 

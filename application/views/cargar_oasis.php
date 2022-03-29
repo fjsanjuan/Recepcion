@@ -7,7 +7,7 @@
 				style="width: 150px;height:50px;opacity: 0;overflow: hidden;position: absolute;z-index: 100000;left:20px;top:5px; cursor: pointer;" 
 				>
 	        </div>
-	        <span class="nav-link">Los archivos no deben pesar mas de 10 MB cada uno o 30 MB en conjunto.</span>
+	        <span class="nav-link">El tamaño máximo de subida de archivos no debe ser mayor a 10 MB por petición.</span>
         </div>
 		<?php
             $attributes = array('id' => 'form_oasis');
