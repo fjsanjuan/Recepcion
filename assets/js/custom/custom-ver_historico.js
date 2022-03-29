@@ -6691,10 +6691,10 @@ function construir_tabla_historial_anversos(data) {
 		$(encargado).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
 		$(dannos).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
 		$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+		$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
+		$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
 		if (val.diagnostico) {
-			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
 		}
 		if (val.IDDanno) {
 			$(dannos).prop('disabled', true);
@@ -6841,6 +6841,11 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .detall
 	win.focus();
 });
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaranverso', function(event) {
+	if (!$(this).data('Encargado')){
+		toastr.info('Debe asignar un Técnico encargado antes de autorizar mano de obra.');
+		$(this).prop('checked',!$(this).is(':checked'));
+		return;
+	}
 	id = $(this).prop('id').split('-')[1];
 	$('.swal2-select').addClass('swal2-select-active');
 	idOrden = localStorage.getItem('hist_id_orden');
@@ -7162,6 +7167,11 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .maradi
 	});
 });
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrte').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrte', function(event) {
+	if (!$(this).data('Encargado')){
+		toastr.info('Debe asignar un Técnico encargado antes de autorizar mano de obra.');
+		$(this).prop('checked',!$(this).is(':checked'));
+		return;
+	}
 	id = $(this).prop('id').split('-')[1];
 	idOrden = localStorage.getItem('hist_id_orden');
 	data = $(this).data();
@@ -7215,6 +7225,11 @@ $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autori
 	});
 });
 $(document).off('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrtias').on('click', '#historialDiagnosticoModal #tabla_diagnosticos .autorizaGrtias', function(event) {
+	if (!$(this).data('Encargado')){
+		toastr.info('Debe asignar un Técnico encargado antes de autorizar mano de obra.');
+		$(this).prop('checked',!$(this).is(':checked'));
+		return;
+	}
 	id = $(this).prop('id').split('-')[1];
 	idOrden = localStorage.getItem('hist_id_orden');
 	data = $(this).data();
