@@ -100,7 +100,6 @@ class Buscador_Model extends CI_Model{
 				$select = "CONVERT(date, vtn.FechaRequerida, 105 ) as fecha_requerida, vtn.HoraRequerida, vtn.HoraRecepcion, VIN.VIN, ag.Nombre as asesor,vtn.Estatus as estatus ,vtn.Comentarios, vtn.MovID";
 				$ret['cita'] = $int->select($select)->from("venta vtn")->join("VIN", "VIN.VIN = vtn.ServicioSerie")->join("Agente ag", "ag.Agente = vtn.Agente")
 					->where("vtn.mov", "Cita Servicio")->where("vtn.estatus", "CONFIRMAR")->where("vtn.Cliente", $datos['id'])->get()->result_array();
-
 				$id_cliente = $int->select("TOP(1) Cliente")->from("Cte")->where("Cliente", $datos['id'])->get()->result_array();
 				
 				$select =  "VIN.VIN, VIN.ColorExteriorDescripcion, Art.Descripcion1";
@@ -5383,7 +5382,7 @@ class Buscador_Model extends CI_Model{
 							'dt.VentaID' => $mano['IdVenta'],
 						])->get()->row_array();
 					$response['manos'][$key]['num_reparacion'] = isset($num['num_reparacion']) ? $num['num_reparacion'] : '';
-					
+					$response['manos'][$key]['cantidadTipoGarantia'] = $this->db->select('id')->from('lineas_reparacion')->where(['VentaID' => $response['manos'][$key]['ID'], 'Renglon' => $response['manos'][$key]['Renglon'], 'RenglonID' => $response['manos'][$key]['RenglonID'], 'RenglonSub' => $response['manos'][$key]['RenglonSub']])->count_all_results();
 				}
 				$response['estatus'] = true;
 				$response['mensaje'] = "Ok.";
