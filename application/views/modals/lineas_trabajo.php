@@ -7,6 +7,9 @@
 	</li>
 	
 </ul><br>
+<div class="d-flex justify-content-center" >
+	<span class="tipoGtiAgrgada">&nbsp&nbsp&nbsp</span><span>Agregada</span>
+</div>
 <div class="tab-content" id="linTabContent">
 	<div class="col-md-12 tab-pane fade show active" id="nueva_linea" role="tabpanel" aria-labelledby="nuev-lin">
 <?php
