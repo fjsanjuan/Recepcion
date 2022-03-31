@@ -318,7 +318,13 @@ $(document).on("click", "#table_recepcion tbody tr", function(e) {
                      mandar_tickaje();   
                     }else
                     {
-                        alert("Es necesario marcar el tickaje de llegada y pase de asesor para poder avanzar a la orden");
+                        swal({
+                            title:'Es necesario marcar el tickaje de llegada y pase de asesor<br/>  para poder avanzar a la orden',
+                            type:'info',
+                            position: 'top',
+                            toast:true,
+                            allowOutsideClick: false
+                        });
                     }
                 break;
               default:
