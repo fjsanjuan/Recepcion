@@ -5612,7 +5612,7 @@ $(document).on('click', '#cancelar_firmaLineas', function(e){
 			let con_movimientos = 0;
 			if (respLineas.estatus) {
 				$.each(respLineas.manos, function(index, val) {
-					$('#linea_tipo').append($(`<option>`,{'class': val.cantidadTipoGarantia > 0 ? 'tipoGtiAgrgada' : '', 'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`, 'data-gte': val.Nombre_gte, 'data-admon': val.Nombre_grtias, 'data-jefe': val.Nombre_jefe, 'data-num_reparacion': val.num_reparacion}));
+					$('#linea_tipo').append($(`<option>`,{'class': val.cantidadTipoGarantia > 0 ? 'colorAgrgada' : '', 'value': val.ID, 'text': `${val.Descripcion1}`, 'data-renglon': `${val.Renglon}`, 'data-renglonsub': `${val.RenglonSub}`, 'data-renglonid': `${val.RenglonID}`, 'data-gte': val.Nombre_gte, 'data-admon': val.Nombre_grtias, 'data-jefe': val.Nombre_jefe, 'data-num_reparacion': val.num_reparacion}));
 				});
 				$('#lineaTrabajoModal').modal('show');
 			}else {

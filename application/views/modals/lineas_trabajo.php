@@ -7,8 +7,10 @@
 	</li>
 	
 </ul><br>
-<div class="d-flex justify-content-center" >
-	<span class="tipoGtiAgrgada">&nbsp&nbsp&nbsp</span><span>Agregada</span>
+<div class="row">
+<div class="col-lg-2" style="float:none; margin:auto;" >
+	<span class="colorAgrgada">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>Agregada</span>
+</div>
 </div>
 <div class="tab-content" id="linTabContent">
 	<div class="col-md-12 tab-pane fade show active" id="nueva_linea" role="tabpanel" aria-labelledby="nuev-lin">

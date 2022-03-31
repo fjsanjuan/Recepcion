@@ -85,8 +85,8 @@ table tr.active {
 	.cursor-move {
 		cursor: move;
 	}
-.tipoGtiAgrgada{
-	background-color: #a5a4a4!important;
+.colorAgrgada{
+	background-color:#a5a4a4!important;
 }
 </style>
 <div class="container">
