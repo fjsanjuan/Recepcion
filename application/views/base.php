@@ -33,6 +33,7 @@
     base_url = "<?=base_url()?>";
     var id_perfil = "<?=isset($this->session->userdata['logged_in']['perfil']) ? $this->session->userdata['logged_in']['perfil'] : 0?>";             //importante!!!  
     var fordStar = "<?=isset($this->session->userdata['logged_in']['fordStar']) ? $this->session->userdata['logged_in']['fordStar'] : null?>";             //importante!!!  
+    cve_intelisis = "<?=isset($this->session->userdata['logged_in']['cve_intelisis']) ? $this->session->userdata['logged_in']['cve_intelisis'] : 0?>";             //importante!!!  
     if (id_perfil == 5 && !fordStar && !window.location.pathname.includes('configurar_perfil')) {
     	window.location.href = "<?=site_url('user/configurar_perfil')?>";
     }

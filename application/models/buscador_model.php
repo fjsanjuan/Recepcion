@@ -2403,6 +2403,8 @@ class Buscador_Model extends CI_Model{
 									->get()->row_array(); 
 		
 			$asignado = $intelisis->select('Agente')->from('VentaD')->where(['Agente' => $usuario, 'ID' => $value["id_orden_intelisis"]])->count_all_results();
+			$encargado = $intelisis->select('tecnico_encargado')->from('CA_VentaD')->where(['tecnico_encargado
+				' => $usuario, 'VentaID' => $value["id_orden_intelisis"]])->count_all_results();
 		/*echo "<pre>";
 		print_r ($intelisis->last_query());
 		echo "</pre>";*/
@@ -2416,7 +2418,7 @@ class Buscador_Model extends CI_Model{
 												->get()->row_array(); 
 			if (isset($venta['Estatus']) && $venta['Estatus'] != 'CANCELADO') {
 				if ($perfil == 5) {
-					if ($asignado > 0) {
+					if ($asignado > 0 || $encargado > 0) {
 						$ordenes_validas[] = $ordenes[$key];
 					}
 				}else {
