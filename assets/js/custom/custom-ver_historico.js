@@ -6674,62 +6674,64 @@ function construir_tabla_historial_anversos(data) {
 	tr.append($('<th>',{'text': 'Daños relacionados'}));
 	$('#tabla_diagnosticos').append(tr);
 	$.each(data, function(index, val) {
-		tr = $('<tr>');
-		anverso = $('<button>', {'class': 'btn btn-sm btn-primary abriranverso', 'id': `abriranverso-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-edit'}));
-		tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
-		encargado = $('<button>', {'class': 'btn btn-sm btn-primary asignar_encargado', 'id': `asignar_encargado-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
-		pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
-		detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
-		adicional = $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'style': 'height: 20px; width: 20px;', 'id': `adicional-${val.diagnostico ? val.diagnostico.VentaID : ''}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false});
-		autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'style': 'height: 20px; width: 20px;', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
-		dannos = $('<button>', {'class': 'btn btn-sm btn-primary dannos', 'id': `dannos-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-code-fork'}));
-		autorizar2 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'style': 'height: 20px; width: 20px;', 'id': `authGrte-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grte, 'disabled': (id_perfil != 8 || !val.Adicional ? true : false)}) ;
-		autorizar3 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'style': 'height: 20px; width: 20px;', 'id': `authGrtias-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grtias, 'disabled': (id_perfil != 7 || !val.Adicional ? true : false)});
-		$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(encargado).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
-		$(dannos).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
-		$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
-		$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
-		if (val.diagnostico) {
-			$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
+		if(cve_intelisis == val.Agente || cve_intelisis == val.TecnicoEncargado || id_perfil != 5){
+			tr = $('<tr>');
+				anverso = $('<button>', {'class': 'btn btn-sm btn-primary abriranverso', 'id': `abriranverso-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-edit'}));
+				tecnico = $('<button>', {'class': 'btn btn-sm btn-primary asignar_tecnico', 'id': `asignar_tec-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
+				encargado = $('<button>', {'class': 'btn btn-sm btn-primary asignar_encargado', 'id': `asignar_encargado-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-sign-in-alt'}));
+				pdf = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary pdfhistorialanverso', 'id': `pdfhistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-file-pdf'})) : '';
+				detalles = val.diagnostico ? $('<button>', {'class': 'btn btn-sm btn-primary detalleshistorialanverso', 'id': `detalleshistorialanverso-${val.diagnostico.id_diagnostico}`}).append($('<i>',{'class': 'fa fa-eye'})) : '';
+				adicional = $('<input>',{'type': 'checkbox', 'class': 'check maradicional', 'style': 'height: 20px; width: 20px;', 'id': `adicional-${val.diagnostico ? val.diagnostico.VentaID : ''}`} ).prop({'checked': val.Adicional, 'disabled': (id_perfil != 5 || val.Autoriz_grte || val.Autoriz_grtias) ? true : false});
+				autorizar = val.diagnostico ? $('<input>',{'type': 'checkbox', 'class': 'check autorizaranverso', 'style': 'height: 20px; width: 20px;', 'id': `authanverso-${val.diagnostico.id_diagnostico}`} ).prop({'checked': val.diagnostico.autorizado, 'disabled': (id_perfil != 4 || val.diagnostico.terminado == 1 ? true : false)}) : 'Es necesario abrir el anverso antes de autorizar.';
+				dannos = $('<button>', {'class': 'btn btn-sm btn-primary dannos', 'id': `dannos-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`}).append($('<i>',{'class': 'fa fa-code-fork'}));
+				autorizar2 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrte', 'style': 'height: 20px; width: 20px;', 'id': `authGrte-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grte, 'disabled': (id_perfil != 8 || !val.Adicional ? true : false)}) ;
+				autorizar3 = $('<input>',{'type': 'checkbox', 'class': 'check autorizaGrtias', 'style': 'height: 20px; width: 20px;', 'id': `authGrtias-${val.diagnostico ? val.diagnostico.id_diagnostico : ''}`} ).prop({'checked': val.Autoriz_grtias, 'disabled': (id_perfil != 7 || !val.Adicional ? true : false)});
+				$(anverso).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+				$(tecnico).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+				$(encargado).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
+				$(dannos).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+				$(adicional).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente});
+				$(autorizar2).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
+				$(autorizar3).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
+				if (val.diagnostico) {
+					$(autorizar).data({'renglon': val.Renglon, 'renglonId': val.RenglonID, 'renglonSub': val.RenglonSub, 'idVenta': val.ID, 'Agente': val.Agente, 'Encargado': val.TecnicoEncargado});
+				}
+				if (val.IDDanno) {
+					$(dannos).prop('disabled', true);
+				}
+				$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
+				$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
+				$(encargado).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
+				$(adicional).prop('disabled', val.diagnostico ? (val.diagnostico.autorizado ? true : false) : false);
+				if (id_perfil != 4) {
+					$(tecnico).prop('disabled', true);
+					$(encargado).prop('disabled', true);
+				}
+				if (id_perfil == 7) {
+					$(anverso).prop('disabled', false);
+					$(adicional).prop('disabled', false);
+					$(autorizar2).prop('disabled', true);
+				}
+				if ($('input.adicional').is(':checked') && val.diagnostico.terminado == 1){
+					$(autorizar2).prop('disabled', false);
+					$(autorizar3).prop('disabled', false);
+				}
+				tr.append($('<td>',{'text': val.Descripcion1}));
+				tr.append($('<td>',{'text': val.Nombre}));
+				tr.append($('<td>',{'text': val.NombreEncargado}));
+				tr.append($('<td>').append(adicional));
+				tr.append($('<td>').append(autorizar));
+				tr.append($('<td>').append(autorizar2));
+				tr.append($('<td>').append(autorizar3));
+				tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
+				tr.append($('<td>').append(anverso));
+				tr.append($('<td>').append(tecnico));
+				tr.append($('<td>').append(encargado));
+				tr.append($('<td>').append(pdf));
+				tr.append($('<td>').append(detalles));
+				tr.append($('<td>').append(dannos));
+				$('#tabla_diagnosticos').append(tr);
 		}
-		if (val.IDDanno) {
-			$(dannos).prop('disabled', true);
-		}
-		$(anverso).prop('disabled', val.diagnostico ? (val.diagnostico.terminado ? true : false) : false);
-		$(tecnico).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
-		$(encargado).prop('disabled', val.diagnostico ? (val.diagnostico.terminado || val.diagnostico.autorizado ? true : false) : false);
-		$(adicional).prop('disabled', val.diagnostico ? (val.diagnostico.autorizado ? true : false) : false);
-		if (id_perfil != 4) {
-			$(tecnico).prop('disabled', true);
-			$(encargado).prop('disabled', true);
-		}
-		if (id_perfil == 7) {
-			$(anverso).prop('disabled', false);
-			$(adicional).prop('disabled', false);
-			$(autorizar2).prop('disabled', true);
-		}
-		if ($('input.adicional').is(':checked') && val.diagnostico.terminado == 1){
-			$(autorizar2).prop('disabled', false);
-			$(autorizar3).prop('disabled', false);
-		}
-		tr.append($('<td>',{'text': val.Descripcion1}));
-		tr.append($('<td>',{'text': val.Nombre}));
-		tr.append($('<td>',{'text': val.NombreEncargado}));
-		tr.append($('<td>').append(adicional));
-		tr.append($('<td>').append(autorizar));
-		tr.append($('<td>').append(autorizar2));
-		tr.append($('<td>').append(autorizar3));
-		tr.append($('<td>',{'text': (val.diagnostico ? (val.diagnostico.terminado ? 'Si': 'No') : 'No')}));
-		tr.append($('<td>').append(anverso));
-		tr.append($('<td>').append(tecnico));
-		tr.append($('<td>').append(encargado));
-		tr.append($('<td>').append(pdf));
-		tr.append($('<td>').append(detalles));
-		tr.append($('<td>').append(dannos));
-		$('#tabla_diagnosticos').append(tr);
 	});
 }
 
