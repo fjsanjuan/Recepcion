@@ -2350,12 +2350,10 @@ class Buscador_Model extends CI_Model{
 
 		//print_r($suc_or['id']['id_intelisis']); die();
 		$where = " fecha_creacion BETWEEN '".date('d-m-Y', strtotime($fecha_ini))." 00:00:00' AND '".date('d-m-Y', strtotime($fecha_fin))." 23:59:59'";
-		if($perfil == 2 || $perfil == 4 || $perfil == 7 || $perfil == 8)																//refacciones
+		if($perfil == 2 || $perfil == 4 || $perfil == 6 || $perfil == 7 || $perfil == 8)																//refacciones
 		{
 			$cond_claveUs = "id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			//$cond_claveUs = "1 = 1 ";
-		}else if($perfil == 6){
-			$cond_claveUs = " movimiento IS NOT NULL";
 		}else if($perfil == 5){
 			$cond_claveUs = "id_sucursal_intelisis = ".$suc_or['id']['id_servicio']."  ";
 			/*$usuario = "AM2";
