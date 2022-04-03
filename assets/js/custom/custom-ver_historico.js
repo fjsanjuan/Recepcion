@@ -2179,7 +2179,7 @@
 							}
 							table.append(row);
 						});
-						var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailP2' data-index='"+index+"' data-idpres='"+value.id_presupuesto+"'><i class='fas fa-envelope'></i>Enviar Email</button></td><td><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b></td></tr>");
+						var row_importe = $("<tr><td><button class='btn btn-sm btn-info btn-mailP2' data-index='"+index+"' data-idpres='"+value.id_presupuesto+"'><i class='fas fa-envelope'></i>Enviar Email</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b></td></tr>");
 						table.append(row_importe);
 						$('#modalValidacion .modal-body').append(row_title);
 						$('#modalValidacion .modal-body').append(table);
@@ -5216,7 +5216,7 @@ function obtener_cotizaciones(id_orden){
 						}
 						table.append(row);
 					});
-					var row_importe = $("<tr><td><button class='btn btn-sm btn-primary btnPdf2' data-index='"+index+"' data-idpres='"+idpres+"'><i class='fas fa-file-download'></i> PDF</button></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
+					var row_importe = $("<tr><td></td><td></td><td></td><td><b>Importe</b></td><td><b>"+value.total_presupuesto+"</b><td></td></td>");
 					table.append(row_importe);
 					$('#requisModal #cotizaciones .contentCot').append(row_title);
 					$('#requisModal #cotizaciones .contentCot').append(table);
@@ -5297,7 +5297,7 @@ function notificar_verificacion(id) {
 	form.append('id', id);
 	swal({
 		title: 'Notificar a Refacciones',
-		text: 'Cuando notificas a Refacciones se cierra la verificación y ya no sera editable.\nPuedes notificar desde la opción dentro de "Ver Verificaciones"',
+		text: 'Cuando notificas a Refacciones se cierra la cotización y ya no sera editable.\nPuedes notificar desde la opción dentro de "Ver Cotizaciones"',
 		showCancelButton: true,
 		confirmButtonText: 'Notificar',
 		cancelButtonText: 'Más tarde',
