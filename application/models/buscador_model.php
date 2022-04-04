@@ -4563,6 +4563,8 @@ class Buscador_Model extends CI_Model{
 						$response['desglose'][$key]['prefijo'] = null;
 						$response['desglose'][$key]['sufijo'] = null;
 						$costo_tiempo = 0;
+						$existe = $this->db->select('*')->from('diagnostico_tecnico')->where(['VentaID' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID']])->get()->row_array();
+						$response['desglose'][$key]['clave_defecto'] = isset($existe['clave_defect']) ? $existe['clave_defect'] : '';
 						$linea = $this->db->select('*')->from('lineas_reparacion')->where(['VentaID' => $response['desglose'][$key]['IdVenta'], 'Renglon' => $response['desglose'][$key]['Renglon'], 'RenglonId' => $response['desglose'][$key]['RenglonID']])->get()->row_array();
 						$response['desglose'][$key]['num_rem'] = isset($linea['num_reparacion']) ? $linea['num_reparacion'] : null;
 						$response['desglose'][$key]['importe_mano'] = isset($linea['mano_obra_total']) ? $linea['mano_obra_total'] : 0;
