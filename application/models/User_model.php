@@ -98,77 +98,101 @@ class User_model extends CI_Model {
 			return null;
 	}
 
-	function datos_vta($id, $datos = 0){
-		if($id != 0)
-		{
-			/*vta.ID, c.cliente,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.TelefonosLada,c.Direccion, c.DireccionNumero,c.Extencion2, c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, vta.Empresa, vta.Almacen, vta.Cliente, vta.Sucursal, vta.Mov, vta.FechaEmision,vta.FechaRequerida, vta.HoraRequerida, vta.UEN, vta.Moneda, vta.Agente, vta.ServicioSerie,c.PersonalNombres,c.PersonalApellidoPaterno,c.PersonalApellidoMaterno */
-			$this->db2 = $this->load->database('other',true); 
-			$query['datos'] = $this->db2->query("SELECT vta.Mov,
-												vta.Empresa,
-												vta.Sucursal,
-												vta.Almacen,
-												vta.ID,
-												vta.FechaEmision,
-												c.PersonalNombres,
-												ISNULL(c.PersonalNombres2,'') AS PersonalNombres2,
-												ISNULL(c.PersonalApellidoPaterno,'') AS PersonalApellidoPaterno,
-												ISNULL(c.PersonalApellidoMaterno,'') AS PersonalApellidoMaterno,
-												c.cliente,
-												c.nombre,
-												c.PersonalTelefonoMovil AS Celular,
-												c.eMail1,
-												c.TelefonosLada,
-												c.Telefonos,
-												c.Extencion2,
-												c.Contacto2,
-												c.RFC,
-												c.Direccion,
-												c.DireccionNumero,
-												c.DireccionNumeroInt,
-												c.Colonia,
-												c.Poblacion,
-												c.Estado,
-												c.CodigoPostal,
-												vta.FechaRequerida,
-												vta.HoraRequerida,
-												vta.Condicion,
-												vta.ServicioTipoOrden,
-												vta.ServicioTipoOperacion,
-												vta.ListaPreciosEsp,
-												vta.Concepto,
-												vta.Moneda,
-												vta.UEN,
-												vta.ServicioIdentificador,
-												vta.ServicioNumero,
-												vta.ZonaImpuesto
-											FROM Venta vta 
-											INNER JOIN Cte c ON vta.Cliente = c.Cliente 
-											WHERE ID = ? " , array($id))->result_array();
+	function datos_vta($id, $datos = 0, $campanias){
+		#se obtiene todos los datos necesarios de la orden de servicio y campañas
+		if($campanias == 'false') {
 
-			$query['vehiculo'] = $this->db2->query("SELECT vta.ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km, vta.ServicioSerie, 
-				vin.ColorExteriorDescripcion 
-			FROM Venta vta  INNER JOIN VIN vin ON vta.ServicioSerie = vin.VIN WHERE vta.ID = ?", array($id))->result_array();
-
-			$query['Agente'] = $this->db2->query("Select ag.agente, ag.nombre FROM Venta vta INNER JOIN Agente ag ON ag.Agente = vta.Agente WHERE vta.ID = ?" ,array($id))->result_array();	
-		}else
-		{
-			$this->db2 = $this->load->database('other',true); 
-			
-			$query['datos'] = $this->db2->select(" '0' as ID, c.cliente,,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.Direccion, c.DireccionNumero, c.TelefonosLada,c.Extencion2,c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, c.Cliente, '".$datos['vin']."' as ServicioSerie,c.PersonalNombres,ISNULL(c.PersonalNombres2,' ') AS 'PersonalNombres2',ISNULL(c.PersonalApellidoPaterno,'') AS 'PersonalApellidoPaterno',ISNULL(c.PersonalApellidoMaterno,'') AS 'PersonalApellidoMaterno' ")->from("Cte c")->where("c.Cliente",$datos['cliente'])->get()->result_array();
-
-			$select = "su.empresa as Empresa, su.almacen_servicio as Almacen, su.sucursal_int as Sucursal, '' as Mov, '' as FechaEmision, '' as FechaRequerida, '' as HoraRequerida, '' as UEN, su.moneda as Moneda, us.cve_intelisis as Agente";
-
-			$query['datos'] += $this->db->select($select)->from("usuarios us")->join("sucursal su", "su.id = us.id_sucursal")->where("us.id", $this->session->userdata("id"))->get()->result_array();
-
-			$query['vehiculo'] = $this->db2->select ("Vin.Articulo as ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km,  vin.Vin as ServicioSerie, vin.ColorExteriorDescripcion")->from("Vin vin")
-								->where("vin.Vin", urldecode($datos['vin']))->get()->result_array();
-
-			$query['Agente'] = $this->db2->select("ag.agente, ag.nombre")->from("Agente ag")->where("ag.Agente",$this->session->userdata["logged_in"]["cve_intelisis"])->get()->result_array();	
-			$tabla = "MovTipoValidarUEN muv";
-			if($this->Version == "V6000")
-				$tabla = "CA_MovTipoValidarUEN muv";
-			$query['uen'] = $this->db2->select("UEN.Nombre, UEN.UEN, muv.mov")->from("UEN")->join($tabla, "muv.UENValida = UEN.UEN")->where("muv.Mov IN ('Servicio','Cita Servicio')")->where("UEN.Estatus",'ALTA')->get()->result_array();
+			if($id != 0)
+			{
+				/*vta.ID, c.cliente,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.TelefonosLada,c.Direccion, c.DireccionNumero,c.Extencion2, c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, vta.Empresa, vta.Almacen, vta.Cliente, vta.Sucursal, vta.Mov, vta.FechaEmision,vta.FechaRequerida, vta.HoraRequerida, vta.UEN, vta.Moneda, vta.Agente, vta.ServicioSerie,c.PersonalNombres,c.PersonalApellidoPaterno,c.PersonalApellidoMaterno */
+				$this->db2 = $this->load->database('other',true); 
+				$query['datos'] = $this->db2->query("SELECT vta.Mov,
+													vta.Empresa,
+													vta.Sucursal,
+													vta.Almacen,
+													vta.ID,
+													vta.FechaEmision,
+													c.PersonalNombres,
+													ISNULL(c.PersonalNombres2,'') AS PersonalNombres2,
+													ISNULL(c.PersonalApellidoPaterno,'') AS PersonalApellidoPaterno,
+													ISNULL(c.PersonalApellidoMaterno,'') AS PersonalApellidoMaterno,
+													c.cliente,
+													c.nombre,
+													c.PersonalTelefonoMovil AS Celular,
+													c.eMail1,
+													c.TelefonosLada,
+													c.Telefonos,
+													c.Extencion2,
+													c.Contacto2,
+													c.RFC,
+													c.Direccion,
+													c.DireccionNumero,
+													c.DireccionNumeroInt,
+													c.Colonia,
+													c.Poblacion,
+													c.Estado,
+													c.CodigoPostal,
+													vta.FechaRequerida,
+													vta.HoraRequerida,
+													vta.Condicion,
+													vta.ServicioTipoOrden,
+													vta.ServicioTipoOperacion,
+													vta.ListaPreciosEsp,
+													vta.Concepto,
+													vta.Moneda,
+													vta.UEN,
+													vta.ServicioIdentificador,
+													vta.ServicioNumero,
+													vta.ZonaImpuesto
+												FROM Venta vta 
+												INNER JOIN Cte c ON vta.Cliente = c.Cliente 
+												WHERE ID = ? " , array($id))->result_array();
+	
+				$query['vehiculo'] = $this->db2->query("SELECT vta.ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km, vta.ServicioSerie, 
+					vin.ColorExteriorDescripcion 
+				FROM Venta vta  INNER JOIN VIN vin ON vta.ServicioSerie = vin.VIN WHERE vta.ID = ?", array($id))->result_array();
+	
+				$query['Agente'] = $this->db2->query("Select ag.agente, ag.nombre FROM Venta vta INNER JOIN Agente ag ON ag.Agente = vta.Agente WHERE vta.ID = ?" ,array($id))->result_array();	
+			}else
+			{
+				$this->db2 = $this->load->database('other',true); 
+				
+				$query['datos'] = $this->db2->select(" '0' as ID, c.cliente,,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.Direccion, c.DireccionNumero, c.TelefonosLada,c.Extencion2,c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, c.Cliente, '".$datos['vin']."' as ServicioSerie,c.PersonalNombres,ISNULL(c.PersonalNombres2,' ') AS 'PersonalNombres2',ISNULL(c.PersonalApellidoPaterno,'') AS 'PersonalApellidoPaterno',ISNULL(c.PersonalApellidoMaterno,'') AS 'PersonalApellidoMaterno' ")->from("Cte c")->where("c.Cliente",$datos['cliente'])->get()->result_array();
+	
+				$select = "su.empresa as Empresa, su.almacen_servicio as Almacen, su.sucursal_int as Sucursal, '' as Mov, '' as FechaEmision, '' as FechaRequerida, '' as HoraRequerida, '' as UEN, su.moneda as Moneda, us.cve_intelisis as Agente";
+	
+				$query['datos'] += $this->db->select($select)->from("usuarios us")->join("sucursal su", "su.id = us.id_sucursal")->where("us.id", $this->session->userdata("id"))->get()->result_array();
+	
+				$query['vehiculo'] = $this->db2->select ("Vin.Articulo as ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km,  vin.Vin as ServicioSerie, vin.ColorExteriorDescripcion")->from("Vin vin")
+									->where("vin.Vin", urldecode($datos['vin']))->get()->result_array();
+	
+				$query['Agente'] = $this->db2->select("ag.agente, ag.nombre")->from("Agente ag")->where("ag.Agente",$this->session->userdata["logged_in"]["cve_intelisis"])->get()->result_array();	
+				$tabla = "MovTipoValidarUEN muv";
+				if($this->Version == "V6000")
+					$tabla = "CA_MovTipoValidarUEN muv";
+				$query['uen'] = $this->db2->select("UEN.Nombre, UEN.UEN, muv.mov")->from("UEN")->join($tabla, "muv.UENValida = UEN.UEN")->where("muv.Mov IN ('Servicio','Cita Servicio')")->where("UEN.Estatus",'ALTA')->get()->result_array();
+			}
 		}
+		#solo se consulta lo necesario para obtener datos de campañas
+		else{
+			if($id != 0)
+			{
+				/*vta.ID, c.cliente,c.Contacto2, c.nombre,c.PersonalTelefonoMovil AS Celular, c.RFC, c.Telefonos, c.TelefonosLada,c.Direccion, c.DireccionNumero,c.Extencion2, c.DireccionNumeroInt, c.Colonia, c.Poblacion, c.Estado, c.CodigoPostal, c.eMail1, vta.Empresa, vta.Almacen, vta.Cliente, vta.Sucursal, vta.Mov, vta.FechaEmision,vta.FechaRequerida, vta.HoraRequerida, vta.UEN, vta.Moneda, vta.Agente, vta.ServicioSerie,c.PersonalNombres,c.PersonalApellidoPaterno,c.PersonalApellidoMaterno */
+				$this->db2 = $this->load->database('other',true); 
+				$query['vehiculo'] = $this->db2->query("SELECT vta.ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km, vta.ServicioSerie, 
+					vin.ColorExteriorDescripcion 
+				FROM Venta vta  INNER JOIN VIN vin ON vta.ServicioSerie = vin.VIN WHERE vta.ID = ?", array($id))->result_array();
+			}else
+			{
+				$this->db2 = $this->load->database('other',true); 
+				
+				$query['datos'] = $this->db2->select("  '".$datos['vin']."' as ServicioSerie ")->from("Cte c")->where("c.Cliente",$datos['cliente'])->get()->result_array();
+	
+				$query['vehiculo'] = $this->db2->select ("Vin.Articulo as ServicioArticulo ,vin.Modelo, vin.Placas, vin.Km,  vin.Vin as ServicioSerie, vin.ColorExteriorDescripcion")->from("Vin vin")
+									->where("vin.Vin", urldecode($datos['vin']))->get()->result_array();
+			}
+		}
+		
 		$query['Horarios']  = $this->db2->query("SELECT Hora FROM agendahora")->result_array();
 		//lo nuevo para campañas
 		$tabla = "vinrecalld as vd";
@@ -177,11 +201,50 @@ class User_model extends CI_Model {
 			$tabla = "CA_vinrecalld as vd";
 			$tabla2 = "CA_vinrecall vdd";
 		}
-		$query['camp'] = $this->db2->select("vdd.Asunto,vdd.Problema, vd.Vigencia,vdd.Prioridad")->from($tabla)->join($tabla2,"vdd.id = vd.id")->where("vd.Estatus","PENDIENTE")
+		$query['camp'] = $this->db2
+		->select("	vd.id,
+					vd.Vin,
+					vd.Modelo,
+					vdd.Asunto,vdd.Problema, 
+					CONVERT(varchar(10), 
+					vd.Vigencia,103) as Vigencia ,
+					vdd.Prioridad, 
+					vd.estatus")
+		->from($tabla)->join($tabla2,"vdd.id = vd.id")->where("vd.Estatus","PENDIENTE")
+			->where("vdd.Estatus","ALTA")
 			->where("vd.VIN", $query['vehiculo'][0]['ServicioSerie'])->where("vd.Vigencia >= '".date("d-m-Y")."'")->get()->result_array();
 
-
+	
 		return $query;
+	}
+
+
+	function update_campanias($idCampania,$vinCampania,$modeloCampania, $estatusCampania){
+		
+		$this->db2 = $this->load->database('other',true);
+		$this->db2->trans_begin();
+		// en esta caso no condicionamos a version de intelisis por que este store es nuevo
+		$xp = 'xpCA_ActualizaVinCampanaWeb';
+		$result= $this->db2->query(" DECLARE @OkRef int;  EXEC @OkRef = ".$xp." ?,?,?,?  ;  SELECT 'OkRef' = @OkRef;  ", array($idCampania,$vinCampania,$modeloCampania,$estatusCampania));
+		// para revisar como se ejecuta la sentencia
+		//echo $this->db2->last_query();
+		
+		//var_dump($result->result_array());
+		//print_r($result->result_array());
+		
+		foreach ($result->result_array() as $row)
+		{
+				$ok = $row['OkRef'];
+		}
+
+		if ($this->db2->trans_status() === FALSE){
+			$this->db2->trans_rollback();
+			return false;
+		}else{
+			$this->db2->trans_commit();
+			return $ok;
+		}	
+	
 	}
 
 	function update_cli($data){

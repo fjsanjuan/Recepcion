@@ -142,10 +142,23 @@ class User extends CI_Controller {
 	function cargar_datos_vta(){
 		$idVta = $this->input->post('id');
 		$datos = $this->input->post();
+		$campanias = $this->input->post('campanias');
 		$this->load->model('user_model');
-		$datos = $this->user_model->datos_vta($idVta, $datos);
+		$datos = $this->user_model->datos_vta($idVta, $datos, $campanias);
 		// print_r($datos);
 		echo json_encode($datos);
+	}
+
+	//cargamos los datos que estan registrados en venta para generar orden
+	function update_campanias(){
+		$idCampania = $this->input->post('idCampania');
+		$vin = $this->input->post('vinCampania');
+		$modelo = $this->input->post('modeloCampania');
+		$estatus = $this->input->post('estatusCampania');
+		$this->load->model('user_model');
+		$ok = $this->user_model->update_campanias($idCampania, $vin, $modelo, $estatus);
+		//print_r($ok);
+		echo json_encode($ok);
 	}
 
 	//vista form

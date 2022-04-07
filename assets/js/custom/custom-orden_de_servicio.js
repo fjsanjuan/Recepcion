@@ -2,6 +2,9 @@ let cloneID = 0;
 //variable que controlan el tipo de formato de orden de servicio(profeco) que se genera en pdf 
 var formt_serv_pdf = "Ford";
 $(window).on('load', function() {
+    //escondemos boton para las campañas que solo aparecera cuando el VIN tenga camapañas asignadas y sin marcar
+    $("#boton_CampaniasVin").hide();  // hide
+    
     bind();
     var options = {
         brushColor:"rgb(255,0,0)",
@@ -266,12 +269,21 @@ $(window).on('load', function() {
         url: base_url+ "index.php/user/cargar_datos_vta",
         type: "POST",
         dataType: 'json',
-        data: ({ id: id, cliente: id_cliente, vin:vin} ),
+        //variable campanias se envia false para obtner todos los datos de la orden
+        data: ({ id: id, cliente: id_cliente, vin:vin, campanias:'false'} ),
         beforeSend: function(){
             $("#loading_spin").show();
         },
         error: function(){
-            console.log('error');
+            //console.log('error');
+            swal({
+                title:'Lo sentimos no se pudo obtener datos de la orden<br/>favor de recargar la pagína....',
+                type:'info',
+                position: 'top',
+                toast:true,
+                allowOutsideClick: false
+            });
+            
         },
         success: function (data){
             $("#loading_spin").hide();
@@ -374,33 +386,9 @@ $(window).on('load', function() {
                     $("#hora_promesa_cliente2").append('<option value="' + data.Horarios[i]['Hora'] + '">' + data.Horarios[i]['Hora'] + '</option>');
             }
             
-            //lo nuevo para campañas
-            if(camp.length > 0)
-            {
-                var temp = "";
-                for (var i = 0; i < camp.length; i++) 
-                {
-                    temp += "<tr>";
-                    temp +="<td>"+camp[i]['Asunto']+"</td>";
-                    temp +="<td>"+camp[i]['Problema']+"</td>";
-                    temp +="<td>"+camp[i]['Vigencia']+"</td>";
-                    temp +="<td>"+camp[i]['Prioridad']+"</td>";
-                    temp += "</tr>";
-                }
-                $("#tbodycamp").empty();
-                $("#tbodycamp").append(temp);
-                $("#modalcamp").modal("show");
-            }else
-            {
-                swal({
-                    title:'No hay campañas activas para esta unidad.',
-                    type:'info',
-                    position: 'top',
-                    toast:true,
-                    allowOutsideClick: false
-                });
-                //alert("no hay campañas activas para esta unidad");
-            }
+            //se crea la estructura de la tabla de campañas por funcion para accederlo desde diferentes metodos
+            crear_tabla_campanias(camp)
+
             //$("#promesa_cliente").val(datos[0]['FechaRequerida']);
 
            // var moneda = result[0]['Moneda'];
@@ -463,6 +451,207 @@ $(window).on('load', function() {
             }         
         }
     });
+
+    /*Mostrar Modal de Campañas*/
+    $(document).on("click", '#boton_CampaniasVin', function (e){
+        e.preventDefault();
+        // funcion que obtine solo lo necesario de los datos de campañas
+        obtner_dts_campanias()
+    });
+
+    /*Actualizar datos campaña*/
+    $(document).on("click", "input.chk_campania", function(e){
+		//e.preventDefault();
+        var $this = $(this);
+        var id_campania = $this.prop("id");
+		id_campania = id_campania.split("-");
+		id_campania = id_campania[1];
+
+        // $(this).prop('checked', false);
+        // $(this).closest('tr').find('td:eq(3)').html('new content');
+
+        // closets busca el elemento más cercano para accededer a los elemenentos dentro del DOM sobre el tr más cercano en caso de tablas
+        vin_campania = $(this).closest('tr').find('#vin_campania').val();
+        modelo_campania = $(this).closest('tr').find('#modelo_campania').val();
+		//console.log(id_campania+"-"+vin_campania+"-"+modelo_campania);
+        
+        if( $this.prop("checked") != false ){
+            update_campanias('ATENDIDA',id_campania,vin_campania,modelo_campania,$this);
+        }
+        else{
+            update_campanias('PENDIENTE',id_campania,vin_campania,modelo_campania,$this);
+        }
+
+
+        
+	});
+
+    $(document).on("click", "#modalcampClose", function(e){
+        swal({
+		title: 'Las campañas atendidas ya no se listarán al cerrar esta ventana<br/>¿Desea continuar?',
+		showCancelButton: true,
+		confirmButtonText: 'Si',
+		cancelButtonText: 'Cancelar',
+		type: 'info'
+		}).then((result) => {
+			if (result.value) {
+				$('#modalcamp').modal('toggle');
+			}
+		});
+	});
+
+    
+    // funcion para obtener  datos de campañas
+    function obtner_dts_campanias() {
+        $.ajax({
+            url: base_url+ "index.php/user/cargar_datos_vta",
+            type: "POST",
+            dataType: 'json',
+            //variable campanias se envia true para obtner solo los datos de campañas y llamar desdeel boton boton_CampaniasVin
+            data: ({ id: id, cliente: id_cliente, vin:vin,campanias:'true'} ),
+            beforeSend: function(){
+                $("#loading_spin").show();
+            },
+            error: function(){
+                //console.log('error');
+                swal('Lo sentimos no se pudo cargar los datos de las campañas, intente más tarde', '', 'error');
+                
+            },
+            success: function (data){
+                $("#loading_spin").hide();
+                result = eval(data);
+                // console.log(data[0]);
+                //validation
+                var camp = data.camp;
+
+                //se crea la estructura de la tabla de campañas por funcion para accederlo desde diferentes metodos o funciones
+                crear_tabla_campanias(camp)
+
+            }
+        });
+
+    }
+    
+    // funcion que actualizara datos de las campañas  
+    function update_campanias(estatus_campania,id_campania,vin_campania,modelo_campania,$this) {
+        //actualizará el marcado de estatus de campañas de pendientes por atendidas
+        if(estatus_campania == 'ATENDIDA'){
+
+            $.ajax({
+                url: base_url+ "index.php/user/update_campanias",
+                type: "POST",
+                dataType: 'json',
+                //variable campanias se envia true para obtner solo los datos de campañas y llamar desdeel boton boton_CampaniasVin
+                data: ({ idCampania: id_campania, vinCampania: vin_campania, modeloCampania:modelo_campania,estatusCampania:estatus_campania} ),
+                beforeSend: function(){
+                    $("#loading_spin").show();
+                },
+                error: function(){
+                    //console.log('error');
+                    swal('Lo sentimos no se pudo actualizar, intente más tarde', '', 'error');
+                    $("#loading_spin").hide();
+                    $this.prop('checked', false);
+                    
+                }
+                ,success: function (data){
+                    $("#loading_spin").hide();
+                    //console.log('dataaa');
+                    if(data ==1){
+                        swal('Campaña actualizada correctamente.', '', 'success');
+                        $this.prop('checked', true);
+                        $this.closest('tr').find('td:eq(3)').html(estatus_campania);
+                    }
+                    else{
+                        swal('No hay nada que actualizar', '', 'info');
+                        $this.prop('checked', false);
+                    }
+                    
+                    
+                    
+                }
+            });
+        }
+        else if(estatus_campania == 'PENDIENTE'){
+            $.ajax({
+                url: base_url+ "index.php/user/update_campanias",
+                type: "POST",
+                dataType: 'json',
+                //variable campanias se envia true para obtner solo los datos de campañas y llamar desdeel boton boton_CampaniasVin
+                data: ({ idCampania: id_campania, vinCampania: vin_campania, modeloCampania:modelo_campania,estatusCampania:estatus_campania} ),
+                beforeSend: function(){
+                    $("#loading_spin").show();
+                },
+                error: function(){
+                    //console.log('error');
+                    swal('Lo sentimos no se pudo actualizar, intente más tarde', '', 'error');
+                    $("#loading_spin").hide();
+                    $this.prop('checked', true);
+                    
+                }
+                ,success: function (data){
+                    $("#loading_spin").hide();
+                    //console.log('dataaa');
+                
+                    if(data ==1){
+                        swal('Campaña actualizada correctamente.', '', 'success');
+                        $this.prop('checked', false);
+                        $this.closest('tr').find('td:eq(3)').html(estatus_campania);
+                    }
+                    else{
+                        swal('No hay nada que actualizar', '', 'info');
+                        $this.prop('checked', true);
+                    }
+                    
+                }
+            });
+        }
+    }
+
+    function crear_tabla_campanias(camp){
+        if(camp.length > 0)
+        {
+            var temp = "";
+            for (var i = 0; i < camp.length; i++) 
+            {
+                temp += "<tr>";
+                temp +="<td>"+camp[i]['Asunto']+"</td>";
+                temp +="<td>"+camp[i]['Problema']+"</td>";
+                temp +="<td>"+camp[i]['Vigencia']+"</td>";
+                //temp +="<td>"+camp[i]['Prioridad']+"</td>";
+                temp +="<td>"+camp[i]['estatus']+"</td>";
+                temp +=
+                 "<td>" 
+                    +"<div class='form-check'> "
+                        +"<input class='form-check-input chk_campania' type='checkbox' value='' id='idCampania-"+camp[i]['id']+"'> "
+                        +"<label class='form-check-label' for='idCampania-"+camp[i]['id']+"'>"
+                        +"</label>"
+                    +"</div>"
+                +"</td>";
+                temp     += "<input type='hidden' id='vin_campania' value='"+camp[i]['Vin']+"'>";
+                temp     += "<input type='hidden' id='modelo_campania' value='"+camp[i]['Modelo']+"'>";
+                temp += "</tr>";
+            }
+            $("#tbodycamp").empty();
+            $("#tbodycamp").append(temp);
+            
+            $("#modalcamp").modal("show");
+           
+            // hacer visible el boton para ver campañas solo si existen campañas viengtes y sin marcar
+            setTimeout(function(){
+                $("#boton_CampaniasVin").show();                 
+            }, 1500);
+        }else
+        {
+            swal({
+                title:'No hay campañas activas para esta unidad.',
+                type:'info',
+                position: 'top',
+                toast:true,
+                allowOutsideClick: false
+            });
+            
+        }
+    }
 
     //se asigna la variable con el id de la orden en la tabla orden_servicio
     var id_orden_servicio_insp = localStorage.getItem("id_orden_servicio");
@@ -871,7 +1060,7 @@ $(window).on('load', function() {
                 //$(idInput).prop('checked',true);
             } 
     }
-
+        
     // funcion que evalua checks con 2 opciones  condiciones generales asina a los dos valores
     function check_dos_no(val,opc1,idInput1,opc2,idInput2) {
         switch(val) {
@@ -2620,6 +2809,7 @@ $(document).on("click", '#mostrar_modalsonido', function (e){
 
     $("#modalsonido").modal("show");
 });
+
 
 /*Inspección*/
 $(document).on("click", "#btn_resetImgInsp", function(e){

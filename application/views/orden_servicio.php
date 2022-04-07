@@ -292,6 +292,11 @@
                                                     <textarea name="comentcliente" id="comentcliente" rows="3" style="width:100%;"></textarea>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="form-group col">
+                                                    <button class="btn btn-info btn-sm" id="boton_CampaniasVin"><i class="fa fa-search"></i> Campañas</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2851,18 +2856,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Campañas Disponibles</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
-                    <table class="table">
+                    <table class="table tabla_campanias" id='tabla_campanias'>
                         <thead>
                             <tr>
                                 <th>Asunto</th>
                                 <th>Problema</th>
                                 <th>Vigencia</th>
-                                <th>Prioridad</th>
+                                <!-- <th>Prioridad</th> -->
+                                <th>Estatus</th>
+                                <th>Seleccionar</th>
                             </tr>
                         </thead>
                         <tbody id="tbodycamp">
@@ -2871,7 +2875,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary"  id ="modalcampClose">Cerrar</button>
                 </div>
             </div>
     </div>
