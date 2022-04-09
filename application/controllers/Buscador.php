@@ -104,7 +104,7 @@ class Buscador extends CI_Controller {
 
 	public function busqueda(){
 		$data = $this->input->post();
-		$data['busqueda'] = explode(" ", $data['busqueda']);
+		$data['busqueda'] = is_array($data['busqueda']) ? $data['busqueda'] : explode(" ", $data['busqueda']);
 		//var_dump($data);die();
 		$ret = $this->buscador_model->busqueda($data);
 		//var_dump($ret);

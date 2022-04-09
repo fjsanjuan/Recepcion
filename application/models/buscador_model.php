@@ -60,6 +60,11 @@ class Buscador_Model extends CI_Model{
 				->like("Placas", $datos['busqueda'][0])->limit(20)->get()->result_array();
 				$ret['estatus'] = "ok";
 			break;
+			case '4':
+				$ret['resultado'] = $int->select("Placas as value, VIN as id, cte.cliente as id_cliente, PersonalNombres + ' ' + PersonalNombres2  as nombre, PersonalApellidoPaterno as ap_paterno, PersonalApellidoMaterno as ap_materno")->from("VIN")->join("cte","cte.Cliente=vin.Cliente","left")
+				->where_in("Placas", $datos['busqueda'])->limit(20)->get()->result_array();
+				$ret['estatus'] = "ok";
+			break;
 
 			default:
 				$ret['estatus'] = "ko";

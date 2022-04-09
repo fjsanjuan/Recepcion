@@ -157,7 +157,7 @@ $(document).ready(function(){
     });
     $("#photo_button").on("click",function(e){
         e.stopPropagation();
-        $("#fileOcr").click();
+        // $("#fileOcr").click();
     });
 
     var seleccionado = "";
@@ -217,6 +217,7 @@ function resizeImg(file){
     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
     if ( extn == "png" || extn == "jpg" || extn == "jpeg") {
         $("#loading_spin").show();
+        scan_img(file.target.files[0]);
         // $("#canvas").show();
         // $("#canvas2").show();
         var ctx = document.getElementById('canvas').getContext('2d');
@@ -243,7 +244,7 @@ function resizeImg(file){
             ctx.drawImage(img, 0, -40,tempW,tempH);
             var sourceCanvas = document.getElementById('canvas');
             ctx2.drawImage(sourceCanvas, -15, -10,MAX_WIDTH,MAX_HEIGHT);
-            scan_img(ctx2);
+            // scan_img(ctx2);
         }
         
     }else{
@@ -251,9 +252,104 @@ function resizeImg(file){
     }
 }
 function scan_img(ctx){
-    console.log("luis");
     document.querySelector("#fileOcr").innerHTML = ''
-    Tesseract.recognize(ctx, {
+    const form = new FormData();
+    form.append('placa', ctx);
+    form.append('idsucursal', 110);
+    $.ajax({
+		url: "https://isapi.intelisis-solutions.com/auth/",
+		// url: "http://127.0.0.1:8000/auth/",
+		type: "POST",
+		dataType: 'json',
+		data: {
+			username:'TEST001',
+			password:'intelisis'
+		},
+		beforeSend: function(){
+			$("#loading_spin").show();
+		},
+		error: function(){
+			console.log('error al consumir token de sepa.');
+			$("#loading_spin").hide();
+		},
+		success: function (data){
+			tok=data.token;
+			$.ajax({
+				url: "https://isapi.intelisis-solutions.com/mLearn/ocrPlates",
+				// url: "http://127.0.0.1:8000/mLearn/ocrPlates",
+				type: "POST",
+				headers: {
+					Authorization: `Token ${tok}`,
+				},
+				//habilitar xhrFields cuando se requiera descargar
+				//xhrFields: {responseType: "blob"},
+				cache: false,
+			    contentType: false,
+			    processData: false,
+			    data: form,
+				beforeSend: function(){
+					$("#loading_spin").show();
+					toastr.info("Detectando Placa.");
+				},
+				error: function(){
+					console.log('error al consumir ocrPlates');
+					toastr.error("Error al detectar la Placa, intente más tarde.");
+					$("#loading_spin").hide();
+				},
+				success: function (resp){
+					$("#loading_spin").hide();
+					placas = '';
+					$.each(resp.plates, function(index, val) {
+						placas += '<input type="text" value="'+val+'" class="name form-control" required />'
+					});
+					if (resp.plates.length <= 0) {
+						toastr.info('No se detecto el número de placa puede ingresarlo o realizar una nueva captura de la placa.');
+						placas += '<input type="text" value="" class="name form-control" required />'
+					}
+					$.confirm({
+		            title: resp.plates.length > 0 ? '¡Texto Escaneado!' : 'No se detecto el número de placa puede ingresarlo o realizar una nueva captura de la placa.',
+			            content: '' +
+			            '<form action="#!" class="formName">' +
+			            '<div class="form-group">' +
+			            '<label>¿Desea buscar esta placa?</label>' +
+			            placas+
+			            '</div>' +
+			            '</form>',
+			            buttons: {
+			                formSubmit: {
+			                    text: 'Buscar',
+			                    btnClass: 'btn-green',
+			                    action: function () {
+			                        var name = this.$content.find('.name').val();
+			                        let busqueda = [];
+			                        $.each(this.$content.find('.name'), function(index, val) {
+			                        	if ($(val).val().trim().length > 0) {
+				                        	busqueda.push($(val).val());
+				                        }
+			                        });
+			                        if(busqueda.length == 0){
+			                            $.alert('favor de escribir un número de placa');
+			                            return false;
+			                        }
+			                        search_no(busqueda);
+			                    }
+			                },
+			                cerrar: {
+			                    text: 'cancelar',
+			                    btnClass: 'btn-dark',
+			                    action: function () {
+			                        //close
+			                    }
+			                },
+			            },
+			            theme: 'material'
+			        });
+				}
+			});
+		}
+	});
+
+    /*Tesseract.recognize(ctx, {
         lang: 'eng'
     })
     .then(function(info){
@@ -292,7 +388,7 @@ function scan_img(ctx){
             },
             theme: 'material'
         });
-    })
+    })*/
 }
 function search_no(num_placa){
     $("#loading_spin").show();
@@ -303,7 +399,7 @@ function search_no(num_placa){
         dataType: "json",
         data: {
             busqueda: num_placa,
-            tipo: 3
+            tipo: 4
         },
         success: function( data ) 
         {
@@ -312,7 +408,7 @@ function search_no(num_placa){
                 $("#loading_spin").hide();
                 var id_d = data.resultado[0]['id'];
                 console.log(id_d);
-                $("body").load( site_url+"buscador/resultadosprincipal", { id:id_d , tipo: 3 } );
+                $("body #detalle").load( site_url+"buscador/resultadosprincipal", { id:id_d , tipo: 3 } );
             }
             else
             {
